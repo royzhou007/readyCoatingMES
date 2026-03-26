@@ -289,7 +289,7 @@
                             <div class="text-sm text-gray-600 mt-2">
                                 已录 <span id="shiftCountDisplay" class="font-bold text-gray-900">247</span> / 目标 <span id="workOrderTarget" class="font-bold text-gray-900">316</span> 支
                             </div>
-                            <div id="shiftCount" class="hidden">247</div>
+                            <div id="shiftCountValue" class="hidden">247</div>
                         </div>
                     </div>
                 </div>
@@ -341,11 +341,11 @@
                            onkeyup="handleSearch(this.value)">
                 </div>
                 <div class="flex gap-2 overflow-x-auto pb-1 lg:pb-0 w-full lg:w-auto">
-                    <button onclick="setFilter('all')" class="filter-chip active px-4 py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold whitespace-nowrap">全部记录</button>
-                    <button onclick="setFilter('pass')" class="filter-chip px-4 py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold whitespace-nowrap flex items-center gap-2">
+                    <button onclick="setFilter(event, 'all')" class="filter-chip active px-4 py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold whitespace-nowrap">全部记录</button>
+                    <button onclick="setFilter(event, 'pass')" class="filter-chip px-4 py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold whitespace-nowrap flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-green-500"></span>外观合格
                     </button>
-                    <button onclick="setFilter('fail')" class="filter-chip px-4 py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold whitespace-nowrap flex items-center gap-2">
+                    <button onclick="setFilter(event, 'fail')" class="filter-chip px-4 py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold whitespace-nowrap flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-red-500"></span>外观不合格
                     </button>
                 </div>
@@ -2409,7 +2409,7 @@ R.H: &lt;70%：&lt;4 hours
         function updateWorkOrderProgress(recordedCount) {
             const target = parseInt(document.getElementById('workOrderTarget')?.textContent || '316', 10);
             const percent = Math.min(100, Math.round((recordedCount / target) * 100));
-            const shiftCount = document.getElementById('shiftCount');
+            const shiftCount = document.getElementById('shiftCountValue');
             const shiftCountDisplay = document.getElementById('shiftCountDisplay');
             const progressPercent = document.getElementById('progressPercent');
             const progressFill = document.getElementById('workOrderProgressFill');
@@ -2754,7 +2754,7 @@ R.H: &lt;70%：&lt;4 hours
             closeEntryDrawer();
 
             // 更新本班数量
-            const shiftCount = document.getElementById('shiftCount');
+            const shiftCount = document.getElementById('shiftCountValue');
             const currentCount = parseInt(shiftCount.textContent, 10) + 1;
             updateWorkOrderProgress(currentCount);
         }
@@ -2784,7 +2784,7 @@ R.H: &lt;70%：&lt;4 hours
             nextId++;
 
             // 更新本班数量
-            const shiftCount = document.getElementById('shiftCount');
+            const shiftCount = document.getElementById('shiftCountValue');
             const currentCount = parseInt(shiftCount.textContent, 10) + 1;
             updateWorkOrderProgress(currentCount);
 
@@ -2881,7 +2881,7 @@ R.H: &lt;70%：&lt;4 hours
         }
 
         // ========== 表格操作 ==========
-        function setFilter(type) {
+        function setFilter(event, type) {
             document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
             event.target.closest('.filter-chip').classList.add('active');
             showToast(`已切换到: ${event.target.closest('.filter-chip').textContent.trim()}`, 'info');
@@ -3052,7 +3052,7 @@ R.H: &lt;70%：&lt;4 hours
             switchMainTab('material');
             renderInstrumentTable();
             setCompressedAirResult('pass');
-            updateWorkOrderProgress(parseInt(document.getElementById('shiftCount')?.textContent || '247', 10));
+            updateWorkOrderProgress(parseInt(document.getElementById('shiftCountValue')?.textContent || '247', 10));
 
             // 更新当前时间
             const now = new Date();
