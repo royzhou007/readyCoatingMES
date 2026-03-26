@@ -224,10 +224,10 @@
     </header>
 
     <!-- Work Order Card -->
-    <div class="bg-white border-b border-gray-200 px-6 py-4 flex-none">
-        <div class="wo-card producing rounded-xl p-4 industrial-shadow relative overflow-hidden">
+    <div class="bg-white border-b border-gray-200 px-6 py-3 flex-none">
+        <div class="wo-card producing rounded-xl px-4 py-3 industrial-shadow relative overflow-hidden">
             <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -mr-10 -mt-10 opacity-50"></div>
-            <div class="relative flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div class="relative flex flex-col lg:flex-row lg:items-center justify-between gap-3">
                 <div class="flex items-start gap-4">
                     <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-white flex-shrink-0">
                         <i class="fas fa-clipboard-list text-xl"></i>
@@ -240,9 +240,9 @@
                                 生产中
                             </span>
                         </div>
-                        <div class="mt-1 flex items-center gap-4 text-sm text-gray-600 flex-wrap">
-                            <span class="flex items-center gap-1.5"><i class="fas fa-building text-gray-400"></i>客户: <span class="font-medium text-gray-900">华北石油管道工程有限公司</span></span>
-                            <span class="flex items-center gap-1.5"><i class="fas fa-project-diagram text-gray-400"></i>项目: <span class="font-medium text-gray-900">京唐港输油管道工程 Phase-2</span></span>
+                        <div class="mt-1 space-y-1 text-sm text-gray-600">
+                            <div class="flex items-center gap-1.5 min-w-0"><i class="fas fa-building text-gray-400"></i>客户: <span class="font-medium text-gray-900 truncate">华北石油管道工程有限公司</span></div>
+                            <div class="flex items-center gap-1.5 min-w-0"><i class="fas fa-project-diagram text-gray-400"></i>项目: <span class="font-medium text-gray-900 truncate">京唐港输油管道工程 Phase-2</span></div>
                         </div>
                     </div>
                 </div>
@@ -266,21 +266,21 @@
 
                 <div class="flex-1 lg:px-6 lg:border-x border-gray-200">
                     <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
-                        <div class="px-1 xl:border-r border-gray-200">
+                        <div class="px-1 text-center xl:border-r border-gray-200">
                             <div class="text-sm text-gray-500 mb-2">计划开始</div>
-                            <div class="text-2xl font-bold text-gray-900 leading-tight">2026-03-18 08:00</div>
+                            <div class="text-lg font-bold text-gray-900 leading-tight">2026-03-18 08:00</div>
                         </div>
-                        <div class="px-1 xl:border-r border-gray-200">
+                        <div class="px-1 text-center xl:border-r border-gray-200">
                             <div class="text-sm text-gray-500 mb-2">计划结束</div>
-                            <div class="text-2xl font-bold text-gray-900 leading-tight">2026-03-25 18:00</div>
+                            <div class="text-lg font-bold text-gray-900 leading-tight">2026-03-25 18:00</div>
                         </div>
-                        <div class="px-1 xl:border-r border-gray-200">
+                        <div class="px-1 text-center xl:border-r border-gray-200">
                             <div class="text-sm text-gray-500 mb-2">剩余时间</div>
-                            <div class="text-2xl font-bold text-blue-600 leading-tight">2天 4小时</div>
+                            <div class="text-lg font-bold text-blue-600 leading-tight">2天 4小时</div>
                         </div>
-                        <div class="px-1">
-                            <div class="flex items-baseline justify-between gap-3 mb-2">
-                                <span class="text-4xl font-extrabold text-blue-600" id="progressPercent">78%</span>
+                        <div class="px-1 text-center">
+                            <div class="flex items-baseline justify-center gap-3 mb-2">
+                                <span class="text-3xl font-extrabold text-blue-600" id="progressPercent">78%</span>
                                 <span class="text-base font-semibold text-gray-600">完成度</span>
                             </div>
                             <div class="progress-bar h-4">
@@ -296,10 +296,6 @@
 
                 <!-- Actions -->
                 <div class="flex items-center gap-3">
-                    <button onclick="openEntryDrawer()" class="action-btn flex items-center gap-2 px-5 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-semibold industrial-shadow-lg">
-                        <i class="fas fa-plus-circle"></i>
-                        <span>进管</span>
-                    </button>
                     <button onclick="viewWorkOrderDetail()" class="action-btn flex items-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold industrial-shadow">
                         <i class="fas fa-info-circle"></i>
                         <span>工单详情</span>
@@ -334,11 +330,17 @@
     <div id="materialFilterBar" class="bg-white border-b border-gray-200 px-6 py-3 flex-none">
         <div class="flex flex-col gap-3">
             <div class="flex flex-col lg:flex-row gap-3 items-start lg:items-center justify-between">
-                <div class="relative w-full lg:w-96">
-                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                    <input type="text" id="searchInput" placeholder="搜索自编号、捆号、炉号、管号..." 
-                           class="search-input w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-base outline-none transition-all"
-                           onkeyup="handleSearch(this.value)">
+                <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto lg:flex-1 lg:min-w-0">
+                    <div class="relative w-full lg:max-w-md">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                        <input type="text" id="searchInput" placeholder="搜索自编号、捆号、炉号、管号..." 
+                               class="search-input w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-base outline-none transition-all"
+                               onkeyup="handleSearch(this.value)">
+                    </div>
+                    <button onclick="openEntryDrawer()" class="action-btn flex items-center justify-center gap-2 px-5 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-semibold industrial-shadow-lg whitespace-nowrap">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>进管</span>
+                    </button>
                 </div>
                 <div class="flex gap-2 overflow-x-auto pb-1 lg:pb-0 w-full lg:w-auto">
                     <button onclick="setFilter(event, 'all')" class="filter-chip active px-4 py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold whitespace-nowrap">全部记录</button>
@@ -356,7 +358,7 @@
                     <i class="fas fa-clock-rotate-left text-blue-500"></i>
                     <span class="font-medium">班次浏览:</span>
                 </div>
-                <div id="shiftButtonList" class="flex gap-2 overflow-x-auto pb-1 w-full">
+                <div id="shiftButtonList" class="flex gap-2 overflow-x-auto pb-1 flex-1 min-w-0">
                     
                     <button onclick="switchShift('yesterday_night')" 
                             class="shift-btn flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-white text-gray-700 border-gray-200 hover:border-blue-400" 
@@ -379,11 +381,11 @@
                         今日夜班
                         <span class="ml-2 text-xs py-0.5 px-1.5 rounded-full bg-gray-100 text-gray-600">0支</span>
                     </button>
+                    <button id="addShiftButton" onclick="openAddShiftModal()" class="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-dashed border-blue-300 text-blue-600 bg-blue-50 hover:bg-blue-100 font-semibold text-sm whitespace-nowrap transition-all">
+                        <i class="fas fa-plus"></i>
+                        <span>新增班次</span>
+                    </button>
                 </div>
-                <button onclick="openAddShiftModal()" class="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-dashed border-blue-300 text-blue-600 bg-blue-50 hover:bg-blue-100 font-semibold text-sm whitespace-nowrap transition-all">
-                    <i class="fas fa-plus"></i>
-                    <span>新增班次</span>
-                </button>
             </div>
         </div>
     </div>
@@ -2895,7 +2897,13 @@ R.H: &lt;70%：&lt;4 hours
 
             const shiftButtonList = document.getElementById('shiftButtonList');
             if (shiftButtonList) {
-                shiftButtonList.appendChild(createShiftButton(shiftId, shift));
+                const newButton = createShiftButton(shiftId, shift);
+                const addShiftButton = document.getElementById('addShiftButton');
+                if (addShiftButton) {
+                    shiftButtonList.insertBefore(newButton, addShiftButton);
+                } else {
+                    shiftButtonList.appendChild(newButton);
+                }
             }
 
             renderShiftFilterOptions();
