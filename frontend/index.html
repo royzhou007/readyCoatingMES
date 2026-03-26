@@ -108,7 +108,16 @@
         .progress-fill { background: linear-gradient(90deg, #3B82F6 0%, #2563EB 100%); transition: width 0.3s ease; }
 
         .shift-btn { transition: all 0.2s ease; }
-        .shift-btn.active { background: #2563EB; color: white; border-color: #2563EB; }
+        .shift-btn.active {
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            color: white;
+            border-color: #2563EB;
+            box-shadow: 0 10px 24px rgba(37, 99, 235, 0.28);
+            transform: translateY(-2px);
+        }
+        .shift-btn.active i {
+            color: white;
+        }
 
         .main-tab-btn {
             transition: all 0.2s ease;
@@ -167,7 +176,7 @@
             opacity: 0;
         }
         .bevel-content.expanded {
-            max-height: 500px;
+            max-height: 2000px;
             opacity: 1;
         }
         .bevel-arrow {
@@ -239,7 +248,7 @@
                 </div>
 
                 <!-- Shift Info -->
-                <div class="flex items-center gap-4 lg:px-6 lg:border-x border-gray-200">
+                <div class="hidden flex items-center gap-4 lg:px-6 lg:border-x border-gray-200">
                     <div class="shift-indicator px-4 py-2 rounded-xl flex items-center gap-3">
                         <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-sm">
                             <i class="fas fa-sun text-xl"></i>
@@ -252,6 +261,36 @@
                     <div class="text-center">
                         <div class="text-xs text-gray-500 mb-1">本班已录</div>
                         <div class="text-xl font-bold text-blue-600" id="shiftCount">156<span class="text-xs text-gray-500 font-normal ml-1">支</span></div>
+                    </div>
+                </div>
+
+                <div class="flex-1 lg:px-6 lg:border-x border-gray-200">
+                    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
+                        <div class="px-1 xl:border-r border-gray-200">
+                            <div class="text-sm text-gray-500 mb-2">计划开始</div>
+                            <div class="text-2xl font-bold text-gray-900 leading-tight">2026-03-18 08:00</div>
+                        </div>
+                        <div class="px-1 xl:border-r border-gray-200">
+                            <div class="text-sm text-gray-500 mb-2">计划结束</div>
+                            <div class="text-2xl font-bold text-gray-900 leading-tight">2026-03-25 18:00</div>
+                        </div>
+                        <div class="px-1 xl:border-r border-gray-200">
+                            <div class="text-sm text-gray-500 mb-2">剩余时间</div>
+                            <div class="text-2xl font-bold text-blue-600 leading-tight">2天 4小时</div>
+                        </div>
+                        <div class="px-1">
+                            <div class="flex items-baseline justify-between gap-3 mb-2">
+                                <span class="text-4xl font-extrabold text-blue-600" id="progressPercent">78%</span>
+                                <span class="text-base font-semibold text-gray-600">完成度</span>
+                            </div>
+                            <div class="progress-bar h-4">
+                                <div id="workOrderProgressFill" class="progress-fill h-full rounded-full" style="width: 78%"></div>
+                            </div>
+                            <div class="text-sm text-gray-600 mt-2">
+                                已录 <span id="shiftCountDisplay" class="font-bold text-gray-900">247</span> / 目标 <span id="workOrderTarget" class="font-bold text-gray-900">316</span> 支
+                            </div>
+                            <div id="shiftCount" class="hidden">247</div>
+                        </div>
                     </div>
                 </div>
 
@@ -327,7 +366,7 @@
                         <span class="ml-2 text-xs py-0.5 px-1.5 rounded-full bg-gray-100 text-gray-600">89支</span>
                     </button>
                     <button onclick="switchShift('today_day')" 
-                            class="shift-btn flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-blue-600 text-white border-blue-600" 
+                            class="shift-btn active flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-blue-600 text-white border-blue-600 ring-4 ring-blue-100" 
                             data-shift="today_day">
                         <i class="fas fa-sun mr-2"></i>
                         今日白班
@@ -618,11 +657,316 @@
                     保存
                 </button>
             </div>
+            </div>
         </div>
     </section>
 
     <section id="tab-panel-production" class="tab-panel flex-1 flex-col min-h-0 bg-gray-50 p-6">
         <div class="bg-white rounded-2xl industrial-shadow p-6 h-full overflow-auto">
+            <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4 mb-6">
+                <div>
+                    <div class="text-sm text-gray-500">工艺卡名称</div>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1">钢管外防腐生产工艺卡</h3>
+                </div>
+                <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3">
+                    <div class="text-sm text-blue-700">工艺卡编号</div>
+                    <div class="text-lg font-bold text-blue-900 mt-1">GYK-3LPE-2026-001</div>
+                </div>
+            </div>
+            <div class="space-y-5">
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('productionSpec')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">1. 钢管规格及防腐要求</div>
+                            <div class="text-sm text-gray-500 mt-1">展示当前工艺卡的规格参数与防腐执行要求</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="productionSpecStatus">点击展开</span>
+                            <i id="productionSpecArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="productionSpecContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">钢管规格(数值，单位mm)</label><input type="number" value="1219" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">生产米数(数值，单位m)</label><input type="number" value="16320" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">防腐类型</label><select class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"><option selected>3LPE</option><option>3LPP</option></select></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">执行标准</label><input type="text" value="GB/T 23257-2017" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">FBE厚度(数值，单位μm)</label><input type="number" value="220" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">AD厚度(数值，单位μm)</label><input type="number" value="180" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">PE总厚度(数值，单位mm)</label><input type="number" step="0.01" value="3.00" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('productionConsume')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">2. 防腐材料理论消耗量</div>
+                            <div class="text-sm text-gray-500 mt-1">根据工艺卡要求展示原材料单耗和理论总量</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="productionConsumeStatus">点击展开</span>
+                            <i id="productionConsumeArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="productionConsumeContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 overflow-auto">
+                            <table class="data-table w-full bg-white rounded-xl overflow-hidden">
+                                <thead><tr><th class="px-4 py-4 text-center w-20">序号</th><th class="px-4 py-4 text-left">原材料</th><th class="px-4 py-4 text-center">单耗(kg/m2)</th><th class="px-4 py-4 text-center">总量(kg)</th><th class="px-4 py-4 text-left">备注</th></tr></thead>
+                                <tbody>
+                                    <tr><td class="px-4 py-4 text-center">1</td><td class="px-4 py-4">钢砂（Steel grit）</td><td class="px-4 py-4 text-center">0.12</td><td class="px-4 py-4 text-center">1954</td><td class="px-4 py-4">湖北浠水</td></tr>
+                                    <tr><td class="px-4 py-4 text-center">2</td><td class="px-4 py-4">钢丸（Steel shot）</td><td class="px-4 py-4 text-center">0.12</td><td class="px-4 py-4 text-center">1954</td><td class="px-4 py-4">湖北浠水</td></tr>
+                                    <tr><td class="px-4 py-4 text-center">3</td><td class="px-4 py-4">环氧粉末（FBE）</td><td class="px-4 py-4 text-center">0.42</td><td class="px-4 py-4 text-center">3258</td><td class="px-4 py-4">天津瑞远DR-301A</td></tr>
+                                    <tr><td class="px-4 py-4 text-center">4</td><td class="px-4 py-4">胶粘剂（AD）</td><td class="px-4 py-4 text-center">0.25</td><td class="px-4 py-4 text-center">2280</td><td class="px-4 py-4">广州鹿山L-5R</td></tr>
+                                    <tr><td class="px-4 py-4 text-center">5</td><td class="px-4 py-4">聚乙烯（PE）</td><td class="px-4 py-4 text-center">3.3</td><td class="px-4 py-4 text-center">45600</td><td class="px-4 py-4">威海幅员FY-JK-02BK</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('productionProject')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">3. 项目要求</div>
+                            <div class="text-sm text-gray-500 mt-1">按项目技术文件展示检测项目与标准要求</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="productionProjectStatus">点击展开</span>
+                            <i id="productionProjectArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="productionProjectContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 overflow-auto">
+                            <table class="data-table w-full bg-white rounded-xl overflow-hidden">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-4 text-center w-24">序号</th>
+                                        <th class="px-4 py-4 text-center w-48">检测项目</th>
+                                        <th class="px-4 py-4 text-left">标准要求</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="px-4 py-4 text-center font-medium">1</td>
+                                        <td class="px-4 py-4 text-center font-medium">预留端</td>
+                                        <td class="px-4 py-4">
+                                            <div class="flex flex-wrap gap-x-10 gap-y-2 text-gray-700">
+                                                <span>预留端：<span class="font-semibold text-gray-900">100-125</span> mm</span>
+                                                <span>FBE：<span class="font-semibold text-gray-900">≥10</span> mm</span>
+                                            </div>
+                                            <div class="mt-2 text-gray-700">涂层坡口角度：<span class="font-semibold text-gray-900">≤30°</span></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-center font-medium">2</td>
+                                        <td class="px-4 py-4 text-center font-medium">坡口</td>
+                                        <td class="px-4 py-4 text-gray-700">根据来料</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-center font-medium" rowspan="5">3</td>
+                                        <td class="px-4 py-4 text-center font-medium" rowspan="5">包装</td>
+                                        <td class="px-4 py-4 !p-0">
+                                            <table class="w-full border-collapse">
+                                                <tbody>
+                                                    <tr class="border-b border-gray-200">
+                                                        <td class="px-4 py-4 w-56 text-gray-700 font-medium border-r border-gray-200">防撞绳</td>
+                                                        <td class="px-4 py-4 text-gray-700">3 道/支，直径 20mm</td>
+                                                    </tr>
+                                                    <tr class="border-b border-gray-200">
+                                                        <td class="px-4 py-4 text-gray-700 font-medium border-r border-gray-200">管帽</td>
+                                                        <td class="px-4 py-4 text-gray-700">根据来料</td>
+                                                    </tr>
+                                                    <tr class="border-b border-gray-200">
+                                                        <td class="px-4 py-4 text-gray-700 font-medium border-r border-gray-200">打捆</td>
+                                                        <td class="px-4 py-4 text-gray-700">不需要。</td>
+                                                    </tr>
+                                                    <tr class="border-b border-gray-200">
+                                                        <td class="px-4 py-4 text-gray-700 font-medium border-r border-gray-200">吊带</td>
+                                                        <td class="px-4 py-4 text-gray-700">根据来料</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="px-4 py-4 text-gray-700 font-medium border-r border-gray-200">其他</td>
+                                                        <td class="px-4 py-4 text-gray-700"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr></tr>
+                                    <tr></tr>
+                                    <tr></tr>
+                                    <tr></tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-center font-medium">4</td>
+                                        <td class="px-4 py-4 text-center font-medium">技术文件</td>
+                                        <td class="px-4 py-4 text-gray-700">技术文件.pdf</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-center font-medium">5</td>
+                                        <td class="px-4 py-4 text-center font-medium">标识</td>
+                                        <td class="px-4 py-4 text-gray-700">Marking.jpg</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-center font-medium">6</td>
+                                        <td class="px-4 py-4 text-center font-medium">工艺评定</td>
+                                        <td class="px-4 py-4 text-gray-700">需要</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-center font-medium">7</td>
+                                        <td class="px-4 py-4 text-center font-medium">试验管</td>
+                                        <td class="px-4 py-4 text-gray-700">有试验管</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-center font-medium">8</td>
+                                        <td class="px-4 py-4 text-center font-medium">监制</td>
+                                        <td class="px-4 py-4 text-gray-700">有</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('productionEquipment')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">4. 外防腐线设备参数设定</div>
+                            <div class="text-sm text-gray-500 mt-1">展示外防腐线各区域设备的参数设定要求</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="productionEquipmentStatus">点击展开</span>
+                            <i id="productionEquipmentArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="productionEquipmentContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 overflow-auto">
+                            <table class="data-table w-full bg-white rounded-xl overflow-hidden">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-4 text-center w-20">序号</th>
+                                        <th class="px-4 py-4 text-center w-36">区域名称</th>
+                                        <th class="px-4 py-4 text-center w-44">参数名称</th>
+                                        <th class="px-4 py-4 text-center w-32">参数要求</th>
+                                        <th class="px-4 py-4 text-center w-44">参数名称</th>
+                                        <th class="px-4 py-4 text-center w-32">参数要求</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="px-4 py-4 text-center font-medium" rowspan="4">1</td>
+                                        <td class="px-4 py-4 text-center font-medium" rowspan="4">抛丸除锈区</td>
+                                        <td class="px-4 py-4 text-gray-700">传送线速度</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">1-2</td>
+                                        <td class="px-4 py-4 text-gray-700">传送线螺距（mm）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">170-190</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-gray-700">频率（HZ）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">15-23</td>
+                                        <td class="px-4 py-4 text-center text-gray-400">/</td>
+                                        <td class="px-4 py-4 text-center text-gray-400">/</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-gray-700">抛丸电机电流（A）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">70-75</td>
+                                        <td class="px-4 py-4 text-gray-700">除锈等级</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">≥Sa2.5</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-gray-700">锚纹深度（um）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">40-90</td>
+                                        <td class="px-4 py-4 text-gray-700">丸、砂配比</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">4:1</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="px-4 py-4 text-center font-medium" rowspan="12">2</td>
+                                        <td class="px-4 py-4 text-center font-medium" rowspan="12">涂敷区</td>
+                                        <td class="px-4 py-4 text-gray-700">传送线速度</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">1-2</td>
+                                        <td class="px-4 py-4 text-gray-700">传送线螺距（mm）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">170-190</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-gray-700">频率（HZ）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">22-32</td>
+                                        <td class="px-4 py-4 text-center text-gray-400">/</td>
+                                        <td class="px-4 py-4 text-center text-gray-400">/</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-gray-700">加热温度（℃）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">185-230</td>
+                                        <td class="px-4 py-4 text-gray-700">直流电压（V）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">500-600</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-gray-700">加热功率（KW）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">550-650</td>
+                                        <td class="px-4 py-4 text-center text-gray-400">/</td>
+                                        <td class="px-4 py-4 text-center text-gray-400">/</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-gray-700">喷枪数量（支）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">3-6</td>
+                                        <td class="px-4 py-4 text-gray-700">静电电压（Kv）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">90-100</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-gray-700">喷枪与管距离（mm）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">90-110</td>
+                                        <td class="px-4 py-4 text-gray-700">喷枪压力（Mpa）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">0.01-0.5</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-gray-700">75AD胶粘剂挤出机主机转速（HZ）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">14-19</td>
+                                        <td class="px-4 py-4 text-gray-700">物料风干温度（℃）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">60-80</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-gray-700">75AD胶粘剂挤出机电流（A）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">45-65</td>
+                                        <td class="px-4 py-4 text-gray-700">物料加热温度（℃）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">200-230</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-gray-700">75AD胶粘剂口膜宽度（mm）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">400</td>
+                                        <td class="px-4 py-4 text-center text-gray-400">/</td>
+                                        <td class="px-4 py-4 text-center text-gray-400">/</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-gray-700">150/180挤塑机主机螺杆转速（r/min）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">20-30</td>
+                                        <td class="px-4 py-4 text-gray-700">物料风干温度（℃）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">50-80</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-gray-700">150/180挤塑机主机电流（A）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">450-550</td>
+                                        <td class="px-4 py-4 text-gray-700">物料加热温度（℃）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">200-250</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-4 text-gray-700">口膜宽度（mm）</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">800 / 1000</td>
+                                        <td class="px-4 py-4 text-center text-gray-400">/</td>
+                                        <td class="px-4 py-4 text-center text-gray-400">/</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="mt-4 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-800">
+                                备注：设备运行参数根据现场实际情况调整。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="border border-gray-200 rounded-2xl overflow-hidden bg-white">
+                    <div class="px-5 py-4">
+                        <div class="text-lg font-bold text-gray-900">5. 其他要求</div>
+                        <div class="text-sm text-gray-500 mt-1">其他的技术要求和实验要求，详见 ITP 和 MPS。</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden">
             <div class="flex items-start justify-between gap-4 mb-6">
                 <div>
                     <h3 class="text-xl font-bold text-gray-900">生产工艺卡</h3>
@@ -670,33 +1014,366 @@
             <div class="flex items-start justify-between gap-4 mb-6">
                 <div>
                     <h3 class="text-xl font-bold text-gray-900">质检工艺卡</h3>
-                    <p class="text-sm text-gray-500 mt-1">用于记录本工单质检判定标准、抽检频次与异常处置流程</p>
+                    <p class="text-sm text-gray-500 mt-1">按工序展示检查项目、检验频次、合格标准、使用设备与检测方法</p>
                 </div>
                 <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 border border-green-200">执行中</span>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div class="rounded-xl bg-green-50 border border-green-200 p-5">
-                    <div class="text-sm font-semibold text-green-900">合格判定</div>
-                    <div class="text-sm text-green-700 mt-2">外观无裂纹、压痕、严重腐蚀；尺寸与重量在工艺允差范围内。</div>
-                </div>
-                <div class="rounded-xl bg-red-50 border border-red-200 p-5">
-                    <div class="text-sm font-semibold text-red-900">异常拦截</div>
-                    <div class="text-sm text-red-700 mt-2">出现批量异常趋势时立即停止录入并发起质量会签。</div>
-                </div>
-            </div>
-            <div class="space-y-4">
-                <div class="border border-gray-200 rounded-xl p-5">
-                    <div class="font-semibold text-gray-900">抽检频次</div>
-                    <div class="text-sm text-gray-600 mt-2">每 20 支进行一次复核抽检，每班首件与末件必须保留完整检测记录。</div>
-                </div>
-                <div class="border border-gray-200 rounded-xl p-5">
-                    <div class="font-semibold text-gray-900">记录要求</div>
-                    <div class="text-sm text-gray-600 mt-2">异常项需关联责任人、复核时间与处理意见，确保可追溯。</div>
-                </div>
-                <div class="border border-gray-200 rounded-xl p-5">
-                    <div class="font-semibold text-gray-900">放行流程</div>
-                    <div class="text-sm text-gray-600 mt-2">班组质检员初判后，由值班工程师复核签字，系统状态更新为“可放行”。</div>
-                </div>
+            <div class="overflow-auto border border-gray-200 rounded-2xl">
+                <table class="data-table w-full bg-white">
+                    <thead class="sticky-header">
+                        <tr>
+                            <th class="px-4 py-4 text-center w-24" rowspan="2">工序</th>
+                            <th class="px-4 py-4 text-center w-60" rowspan="2">检查项目</th>
+                            <th class="px-4 py-4 text-center" colspan="2">检验频次</th>
+                            <th class="px-4 py-4 text-center min-w-[560px]" rowspan="2">合格标准</th>
+                            <th class="px-4 py-4 text-center min-w-[180px]" rowspan="2">使用设备</th>
+                            <th class="px-4 py-4 text-center min-w-[160px]" rowspan="2">检测方法</th>
+                        </tr>
+                        <tr>
+                            <th class="px-4 py-4 text-center w-28">PQT</th>
+                            <th class="px-4 py-4 text-center w-28">NPT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="px-4 py-4 text-center font-semibold" rowspan="3">进管</td>
+                            <td class="px-4 py-4 text-gray-700">外观检查</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 whitespace-pre-line text-gray-700">1.目视检查钢管内外表面污染状况及钢管母体缺陷，表面干燥、平整无油脂、油和其他污染物。任何污染物都应清除。
+2.检查并记录钢管信息：制造商、炉号、批号、长度、管号，标识清晰饱满。
+3.除锈时，每个钢管两端戴管帽，防止钢砂进入。
+4.进管结束后，确定钢管数量。
+5.不符合检验标准的钢管及时报告、并标记和隔离（如果必要），有待确认，有缺陷的钢管禁止下管。
+6.有严重质量缺陷的钢管及时提交给客户。</td>
+                            <td class="px-4 py-4 text-center">目测</td>
+                            <td class="px-4 py-4 text-center">API 5L 46th</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">环境湿度及钢管外表面温度的检查</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-center">开始和，1次/4h</td>
+                            <td class="px-4 py-4 text-gray-700">环境湿度≤85%且钢管表面温度高于露点温度 3℃，如果钢管达不到要求需预热。</td>
+                            <td class="px-4 py-4 text-center">露点仪/温湿度表<br>红外测温仪</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">压缩空气</td>
+                            <td class="px-4 py-4 text-center">开始时 1 次</td>
+                            <td class="px-4 py-4 text-center">1次/班</td>
+                            <td class="px-4 py-4 text-gray-700">干燥无湿气、无油污或残留</td>
+                            <td class="px-4 py-4 text-center">滤纸</td>
+                            <td class="px-4 py-4 text-center">ASTM D 4285</td>
+                        </tr>
+
+                        <tr>
+                            <td class="px-4 py-4 text-center font-semibold" rowspan="6">除锈</td>
+                            <td class="px-4 py-4 text-gray-700">检查除锈后钢管外表面</td>
+                            <td class="px-4 py-4 text-center">100%</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-gray-700">钢管外表面无焊渣、毛刺、磨料等</td>
+                            <td class="px-4 py-4 text-center">可见光照度计</td>
+                            <td class="px-4 py-4 text-center">目测</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">检查钢管的外表面粗糙度</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-center"></td>
+                            <td class="px-4 py-4 text-gray-700">40-90um</td>
+                            <td class="px-4 py-4 text-center">粗糙度测试仪<br>拓片纸、千分表</td>
+                            <td class="px-4 py-4 text-center">ISO 8503-4</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">清洁度等级</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-center">开始时，1次/4h</td>
+                            <td class="px-4 py-4 text-gray-700">≥Sa 2.5</td>
+                            <td class="px-4 py-4 text-center">ISO 比对板</td>
+                            <td class="px-4 py-4 text-center">ISO 8501-1</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">盐份检测</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-center"></td>
+                            <td class="px-4 py-4 text-gray-700">≤20mg/m²（内控）</td>
+                            <td class="px-4 py-4 text-center">盐分检测仪</td>
+                            <td class="px-4 py-4 text-center">ISO 8502-6</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">灰尘度检测</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-center"></td>
+                            <td class="px-4 py-4 text-gray-700">最大不超过 2 级（内控）</td>
+                            <td class="px-4 py-4 text-center">压敏胶带</td>
+                            <td class="px-4 py-4 text-center">ISO 8502-3</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">涂敷间隔时间</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 whitespace-pre-line text-gray-700">R.H:80-85%：&lt;2 hours      R.H: 70-80%&lt;3 hours
+R.H: &lt;70%：&lt;4 hours
+如钢管有返锈或涂敷间隔时间规定时间应重新除锈（内控）</td>
+                            <td class="px-4 py-4 text-center">/</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
+                        </tr>
+
+                        <tr>
+                            <td class="px-4 py-4 text-center font-semibold" rowspan="8">涂敷</td>
+                            <td class="px-4 py-4 text-gray-700">钢管加热温度</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-center">连续检测，记录 1 次/h</td>
+                            <td class="px-4 py-4 text-gray-700">钢管加热温度区间要求：185~250℃</td>
+                            <td class="px-4 py-4 text-center">红外温度计，测温笔</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">AD 挤出温度</td>
+                            <td class="px-4 py-4 text-center">开始时 1 次</td>
+                            <td class="px-4 py-4 text-center">1 次/h</td>
+                            <td class="px-4 py-4 text-gray-700">185-235℃</td>
+                            <td class="px-4 py-4 text-center">红外温度计</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">PP 挤出温度</td>
+                            <td class="px-4 py-4 text-center">开始时 1 次</td>
+                            <td class="px-4 py-4 text-center">1 次/h</td>
+                            <td class="px-4 py-4 text-gray-700">200-250℃</td>
+                            <td class="px-4 py-4 text-center">红外温度计</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">FBE 厚度检测</td>
+                            <td class="px-4 py-4 text-center">每班开始时 1 次，及生产中断</td>
+                            <td class="px-4 py-4 text-center">每班开始时 1 次，及生产中断</td>
+                            <td class="px-4 py-4 text-gray-700">≥120μm</td>
+                            <td class="px-4 py-4 text-center">涂层测厚仪</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">AD 厚度检测</td>
+                            <td class="px-4 py-4 text-center">每班开始时 1 次，及生产中断</td>
+                            <td class="px-4 py-4 text-center">每班开始时 1 次，及生产中断</td>
+                            <td class="px-4 py-4 text-gray-700">170~250μm</td>
+                            <td class="px-4 py-4 text-center">涂层测厚仪</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">水冷温度</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-gray-700">≤60℃</td>
+                            <td class="px-4 py-4 text-center">红外温度计</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">外观检测</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-gray-700">平滑，辊压密实，无暗泡，无麻点，无皱折，无裂纹。色泽均匀，防腐管端应无翘边</td>
+                            <td class="px-4 py-4 text-center">可见光照度计</td>
+                            <td class="px-4 py-4 text-center">目测</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">涂层总厚度</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-center">开始 1、3、5 根，以后每 10 根检测一次</td>
+                            <td class="px-4 py-4 whitespace-pre-line text-gray-700">φ168.3mm 涂层总厚度：≥2.0mm
+φ323.8mm 涂层总厚度：≥2.2mm</td>
+                            <td class="px-4 py-4 text-center">涂层测厚仪</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
+                        </tr>
+
+                        <tr>
+                            <td class="px-4 py-4 text-center font-semibold" rowspan="4">在线检测</td>
+                            <td class="px-4 py-4 text-gray-700">电火花检漏</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-gray-700">25KV,100%覆盖表面</td>
+                            <td class="px-4 py-4 text-center">在线电火花检漏仪</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">预留端检查</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-center">逐根</td>
+                            <td class="px-4 py-4 text-gray-700">预留端长度：≥300mm，FBE 预留 10-30mm，涂层角度&lt;30°，聚丙烯斜切面≥5mm</td>
+                            <td class="px-4 py-4 text-center">铝座角尺，角度尺</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">剩磁检测</td>
+                            <td class="px-4 py-4 text-center">1 次</td>
+                            <td class="px-4 py-4 text-center">1 次/班</td>
+                            <td class="px-4 py-4 text-gray-700">&lt;15 Gauss（内控）</td>
+                            <td class="px-4 py-4 text-center">磁强计</td>
+                            <td class="px-4 py-4 text-center">GB/T 23257-2017</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">剥离强度测试</td>
+                            <td class="px-4 py-4 text-center">1 次</td>
+                            <td class="px-4 py-4 text-center">2 次/班</td>
+                            <td class="px-4 py-4 text-gray-700">50±5℃，≥100N/cm；90±5℃，≥80N/cm</td>
+                            <td class="px-4 py-4 text-center">剥离试验机</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
+                        </tr>
+
+                        <tr>
+                            <td class="px-4 py-4 text-center font-semibold" rowspan="3">修补</td>
+                            <td class="px-4 py-4 text-gray-700">目视检查外观</td>
+                            <td class="px-4 py-4 text-center">每处修补点</td>
+                            <td class="px-4 py-4 text-center">每处修补点</td>
+                            <td class="px-4 py-4 text-gray-700">面积不超过 10cm²，每米不超 1 处的漏点或损伤可修补，超出面积和个数量提交业主批准，修复后表面应平整、无皱折、无气泡、无烧焦碳化等现象。</td>
+                            <td class="px-4 py-4 text-center">修补套装</td>
+                            <td class="px-4 py-4 text-center">ISO 21809-1:2018</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">电火花检漏</td>
+                            <td class="px-4 py-4 text-center">每处修补点</td>
+                            <td class="px-4 py-4 text-center">每处修补点</td>
+                            <td class="px-4 py-4 text-gray-700">25KV,100%覆盖表面</td>
+                            <td class="px-4 py-4 text-center">手持电火花检漏仪</td>
+                            <td class="px-4 py-4 text-center">ISO 21809-1:2018</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">厚度检测</td>
+                            <td class="px-4 py-4 text-center">每处修补点</td>
+                            <td class="px-4 py-4 text-center">每处修补点</td>
+                            <td class="px-4 py-4 text-gray-700">不低于最低要求</td>
+                            <td class="px-4 py-4 text-center">涂层测厚仪</td>
+                            <td class="px-4 py-4 text-center">ISO 21809-1:2018</td>
+                        </tr>
+
+                        <tr>
+                            <td class="px-4 py-4 text-center font-semibold" rowspan="8">离线试验</td>
+                            <td class="px-4 py-4 text-gray-700">连续性</td>
+                            <td class="px-4 py-4 text-center">1 次</td>
+                            <td class="px-4 py-4 text-center">1 次/批</td>
+                            <td class="px-4 py-4 text-gray-700">25KV 无漏点</td>
+                            <td class="px-4 py-4 text-center">手持电火花检漏仪</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">试件冲击强度</td>
+                            <td class="px-4 py-4 text-center">1 次</td>
+                            <td class="px-4 py-4 text-center">1 次/每批 PE</td>
+                            <td class="px-4 py-4 text-gray-700">0±2℃，≥5J/mm；25KV 无漏点</td>
+                            <td class="px-4 py-4 text-center">冲击试验机<br>手持电火花检漏仪</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013<br>附录 H</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">压痕硬度 mm</td>
+                            <td class="px-4 py-4 text-center">1 次</td>
+                            <td class="px-4 py-4 text-center">1 次/每批 PE</td>
+                            <td class="px-4 py-4 text-gray-700">90±5℃，≤0.3mm</td>
+                            <td class="px-4 py-4 text-center">压痕测试仪</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013<br>附录 I</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">断裂伸长率 %</td>
+                            <td class="px-4 py-4 text-center">1 次</td>
+                            <td class="px-4 py-4 text-center">1 次/每批 PE</td>
+                            <td class="px-4 py-4 text-gray-700">23±3℃，≥400%（内控）</td>
+                            <td class="px-4 py-4 text-center">拉伸试验机</td>
+                            <td class="px-4 py-4 text-center">ISO 527-2</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700" rowspan="3">阴极剥离试验 mm</td>
+                            <td class="px-4 py-4 text-center">1 次</td>
+                            <td class="px-4 py-4 text-center">/</td>
+                            <td class="px-4 py-4 text-gray-700">-1.5 V±0.15V at 23±2℃ 28 d ≤7.0mm</td>
+                            <td class="px-4 py-4 text-center" rowspan="3">稳压电源，烘箱</td>
+                            <td class="px-4 py-4 text-center" rowspan="3">DIN 30678-2013<br>附录 C</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-center">1 次</td>
+                            <td class="px-4 py-4 text-center">/</td>
+                            <td class="px-4 py-4 text-gray-700">-1.5 V±0.15V at 90±3℃ 28 d ≤15.0mm</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-center">1 次</td>
+                            <td class="px-4 py-4 text-center">1 次</td>
+                            <td class="px-4 py-4 text-gray-700">-3.5 V±0.15V at 65±3℃ 24 h ≤7.0mm</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">DSC 固化度</td>
+                            <td class="px-4 py-4 text-center">1 次</td>
+                            <td class="px-4 py-4 text-center">1 次/批</td>
+                            <td class="px-4 py-4 text-gray-700">-2.0℃ &lt; ΔTg &lt; 3.0℃</td>
+                            <td class="px-4 py-4 text-center">差式热量扫描仪</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013<br>附录 B</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">涂层电阻率</td>
+                            <td class="px-4 py-4 text-center">1 次</td>
+                            <td class="px-4 py-4 text-center">/</td>
+                            <td class="px-4 py-4 text-gray-700">&gt;10¹⁶ΩM²</td>
+                            <td class="px-4 py-4 text-center">安培表，稳压电源</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013<br>附录 J</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">热老化</td>
+                            <td class="px-4 py-4 text-center">1 次</td>
+                            <td class="px-4 py-4 text-center">/</td>
+                            <td class="px-4 py-4 text-gray-700">IΔMFRI±35%</td>
+                            <td class="px-4 py-4 text-center">烘箱，熔体流动速率仪</td>
+                            <td class="px-4 py-4 text-center">DIN 30678-2013<br>附录 L</td>
+                        </tr>
+
+                        <tr>
+                            <td class="px-4 py-4 text-center font-semibold" rowspan="3">原材料</td>
+                            <td class="px-4 py-4 text-gray-700">FBE</td>
+                            <td class="px-4 py-4 text-center">1 次</td>
+                            <td class="px-4 py-4 text-center">每班 1 次</td>
+                            <td class="px-4 py-4 text-gray-700">天津瑞远 DR-301B</td>
+                            <td class="px-4 py-4 text-center">/</td>
+                            <td class="px-4 py-4 text-center">CSA Z245.20</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">AD</td>
+                            <td class="px-4 py-4 text-center">1 次</td>
+                            <td class="px-4 py-4 text-center">每班 1 次</td>
+                            <td class="px-4 py-4 text-gray-700">广州鹿山 PR298</td>
+                            <td class="px-4 py-4 text-center">/</td>
+                            <td class="px-4 py-4 text-center">ISO 21809-1:2018</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 text-gray-700">PP</td>
+                            <td class="px-4 py-4 text-center">1 次</td>
+                            <td class="px-4 py-4 text-center">每班 1 次</td>
+                            <td class="px-4 py-4 text-gray-700">广州鹿山 PJ-1</td>
+                            <td class="px-4 py-4 text-center">/</td>
+                            <td class="px-4 py-4 text-center">ISO 21809-1:2018</td>
+                        </tr>
+
+                        <tr>
+                            <td class="px-4 py-4 text-center font-semibold">防腐管标识</td>
+                            <td class="px-4 py-4 text-gray-700">喷标</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-gray-700">单端喷标，距离管端 400-600mm 开始</td>
+                            <td class="px-4 py-4 text-center">手持式喷码机</td>
+                            <td class="px-4 py-4 text-center">/</td>
+                        </tr>
+
+                        <tr>
+                            <td class="px-4 py-4 text-center font-semibold">防腐管包装</td>
+                            <td class="px-4 py-4 text-gray-700">防腐管包装保护措施</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 text-center">逐支</td>
+                            <td class="px-4 py-4 whitespace-pre-line text-gray-700">管帽：甲供
+防撞绳：每支 3 道，每道一条，φ20mm；
+吊带：甲供
+打捆：原捆原包打捆。
+其他：
+1.按照合同号进行区分堆放及发货；
+2.需要做 PQT，以及有全程监造；</td>
+                            <td class="px-4 py-4 text-center">/</td>
+                            <td class="px-4 py-4 text-center">/</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
@@ -1729,6 +2406,31 @@
             showToast(`仪器属性已保存，压缩空气检测：${compressedAirResult === 'pass' ? '合格' : '不合格'}`, 'success');
         }
 
+        function updateWorkOrderProgress(recordedCount) {
+            const target = parseInt(document.getElementById('workOrderTarget')?.textContent || '316', 10);
+            const percent = Math.min(100, Math.round((recordedCount / target) * 100));
+            const shiftCount = document.getElementById('shiftCount');
+            const shiftCountDisplay = document.getElementById('shiftCountDisplay');
+            const progressPercent = document.getElementById('progressPercent');
+            const progressFill = document.getElementById('workOrderProgressFill');
+
+            if (shiftCount) shiftCount.textContent = String(recordedCount);
+            if (shiftCountDisplay) shiftCountDisplay.textContent = String(recordedCount);
+            if (progressPercent) progressPercent.textContent = `${percent}%`;
+            if (progressFill) progressFill.style.width = `${percent}%`;
+        }
+
+        function toggleProductionSection(sectionKey) {
+            const content = document.getElementById(`${sectionKey}Content`);
+            const arrow = document.getElementById(`${sectionKey}Arrow`);
+            const status = document.getElementById(`${sectionKey}Status`);
+
+            const isExpanded = content.classList.contains('expanded');
+            content.classList.toggle('expanded', !isExpanded);
+            arrow.classList.toggle('rotated', !isExpanded);
+            status.textContent = isExpanded ? '点击展开' : '点击收起';
+        }
+
         function toggleBevelInfo() {
             const content = document.getElementById('bevelContent');
             const arrow = document.getElementById('bevelArrow');
@@ -2053,8 +2755,8 @@
 
             // 更新本班数量
             const shiftCount = document.getElementById('shiftCount');
-            const currentCount = parseInt(shiftCount.textContent) + 1;
-            shiftCount.innerHTML = `${currentCount}<span class="text-xs text-gray-500 font-normal ml-1">支</span>`;
+            const currentCount = parseInt(shiftCount.textContent, 10) + 1;
+            updateWorkOrderProgress(currentCount);
         }
 
         function saveAndContinue() {
@@ -2083,8 +2785,8 @@
 
             // 更新本班数量
             const shiftCount = document.getElementById('shiftCount');
-            const currentCount = parseInt(shiftCount.textContent) + 1;
-            shiftCount.innerHTML = `${currentCount}<span class="text-xs text-gray-500 font-normal ml-1">支</span>`;
+            const currentCount = parseInt(shiftCount.textContent, 10) + 1;
+            updateWorkOrderProgress(currentCount);
 
             // 重置码单选择区域，但保留捆号等信息（如果从码单选择的）
             if (selectedCodeItem) {
@@ -2120,7 +2822,7 @@
             document.querySelectorAll('.shift-btn').forEach(btn => {
                 const isActive = btn.dataset.shift === shiftId;
                 btn.className = isActive 
-                    ? `shift-btn active flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-blue-600 text-white border-blue-600`
+                    ? `shift-btn active flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-blue-600 text-white border-blue-600 ring-4 ring-blue-100`
                     : `shift-btn flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-white text-gray-700 border-gray-200 hover:border-blue-400`;
 
                 const badge = btn.querySelector('span');
@@ -2350,6 +3052,7 @@
             switchMainTab('material');
             renderInstrumentTable();
             setCompressedAirResult('pass');
+            updateWorkOrderProgress(parseInt(document.getElementById('shiftCount')?.textContent || '247', 10));
 
             // 更新当前时间
             const now = new Date();
