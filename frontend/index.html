@@ -356,7 +356,7 @@
                     <i class="fas fa-clock-rotate-left text-blue-500"></i>
                     <span class="font-medium">班次浏览:</span>
                 </div>
-                <div class="flex gap-2 overflow-x-auto pb-1 w-full">
+                <div id="shiftButtonList" class="flex gap-2 overflow-x-auto pb-1 w-full">
                     
                     <button onclick="switchShift('yesterday_night')" 
                             class="shift-btn flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-white text-gray-700 border-gray-200 hover:border-blue-400" 
@@ -380,6 +380,10 @@
                         <span class="ml-2 text-xs py-0.5 px-1.5 rounded-full bg-gray-100 text-gray-600">0支</span>
                     </button>
                 </div>
+                <button onclick="openAddShiftModal()" class="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-dashed border-blue-300 text-blue-600 bg-blue-50 hover:bg-blue-100 font-semibold text-sm whitespace-nowrap transition-all">
+                    <i class="fas fa-plus"></i>
+                    <span>新增班次</span>
+                </button>
             </div>
         </div>
     </div>
@@ -1980,11 +1984,7 @@ R.H: &lt;70%：&lt;4 hours
                 <!-- 班次筛选 -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-3">班次</label>
-                    <div class="flex flex-wrap gap-2">
-                        <button class="filter-opt active px-4 py-2 rounded-lg border-2 border-blue-500 bg-blue-50 text-blue-700 font-medium text-sm" onclick="setFilterOpt(this)">全部班次</button>
-                        <button class="filter-opt px-4 py-2 rounded-lg border-2 border-gray-200 text-gray-600 font-medium text-sm hover:border-blue-300" onclick="setFilterOpt(this)">昨日夜班</button>
-                        <button class="filter-opt px-4 py-2 rounded-lg border-2 border-gray-200 text-gray-600 font-medium text-sm hover:border-blue-300" onclick="setFilterOpt(this)">今日白班</button>
-                    </div>
+                    <div id="filterShiftOptions" class="flex flex-wrap gap-2"></div>
                 </div>
 
                 <!-- 编号筛选 -->
@@ -2047,6 +2047,48 @@ R.H: &lt;70%：&lt;4 hours
         </div>
     </div>
 
+    <div id="addShiftModal" class="modal fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl industrial-shadow-lg max-w-md w-full">
+            <div class="border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                        <i class="fas fa-calendar-plus text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">新增班次</h3>
+                        <p class="text-sm text-gray-500">输入日期并选择白班或晚班</p>
+                    </div>
+                </div>
+                <button onclick="closeAddShiftModal()" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-5">
+                <div>
+                    <label for="newShiftDate" class="block text-sm font-medium text-gray-700 mb-2">班次日期</label>
+                    <input id="newShiftDate" type="date" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-base outline-none transition-all form-input">
+                </div>
+                <div>
+                    <label for="newShiftType" class="block text-sm font-medium text-gray-700 mb-2">班次类型</label>
+                    <select id="newShiftType" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-base outline-none transition-all form-input">
+                        <option value="day">白班</option>
+                        <option value="night">晚班</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 px-6 py-4 bg-gray-50 rounded-b-2xl flex gap-3">
+                <button onclick="closeAddShiftModal()" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:bg-gray-100">
+                    取消
+                </button>
+                <button onclick="submitAddShift()" class="flex-1 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 industrial-shadow">
+                    确定新增
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- 工单详情弹窗 -->
     <div id="woDetailModal" class="modal fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
         <div class="modal-content bg-white rounded-2xl industrial-shadow-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
@@ -2084,23 +2126,7 @@ R.H: &lt;70%：&lt;4 hours
                 <!-- 班次统计 -->
                 <div class="border-t border-gray-200 pt-6">
                     <h4 class="font-semibold text-gray-900 mb-4">班次生产统计</h4>
-                    <div class="grid grid-cols-3 gap-4">
-                        <div class="text-center p-4 bg-indigo-50 rounded-xl border border-indigo-200">
-                            <div class="text-2xl font-bold text-indigo-600">89</div>
-                            <div class="text-xs text-gray-600 mt-1">昨日夜班</div>
-                            <div class="text-xs text-indigo-600">03-24 20:00-08:00</div>
-                        </div>
-                        <div class="text-center p-4 bg-blue-50 rounded-xl border border-blue-200">
-                            <div class="text-2xl font-bold text-blue-600">156</div>
-                            <div class="text-xs text-gray-600 mt-1">今日白班</div>
-                            <div class="text-xs text-blue-600">03-25 08:00-20:00</div>
-                        </div>
-                        <div class="text-center p-4 bg-gray-50 rounded-xl border border-gray-200">
-                            <div class="text-2xl font-bold text-gray-400">0</div>
-                            <div class="text-xs text-gray-500 mt-1">今日夜班</div>
-                            <div class="text-xs text-gray-400">03-25 20:00-08:00</div>
-                        </div>
-                    </div>
+                    <div id="workOrderShiftStats" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
                 </div>
 
                 <!-- 总体进度 -->
@@ -2236,10 +2262,138 @@ R.H: &lt;70%：&lt;4 hours
         ];
 
         const shiftData = {
-            'yesterday_night': { name: '昨日夜班', count: 89, icon: 'fa-moon', color: 'indigo' },
-            'today_day': { name: '今日白班', count: 156, icon: 'fa-sun', color: 'blue' },
-            'today_night': { name: '今日夜班', count: 0, icon: 'fa-moon', color: 'indigo' }
+            'yesterday_night': { name: '昨日夜班', count: 89, icon: 'fa-moon', color: 'indigo', dateLabel: '03-24', timeRange: '20:00-08:00', type: 'night' },
+            'today_day': { name: '今日白班', count: 156, icon: 'fa-sun', color: 'blue', dateLabel: '03-25', timeRange: '08:00-20:00', type: 'day' },
+            'today_night': { name: '今日夜班', count: 0, icon: 'fa-moon', color: 'indigo', dateLabel: '03-25', timeRange: '20:00-08:00', type: 'night' }
         };
+
+        function formatShiftDate(dateValue) {
+            const [year, month, day] = dateValue.split('-');
+            return `${year}-${month}-${day}`;
+        }
+
+        function getShiftTypeLabel(type) {
+            return type === 'night' ? '晚班' : '白班';
+        }
+
+        function getShiftTimeRange(type) {
+            return type === 'night' ? '20:00-08:00' : '08:00-20:00';
+        }
+
+        function getShiftDateLabel(dateValue) {
+            const [, month, day] = dateValue.split('-');
+            return `${month}-${day}`;
+        }
+
+        function buildShiftName(dateValue, type) {
+            return `${formatShiftDate(dateValue)} ${getShiftTypeLabel(type)}`;
+        }
+
+        function buildShiftId(dateValue, type) {
+            return `custom_${dateValue.replaceAll('-', '_')}_${type}`;
+        }
+
+        function getTodayDateValue() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function createShiftButton(shiftId, shift) {
+            const button = document.createElement('button');
+            const iconClass = shift.icon === 'fa-moon' ? 'fas fa-moon mr-2' : 'fas fa-sun mr-2';
+            const badgeClass = shiftId === currentShift
+                ? 'ml-2 text-xs py-0.5 px-1.5 rounded-full bg-white/20'
+                : 'ml-2 text-xs py-0.5 px-1.5 rounded-full bg-gray-100 text-gray-600';
+
+            button.type = 'button';
+            button.dataset.shift = shiftId;
+            button.className = shiftId === currentShift
+                ? 'shift-btn active flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-blue-600 text-white border-blue-600 ring-4 ring-blue-100'
+                : 'shift-btn flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-white text-gray-700 border-gray-200 hover:border-blue-400';
+            button.onclick = () => switchShift(shiftId);
+            button.innerHTML = `
+                <i class="${iconClass}"></i>
+                ${shift.name}
+                <span class="${badgeClass}">${shift.count}支</span>
+            `;
+
+            return button;
+        }
+
+        function renderShiftFilterOptions() {
+            const container = document.getElementById('filterShiftOptions');
+            if (!container) return;
+
+            const allButtonClass = 'filter-opt active px-4 py-2 rounded-lg border-2 border-blue-500 bg-blue-50 text-blue-700 font-medium text-sm';
+            const itemButtonClass = 'filter-opt px-4 py-2 rounded-lg border-2 border-gray-200 text-gray-600 font-medium text-sm hover:border-blue-300';
+
+            container.innerHTML = '';
+
+            const allButton = document.createElement('button');
+            allButton.type = 'button';
+            allButton.className = allButtonClass;
+            allButton.textContent = '全部班次';
+            allButton.onclick = function() { setFilterOpt(this); };
+            container.appendChild(allButton);
+
+            Object.values(shiftData).forEach(shift => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = itemButtonClass;
+                button.textContent = shift.name;
+                button.onclick = function() { setFilterOpt(this); };
+                container.appendChild(button);
+            });
+        }
+
+        function getShiftStatCardClass(shiftId, shift) {
+            if (shiftId === currentShift) {
+                return shift.color === 'indigo'
+                    ? 'text-center p-4 bg-indigo-50 rounded-xl border border-indigo-200'
+                    : 'text-center p-4 bg-blue-50 rounded-xl border border-blue-200';
+            }
+
+            return shift.count > 0
+                ? 'text-center p-4 bg-slate-50 rounded-xl border border-slate-200'
+                : 'text-center p-4 bg-gray-50 rounded-xl border border-gray-200';
+        }
+
+        function getShiftStatValueClass(shiftId, shift) {
+            if (shiftId === currentShift) {
+                return shift.color === 'indigo' ? 'text-2xl font-bold text-indigo-600' : 'text-2xl font-bold text-blue-600';
+            }
+
+            return shift.count > 0 ? 'text-2xl font-bold text-slate-700' : 'text-2xl font-bold text-gray-400';
+        }
+
+        function getShiftStatMetaClass(shiftId, shift) {
+            if (shiftId === currentShift) {
+                return shift.color === 'indigo' ? 'text-xs text-indigo-600' : 'text-xs text-blue-600';
+            }
+
+            return shift.count > 0 ? 'text-xs text-slate-500' : 'text-xs text-gray-400';
+        }
+
+        function renderWorkOrderShiftStats() {
+            const container = document.getElementById('workOrderShiftStats');
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            Object.entries(shiftData).forEach(([shiftId, shift]) => {
+                const card = document.createElement('div');
+                card.className = getShiftStatCardClass(shiftId, shift);
+                card.innerHTML = `
+                    <div class="${getShiftStatValueClass(shiftId, shift)}">${shift.count}</div>
+                    <div class="text-xs text-gray-600 mt-1">${shift.name}</div>
+                    <div class="${getShiftStatMetaClass(shiftId, shift)}">${shift.dateLabel} ${shift.timeRange}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
 
         function switchMainTab(tabId) {
             currentMainTab = tabId;
@@ -2689,7 +2843,67 @@ R.H: &lt;70%：&lt;4 hours
             document.body.style.overflow = '';
         }
 
+        function openAddShiftModal() {
+            const dateInput = document.getElementById('newShiftDate');
+            const typeInput = document.getElementById('newShiftType');
+
+            if (dateInput && !dateInput.value) {
+                dateInput.value = getTodayDateValue();
+            }
+            if (typeInput) {
+                typeInput.value = 'day';
+            }
+
+            document.getElementById('addShiftModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAddShiftModal() {
+            document.getElementById('addShiftModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function submitAddShift() {
+            const dateValue = document.getElementById('newShiftDate').value;
+            const shiftType = document.getElementById('newShiftType').value;
+
+            if (!dateValue) {
+                showToast('请选择班次日期', 'error');
+                return;
+            }
+
+            const shiftId = buildShiftId(dateValue, shiftType);
+            if (shiftData[shiftId]) {
+                showToast('该日期班次已存在，请勿重复新增', 'error');
+                return;
+            }
+
+            const shift = {
+                name: buildShiftName(dateValue, shiftType),
+                count: 0,
+                icon: shiftType === 'night' ? 'fa-moon' : 'fa-sun',
+                color: shiftType === 'night' ? 'indigo' : 'blue',
+                dateLabel: getShiftDateLabel(dateValue),
+                timeRange: getShiftTimeRange(shiftType),
+                type: shiftType
+            };
+
+            shiftData[shiftId] = shift;
+
+            const shiftButtonList = document.getElementById('shiftButtonList');
+            if (shiftButtonList) {
+                shiftButtonList.appendChild(createShiftButton(shiftId, shift));
+            }
+
+            renderShiftFilterOptions();
+            renderWorkOrderShiftStats();
+            closeAddShiftModal();
+            switchShift(shiftId);
+            showToast(`已新增班次: ${shift.name}`, 'success');
+        }
+
         function viewWorkOrderDetail() {
+            renderWorkOrderShiftStats();
             document.getElementById('woDetailModal').classList.add('open');
             document.body.style.overflow = 'hidden';
         }
@@ -3047,6 +3261,8 @@ R.H: &lt;70%：&lt;4 hours
 
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
+            renderShiftFilterOptions();
+            renderWorkOrderShiftStats();
             switchShift('today_day');
             setAppearance('pass');
             switchMainTab('material');
@@ -3066,6 +3282,7 @@ R.H: &lt;70%：&lt;4 hours
                 closeDetailDrawer();
                 closeEntryDrawer();
                 closeFilter();
+                closeAddShiftModal();
                 closeWoDetail();
                 closeCodeListModal();
             }
