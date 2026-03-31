@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>外喷砂线历史详情 - MES系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+
+        * { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        body { font-family: 'Inter', 'Noto Sans SC', sans-serif; background: #F4F6F8; }
+
+        .industrial-shadow { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04); }
+        .industrial-shadow-lg { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 8px 24px rgba(0, 0, 0, 0.06); }
+        .wo-card { background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%); border-left: 4px solid #2563EB; }
+
+        .data-table { border-collapse: separate; border-spacing: 0; width: 100%; table-layout: fixed; }
+        .data-table th {
+            background: #F8FAFC;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.75rem;
+            color: #64748B;
+            border-bottom: 2px solid #E2E8F0;
+            padding: 12px 4px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .data-table td {
+            border-bottom: 1px solid #F1F5F9;
+            padding: 10px 4px;
+            text-align: center;
+            transition: background-color 0.15s ease;
+            vertical-align: middle;
+        }
+        .data-table tr:hover td { background-color: #F8FAFC; }
+
+        .form-input {
+            width: 100%;
+            padding: 6px 4px;
+            border: 2px solid #E2E8F0;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            outline: none;
+            transition: all 0.2s;
+            text-align: center;
+            background: #F8FAFC;
+            color: #1E293B;
+        }
+        .form-input:disabled {
+            background: #F8FAFC;
+            border-color: #E2E8F0;
+            color: #1E293B;
+            cursor: default;
+        }
+
+        .shift-badge {
+            background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+            border: 2px solid #60A5FA;
+        }
+
+        .stats-card {
+            background: white;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .status-pending { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
+        .status-saved { background: #DCFCE7; color: #166534; border: 1px solid #86EFAC; }
+        .status-editing { background: #DBEAFE; color: #1E40AF; border: 1px solid #93C5FD; }
+
+        .readonly-field {
+            background: #F8FAFC;
+            border: 2px solid #E2E8F0;
+            border-radius: 6px;
+            padding: 6px 4px;
+            color: #1E293B;
+            font-weight: 500;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 34px;
+            width: 100%;
+        }
+
+        .btn-secondary {
+            background: #F3F4F6;
+            color: #374151;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 2px solid #E5E7EB;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-secondary:hover {
+            background: #E5E7EB;
+            border-color: #D1D5DB;
+        }
+
+        .btn-primary {
+            background: #2563EB;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-primary:hover { background: #1D4ED8; }
+
+        @media (max-width: 1280px) {
+            .data-table { font-size: 0.75rem; }
+            .data-table th, .data-table td { padding: 8px 2px; }
+            .form-input { padding: 4px 2px; font-size: 0.75rem; }
+            .btn-primary, .btn-secondary { padding: 5px 8px; font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50 pb-20">
+    <header class="bg-white industrial-shadow sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-4">
+                    <button onclick="history.back()" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
+                        <i class="fas fa-arrow-left text-lg"></i>
+                    </button>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                            <i class="fas fa-file-lines text-xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-900 tracking-tight">外喷砂线班次提交详情</h1>
+                            <p class="text-xs text-gray-500">历史归档 | 外喷砂线设备运行记录</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="./waipensha-equipment-history.html" class="btn-secondary">
+                        <i class="fas fa-list"></i>
+                        <span>返回历史列表</span>
+                    </a>
+                    <div class="hidden md:flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg text-sm font-medium">
+                        <i class="fas fa-box-archive"></i>
+                        <span>已归档</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+        <div class="wo-card rounded-xl p-5 industrial-shadow relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -mr-10 -mt-10 opacity-50"></div>
+            <div class="relative flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="shift-badge px-4 py-2 rounded-xl flex items-center gap-3">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-sm">
+                            <i class="fas fa-sun text-xl" id="shiftIcon"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-blue-700 font-semibold">班次信息</div>
+                            <div class="text-sm font-bold text-blue-900" id="shiftDisplay">2026-03-31 今日白班 (08:00-20:00)</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-lg border border-gray-200">
+                        <i class="fas fa-calendar text-gray-400"></i>
+                        <span class="text-sm font-semibold text-gray-700" id="currentDate">2026-03-31</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 text-sm">
+                    <div class="text-center px-4 py-2 bg-blue-50 rounded-lg border border-blue-200">
+                        <div class="text-xs text-gray-500">已录入时段</div>
+                        <div class="text-lg font-bold text-blue-600" id="filledCount">12/12</div>
+                    </div>
+                    <div class="text-center px-4 py-2 bg-green-50 rounded-lg border border-green-200">
+                        <div class="text-xs text-gray-500">记录状态</div>
+                        <div class="text-sm font-bold text-green-600" id="recordStatus">已提交</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 p-5 industrial-shadow">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <i class="fas fa-sliders-h text-blue-600"></i>
+                    基础工艺参数
+                    <span class="text-xs font-normal text-gray-400 ml-2">历史班次提交时保存的参数快照</span>
+                </h2>
+                <div class="text-sm text-gray-500 flex items-center gap-2">
+                    <i class="fas fa-lock"></i>
+                    <span>只读</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">钢砂厂家</label>
+                    <input type="text" id="sandFactory" class="form-input" disabled>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">钢砂规格</label>
+                    <input type="text" id="sandSpec" class="form-input" disabled>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">钢丸厂家</label>
+                    <input type="text" id="shotFactory" class="form-input" disabled>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">钢丸规格</label>
+                    <input type="text" id="shotSpec" class="form-input" disabled>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">丸、砂配比</label>
+                    <input type="text" id="mixRatio" class="form-input" disabled>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">传送线螺距</label>
+                    <input type="text" id="screwPitch" class="form-input" disabled>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">除锈等级</label>
+                    <input type="text" id="rustGrade" class="form-input" disabled>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">锚纹深度(μm)</label>
+                    <input type="text" id="anchorDepth" class="form-input" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 overflow-hidden industrial-shadow">
+            <div class="px-5 py-4 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+                <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <i class="fas fa-clock text-blue-600"></i>
+                    时段运行记录
+                </h2>
+                <div class="flex items-center gap-2 text-sm text-gray-500">
+                    <i class="fas fa-box-archive"></i>
+                    <span>历史提交明细，仅供查看</span>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>时段</th>
+                            <th>传送线速度<br><span class="text-xs font-normal text-gray-400">(m/min)</span></th>
+                            <th>传送线频率<br><span class="text-xs font-normal text-gray-400">(Hz)</span></th>
+                            <th>除尘系统<br><span class="text-xs font-normal text-gray-400">运行</span></th>
+                            <th>液压系统<br><span class="text-xs font-normal text-gray-400">运行</span></th>
+                            <th>检测时间</th>
+                            <th>检测人</th>
+                            <th>状态</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recordTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 p-5 industrial-shadow">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <i class="fas fa-chart-bar text-blue-600"></i>
+                    班次累计统计
+                </h2>
+                <div class="text-sm text-gray-500 flex items-center gap-2">
+                    <i class="fas fa-file-shield"></i>
+                    <span>归档统计</span>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="stats-card">
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">累计运行时间 (h)</label>
+                    <input type="text" id="totalRuntime" class="form-input text-lg font-bold text-blue-600" disabled>
+                </div>
+                <div class="stats-card">
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">累计钢砂加入量 (kg)</label>
+                    <input type="text" id="totalSand" class="form-input text-lg font-bold text-blue-600" disabled>
+                </div>
+                <div class="stats-card">
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">累计除锈数量 (支)</label>
+                    <input type="text" id="totalPipes" class="form-input text-lg font-bold text-blue-600" disabled>
+                </div>
+                <div class="stats-card">
+                    <label class="block text-xs font-semibold text-gray-500 mb-1">累计钢丸加入量 (kg)</label>
+                    <input type="text" id="totalShot" class="form-input text-lg font-bold text-blue-600" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 p-5 industrial-shadow">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">班次备注 / 异常情况记录</label>
+            <textarea id="shiftRemarks" rows="3" class="form-input text-left" disabled></textarea>
+        </div>
+    </main>
+
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 industrial-shadow-lg z-30">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="text-sm text-gray-600">
+                <span class="font-semibold text-gray-900" id="bottomShiftInfo">2026-03-31 今日白班</span>
+                <span class="mx-2">|</span>
+                <span>提交人: <span class="font-bold text-blue-600" id="bottomSubmitter">张师傅</span></span>
+                <span class="mx-2">|</span>
+                <span>提交时间: <span class="font-bold text-green-600" id="bottomSubmitTime">19:42</span></span>
+            </div>
+            <div class="flex gap-3">
+                <a href="./waipensha-equipment-history.html" class="btn-secondary">
+                    <i class="fas fa-list mr-1"></i>返回列表
+                </a>
+                <button onclick="window.print()" class="btn-primary">
+                    <i class="fas fa-print mr-1"></i>打印详情
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const detailMap = {
+            '2026-03-31-day': {
+                shiftType: 'day',
+                date: '2026-03-31',
+                shiftLabel: '2026-03-31 今日白班 (08:00-20:00)',
+                filled: '12/12',
+                status: '已提交',
+                statusClass: 'text-sm font-bold text-green-600',
+                submitter: '张师傅',
+                submitTime: '19:42',
+                baseInfo: {
+                    sandFactory: '金虎机械',
+                    sandSpec: 'G25',
+                    shotFactory: '宏盛材料',
+                    shotSpec: 'S330',
+                    mixRatio: '6:4',
+                    screwPitch: '185',
+                    rustGrade: 'Sa2.5',
+                    anchorDepth: '55'
+                },
+                stats: {
+                    totalRuntime: '10.8',
+                    totalSand: '2400',
+                    totalPipes: '156',
+                    totalShot: '1260'
+                },
+                remarks: '上午 10:30 更换一次钢砂补料，设备整体运行稳定，13:00 至 13:20 对抛丸器做例行点检，无异常停机。',
+                rows: [
+                    ['08:00~09:00', '2.8', '47', '正常', '正常', '08:55', '张师傅', 'saved'],
+                    ['09:00~10:00', '2.9', '48', '正常', '正常', '09:58', '张师傅', 'saved'],
+                    ['10:00~11:00', '2.6', '44', '正常', '正常', '10:48', '张师傅', 'pending'],
+                    ['11:00~12:00', '3.0', '49', '正常', '正常', '11:57', '张师傅', 'saved'],
+                    ['12:00~13:00', '2.1', '36', '正常', '正常', '12:45', '张师傅', 'pending'],
+                    ['13:00~14:00', '2.3', '39', '正常', '正常', '13:58', '张师傅', 'pending'],
+                    ['14:00~15:00', '3.1', '50', '正常', '正常', '14:58', '张师傅', 'saved'],
+                    ['15:00~16:00', '2.9', '48', '正常', '正常', '15:55', '张师傅', 'saved'],
+                    ['16:00~17:00', '2.8', '47', '正常', '正常', '16:53', '张师傅', 'saved'],
+                    ['17:00~18:00', '2.8', '47', '正常', '正常', '17:57', '张师傅', 'saved'],
+                    ['18:00~19:00', '2.7', '46', '正常', '正常', '18:54', '张师傅', 'saved'],
+                    ['19:00~20:00', '2.5', '42', '正常', '正常', '19:40', '张师傅', 'saved']
+                ]
+            },
+            '2026-03-30-night': {
+                shiftType: 'night',
+                date: '2026-03-30',
+                shiftLabel: '2026-03-30 昨日夜班 (20:00-08:00)',
+                filled: '12/12',
+                status: '已提交',
+                statusClass: 'text-sm font-bold text-green-600',
+                submitter: '李师傅',
+                submitTime: '07:56',
+                baseInfo: {
+                    sandFactory: '金虎机械',
+                    sandSpec: 'G25',
+                    shotFactory: '宏盛材料',
+                    shotSpec: 'S330',
+                    mixRatio: '6:4',
+                    screwPitch: '180',
+                    rustGrade: 'Sa2.5',
+                    anchorDepth: '53'
+                },
+                stats: {
+                    totalRuntime: '9.6',
+                    totalSand: '2100',
+                    totalPipes: '143',
+                    totalShot: '1180'
+                },
+                remarks: '夜班整体运行平稳，凌晨 02:10 进行短暂停机清理，复机后参数恢复正常。',
+                rows: [
+                    ['20:00~21:00', '2.7', '45', '正常', '正常', '20:55', '李师傅', 'saved'],
+                    ['21:00~22:00', '2.8', '46', '正常', '正常', '21:56', '李师傅', 'saved'],
+                    ['22:00~23:00', '2.9', '48', '正常', '正常', '22:57', '李师傅', 'saved'],
+                    ['23:00~00:00', '2.4', '40', '正常', '正常', '23:48', '李师傅', 'pending'],
+                    ['00:00~01:00', '2.7', '45', '正常', '正常', '00:55', '李师傅', 'saved'],
+                    ['01:00~02:00', '3.0', '49', '正常', '正常', '01:58', '李师傅', 'saved'],
+                    ['02:00~03:00', '1.8', '31', '正常', '正常', '02:40', '李师傅', 'editing'],
+                    ['03:00~04:00', '2.8', '46', '正常', '正常', '03:57', '李师傅', 'saved'],
+                    ['04:00~05:00', '2.9', '47', '正常', '正常', '04:56', '李师傅', 'saved'],
+                    ['05:00~06:00', '2.5', '42', '正常', '正常', '05:53', '李师傅', 'saved'],
+                    ['06:00~07:00', '2.6', '43', '正常', '正常', '06:52', '李师傅', 'saved'],
+                    ['07:00~08:00', '2.3', '39', '正常', '正常', '07:44', '李师傅', 'saved']
+                ]
+            },
+            '2026-03-29-day': {
+                shiftType: 'day',
+                date: '2026-03-29',
+                shiftLabel: '2026-03-29 白班 (08:00-20:00)',
+                filled: '10/12',
+                status: '待补录',
+                statusClass: 'text-sm font-bold text-amber-600',
+                submitter: '王班长',
+                submitTime: '20:05',
+                baseInfo: {
+                    sandFactory: '金虎机械',
+                    sandSpec: 'G25',
+                    shotFactory: '宏盛材料',
+                    shotSpec: 'S330',
+                    mixRatio: '7:3',
+                    screwPitch: '178',
+                    rustGrade: 'Sa2.5',
+                    anchorDepth: '50'
+                },
+                stats: {
+                    totalRuntime: '8.9',
+                    totalSand: '1900',
+                    totalPipes: '128',
+                    totalShot: '1020'
+                },
+                remarks: '16:00 后两小时数据未完整提交，现场备注为换班交接时遗漏，需后补。',
+                rows: [
+                    ['08:00~09:00', '2.5', '42', '正常', '正常', '08:50', '王班长', 'saved'],
+                    ['09:00~10:00', '2.8', '46', '正常', '正常', '09:58', '王班长', 'saved'],
+                    ['10:00~11:00', '2.6', '44', '正常', '正常', '10:55', '王班长', 'saved'],
+                    ['11:00~12:00', '2.7', '45', '正常', '正常', '11:53', '王班长', 'saved'],
+                    ['12:00~13:00', '2.0', '34', '正常', '正常', '12:42', '王班长', 'pending'],
+                    ['13:00~14:00', '2.9', '48', '正常', '正常', '13:58', '王班长', 'saved'],
+                    ['14:00~15:00', '2.8', '47', '正常', '正常', '14:52', '王班长', 'saved'],
+                    ['15:00~16:00', '2.4', '41', '正常', '正常', '15:49', '王班长', 'saved'],
+                    ['16:00~17:00', '--', '--', '--', '--', '--', '--', 'editing'],
+                    ['17:00~18:00', '--', '--', '--', '--', '--', '--', 'editing'],
+                    ['18:00~19:00', '2.7', '45', '正常', '正常', '18:50', '王班长', 'saved'],
+                    ['19:00~20:00', '2.9', '48', '正常', '正常', '19:37', '王班长', 'saved']
+                ]
+            }
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const shiftKey = params.get('shift') || '2026-03-31-day';
+        const detail = detailMap[shiftKey] || detailMap['2026-03-31-day'];
+
+        function statusBadge(type) {
+            if (type === 'saved') {
+                return '<span class="status-badge status-saved"><i class="fas fa-check-circle"></i>已保存</span>';
+            }
+            if (type === 'editing') {
+                return '<span class="status-badge status-editing"><i class="fas fa-pen"></i>待补录</span>';
+            }
+            return '<span class="status-badge status-pending"><i class="fas fa-clock"></i>异常说明</span>';
+        }
+
+        function populateDetail() {
+            document.getElementById('shiftDisplay').textContent = detail.shiftLabel;
+            document.getElementById('currentDate').textContent = detail.date;
+            document.getElementById('filledCount').textContent = detail.filled;
+            document.getElementById('recordStatus').textContent = detail.status;
+            document.getElementById('recordStatus').className = detail.statusClass;
+            document.getElementById('bottomShiftInfo').textContent = detail.shiftLabel;
+            document.getElementById('bottomSubmitter').textContent = detail.submitter;
+            document.getElementById('bottomSubmitTime').textContent = detail.submitTime;
+            document.getElementById('shiftRemarks').value = detail.remarks;
+
+            const icon = document.getElementById('shiftIcon');
+            icon.className = detail.shiftType === 'night' ? 'fas fa-moon text-xl' : 'fas fa-sun text-xl';
+
+            Object.entries(detail.baseInfo).forEach(([key, value]) => {
+                document.getElementById(key).value = value;
+            });
+
+            Object.entries(detail.stats).forEach(([key, value]) => {
+                document.getElementById(key).value = value;
+            });
+
+            document.getElementById('recordTableBody').innerHTML = detail.rows.map(row => `
+                <tr>
+                    <td class="time-slot font-semibold text-gray-900">${row[0]}</td>
+                    <td><span class="readonly-field">${row[1]}</span></td>
+                    <td><span class="readonly-field">${row[2]}</span></td>
+                    <td><span class="readonly-field">${row[3]}</span></td>
+                    <td><span class="readonly-field">${row[4]}</span></td>
+                    <td><span class="readonly-field">${row[5]}</span></td>
+                    <td><span class="readonly-field">${row[6]}</span></td>
+                    <td>${statusBadge(row[7])}</td>
+                </tr>
+            `).join('');
+        }
+
+        populateDetail();
+    </script>
+</body>
+</html>

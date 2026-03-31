@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>外喷砂线历史记录 - MES系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: "Inter", "Noto Sans SC", sans-serif; background: #f4f6f8; }
+        .industrial-shadow { box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.04); }
+        .history-card { transition: all .2s ease; }
+        .history-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37, 99, 235, .12); border-color: #93c5fd; }
+        .status-badge { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:9999px; font-size:12px; font-weight:700; }
+        .status-done { background:#dcfce7; color:#166534; border:1px solid #86efac; }
+        .status-partial { background:#dbeafe; color:#1d4ed8; border:1px solid #93c5fd; }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <header class="bg-white industrial-shadow sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="h-16 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <button onclick="history.back()" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center">
+                            <i class="fas fa-clock-rotate-left"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-900">外喷砂线历史记录</h1>
+                            <p class="text-xs text-gray-500">查看过往班次提交的设备运行记录</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium">
+                    <i class="fas fa-database"></i>
+                    <span>已归档 6 个班次</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white border border-gray-200 rounded-2xl p-5 industrial-shadow">
+                <div class="text-sm text-gray-500">最近提交</div>
+                <div class="mt-2 text-3xl font-bold text-gray-900">2026-03-31</div>
+                <div class="mt-2 text-sm text-blue-600 font-semibold">今日白班已归档</div>
+            </div>
+            <div class="bg-white border border-gray-200 rounded-2xl p-5 industrial-shadow">
+                <div class="text-sm text-gray-500">完整提交班次</div>
+                <div class="mt-2 text-3xl font-bold text-green-600">5</div>
+                <div class="mt-2 text-sm text-gray-500">12 个时段均已录入</div>
+            </div>
+            <div class="bg-white border border-gray-200 rounded-2xl p-5 industrial-shadow">
+                <div class="text-sm text-gray-500">待补录班次</div>
+                <div class="mt-2 text-3xl font-bold text-amber-600">1</div>
+                <div class="mt-2 text-sm text-gray-500">存在未完成时段</div>
+            </div>
+        </section>
+
+        <section class="space-y-4">
+            <div>
+                <h2 class="text-lg font-bold text-gray-900">班次列表</h2>
+                <p class="text-sm text-gray-500">点击卡片查看对应班次提交详情</p>
+            </div>
+
+            <a href="./waipensha-equipment-history-detail.html?shift=2026-03-31-day" class="history-card block bg-white border border-gray-200 rounded-2xl p-5 industrial-shadow">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+                            <i class="fas fa-sun"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <h3 class="text-lg font-bold text-gray-900">2026-03-31 今日白班</h3>
+                                <span class="status-badge status-done"><i class="fas fa-check-circle"></i>已提交</span>
+                            </div>
+                            <div class="mt-2 text-sm text-gray-500">08:00 - 20:00 | 提交人：张师傅 | 提交时间：19:42</div>
+                            <div class="mt-3 flex flex-wrap gap-3 text-sm">
+                                <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-semibold">已录入时段 12/12</span>
+                                <span class="px-3 py-1 rounded-full bg-green-50 text-green-700 font-semibold">运行时间 10.8h</span>
+                                <span class="px-3 py-1 rounded-full bg-gray-100 text-gray-700 font-semibold">钢管数量 156</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-blue-600 font-semibold flex items-center gap-2">
+                        <span>查看详情</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </a>
+
+            <a href="./waipensha-equipment-history-detail.html?shift=2026-03-30-night" class="history-card block bg-white border border-gray-200 rounded-2xl p-5 industrial-shadow">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <h3 class="text-lg font-bold text-gray-900">2026-03-30 昨日夜班</h3>
+                                <span class="status-badge status-done"><i class="fas fa-check-circle"></i>已提交</span>
+                            </div>
+                            <div class="mt-2 text-sm text-gray-500">20:00 - 08:00 | 提交人：李师傅 | 提交时间：07:56</div>
+                            <div class="mt-3 flex flex-wrap gap-3 text-sm">
+                                <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-semibold">已录入时段 12/12</span>
+                                <span class="px-3 py-1 rounded-full bg-green-50 text-green-700 font-semibold">运行时间 9.6h</span>
+                                <span class="px-3 py-1 rounded-full bg-gray-100 text-gray-700 font-semibold">钢管数量 143</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-blue-600 font-semibold flex items-center gap-2">
+                        <span>查看详情</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </a>
+
+            <a href="./waipensha-equipment-history-detail.html?shift=2026-03-29-day" class="history-card block bg-white border border-gray-200 rounded-2xl p-5 industrial-shadow">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                            <i class="fas fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <h3 class="text-lg font-bold text-gray-900">2026-03-29 白班</h3>
+                                <span class="status-badge status-partial"><i class="fas fa-pen"></i>待补录</span>
+                            </div>
+                            <div class="mt-2 text-sm text-gray-500">08:00 - 20:00 | 提交人：王班长 | 提交时间：20:05</div>
+                            <div class="mt-3 flex flex-wrap gap-3 text-sm">
+                                <span class="px-3 py-1 rounded-full bg-amber-50 text-amber-700 font-semibold">已录入时段 10/12</span>
+                                <span class="px-3 py-1 rounded-full bg-green-50 text-green-700 font-semibold">运行时间 8.9h</span>
+                                <span class="px-3 py-1 rounded-full bg-gray-100 text-gray-700 font-semibold">钢管数量 128</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-blue-600 font-semibold flex items-center gap-2">
+                        <span>查看详情</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </a>
+        </section>
+    </main>
+</body>
+</html>

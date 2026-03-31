@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>除锈工单列表 - MES系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap");
+
+      * {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+
+      body {
+        font-family: "Inter", "Noto Sans SC", sans-serif;
+        background: #f4f6f8;
+        overflow: hidden;
+      }
+
+      .industrial-shadow {
+        box-shadow:
+          0 2px 8px rgba(0, 0, 0, 0.08),
+          0 4px 16px rgba(0, 0, 0, 0.04);
+      }
+
+      .industrial-shadow-lg {
+        box-shadow:
+          0 8px 24px rgba(15, 23, 42, 0.1),
+          0 16px 40px rgba(37, 99, 235, 0.08);
+      }
+
+      .hero-panel {
+        background:
+          radial-gradient(circle at top right, rgba(96, 165, 250, 0.28), transparent 28%),
+          linear-gradient(135deg, #0f172a 0%, #1d4ed8 55%, #2563eb 100%);
+      }
+
+      .chip {
+        transition: all 0.2s ease;
+      }
+
+      .chip.active {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        color: #fff;
+        border-color: #2563eb;
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.24);
+      }
+
+      .workorder-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+        border: 1px solid #dbeafe;
+        border-left: 5px solid #2563eb;
+        transition:
+          transform 0.22s ease,
+          box-shadow 0.22s ease,
+          border-color 0.22s ease;
+        cursor: pointer;
+      }
+
+      .workorder-card:hover {
+        transform: translateY(-4px);
+        border-color: #93c5fd;
+        box-shadow:
+          0 14px 30px rgba(15, 23, 42, 0.1),
+          0 10px 22px rgba(37, 99, 235, 0.14);
+      }
+
+      .workorder-card[data-status="paused"] {
+        border-left-color: #f59e0b;
+      }
+
+      .workorder-card[data-status="urgent"] {
+        border-left-color: #dc2626;
+      }
+
+      .metric-card {
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        backdrop-filter: blur(8px);
+      }
+
+      .progress-track {
+        background: #dbeafe;
+        border-radius: 9999px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        background: linear-gradient(90deg, #60a5fa 0%, #2563eb 100%);
+        transition: width 0.3s ease;
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 9999px;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1px solid transparent;
+      }
+
+      .status-badge.in-progress {
+        background: #dbeafe;
+        color: #1d4ed8;
+        border-color: #bfdbfe;
+      }
+
+      .status-badge.pending {
+        background: #e5e7eb;
+        color: #374151;
+        border-color: #d1d5db;
+      }
+
+      .status-badge.paused {
+        background: #fef3c7;
+        color: #b45309;
+        border-color: #fcd34d;
+      }
+
+      .status-badge.urgent {
+        background: #fee2e2;
+        color: #b91c1c;
+        border-color: #fca5a5;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 9999px;
+        background: currentColor;
+        opacity: 0.8;
+      }
+
+      .info-pill {
+        background: #eff6ff;
+        border: 1px solid #dbeafe;
+      }
+
+      .search-input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+      }
+
+      .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #e2e8f0;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 9999px;
+      }
+    </style>
+  </head>
+  <body class="h-screen w-screen flex flex-col">
+    <header class="bg-white industrial-shadow z-50 flex-none">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-4">
+          <button
+            onclick="history.back()"
+            class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors"
+          >
+            <i class="fas fa-arrow-left text-lg"></i>
+          </button>
+          <div class="flex items-center gap-3">
+            <div
+              class="w-11 h-11 bg-blue-600 rounded-xl flex items-center justify-center text-white"
+            >
+              <i class="fas fa-clipboard-list text-xl"></i>
+            </div>
+            <div>
+              <h1 class="text-xl font-bold text-gray-900 tracking-tight">
+                除锈工单列表
+              </h1>
+              <p class="text-xs text-gray-500">
+                产线 A-03 | 工序质检记录 | 点击工单进入除锈记录页
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div
+            class="hidden md:flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg text-sm font-medium"
+          >
+            <i class="fas fa-check-circle"></i>
+            <span>系统正常</span>
+          </div>
+          <button
+            class="flex items-center gap-2 px-4 py-2.5 bg-white border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:border-blue-400 hover:text-blue-600 transition-colors"
+          >
+            <i class="fas fa-download"></i>
+            <span class="hidden sm:inline">导出</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <section class="px-6 pt-5 pb-4 flex-none">
+      <div class="hero-panel rounded-3xl industrial-shadow-lg text-white p-6 md:p-7">
+        <div class="flex flex-col xl:flex-row xl:items-end gap-5">
+          <div class="flex-1">
+            <div
+              class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-sm font-semibold"
+            >
+              <i class="fas fa-wave-square"></i>
+              <span>进管工序排产看板</span>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mt-4">
+              当前待处理与执行中的工单一览
+            </h2>
+            <p class="text-blue-100 mt-3 text-sm md:text-base max-w-3xl">
+              展示工单编号、状态、客户、项目、计划数量、已完成数量，以及交期、规格、产线与优先级等关键信息。
+            </p>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 xl:min-w-[520px]">
+            <div class="metric-card rounded-2xl p-4">
+              <div class="text-blue-100 text-xs">工单总数</div>
+              <div class="text-3xl font-extrabold mt-2" id="metricTotal">0</div>
+            </div>
+            <div class="metric-card rounded-2xl p-4">
+              <div class="text-blue-100 text-xs">生产中</div>
+              <div class="text-3xl font-extrabold mt-2" id="metricProducing">0</div>
+            </div>
+            <div class="metric-card rounded-2xl p-4">
+              <div class="text-blue-100 text-xs">今日应完成</div>
+              <div class="text-3xl font-extrabold mt-2" id="metricToday">0</div>
+            </div>
+            <div class="metric-card rounded-2xl p-4">
+              <div class="text-blue-100 text-xs">累计完成</div>
+              <div class="text-3xl font-extrabold mt-2" id="metricCompleted">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="px-6 pb-4 flex-none">
+      <div class="bg-white rounded-2xl industrial-shadow p-4 md:p-5">
+        <div class="flex flex-col xl:flex-row xl:items-center gap-4 justify-between">
+          <div class="flex flex-col md:flex-row gap-3 md:items-center flex-1">
+            <div class="relative flex-1 max-w-2xl">
+              <i
+                class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              ></i>
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="搜索工单号、客户、项目、规格..."
+                class="search-input w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-base outline-none transition-all"
+              />
+            </div>
+            <div class="flex gap-2 overflow-x-auto">
+              <button class="chip active px-4 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold whitespace-nowrap" data-filter="all">
+                全部工单
+              </button>
+              <button class="chip px-4 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold whitespace-nowrap" data-filter="in-progress">
+                生产中
+              </button>
+              <button class="chip px-4 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold whitespace-nowrap" data-filter="pending">
+                待开工
+              </button>
+              <button class="chip px-4 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold whitespace-nowrap" data-filter="urgent">
+                紧急工单
+              </button>
+            </div>
+          </div>
+          <div class="text-sm text-gray-500 flex items-center gap-2">
+            <i class="fas fa-layer-group text-blue-600"></i>
+            <span>当前显示 <span id="visibleCount" class="font-bold text-gray-900">0</span> 个工单</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="flex-1 min-h-0 px-6 pb-6">
+      <div class="h-full overflow-y-auto">
+        <div id="workOrderList" class="grid grid-cols-1 2xl:grid-cols-2 gap-4"></div>
+      </div>
+    </main>
+
+    <script>
+      const workOrders = [
+        {
+          id: "WO-2026-0318-001",
+          status: "in-progress",
+          statusText: "生产中",
+          customer: "华北石油管道工程有限公司",
+          project: "京唐港输油管道工程 Phase-2",
+          quantity: 316,
+          completed: 247,
+          line: "A-03",
+          dueDate: "2026-03-31 18:00",
+          priority: "P1",
+          spec: "Φ219 x 8.18mm",
+          material: "L360M",
+          shift: "今日白班",
+          todayTarget: 68,
+          remark: "当前重点工单，需优先保障进管节拍"
+        },
+        {
+          id: "WO-2026-0320-004",
+          status: "pending",
+          statusText: "待开工",
+          customer: "西北能源建设集团",
+          project: "榆林输气支线扩容项目",
+          quantity: 180,
+          completed: 0,
+          line: "A-03",
+          dueDate: "2026-04-01 08:00",
+          priority: "P2",
+          spec: "Φ168.3 x 7.11mm",
+          material: "L245N",
+          shift: "明日白班",
+          todayTarget: 0,
+          remark: "等待原料批次确认后放行"
+        },
+        {
+          id: "WO-2026-0322-002",
+          status: "paused",
+          statusText: "待复核",
+          customer: "中南管廊运维有限公司",
+          project: "沿江管廊改造项目",
+          quantity: 240,
+          completed: 124,
+          line: "A-02",
+          dueDate: "2026-03-30 20:00",
+          priority: "P2",
+          spec: "Φ273 x 9.27mm",
+          material: "X42",
+          shift: "今日夜班",
+          todayTarget: 42,
+          remark: "上一批次外观抽检待质量复核"
+        },
+        {
+          id: "WO-2026-0326-006",
+          status: "urgent",
+          statusText: "紧急插单",
+          customer: "渤海海工装备制造有限公司",
+          project: "海上平台补料抢修单",
+          quantity: 96,
+          completed: 61,
+          line: "A-01",
+          dueDate: "2026-03-30 16:00",
+          priority: "P0",
+          spec: "Φ114.3 x 6.02mm",
+          material: "B级",
+          shift: "当前班次",
+          todayTarget: 35,
+          remark: "客户现场停工待料，需优先完成"
+        },
+        {
+          id: "WO-2026-0328-003",
+          status: "in-progress",
+          statusText: "生产中",
+          customer: "东海油气输送有限公司",
+          project: "东线原油管道二期",
+          quantity: 420,
+          completed: 302,
+          line: "A-03",
+          dueDate: "2026-04-02 18:00",
+          priority: "P1",
+          spec: "Φ323.9 x 10.31mm",
+          material: "L415M",
+          shift: "今日白班",
+          todayTarget: 88,
+          remark: "计划与除锈工序并行推进"
+        },
+        {
+          id: "WO-2026-0329-005",
+          status: "pending",
+          statusText: "待排产",
+          customer: "华东城市燃气工程公司",
+          project: "城区中压燃气改造工程",
+          quantity: 128,
+          completed: 12,
+          line: "A-04",
+          dueDate: "2026-04-03 12:00",
+          priority: "P3",
+          spec: "Φ88.9 x 5.49mm",
+          material: "Q235B",
+          shift: "后续排产",
+          todayTarget: 0,
+          remark: "已完成来料确认，等待切换规格"
+        }
+      ];
+
+      const listEl = document.getElementById("workOrderList");
+      const searchInput = document.getElementById("searchInput");
+      const chips = Array.from(document.querySelectorAll(".chip"));
+      let activeFilter = "all";
+
+      function getProgress(order) {
+        return Math.max(0, Math.min(100, Math.round((order.completed / order.quantity) * 100)));
+      }
+
+      function renderMetrics() {
+        const total = workOrders.length;
+        const producing = workOrders.filter((item) => item.status === "in-progress").length;
+        const today = workOrders.reduce((sum, item) => sum + item.todayTarget, 0);
+        const completed = workOrders.reduce((sum, item) => sum + item.completed, 0);
+
+        document.getElementById("metricTotal").textContent = total;
+        document.getElementById("metricProducing").textContent = producing;
+        document.getElementById("metricToday").textContent = today;
+        document.getElementById("metricCompleted").textContent = completed;
+      }
+
+      function matchesFilter(order) {
+        if (activeFilter === "all") return true;
+        if (activeFilter === "urgent") return order.status === "urgent";
+        return order.status === activeFilter;
+      }
+
+      function matchesSearch(order, keyword) {
+        if (!keyword) return true;
+        const text = [
+          order.id,
+          order.customer,
+          order.project,
+          order.spec,
+          order.material,
+          order.line
+        ]
+          .join(" ")
+          .toLowerCase();
+        return text.includes(keyword.toLowerCase());
+      }
+
+      function renderList() {
+        const keyword = searchInput.value.trim();
+        const visibleOrders = workOrders.filter(
+          (order) => matchesFilter(order) && matchesSearch(order, keyword)
+        );
+
+        listEl.innerHTML = visibleOrders
+          .map((order) => {
+            const progress = getProgress(order);
+            return `
+              <article class="workorder-card rounded-3xl industrial-shadow p-5 md:p-6 relative overflow-hidden" data-status="${order.status}" onclick="openWorkOrder('${order.id}')">
+                <div class="absolute -top-8 -right-8 w-32 h-32 bg-blue-50 rounded-full opacity-80"></div>
+                <div class="relative flex flex-col gap-5">
+                  <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+                    <div class="flex items-start gap-4 min-w-0">
+                      <div class="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white flex-shrink-0">
+                        <i class="fas fa-file-lines text-2xl"></i>
+                      </div>
+                      <div class="min-w-0">
+                        <div class="flex flex-wrap items-center gap-3">
+                          <h2 class="text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight">${order.id}</h2>
+                          <span class="status-badge ${order.status}">
+                            <span class="status-dot"></span>
+                            ${order.statusText}
+                          </span>
+                          <span class="info-pill px-3 py-1 rounded-full text-xs font-bold text-blue-700">优先级 ${order.priority}</span>
+                        </div>
+                        <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-600">
+                          <div class="flex items-center gap-2 min-w-0">
+                            <i class="fas fa-building text-gray-400"></i>
+                            <span class="truncate">客户：<span class="font-semibold text-gray-900">${order.customer}</span></span>
+                          </div>
+                          <div class="flex items-center gap-2 min-w-0">
+                            <i class="fas fa-diagram-project text-gray-400"></i>
+                            <span class="truncate">项目：<span class="font-semibold text-gray-900">${order.project}</span></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="shrink-0 bg-slate-900 text-white rounded-2xl px-4 py-3 min-w-[170px]">
+                      <div class="text-xs text-slate-300">交付倒计时</div>
+                      <div class="text-lg font-extrabold mt-1">${order.dueDate}</div>
+                      <div class="text-xs text-slate-300 mt-1">${order.shift} · ${order.line} 产线</div>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+                    <div class="bg-slate-50 rounded-2xl px-4 py-3">
+                      <div class="text-xs text-gray-500">生产数量</div>
+                      <div class="text-2xl font-extrabold text-gray-900 mt-1">${order.quantity}</div>
+                    </div>
+                    <div class="bg-blue-50 rounded-2xl px-4 py-3">
+                      <div class="text-xs text-blue-700">当前已完成</div>
+                      <div class="text-2xl font-extrabold text-blue-700 mt-1">${order.completed}</div>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl px-4 py-3">
+                      <div class="text-xs text-gray-500">规格</div>
+                      <div class="text-base font-bold text-gray-900 mt-2">${order.spec}</div>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl px-4 py-3">
+                      <div class="text-xs text-gray-500">材质</div>
+                      <div class="text-base font-bold text-gray-900 mt-2">${order.material}</div>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl px-4 py-3">
+                      <div class="text-xs text-gray-500">今日目标</div>
+                      <div class="text-base font-bold text-gray-900 mt-2">${order.todayTarget} 支</div>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl px-4 py-3">
+                      <div class="text-xs text-gray-500">备注</div>
+                      <div class="text-sm font-medium text-gray-900 mt-2 line-clamp-2">${order.remark}</div>
+                    </div>
+                  </div>
+
+                  <div class="bg-white/90 rounded-2xl border border-blue-100 px-4 py-4">
+                    <div class="flex items-center justify-between gap-3 mb-3">
+                      <div>
+                        <div class="text-xs text-gray-500">工单完成进度</div>
+                        <div class="text-lg font-bold text-gray-900">${order.completed} / ${order.quantity} 支</div>
+                      </div>
+                      <div class="text-3xl font-extrabold text-blue-600">${progress}%</div>
+                    </div>
+                    <div class="progress-track h-3">
+                      <div class="progress-fill h-full" style="width: ${progress}%"></div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            `;
+          })
+          .join("");
+
+        document.getElementById("visibleCount").textContent = visibleOrders.length;
+      }
+
+      function setFilter(filter) {
+        activeFilter = filter;
+        chips.forEach((chip) => {
+          chip.classList.toggle("active", chip.dataset.filter === filter);
+        });
+        renderList();
+      }
+
+      function openWorkOrder(id) {
+        window.location.href = `./derust.html?workOrder=${encodeURIComponent(id)}`;
+      }
+
+      chips.forEach((chip) => {
+        chip.addEventListener("click", () => setFilter(chip.dataset.filter));
+      });
+
+      searchInput.addEventListener("input", renderList);
+
+      renderMetrics();
+      renderList();
+    </script>
+  </body>
+</html>
