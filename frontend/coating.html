@@ -349,6 +349,9 @@
                                class="search-input w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-base outline-none transition-all"
                                onkeyup="handleSearch(this.value)">
                     </div>
+                    <button id="toggleRootDetailBtn" type="button" onclick="toggleRootDetailColumns()" class="px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-gray-700 font-semibold whitespace-nowrap hover:border-blue-400 hover:text-blue-600 transition-colors">
+                        折叠钢管详情
+                    </button>
                     <button id="sampleAddButton" class="hidden" style="display: none !important;" aria-hidden="true" tabindex="-1">
                         <i class="fas fa-plus-circle"></i>
                         <span>抽检录入</span>
@@ -421,9 +424,9 @@
                     <tr>
                         <th class="px-4 py-4 text-left w-12"><input type="checkbox" class="custom-checkbox" id="selectAllRoot" onclick="toggleSelectAll()"></th>
                         <th class="px-4 py-4 text-left"><div class="flex items-center gap-2"><span>自编号</span><i class="fas fa-sort text-gray-400"></i></div></th>
-                        <th class="px-4 py-4 text-left"><div class="flex flex-col"><span>捆号</span><span class="text-xs text-gray-400 font-normal normal-case">管号</span></div></th>
-                        <th class="px-4 py-4 text-left"><div class="flex flex-col"><span>炉号</span><span class="text-xs text-gray-400 font-normal normal-case">批号</span></div></th>
-                        <th class="px-4 py-4 text-center"><div class="flex flex-col items-center"><span>规格</span><span class="text-xs text-gray-400 font-normal normal-case">长度/重量</span></div></th>
+                        <th class="root-detail-col px-4 py-4 text-left"><div class="flex flex-col"><span>捆号</span><span class="text-xs text-gray-400 font-normal normal-case">管号</span></div></th>
+                        <th class="root-detail-col px-4 py-4 text-left"><div class="flex flex-col"><span>炉号</span><span class="text-xs text-gray-400 font-normal normal-case">批号</span></div></th>
+                        <th class="root-detail-col px-4 py-4 text-center"><div class="flex flex-col items-center"><span>规格</span><span class="text-xs text-gray-400 font-normal normal-case">长度/重量</span></div></th>
                         <th class="px-4 py-4 text-center">冷却温度</th>
                         <th class="px-4 py-4 text-center">涂层外观</th>
                         <th class="px-4 py-4 text-center">漏点检验</th>
@@ -442,9 +445,9 @@
                     <tr class="group" data-id="0032" data-shift="today_day" data-result="pass">
                         <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                         <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">0032</div></td>
-                        <td class="px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">96#</div><div class="font-mono text-xs text-gray-500">6508741</div></div></td>
-                        <td class="px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-medium text-gray-900">15303842</div><div class="text-xs text-gray-500">71399</div></div></td>
-                        <td class="px-4 py-4 text-center"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">11856<span class="text-xs text-gray-500 font-normal">mm</span></div><div class="text-xs text-gray-500">573.5kg</div></div></td>
+                        <td class="root-detail-col px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">96#</div><div class="font-mono text-xs text-gray-500">6508741</div></div></td>
+                        <td class="root-detail-col px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-medium text-gray-900">15303842</div><div class="text-xs text-gray-500">71399</div></div></td>
+                        <td class="root-detail-col px-4 py-4 text-center"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">11856<span class="text-xs text-gray-500 font-normal">mm</span></div><div class="text-xs text-gray-500">573.5kg</div></div></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-sm"></i></span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-sm"></i></span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-sm"></i></span></td>
@@ -461,9 +464,9 @@
                     <tr class="group" data-id="0031" data-shift="today_day" data-result="pass">
                         <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                         <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">0031</div></td>
-                        <td class="px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">96#</div><div class="font-mono text-xs text-gray-500">6508739</div></div></td>
-                        <td class="px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-medium text-gray-900">15303842</div><div class="text-xs text-gray-500">71399</div></div></td>
-                        <td class="px-4 py-4 text-center"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">11920<span class="text-xs text-gray-500 font-normal">mm</span></div><div class="text-xs text-gray-500">574.2kg</div></div></td>
+                        <td class="root-detail-col px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">96#</div><div class="font-mono text-xs text-gray-500">6508739</div></div></td>
+                        <td class="root-detail-col px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-medium text-gray-900">15303842</div><div class="text-xs text-gray-500">71399</div></div></td>
+                        <td class="root-detail-col px-4 py-4 text-center"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">11920<span class="text-xs text-gray-500 font-normal">mm</span></div><div class="text-xs text-gray-500">574.2kg</div></div></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-sm"></i></span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-sm"></i></span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-sm"></i></span></td>
@@ -480,9 +483,9 @@
                     <tr class="group" data-id="0030" data-shift="yesterday_night" data-result="fail">
                         <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                         <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">0030</div></td>
-                        <td class="px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">97#</div><div class="font-mono text-xs text-gray-500">6508725</div></div></td>
-                        <td class="px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-medium text-gray-900">15303842</div><div class="text-xs text-gray-500">71400</div></div></td>
-                        <td class="px-4 py-4 text-center"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">11780<span class="text-xs text-gray-500 font-normal">mm</span></div><div class="text-xs text-gray-500">572.8kg</div></div></td>
+                        <td class="root-detail-col px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">97#</div><div class="font-mono text-xs text-gray-500">6508725</div></div></td>
+                        <td class="root-detail-col px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-medium text-gray-900">15303842</div><div class="text-xs text-gray-500">71400</div></div></td>
+                        <td class="root-detail-col px-4 py-4 text-center"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">11780<span class="text-xs text-gray-500 font-normal">mm</span></div><div class="text-xs text-gray-500">572.8kg</div></div></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-sm"></i></span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-sm"></i></span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-sm"></i></span></td>
@@ -691,64 +694,34 @@
                     </h4>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">清洁度</label>
-                            <input id="sampleCleanLevel" type="text" value="Sa2.5" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">温度1</label>
+                            <input id="sampleTemp1" type="number" min="0" step="0.1" value="198" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">灰尘度检测</label>
-                            <select id="sampleDustLevel" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
-                                <option>1级</option>
-                                <option>2级</option>
-                                <option>3级</option>
-                                <option>4级</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">表面粗糙度 (μm)</label>
-                            <input id="sampleRoughness" type="number" min="0" step="1" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">盐分检测</label>
-                            <input id="sampleSalinity" type="text" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
-                        </div>
-                        <div class="lg:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-3">检验结果</label>
                             <div class="flex gap-3">
-                                <button type="button" onclick="setSampleResult('pass')" id="sampleResultPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
+                                <button type="button" onclick="setSampleResult1('pass')" id="sampleResult1Pass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
                                     <i class="fas fa-check-circle"></i>合格
                                 </button>
-                                <button type="button" onclick="setSampleResult('fail')" id="sampleResultFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2">
+                                <button type="button" onclick="setSampleResult1('fail')" id="sampleResult1Fail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2">
                                     <i class="fas fa-times-circle"></i>不合格
                                 </button>
                             </div>
                         </div>
-                        <div class="lg:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-3">灰尘度照片</label>
-                            <p class="text-xs text-gray-500 mb-3">员工使用 Pad 在现场实时拍摄照片并保存到当前抽检记录，可补拍或重拍，支持即时预览与放大查看。</p>
-                            <div class="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-5 items-start">
                         <div>
-                            <img id="samplePhotoPreview" onclick="openPhotoModal(this.src)" class="w-full h-40 object-cover rounded-xl border border-gray-200 cursor-zoom-in" alt="灰尘度照片">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">温度2</label>
+                            <input id="sampleTemp2" type="number" min="0" step="0.1" value="201" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
-                        <div class="space-y-3">
-                            <div id="samplePhotoReadonly" class="text-sm text-gray-500">当前照片可点击放大查看。</div>
-                            <div id="samplePhotoEditArea" class="hidden">
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    <button type="button" class="py-3 rounded-xl border-2 border-blue-200 bg-blue-50 text-blue-700 font-semibold hover:bg-blue-100 transition-colors flex items-center justify-center gap-2">
-                                        <i class="fas fa-camera"></i>
-                                        现场拍照
-                                    </button>
-                                    <button type="button" class="py-3 rounded-xl border-2 border-gray-200 bg-white text-gray-700 font-semibold hover:border-blue-300 transition-colors flex items-center justify-center gap-2">
-                                        <i class="fas fa-rotate"></i>
-                                        重新拍摄
-                                    </button>
-                                </div>
-                                <div class="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-4 text-sm text-gray-500">
-                                    设计说明：Pad 端点击“现场拍照”后调用摄像头采集灰尘度照片，采集完成即绑定到当前抽检记录，并在此区域实时回显预览。
-                                </div>
-                                <input id="samplePhotoInput" type="text" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500" placeholder="调试阶段可临时粘贴图片地址替代实时拍照">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">检验结果</label>
+                            <div class="flex gap-3">
+                                <button type="button" onclick="setSampleResult2('pass')" id="sampleResult2Pass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
+                                    <i class="fas fa-check-circle"></i>合格
+                                </button>
+                                <button type="button" onclick="setSampleResult2('fail')" id="sampleResult2Fail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2">
+                                    <i class="fas fa-times-circle"></i>不合格
+                                </button>
                             </div>
-                        </div>
-                    </div>
                         </div>
                     </div>
                 </div>
@@ -2364,6 +2337,7 @@ R.H: &lt;70%：&lt;4 hours
         let currentMainTab = 'material';
         let currentMaterialSubTab = 'root';
         let currentRowFilter = 'all';
+        let isRootDetailCollapsed = true;
         let selectedRows = new Set();
         let currentAppearance = 'pass';
         let currentBevelCheck = 'pass';
@@ -2395,9 +2369,9 @@ R.H: &lt;70%：&lt;4 hours
             { id: '0030', pipeNo: '6508725', bundleNo: '97#', furnaceNo: '15303842', batchNo: '71400', length: '11780', weight: '572.8', humidity: '65', interval: '41', thicknesses: [352, 368, 379, 385, 392, 361, 374, 388], operator: '李师傅', time: '03:15' }
         ];
         const sampleRecordList = [
-            { id: 'CJ-0032', cleanLevel: 'Sa2.5', dustLevel: '1级', roughness: '52', salinity: '12mg/m²', result: 'pass', inspector: '王检', time: '20:10', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23dbeafe'/><circle cx='42' cy='46' r='10' fill='%2393c5fd'/><circle cx='86' cy='58' r='8' fill='%2360a5fa'/><circle cx='118' cy='40' r='6' fill='%233b82f6'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 1</text></svg>" },
-            { id: 'CJ-0031', cleanLevel: 'Sa2.5', dustLevel: '2级', roughness: '49', salinity: '15mg/m²', result: 'pass', inspector: '王检', time: '18:55', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23e0f2fe'/><circle cx='38' cy='48' r='8' fill='%2394a3b8'/><circle cx='74' cy='60' r='7' fill='%2360a5fa'/><circle cx='110' cy='44' r='8' fill='%233b82f6'/><circle cx='126' cy='70' r='5' fill='%2394a3b8'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 2</text></svg>" },
-            { id: 'CJ-0030', cleanLevel: 'Sa2.5', dustLevel: '4级', roughness: '31', salinity: '28mg/m²', result: 'fail', inspector: '赵检', time: '03:40', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23fee2e2'/><circle cx='32' cy='40' r='9' fill='%23ef4444'/><circle cx='56' cy='54' r='7' fill='%23b91c1c'/><circle cx='84' cy='42' r='9' fill='%23ef4444'/><circle cx='114' cy='58' r='8' fill='%23b91c1c'/><circle cx='132' cy='40' r='7' fill='%23ef4444'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%237f1d1d'>Dust 4</text></svg>" }
+            { id: 'CJ-0032', temp1: '198', temp1Result: 'pass', temp2: '201', temp2Result: 'pass', inspector: '王检', time: '20:10', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23dbeafe'/><circle cx='42' cy='46' r='10' fill='%2393c5fd'/><circle cx='86' cy='58' r='8' fill='%2360a5fa'/><circle cx='118' cy='40' r='6' fill='%233b82f6'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 1</text></svg>" },
+            { id: 'CJ-0031', temp1: '194', temp1Result: 'pass', temp2: '199', temp2Result: 'pass', inspector: '王检', time: '18:55', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23e0f2fe'/><circle cx='38' cy='48' r='8' fill='%2394a3b8'/><circle cx='74' cy='60' r='7' fill='%2360a5fa'/><circle cx='110' cy='44' r='8' fill='%233b82f6'/><circle cx='126' cy='70' r='5' fill='%2394a3b8'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 2</text></svg>" },
+            { id: 'CJ-0030', temp1: '186', temp1Result: 'fail', temp2: '191', temp2Result: 'fail', inspector: '赵检', time: '03:40', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23fee2e2'/><circle cx='32' cy='40' r='9' fill='%23ef4444'/><circle cx='56' cy='54' r='7' fill='%23b91c1c'/><circle cx='84' cy='42' r='9' fill='%23ef4444'/><circle cx='114' cy='58' r='8' fill='%23b91c1c'/><circle cx='132' cy='40' r='7' fill='%23ef4444'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%237f1d1d'>Dust 4</text></svg>" }
         ];
         let currentSampleDrawerMode = 'create';
 
@@ -2624,8 +2598,25 @@ R.H: &lt;70%：&lt;4 hours
 
             document.getElementById('material-subtab-root').classList.toggle('hidden', tabId !== 'root');
             document.getElementById('material-subtab-sample').classList.toggle('hidden', tabId !== 'sample');
+            document.getElementById('toggleRootDetailBtn')?.classList.toggle('hidden', tabId !== 'root');
             clearSelection();
             applyMaterialTableFilters();
+        }
+
+        function applyRootDetailColumnState() {
+            document.querySelectorAll('.root-detail-col').forEach(cell => {
+                cell.classList.toggle('hidden', isRootDetailCollapsed);
+            });
+
+            const toggleBtn = document.getElementById('toggleRootDetailBtn');
+            if (toggleBtn) {
+                toggleBtn.textContent = isRootDetailCollapsed ? '展开钢管详情' : '折叠钢管详情';
+            }
+        }
+
+        function toggleRootDetailColumns() {
+            isRootDetailCollapsed = !isRootDetailCollapsed;
+            applyRootDetailColumnState();
         }
 
         function switchMainTab(tabId) {
@@ -3159,9 +3150,22 @@ R.H: &lt;70%：&lt;4 hours
             document.body.style.overflow = '';
         }
 
-        function setSampleResult(type) {
-            const passBtn = document.getElementById('sampleResultPass');
-            const failBtn = document.getElementById('sampleResultFail');
+        function setSampleResult1(type) {
+            const passBtn = document.getElementById('sampleResult1Pass');
+            const failBtn = document.getElementById('sampleResult1Fail');
+
+            if (type === 'pass') {
+                passBtn.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                failBtn.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                passBtn.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                failBtn.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+        }
+
+        function setSampleResult2(type) {
+            const passBtn = document.getElementById('sampleResult2Pass');
+            const failBtn = document.getElementById('sampleResult2Fail');
 
             if (type === 'pass') {
                 passBtn.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
@@ -3182,11 +3186,10 @@ R.H: &lt;70%：&lt;4 hours
                 : entryRecordList.find(item => item.id === String((sampleRecord || sampleRecordList[0]).id).replace('CJ-', '')) || entryRecordList[0];
             const record = sampleRecord || {
                 id: linkedRoot ? `CJ-${linkedRoot.id}` : 'CJ-NEW',
-                cleanLevel: 'Sa2.5',
-                dustLevel: '1级',
-                roughness: '50',
-                salinity: '10mg/m²',
-                result: 'pass',
+                temp1: '198',
+                temp1Result: 'pass',
+                temp2: '201',
+                temp2Result: 'pass',
                 inspector: '当前班组',
                 time: '待保存',
                 photo: sampleRecordList[0].photo
@@ -3202,15 +3205,12 @@ R.H: &lt;70%：&lt;4 hours
             document.getElementById('sampleBatchNo').value = linkedRoot.batchNo;
             document.getElementById('sampleLength').value = linkedRoot.length;
             document.getElementById('sampleWeight').value = linkedRoot.weight;
-            document.getElementById('sampleCleanLevel').value = record.cleanLevel;
-            document.getElementById('sampleDustLevel').value = record.dustLevel;
-            document.getElementById('sampleRoughness').value = record.roughness;
-            document.getElementById('sampleSalinity').value = record.salinity;
-            document.getElementById('samplePhotoPreview').src = record.photo;
-            document.getElementById('samplePhotoInput').value = '';
-            setSampleResult(record.result);
+            document.getElementById('sampleTemp1').value = record.temp1 ?? '198';
+            document.getElementById('sampleTemp2').value = record.temp2 ?? '201';
+            setSampleResult1(record.temp1Result ?? 'pass');
+            setSampleResult2(record.temp2Result ?? 'pass');
 
-            const editableIds = ['sampleCleanLevel', 'sampleDustLevel', 'sampleRoughness', 'sampleSalinity', 'samplePhotoInput'];
+            const editableIds = ['sampleTemp1', 'sampleTemp2'];
             editableIds.forEach(id => {
                 const el = document.getElementById(id);
                 if (!el) return;
@@ -3218,12 +3218,12 @@ R.H: &lt;70%：&lt;4 hours
                 el.classList.toggle('bg-gray-50', isView);
             });
 
-            document.getElementById('samplePhotoReadonly').classList.toggle('hidden', !isView);
-            document.getElementById('samplePhotoEditArea').classList.toggle('hidden', isView);
             document.getElementById('sampleDrawerSaveBtn').classList.toggle('hidden', isView);
             document.getElementById('sampleDrawerPrintBtn').classList.toggle('hidden', isCreate);
-            document.getElementById('sampleResultPass').disabled = isView;
-            document.getElementById('sampleResultFail').disabled = isView;
+            document.getElementById('sampleResult1Pass').disabled = isView;
+            document.getElementById('sampleResult1Fail').disabled = isView;
+            document.getElementById('sampleResult2Pass').disabled = isView;
+            document.getElementById('sampleResult2Fail').disabled = isView;
 
             document.getElementById('sampleDrawerOverlay').classList.add('open');
             document.getElementById('sampleDrawer').classList.add('open');
@@ -3831,6 +3831,7 @@ R.H: &lt;70%：&lt;4 hours
             renderWorkOrderShiftStats();
             switchMainTab('material');
             switchMaterialSubTab('root');
+            applyRootDetailColumnState();
             applyMaterialTableFilters();
             setAppearance('pass');
             renderInstrumentTable();
