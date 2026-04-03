@@ -1,887 +1,456 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>涂覆点监控记录 - MES系统</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap");
-
-      * {
-        -webkit-tap-highlight-color: transparent;
-        touch-action: manipulation;
-      }
-
-      body {
-        font-family: "Inter", "Noto Sans SC", sans-serif;
-        background: #f4f6f8;
-      }
-
-      .industrial-shadow {
-        box-shadow:
-          0 2px 8px rgba(0, 0, 0, 0.08),
-          0 4px 16px rgba(0, 0, 0, 0.04);
-      }
-
-      .industrial-shadow-lg {
-        box-shadow:
-          0 4px 12px rgba(0, 0, 0, 0.1),
-          0 8px 24px rgba(0, 0, 0, 0.06);
-      }
-
-      .wo-card {
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        border-left: 4px solid #2563eb;
-      }
-
-      .stat-card {
-        background: white;
-        border: 1px solid #e2e8f0;
-        border-radius: 14px;
-        padding: 16px;
-      }
-
-      .range-chip {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 88px;
-        padding: 6px 10px;
-        border-radius: 9999px;
-        background: #eff6ff;
-        color: #1d4ed8;
-        font-size: 0.75rem;
-        font-weight: 600;
-        border: 1px solid #bfdbfe;
-      }
-
-      .custom-checkbox {
-        appearance: none;
-        width: 20px;
-        height: 20px;
-        border: 2px solid #cbd5e1;
-        border-radius: 5px;
-        cursor: pointer;
-        position: relative;
-        transition: all 0.2s ease;
-        display: inline-block;
-        vertical-align: middle;
-      }
-
-      .custom-checkbox:checked {
-        background: #2563eb;
-        border-color: #2563eb;
-      }
-
-      .custom-checkbox:checked::after {
-        content: "\f00c";
-        font-family: "Font Awesome 6 Free";
-        font-weight: 900;
-        color: white;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 11px;
-      }
-
-      .custom-checkbox:disabled {
-        background: #f1f5f9;
-        cursor: not-allowed;
-        opacity: 0.6;
-      }
-
-      .data-table {
-        border-collapse: separate;
-        border-spacing: 0;
-        width: 100%;
-        table-layout: fixed;
-      }
-
-      .data-table th {
-        background: #f8fafc;
-        font-weight: 600;
-        font-size: 0.8125rem;
-        color: #475569;
-        border-bottom: 1px solid #e2e8f0;
-        padding: 14px 8px;
-        text-align: center;
-        vertical-align: middle;
-      }
-
-      .data-table td {
-        border-bottom: 1px solid #e2e8f0;
-        padding: 10px 8px;
-        text-align: left;
-        vertical-align: middle;
-        background: white;
-        transition: background-color 0.15s ease;
-      }
-
-      .data-table tr:hover td {
-        background: #f8fafc;
-      }
-
-      .data-table tr.editing td {
-        background: #eff6ff;
-      }
-
-      .data-table tr.saved td {
-        background: #f9fffb;
-      }
-
-      .form-input {
-        width: 100%;
-        padding: 8px 10px;
-        border: 2px solid #e2e8f0;
-        border-radius: 8px;
-        font-size: 0.875rem;
-        outline: none;
-        transition: all 0.2s;
-        text-align: center;
-        background: white;
-      }
-
-      .form-input:focus {
-        border-color: #2563eb;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-      }
-
-      .form-input:disabled {
-        background: #f8fafc;
-        color: #64748b;
-        cursor: not-allowed;
-      }
-
-      .time-slot {
-        font-weight: 600;
-        color: #1e293b;
-        font-size: 0.875rem;
-        white-space: nowrap;
-        text-align: center;
-      }
-
-      .data-table td.time-slot {
-        text-align: center;
-      }
-
-      .auto-field {
-        background: #f0f9ff;
-        border: 2px solid #bae6fd;
-        border-radius: 8px;
-        padding: 6px 8px;
-        color: #0369a1;
-        font-weight: 600;
-        font-size: 0.875rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        width: 100%;
-        min-height: 34px;
-      }
-
-      .readonly-field {
-        background: #f8fafc;
-        border: 2px solid #e2e8f0;
-        border-radius: 6px;
-        padding: 6px 4px;
-        color: #1e293b;
-        font-weight: 500;
-        font-size: 0.875rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 34px;
-        width: 100%;
-      }
-
-      .action-btn {
-        transition: all 0.2s ease;
-        white-space: nowrap;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-        border-radius: 8px;
-        padding: 8px 12px;
-        font-size: 0.875rem;
-        font-weight: 600;
-        min-width: 78px;
-      }
-
-      .action-btn:active {
-        transform: scale(0.98);
-      }
-
-      .btn-primary {
-        background: #2563eb;
-        color: white;
-      }
-
-      .btn-primary:hover {
-        background: #1d4ed8;
-      }
-
-      .btn-success {
-        background: #16a34a;
-        color: white;
-      }
-
-      .btn-success:hover {
-        background: #15803d;
-      }
-
-      .btn-secondary {
-        background: #f8fafc;
-        color: #334155;
-        border: 1px solid #cbd5e1;
-      }
-
-      .btn-secondary:hover {
-        background: #e2e8f0;
-      }
-
-      .col-time {
-        width: 110px;
-      }
-      .col-temp {
-        width: 150px;
-      }
-      .col-checktime {
-        width: 170px;
-      }
-      .col-operator {
-        width: 100px;
-      }
-      .col-action {
-        width: 120px;
-      }
-      .col-speed {
-        width: 150px;
-      }
-      .col-freq {
-        width: 150px;
-      }
-      .col-dust {
-        width: 150px;
-      }
-      .col-hydraulic {
-        width: 150px;
-      }
-      .col-status {
-        width: 85px;
-      }
-
-      .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        padding: 4px 10px;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        white-space: nowrap;
-      }
-
-      .status-pending {
-        background: #fef3c7;
-        color: #92400e;
-        border: 1px solid #fcd34d;
-      }
-      .status-saved {
-        background: #dcfce7;
-        color: #166534;
-        border: 1px solid #86efac;
-      }
-      .status-editing {
-        background: #dbeafe;
-        color: #1e40af;
-        border: 1px solid #93c5fd;
-      }
-
-      .toast {
-        animation: slideIn 0.3s ease;
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 50;
-      }
-
-      @keyframes slideIn {
-        from {
-          transform: translateY(-20px);
-          opacity: 0;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+        * { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        body { font-family: 'Inter', 'Noto Sans SC', sans-serif; background: #F4F6F8; color: #0F172A; }
+        .industrial-shadow { box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06), 0 6px 20px rgba(15, 23, 42, 0.05); }
+        .industrial-shadow-lg { box-shadow: 0 8px 24px rgba(15, 23, 42, 0.10), 0 20px 40px rgba(15, 23, 42, 0.08); }
+        .wo-card { background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%); border-left: 4px solid #2563EB; }
+        .summary-chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 9999px; padding: 6px 12px; font-size: 0.75rem; font-weight: 600; }
+        .summary-saved { background: #DCFCE7; color: #166534; border: 1px solid #86EFAC; }
+        .summary-pending { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
+        .data-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        .data-table th { background: #F8FAFC; color: #475569; font-size: 0.8125rem; font-weight: 600; padding: 14px 12px; text-align: center; border-bottom: 1px solid #E2E8F0; }
+        .data-table td { background: white; padding: 14px 12px; border-bottom: 1px solid #E2E8F0; font-size: 0.95rem; }
+        .data-table tr:hover td { background: #F8FAFC; }
+        .time-slot { text-align: center; font-weight: 700; color: #0F172A; }
+        .action-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; border-radius: 12px; padding: 0 16px; font-size: 0.9rem; font-weight: 700; transition: all 0.2s ease; }
+        .btn-primary { background: #2563EB; color: white; }
+        .btn-primary:hover { background: #1D4ED8; }
+        .btn-secondary { border: 2px solid #CBD5E1; color: #334155; background: #F8FAFC; }
+        .btn-secondary:hover { background: #E2E8F0; }
+        .btn-success { background: #16A34A; color: white; }
+        .btn-success:hover { background: #15803D; }
+        .drawer-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.46); opacity: 0; pointer-events: none; transition: opacity 0.25s ease; z-index: 50; }
+        .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+        .drawer { position: fixed; top: 0; right: 0; height: 100%; width: min(920px, 92vw); background: white; transform: translateX(100%); transition: transform 0.3s ease; z-index: 51; display: flex; flex-direction: column; }
+        .drawer.open { transform: translateX(0); }
+        .section-card {
+            background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+            border: 1px solid #DCE6F2;
+            border-radius: 18px;
+            padding: 16px;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05), 0 2px 8px rgba(15, 23, 42, 0.04);
         }
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
-      }
-
-      @media (max-width: 1280px) {
-        .data-table {
-          font-size: 0.75rem;
-        }
-
-        .data-table th,
-        .data-table td {
-          padding: 8px 6px;
-        }
-
-        .form-input {
-          font-size: 0.75rem;
-        }
-
-        .col-temp {
-          width: 132px;
-        }
-        .col-checktime {
-          width: 148px;
-        }
-      }
+        .section-title { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-size: 0.95rem; font-weight: 700; color: #1E293B; }
+        .metric-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        .metric-item { display: flex; flex-direction: column; gap: 6px; }
+        .metric-label { font-size: 0.75rem; color: #64748B; font-weight: 600; min-height: 32px; }
+        .form-input { width: 100%; border: 2px solid #E2E8F0; background: white; border-radius: 12px; padding: 10px 12px; outline: none; font-size: 0.95rem; font-weight: 500; transition: all 0.2s ease; }
+        .form-input:focus { border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12); }
+        .status-toggle { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+        .status-pill { border: 2px solid #DBE5F0; background: white; color: #475569; border-radius: 12px; min-height: 48px; font-size: 0.9rem; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; padding: 0 10px; }
+        .status-pill.active { background: #2563EB; border-color: #2563EB; color: white; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18); }
+        .radio-chip-group { display: inline-flex; background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 9999px; padding: 4px; gap: 4px; }
+        .radio-chip { min-width: 58px; border-radius: 9999px; padding: 7px 12px; font-size: 0.875rem; font-weight: 700; color: #475569; background: transparent; transition: all 0.2s ease; }
+        .radio-chip.active { background: white; color: #2563EB; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.14); }
+        .meta-text { font-size: 0.9rem; color: #475569; }
+        .toast { animation: slideIn 0.3s ease; position: fixed; top: 20px; right: 20px; z-index: 60; }
+        @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @media (max-width: 900px) { .metric-grid { grid-template-columns: 1fr; } .status-toggle { grid-template-columns: 1fr; } }
     </style>
-  </head>
-  <body class="min-h-screen bg-gray-50 pb-24">
+</head>
+<body class="min-h-screen bg-slate-50 pb-24">
     <header class="bg-white industrial-shadow sticky top-0 z-40">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-          <div class="flex items-center gap-4">
-            <button
-              onclick="history.back()"
-              class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors"
-            >
-              <i class="fas fa-arrow-left text-lg"></i>
-            </button>
-            <div class="flex items-center gap-3">
-              <div
-                class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white"
-              >
-                <i class="fas fa-temperature-three-quarters text-xl"></i>
-              </div>
-              <div>
-                <h1 class="text-xl font-bold text-gray-900 tracking-tight">
-                  涂覆点监控记录
-                </h1>
-                <p class="text-xs text-gray-500">产线A-03 | 当前班次监控巡检</p>
-              </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-4">
+                    <button onclick="history.back()" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
+                        <i class="fas fa-arrow-left text-lg"></i>
+                    </button>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                            <i class="fas fa-sliders text-xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-900 tracking-tight">涂覆点监控记录</h1>
+                            <p class="text-xs text-gray-500">产线A-03 | 监控记录列表</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg text-sm font-medium">
+                    <i class="fas fa-check-circle"></i>
+                    <span>系统正常</span>
+                </div>
             </div>
-          </div>
-          <div
-            class="hidden md:flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg text-sm font-medium"
-          >
-            <i class="fas fa-check-circle"></i>
-            <span>系统正常</span>
-          </div>
         </div>
-      </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-      <div
-        class="wo-card rounded-xl p-5 industrial-shadow relative overflow-hidden"
-      >
-        <div
-          class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -mr-10 -mt-10 opacity-50"
-        ></div>
-        <div
-          class="relative flex flex-col lg:flex-row lg:items-center justify-between gap-4"
-        >
-          <div class="flex items-center gap-4">
-            <div class="px-4 py-2 rounded-xl bg-blue-50 border border-blue-200">
-              <div class="text-xs text-blue-700 font-semibold">当前班次</div>
-              <div class="text-sm font-bold text-blue-900" id="shiftDisplay">
-                今日白班 (08:00-20:00)
-              </div>
+        <div class="wo-card rounded-2xl p-5 industrial-shadow relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -mr-10 -mt-10 opacity-50"></div>
+            <div class="relative flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div class="flex items-center gap-4 flex-wrap">
+                    <div class="px-4 py-2 rounded-xl bg-blue-50 border border-blue-200">
+                        <div class="text-xs text-blue-700 font-semibold">当前班次</div>
+                        <div class="text-sm font-bold text-blue-900">今日白班 (08:00-20:00)</div>
+                    </div>
+                    <div class="px-4 py-2 rounded-xl bg-gray-50 border border-gray-200">
+                        <div class="text-xs text-gray-500">检测日期</div>
+                        <div class="text-sm font-semibold text-gray-900" id="currentDate">2026-04-03</div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 sm:flex sm:items-center sm:gap-4 text-sm">
+                    <div class="text-center px-4 py-2 bg-blue-50 rounded-lg border border-blue-200">
+                        <div class="text-xs text-gray-500">已保存时段</div>
+                        <div class="text-lg font-bold text-blue-600" id="filledCount">1/4</div>
+                    </div>
+                    <div class="text-center px-4 py-2 bg-green-50 rounded-lg border border-green-200">
+                        <div class="text-xs text-gray-500">记录状态</div>
+                        <div class="text-sm font-bold text-green-600" id="recordStatus">录入中</div>
+                    </div>
+                </div>
             </div>
-            <div class="px-4 py-2 rounded-xl bg-gray-50 border border-gray-200">
-              <div class="text-xs text-gray-500">检测日期</div>
-              <div class="text-sm font-semibold text-gray-900" id="currentDate">
-                2026-04-03
-              </div>
-            </div>
-          </div>
-          <div
-            class="grid grid-cols-2 gap-3 sm:flex sm:items-center sm:gap-4 text-sm"
-          >
-            <div
-              class="text-center px-4 py-2 bg-blue-50 rounded-lg border border-blue-200"
-            >
-              <div class="text-xs text-gray-500">已完成时段</div>
-              <div class="text-lg font-bold text-blue-600" id="filledCount">
-                1/12
-              </div>
-            </div>
-            <div
-              class="text-center px-4 py-2 bg-green-50 rounded-lg border border-green-200"
-            >
-              <div class="text-xs text-gray-500">记录状态</div>
-              <div class="text-sm font-bold text-green-600" id="recordStatus">
-                录入中
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="stat-card">
-          <div class="text-xs text-gray-500 mb-2">钢管加热温度范围</div>
-          <div class="range-chip">190-250℃</div>
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden industrial-shadow">
+            <div class="px-5 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+                <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fas fa-list text-blue-600"></i>
+                    监控记录列表
+                </h2>
+                <div class="text-sm text-slate-500">4 个时段分别填写监控内容</div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>时段</th>
+                            <th>检测时间</th>
+                            <th>检测人</th>
+                            <th>记录状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="monitorTableBody"></tbody>
+                </table>
+            </div>
         </div>
-        <div class="stat-card">
-          <div class="text-xs text-gray-500 mb-2">FBE涂覆温度范围</div>
-          <div class="range-chip">190-250℃</div>
-        </div>
-        <div class="stat-card">
-          <div class="text-xs text-gray-500 mb-2">AD挤出温度范围</div>
-          <div class="range-chip">185-235℃</div>
-        </div>
-        <div class="stat-card">
-          <div class="text-xs text-gray-500 mb-2">PE/PP挤出温度范围</div>
-          <div class="range-chip">185-245℃</div>
-        </div>
-      </div>
-
-      <div
-        class="bg-white rounded-xl border border-gray-200 overflow-hidden industrial-shadow"
-      >
-        <div
-          class="px-5 py-4 border-b border-gray-200 bg-gray-50 flex items-center justify-between"
-        >
-          <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-            <i class="fas fa-clock text-blue-600"></i>
-            时段运行记录
-          </h2>
-          <div class="flex items-center gap-2 text-sm text-gray-500">
-            <i class="fas fa-info-circle"></i>
-            <span>点击“录入”开始填写，系统自动记录时间和操作人</span>
-          </div>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th class="col-time">时段</th>
-                <th class="col-speed">钢管加热温度</th>
-                <th class="col-freq">FBE涂覆温度</th>
-                <th class="col-dust">AD挤出温度</th>
-                <th class="col-hydraulic">PE/PP挤出温度</th>
-                <th class="col-checktime">检测时间</th>
-                <th class="col-operator">检测人</th>
-                <th class="col-status">状态</th>
-                <th class="col-action">操作</th>
-              </tr>
-            </thead>
-            <tbody id="recordTableBody"></tbody>
-          </table>
-        </div>
-      </div>
     </main>
 
-    <div
-      class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 industrial-shadow-lg z-30"
-    >
-      <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
-        <div class="text-sm text-gray-600">
-          <span class="font-semibold text-gray-900">今日白班</span>
-          <span class="mx-2">|</span>
-          <span
-            >已保存
-            <span class="font-bold text-green-600" id="bottomSavedCount"
-              >1</span
-            >
-            条</span
-          >
-          <span class="mx-2">|</span>
-          <span
-            >待录入
-            <span class="font-bold text-orange-600" id="bottomPendingCount"
-              >11</span
-            >
-            条</span
-          >
+    <div id="entryDrawerOverlay" class="drawer-overlay" onclick="closeEntryDrawer()"></div>
+    <div id="entryDrawer" class="drawer industrial-shadow-lg">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-white">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center">
+                    <i class="fas fa-pen-to-square"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">监控记录填写</h3>
+                    <p class="text-sm text-slate-500" id="drawerSlotLabel">8:00~11:00</p>
+                </div>
+            </div>
+            <button onclick="closeEntryDrawer()" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-        <div class="flex gap-3">
-          <button onclick="saveDraft()" class="action-btn btn-secondary">
-            <i class="fas fa-save"></i>保存草稿
-          </button>
-          <button
-            onclick="submitReport()"
-            class="action-btn btn-success industrial-shadow"
-          >
-            <i class="fas fa-check-circle"></i>提交检测记录
-          </button>
+        <div class="flex-1 overflow-y-auto p-6 bg-slate-50">
+            <div class="space-y-4">
+                <div class="flex items-center gap-3 flex-wrap justify-end">
+                    <div class="meta-text">检测时间：<span class="font-semibold text-slate-800" id="drawerTime">--:--</span></div>
+                    <div class="meta-text">检测人：<span class="font-semibold text-slate-800" id="drawerOperator">-</span></div>
+                </div>
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                    <div class="section-card">
+                        <div class="section-title"><i class="fas fa-arrows-left-right-to-line text-blue-600"></i>传送线参数</div>
+                        <div class="metric-grid">
+                            <div class="metric-item"><div class="metric-label">速度 (m/min)</div><input id="conveyorSpeed" type="number" class="form-input" placeholder="请输入"></div>
+                            <div class="metric-item"><div class="metric-label">变频频率 (Hz)</div><input id="conveyorHz" type="number" class="form-input" placeholder="请输入"></div>
+                            <div class="metric-item"><div class="metric-label">钢管辊距 (mm)</div><input id="rollerPitch" type="number" class="form-input" placeholder="请输入"></div>
+                        </div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-title"><i class="fas fa-bolt text-blue-600"></i>加热中频参数</div>
+                        <div class="metric-grid">
+                            <div class="metric-item"><div class="metric-label">线圈规格 Φ</div><input id="coilSpec" type="number" class="form-input" placeholder="请输入"></div>
+                            <div class="metric-item"><div class="metric-label">功率 (KW)</div><input id="heatingPower" type="number" class="form-input" placeholder="请输入"></div>
+                            <div class="metric-item"><div class="metric-label">电压 (V)</div><input id="heatingVoltage" type="number" class="form-input" placeholder="请输入"></div>
+                        </div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-title"><i class="fas fa-spray-can-sparkles text-blue-600"></i>喷枪参数</div>
+                        <div class="metric-grid">
+                            <div class="metric-item"><div class="metric-label">静电电压 (KV)</div><input id="electroVoltage" type="number" class="form-input" placeholder="请输入"></div>
+                            <div class="metric-item"><div class="metric-label">喷枪数量 (支)</div><input id="sprayCount" type="number" class="form-input" placeholder="请输入"></div>
+                            <div class="metric-item"><div class="metric-label">进气压力 (Mpa)</div><input id="intakePressure" type="number" class="form-input" placeholder="请输入"></div>
+                            <div class="metric-item"><div class="metric-label">喷枪与管距 (mm)</div><input id="sprayDistance" type="number" class="form-input" placeholder="请输入"></div>
+                        </div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-title"><i class="fas fa-gear text-blue-600"></i>挤出机参数</div>
+                        <div class="space-y-4">
+                            <div class="metric-item"><div class="metric-label">75 挤出机参数 / AD 挤出机转速 (HZ)</div><input id="adHz" type="number" class="form-input" placeholder="请输入"></div>
+                            <div class="metric-item">
+                                <div class="metric-label">挤出机型号</div>
+                                <div class="radio-chip-group">
+                                    <button type="button" onclick="setScrewModel('150')" id="screw150" class="radio-chip">150</button>
+                                    <button type="button" onclick="setScrewModel('180')" id="screw180" class="radio-chip">180</button>
+                                </div>
+                            </div>
+                            <div class="metric-grid">
+                                <div class="metric-item"><div class="metric-label">PE/PP 转速 (r/min)</div><input id="peppSpeed" type="number" class="form-input" placeholder="请输入"></div>
+                                <div class="metric-item"><div class="metric-label">PE/PP 电流 (A)</div><input id="peppCurrent" type="number" class="form-input" placeholder="请输入"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-card xl:col-span-2">
+                        <div class="section-title"><i class="fas fa-shield-halved text-blue-600"></i>运行状态</div>
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                            <div class="metric-item">
+                                <div class="metric-label">除尘系统运行情况</div>
+                                <div class="status-toggle">
+                                    <button type="button" onclick="setStatusValue('dustStatus','normal')" id="dustStatus-normal" class="status-pill"><i class="fas fa-check"></i>正常</button>
+                                    <button type="button" onclick="setStatusValue('dustStatus','warning')" id="dustStatus-warning" class="status-pill"><i class="fas fa-triangle-exclamation"></i>异常</button>
+                                    <button type="button" onclick="setStatusValue('dustStatus','stop')" id="dustStatus-stop" class="status-pill"><i class="fas fa-stop"></i>停机</button>
+                                </div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">水冷系统运行情况</div>
+                                <div class="status-toggle">
+                                    <button type="button" onclick="setStatusValue('coolingStatus','normal')" id="coolingStatus-normal" class="status-pill"><i class="fas fa-check"></i>正常</button>
+                                    <button type="button" onclick="setStatusValue('coolingStatus','warning')" id="coolingStatus-warning" class="status-pill"><i class="fas fa-triangle-exclamation"></i>异常</button>
+                                    <button type="button" onclick="setStatusValue('coolingStatus','stop')" id="coolingStatus-stop" class="status-pill"><i class="fas fa-stop"></i>停机</button>
+                                </div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">传送线运行情况</div>
+                                <div class="status-toggle">
+                                    <button type="button" onclick="setStatusValue('lineStatus','normal')" id="lineStatus-normal" class="status-pill"><i class="fas fa-check"></i>正常</button>
+                                    <button type="button" onclick="setStatusValue('lineStatus','warning')" id="lineStatus-warning" class="status-pill"><i class="fas fa-triangle-exclamation"></i>异常</button>
+                                    <button type="button" onclick="setStatusValue('lineStatus','stop')" id="lineStatus-stop" class="status-pill"><i class="fas fa-stop"></i>停机</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+        <div class="border-t border-slate-200 bg-white px-6 py-4 flex items-center justify-between">
+            <button onclick="closeEntryDrawer()" class="action-btn btn-secondary">取消</button>
+            <button onclick="saveCurrentRecord()" class="action-btn btn-success"><i class="fas fa-save"></i>保存填写</button>
+        </div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 industrial-shadow-lg z-30">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            <div class="text-sm text-gray-600">
+                <span class="font-semibold text-gray-900">今日白班</span>
+                <span class="mx-2">|</span>
+                <span>已保存 <span class="font-bold text-green-600" id="bottomSavedCount">1</span> 条</span>
+                <span class="mx-2">|</span>
+                <span>待录入 <span class="font-bold text-orange-600" id="bottomPendingCount">3</span> 条</span>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="saveDraft()" class="action-btn btn-secondary"><i class="fas fa-save"></i>保存草稿</button>
+                <button onclick="submitReport()" class="action-btn btn-success industrial-shadow"><i class="fas fa-check-circle"></i>提交监控记录</button>
+            </div>
+        </div>
     </div>
 
     <div id="toastContainer"></div>
 
     <script>
-      const currentUser = {
-        name: "王五",
-        id: "OP-2024-118",
-      };
+        const currentUser = { name: '王五', id: 'OP-2024-118' };
+        const slots = [
+            { id: 'slot-1', label: '8:00~11:00' },
+            { id: 'slot-2', label: '11:00~2:00' },
+            { id: 'slot-3', label: '2:00~5:00' },
+            { id: 'slot-4', label: '5:00~8:00' }
+        ];
+        const records = {
+            'slot-1': {
+                conveyorSpeed: '200', conveyorHz: '204', rollerPitch: '197', coilSpec: '220',
+                heatingPower: '5000', heatingVoltage: '220', electroVoltage: '16', sprayCount: '2',
+                intakePressure: '5', sprayDistance: '12', adHz: '540', screwModel: '150',
+                peppSpeed: '3000', peppCurrent: '34', dustStatus: 'normal', coolingStatus: 'normal',
+                lineStatus: 'normal', time: '09:55', operator: '王五'
+            }
+        };
+        let currentSlotId = null;
 
-      const shiftSlots = [
-        "8:00~9:00",
-        "9:00~10:00",
-        "10:00~11:00",
-        "11:00~12:00",
-        "12:00~1:00",
-        "1:00~2:00",
-        "2:00~3:00",
-        "3:00~4:00",
-        "4:00~5:00",
-        "5:00~6:00",
-        "6:00~7:00",
-        "7:00~8:00",
-      ];
-
-      const records = {
-        0: {
-          heat: "200",
-          fbe: "204",
-          ad: "197",
-          pepp: "220",
-          time: "2026.03.16 09:55",
-          operator: "王五",
-        },
-      };
-
-      let editingRow = null;
-
-      document.addEventListener("DOMContentLoaded", function () {
-        updateDate();
-        initTable();
-        updateStats();
-      });
-
-      function updateDate() {
-        const now = new Date();
-        const y = now.getFullYear();
-        const m = String(now.getMonth() + 1).padStart(2, "0");
-        const d = String(now.getDate()).padStart(2, "0");
-        document.getElementById("currentDate").textContent = `${y}-${m}-${d}`;
-      }
-
-      function initTable() {
-        const tbody = document.getElementById("recordTableBody");
-        tbody.innerHTML = "";
-
-        shiftSlots.forEach((slot, index) => {
-          const tr = document.createElement("tr");
-          tr.id = `row-${index}`;
-          tr.dataset.index = index;
-          tr.dataset.status = records[index] ? "saved" : "empty";
-
-          tr.innerHTML = `
-                    <td class="time-slot">${slot}</td>
-                    <td><input type="number" class="form-input heat-input" placeholder="-" disabled step="0.1"></td>
-                    <td><input type="number" class="form-input fbe-input" placeholder="-" disabled step="0.1"></td>
-                    <td><input type="number" class="form-input ad-input" placeholder="-" disabled step="0.1"></td>
-                    <td><input type="number" class="form-input pepp-input" placeholder="-" disabled step="0.1"></td>
-                    <td>
-                        <div class="auto-field" id="time-${index}" style="display: none;">
-                            <i class="fas fa-clock text-xs"></i>
-                            <span>-</span>
-                        </div>
-                        <div class="readonly-field" id="time-empty-${index}">-</div>
-                    </td>
-                    <td>
-                        <div class="auto-field" id="operator-${index}" style="display: none;">
-                            <i class="fas fa-user text-xs"></i>
-                            <span>-</span>
-                        </div>
-                        <div class="readonly-field" id="operator-empty-${index}">-</div>
-                    </td>
-                    <td>
-                        <span class="status-badge status-pending" id="status-${index}">
-                            <i class="fas fa-circle text-xs"></i> 待录入
-                        </span>
-                    </td>
-                    <td>
-                        <div class="flex items-center justify-center gap-2" id="actions-${index}"></div>
-                    </td>
-                `;
-
-          tbody.appendChild(tr);
-
-          if (records[index]) {
-            fillRowData(index, records[index]);
-            setRowSaved(index);
-          } else {
-            setRowPending(index);
-          }
+        document.addEventListener('DOMContentLoaded', function () {
+            updateDate();
+            renderTable();
+            updateStats();
         });
-      }
 
-      function setRowPending(index) {
-        const row = document.getElementById(`row-${index}`);
-        row.dataset.status = "empty";
-        row.classList.remove("editing", "saved");
-        const timeDisplay = document.getElementById(`time-${index}`);
-        const operatorDisplay = document.getElementById(`operator-${index}`);
-        document.getElementById(`time-empty-${index}`).style.display = "flex";
-        document.getElementById(`operator-empty-${index}`).style.display =
-          "flex";
-        timeDisplay.style.display = "none";
-        operatorDisplay.style.display = "none";
-        row.querySelector(".heat-input").value = "";
-        row.querySelector(".fbe-input").value = "";
-        row.querySelector(".ad-input").value = "";
-        row.querySelector(".pepp-input").value = "";
-        document.getElementById(`status-${index}`).className =
-          "status-badge status-pending";
-        document.getElementById(`status-${index}`).innerHTML =
-          '<i class="fas fa-circle text-xs"></i> 待录入';
-        document.getElementById(`actions-${index}`).innerHTML = `
-                <button onclick="startEdit(${index})" class="action-btn btn-primary">
-                    <i class="fas fa-edit"></i>录入
-                </button>
-            `;
-      }
-
-      function startEdit(index) {
-        if (editingRow !== null && editingRow !== index) {
-          if (!confirm("当前有其他时段正在编辑，是否放弃该时段修改？")) {
-            return;
-          }
-          cancelEdit(editingRow);
+        function updateDate() {
+            const now = new Date();
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
+            document.getElementById('currentDate').textContent = `${y}-${m}-${d}`;
         }
 
-        editingRow = index;
-        const row = document.getElementById(`row-${index}`);
-        row.dataset.status = "editing";
-        row.classList.remove("saved");
-        row.classList.add("editing");
-
-        row.querySelector(".heat-input").disabled = false;
-        row.querySelector(".fbe-input").disabled = false;
-        row.querySelector(".ad-input").disabled = false;
-        row.querySelector(".pepp-input").disabled = false;
-
-        const timeDisplay = document.getElementById(`time-${index}`);
-        const timeEmpty = document.getElementById(`time-empty-${index}`);
-        timeDisplay.style.display = "inline-flex";
-        timeDisplay.querySelector("span").textContent = formatDateTime(
-          new Date(),
-        );
-        timeEmpty.style.display = "none";
-
-        const operatorDisplay = document.getElementById(`operator-${index}`);
-        const operatorEmpty = document.getElementById(
-          `operator-empty-${index}`,
-        );
-        operatorDisplay.style.display = "inline-flex";
-        operatorDisplay.querySelector("span").textContent = currentUser.name;
-        operatorEmpty.style.display = "none";
-
-        document.getElementById(`status-${index}`).className =
-          "status-badge status-editing";
-        document.getElementById(`status-${index}`).innerHTML =
-          '<i class="fas fa-circle text-xs"></i> 录入中';
-
-        document.getElementById(`actions-${index}`).innerHTML = `
-                <button onclick="saveRow(${index})" class="action-btn btn-success">
-                    <i class="fas fa-check"></i>保存
-                </button>
-                <button onclick="cancelEdit(${index})" class="action-btn btn-secondary">
-                    <i class="fas fa-times"></i>取消
-                </button>
-            `;
-
-        row.querySelector(".heat-input").focus();
-        updateStats();
-      }
-
-      function saveRow(index) {
-        const row = document.getElementById(`row-${index}`);
-        const heat = row.querySelector(".heat-input").value.trim();
-        const fbe = row.querySelector(".fbe-input").value.trim();
-        const ad = row.querySelector(".ad-input").value.trim();
-        const pepp = row.querySelector(".pepp-input").value.trim();
-
-        if (!heat || !fbe || !ad || !pepp) {
-          showToast("请填写完整的4项温度数据", "error");
-          return;
+        function renderTable() {
+            const tbody = document.getElementById('monitorTableBody');
+            tbody.innerHTML = '';
+            slots.forEach((slot) => {
+                const record = records[slot.id];
+                const saved = Boolean(record);
+                const chipClass = saved ? 'summary-saved' : 'summary-pending';
+                const chipText = saved ? '已保存' : '待录入';
+                const actionLabel = saved ? '修改' : '填写';
+                const actionIcon = saved ? 'fa-edit' : 'fa-pen';
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="time-slot">${slot.label}</td>
+                    <td class="text-center">${record?.time || '--:--'}</td>
+                    <td class="text-center">${record?.operator || '-'}</td>
+                    <td class="text-center"><span class="summary-chip ${chipClass}">${chipText}</span></td>
+                    <td class="text-center"><button onclick="openEntryDrawer('${slot.id}')" class="action-btn ${saved ? 'btn-secondary' : 'btn-primary'}"><i class="fas ${actionIcon}"></i>${actionLabel}</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
 
-        records[index] = {
-          heat,
-          fbe,
-          ad,
-          pepp,
-          time: document.getElementById(`time-${index}`).querySelector("span")
-            .textContent,
-          operator: currentUser.name,
-        };
-
-        setRowSaved(index);
-        editingRow = null;
-        updateStats();
-        showToast("时段温度记录已保存", "success");
-      }
-
-      function setRowSaved(index) {
-        const row = document.getElementById(`row-${index}`);
-        row.dataset.status = "saved";
-        row.classList.remove("editing");
-        row.classList.add("saved");
-
-        row.querySelector(".heat-input").disabled = true;
-        row.querySelector(".fbe-input").disabled = true;
-        row.querySelector(".ad-input").disabled = true;
-        row.querySelector(".pepp-input").disabled = true;
-
-        const timeDisplay = document.getElementById(`time-${index}`);
-        timeDisplay.className =
-          "readonly-field bg-blue-50 text-blue-700 border-blue-200";
-        timeDisplay.style.display = "inline-flex";
-        timeDisplay.innerHTML = `<i class="fas fa-check-circle text-xs text-green-600 mr-1"></i><span>${records[index].time}</span>`;
-
-        const operatorDisplay = document.getElementById(`operator-${index}`);
-        operatorDisplay.className =
-          "readonly-field bg-blue-50 text-blue-700 border-blue-200";
-        operatorDisplay.style.display = "inline-flex";
-        operatorDisplay.innerHTML = `<i class="fas fa-user-check text-xs text-green-600 mr-1"></i><span>${records[index].operator}</span>`;
-
-        document.getElementById(`time-empty-${index}`).style.display = "none";
-        document.getElementById(`operator-empty-${index}`).style.display =
-          "none";
-        document.getElementById(`status-${index}`).className =
-          "status-badge status-saved";
-        document.getElementById(`status-${index}`).innerHTML =
-          '<i class="fas fa-check-circle text-xs"></i> 已保存';
-
-        document.getElementById(`actions-${index}`).innerHTML = `
-                <button onclick="startEdit(${index})" class="action-btn btn-secondary">
-                    <i class="fas fa-edit"></i>修改
-                </button>
-            `;
-      }
-
-      function cancelEdit(index) {
-        if (records[index]) {
-          fillRowData(index, records[index]);
-          setRowSaved(index);
-        } else {
-          setRowPending(index);
+        function openEntryDrawer(slotId) {
+            currentSlotId = slotId;
+            const slot = slots.find(item => item.id === slotId);
+            const record = records[slotId] || {};
+            document.getElementById('drawerSlotLabel').textContent = slot.label;
+            document.getElementById('drawerTime').textContent = record.time || formatTime(new Date());
+            document.getElementById('drawerOperator').textContent = currentUser.name;
+            document.getElementById('conveyorSpeed').value = record.conveyorSpeed || '';
+            document.getElementById('conveyorHz').value = record.conveyorHz || '';
+            document.getElementById('rollerPitch').value = record.rollerPitch || '';
+            document.getElementById('coilSpec').value = record.coilSpec || '';
+            document.getElementById('heatingPower').value = record.heatingPower || '';
+            document.getElementById('heatingVoltage').value = record.heatingVoltage || '';
+            document.getElementById('electroVoltage').value = record.electroVoltage || '';
+            document.getElementById('sprayCount').value = record.sprayCount || '';
+            document.getElementById('intakePressure').value = record.intakePressure || '';
+            document.getElementById('sprayDistance').value = record.sprayDistance || '';
+            document.getElementById('adHz').value = record.adHz || '';
+            document.getElementById('peppSpeed').value = record.peppSpeed || '';
+            document.getElementById('peppCurrent').value = record.peppCurrent || '';
+            setScrewModel(record.screwModel || '150');
+            setStatusValue('dustStatus', record.dustStatus || 'normal');
+            setStatusValue('coolingStatus', record.coolingStatus || 'normal');
+            setStatusValue('lineStatus', record.lineStatus || 'normal');
+            document.getElementById('entryDrawerOverlay').classList.add('open');
+            document.getElementById('entryDrawer').classList.add('open');
+            document.body.style.overflow = 'hidden';
         }
 
-        editingRow = null;
-        updateStats();
-      }
-
-      function fillRowData(index, data) {
-        const row = document.getElementById(`row-${index}`);
-        row.querySelector(".heat-input").value = data.heat || "";
-        row.querySelector(".fbe-input").value = data.fbe || "";
-        row.querySelector(".ad-input").value = data.ad || "";
-        row.querySelector(".pepp-input").value = data.pepp || "";
-
-        const timeDisplay = document.getElementById(`time-${index}`);
-        timeDisplay.style.display = "inline-flex";
-        timeDisplay.querySelector("span").textContent = data.time || "-";
-        document.getElementById(`time-empty-${index}`).style.display = "none";
-
-        const operatorDisplay = document.getElementById(`operator-${index}`);
-        operatorDisplay.style.display = "inline-flex";
-        operatorDisplay.querySelector("span").textContent =
-          data.operator || "-";
-        document.getElementById(`operator-empty-${index}`).style.display =
-          "none";
-      }
-
-      function updateStats() {
-        const savedCount = Object.keys(records).length;
-        const total = shiftSlots.length;
-
-        document.getElementById("filledCount").textContent =
-          `${savedCount}/${total}`;
-        document.getElementById("bottomSavedCount").textContent = savedCount;
-        document.getElementById("bottomPendingCount").textContent =
-          total - savedCount;
-
-        const statusEl = document.getElementById("recordStatus");
-        if (savedCount === total) {
-          statusEl.textContent = "已完成";
-          statusEl.className = "text-sm font-bold text-green-600";
-        } else if (savedCount > 0 || editingRow !== null) {
-          statusEl.textContent = "录入中";
-          statusEl.className = "text-sm font-bold text-blue-600";
-        } else {
-          statusEl.textContent = "待开始";
-          statusEl.className = "text-sm font-bold text-gray-400";
-        }
-      }
-
-      function saveDraft() {
-        console.log("保存草稿", collectAllData());
-        showToast("草稿已保存到本地", "success");
-      }
-
-      function submitReport() {
-        const pendingCount = shiftSlots.length - Object.keys(records).length;
-        if (pendingCount > 0) {
-          if (!confirm(`还有 ${pendingCount} 个时段未录入，确认继续提交吗？`)) {
-            return;
-          }
+        function closeEntryDrawer() {
+            currentSlotId = null;
+            document.getElementById('entryDrawerOverlay').classList.remove('open');
+            document.getElementById('entryDrawer').classList.remove('open');
+            document.body.style.overflow = '';
         }
 
-        console.log("提交检测记录", collectAllData());
-        showToast("时段运行记录提交成功", "success");
-      }
+        function setScrewModel(value) {
+            document.getElementById('screw150').classList.toggle('active', value === '150');
+            document.getElementById('screw180').classList.toggle('active', value === '180');
+        }
 
-      function collectAllData() {
-        return shiftSlots.map((slot, index) => ({
-          slot,
-          ...(records[index] || {}),
-        }));
-      }
+        function setStatusValue(baseId, value) {
+            ['normal', 'warning', 'stop'].forEach((key) => {
+                const button = document.getElementById(`${baseId}-${key}`);
+                if (button) button.classList.toggle('active', key === value);
+            });
+        }
 
-      function formatDateTime(date) {
-        const h = String(date.getHours()).padStart(2, "0");
-        const min = String(date.getMinutes()).padStart(2, "0");
-        return `${h}:${min}`;
-      }
+        function getActiveStatus(baseId) {
+            if (document.getElementById(`${baseId}-normal`).classList.contains('active')) return 'normal';
+            if (document.getElementById(`${baseId}-warning`).classList.contains('active')) return 'warning';
+            return 'stop';
+        }
 
-      function showToast(message, type = "info") {
-        const container = document.getElementById("toastContainer");
-        const toast = document.createElement("div");
+        function saveCurrentRecord() {
+            const payload = {
+                conveyorSpeed: document.getElementById('conveyorSpeed').value.trim(),
+                conveyorHz: document.getElementById('conveyorHz').value.trim(),
+                rollerPitch: document.getElementById('rollerPitch').value.trim(),
+                coilSpec: document.getElementById('coilSpec').value.trim(),
+                heatingPower: document.getElementById('heatingPower').value.trim(),
+                heatingVoltage: document.getElementById('heatingVoltage').value.trim(),
+                electroVoltage: document.getElementById('electroVoltage').value.trim(),
+                sprayCount: document.getElementById('sprayCount').value.trim(),
+                intakePressure: document.getElementById('intakePressure').value.trim(),
+                sprayDistance: document.getElementById('sprayDistance').value.trim(),
+                adHz: document.getElementById('adHz').value.trim(),
+                screwModel: document.getElementById('screw150').classList.contains('active') ? '150' : '180',
+                peppSpeed: document.getElementById('peppSpeed').value.trim(),
+                peppCurrent: document.getElementById('peppCurrent').value.trim(),
+                dustStatus: getActiveStatus('dustStatus'),
+                coolingStatus: getActiveStatus('coolingStatus'),
+                lineStatus: getActiveStatus('lineStatus'),
+                time: document.getElementById('drawerTime').textContent,
+                operator: currentUser.name
+            };
+            const required = ['conveyorSpeed','conveyorHz','rollerPitch','coilSpec','heatingPower','heatingVoltage','electroVoltage','sprayCount','intakePressure','sprayDistance','adHz','peppSpeed','peppCurrent'];
+            if (required.some((key) => !payload[key])) {
+                showToast('请填写完整的监控参数后再保存', 'error');
+                return;
+            }
+            records[currentSlotId] = payload;
+            closeEntryDrawer();
+            renderTable();
+            updateStats();
+            showToast('监控记录已保存', 'success');
+        }
 
-        const colors = {
-          success: "bg-green-600",
-          error: "bg-red-600",
-          info: "bg-gray-900",
-        };
+        function updateStats() {
+            const savedCount = Object.keys(records).length;
+            const total = slots.length;
+            document.getElementById('filledCount').textContent = `${savedCount}/${total}`;
+            document.getElementById('bottomSavedCount').textContent = savedCount;
+            document.getElementById('bottomPendingCount').textContent = total - savedCount;
+            const statusEl = document.getElementById('recordStatus');
+            if (savedCount === total) {
+                statusEl.textContent = '已完成';
+                statusEl.className = 'text-sm font-bold text-green-600';
+            } else if (savedCount > 0) {
+                statusEl.textContent = '录入中';
+                statusEl.className = 'text-sm font-bold text-blue-600';
+            } else {
+                statusEl.textContent = '待开始';
+                statusEl.className = 'text-sm font-bold text-gray-400';
+            }
+        }
 
-        const icons = {
-          success: "fa-check-circle",
-          error: "fa-exclamation-circle",
-          info: "fa-info-circle",
-        };
+        function saveDraft() {
+            console.log('保存草稿', records);
+            showToast('草稿已保存到本地', 'success');
+        }
 
-        toast.className = `toast ${colors[type]} text-white px-5 py-3 rounded-xl industrial-shadow-lg flex items-center gap-3`;
-        toast.innerHTML = `<i class="fas ${icons[type]}"></i><span>${message}</span>`;
-        container.appendChild(toast);
+        function submitReport() {
+            const pendingCount = slots.length - Object.keys(records).length;
+            if (pendingCount > 0 && !confirm(`还有 ${pendingCount} 个时段未录入，确认继续提交吗？`)) return;
+            console.log('提交监控记录', records);
+            showToast('涂覆点监控记录提交成功', 'success');
+        }
 
-        setTimeout(() => {
-          toast.style.opacity = "0";
-          toast.style.transform = "translateY(-10px)";
-          toast.style.transition = "all 0.3s ease";
-          setTimeout(() => toast.remove(), 300);
-        }, 2400);
-      }
+        function formatTime(date) {
+            const h = String(date.getHours()).padStart(2, '0');
+            const min = String(date.getMinutes()).padStart(2, '0');
+            return `${h}:${min}`;
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const colors = { success: 'bg-green-600', error: 'bg-red-600', info: 'bg-slate-900' };
+            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+            toast.className = `toast ${colors[type]} text-white px-5 py-3 rounded-2xl industrial-shadow-lg flex items-center gap-3`;
+            toast.innerHTML = `<i class="fas ${icons[type]}"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2400);
+        }
     </script>
-  </body>
+</body>
 </html>
