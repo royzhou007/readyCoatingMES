@@ -658,55 +658,15 @@
                   onclick="toggleSelectAll()"
                 />
               </th>
-              <th
-                class="px-4 py-4 text-left cursor-pointer"
-                onclick="sortTable('id')"
-              >
-                <div class="flex items-center gap-2">
-                  <span>自编号</span><i class="fas fa-sort text-gray-400"></i>
-                </div>
-              </th>
-              <th class="px-4 py-4 text-left">
-                <div class="flex flex-col">
-                  <span>捆号</span
-                  ><span class="text-xs text-gray-400 font-normal normal-case"
-                    >管号</span
-                  >
-                </div>
-              </th>
-              <th class="px-4 py-4 text-left">
-                <div class="flex flex-col">
-                  <span>炉号</span
-                  ><span class="text-xs text-gray-400 font-normal normal-case"
-                    >批号</span
-                  >
-                </div>
-              </th>
-              <th class="px-4 py-4 text-center">
-                <div class="flex flex-col items-center">
-                  <span>规格</span
-                  ><span class="text-xs text-gray-400 font-normal normal-case"
-                    >长度/重量</span
-                  >
-                </div>
-              </th>
-              <th class="px-4 py-4 text-center">外观</th>
-              <th class="px-4 py-4 text-center">锈蚀</th>
-              <th class="px-4 py-4 text-center">
-                <div class="flex flex-col items-center">
-                  <span>仪器读数</span
-                  ><span class="text-xs text-gray-400 font-normal normal-case"
-                    >T△ / RH / 温度</span
-                  >
-                </div>
-              </th>
+              <th class="px-4 py-4 text-left">物料名称</th>
+              <th class="px-4 py-4 text-center">投料数量</th>
               <th class="px-4 py-4 text-center">投料时间</th>
-              <th class="px-4 py-4 text-center">质检员</th>
+              <th class="px-4 py-4 text-center">投料人</th>
               <th class="px-4 py-4 text-center">操作</th>
             </tr>
           </thead>
           <tbody id="tableBody">
-            <tr class="group" data-id="0032" data-shift="today_day">
+            <tr class="group" data-id="0032" data-shift="today_day" data-material="FBE粉末" data-quantity="320" data-time="19:35" data-operator="张师傅">
               <td class="px-4 py-4">
                 <input
                   type="checkbox"
@@ -715,64 +675,12 @@
                 />
               </td>
               <td class="px-4 py-4">
-                <div class="font-bold text-gray-900 font-mono text-base">
-                  0032
-                </div>
-              </td>
-              <td class="px-4 py-4">
-                <div class="flex flex-col gap-1">
-                  <div class="text-sm font-semibold text-gray-900">96#</div>
-                  <div class="font-mono text-xs text-gray-500">6508741</div>
-                </div>
-              </td>
-              <td class="px-4 py-4">
-                <div class="flex flex-col gap-1">
-                  <div class="text-sm font-medium text-gray-900">15303842</div>
-                  <div class="text-xs text-gray-500">71399</div>
-                </div>
+                <div class="text-sm font-semibold text-gray-900">FBE粉末</div>
               </td>
               <td class="px-4 py-4 text-center">
-                <div class="flex flex-col gap-1">
-                  <div class="text-sm font-semibold text-gray-900">
-                    11856<span class="text-xs text-gray-500 font-normal"
-                      >mm</span
-                    >
-                  </div>
-                  <div class="text-xs text-gray-500">573.5kg</div>
-                </div>
+                <div class="text-sm font-semibold text-gray-900">320<span class="text-xs text-gray-500 font-normal ml-1">kg</span></div>
               </td>
-              <td class="px-4 py-4 text-center">
-                <span
-                  class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"
-                  ><i class="fas fa-check"></i>合格</span
-                >
-              </td>
-              <td class="px-4 py-4 text-center">
-                <span
-                  class="inline-flex items-center px-2 py-1 rounded text-xs font-medium corrosion-light"
-                  >杞诲井</span
-                >
-              </td>
-              <td class="px-4 py-4 text-center">
-                <div class="flex flex-col gap-0.5 text-xs text-gray-600">
-                  <div class="flex justify-center gap-1">
-                    <span class="text-gray-400">T△:</span
-                    ><span class="font-medium">14.8℃</span>
-                  </div>
-                  <div class="flex justify-center gap-1">
-                    <span class="text-gray-400">RH:</span
-                    ><span class="font-medium">45%</span>
-                  </div>
-                  <div class="flex justify-center gap-1">
-                    <span class="text-gray-400">温度:</span
-                    ><span class="font-medium">120℃</span>
-                  </div>
-                </div>
-              </td>
-              <td class="px-4 py-4 text-center">
-                <div class="text-sm font-medium text-gray-900">19:35</div>
-                <div class="text-xs text-gray-500">今天</div>
-              </td>
+              <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">19:35</div></td>
               <td class="px-4 py-4 text-center">
                 <div class="flex flex-col items-center gap-1">
                   <div
@@ -802,7 +710,7 @@
                 </div>
               </td>
             </tr>
-            <tr class="group" data-id="0031" data-shift="today_day">
+            <tr class="group" data-id="0031" data-shift="today_day" data-material="AD胶黏剂" data-quantity="185" data-time="18:42" data-operator="张师傅">
               <td class="px-4 py-4">
                 <input
                   type="checkbox"
@@ -811,64 +719,12 @@
                 />
               </td>
               <td class="px-4 py-4">
-                <div class="font-bold text-gray-900 font-mono text-base">
-                  0031
-                </div>
-              </td>
-              <td class="px-4 py-4">
-                <div class="flex flex-col gap-1">
-                  <div class="text-sm font-semibold text-gray-900">96#</div>
-                  <div class="font-mono text-xs text-gray-500">6508739</div>
-                </div>
-              </td>
-              <td class="px-4 py-4">
-                <div class="flex flex-col gap-1">
-                  <div class="text-sm font-medium text-gray-900">15303842</div>
-                  <div class="text-xs text-gray-500">71399</div>
-                </div>
+                <div class="text-sm font-semibold text-gray-900">AD胶黏剂</div>
               </td>
               <td class="px-4 py-4 text-center">
-                <div class="flex flex-col gap-1">
-                  <div class="text-sm font-semibold text-gray-900">
-                    11920<span class="text-xs text-gray-500 font-normal"
-                      >mm</span
-                    >
-                  </div>
-                  <div class="text-xs text-gray-500">574.2kg</div>
-                </div>
+                <div class="text-sm font-semibold text-gray-900">185<span class="text-xs text-gray-500 font-normal ml-1">kg</span></div>
               </td>
-              <td class="px-4 py-4 text-center">
-                <span
-                  class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"
-                  ><i class="fas fa-check"></i>合格</span
-                >
-              </td>
-              <td class="px-4 py-4 text-center">
-                <span
-                  class="inline-flex items-center px-2 py-1 rounded text-xs font-medium corrosion-none"
-                  >无</span
-                >
-              </td>
-              <td class="px-4 py-4 text-center">
-                <div class="flex flex-col gap-0.5 text-xs text-gray-600">
-                  <div class="flex justify-center gap-1">
-                    <span class="text-gray-400">T△:</span
-                    ><span class="font-medium">14.6℃</span>
-                  </div>
-                  <div class="flex justify-center gap-1">
-                    <span class="text-gray-400">RH:</span
-                    ><span class="font-medium">42%</span>
-                  </div>
-                  <div class="flex justify-center gap-1">
-                    <span class="text-gray-400">温度:</span
-                    ><span class="font-medium">118℃</span>
-                  </div>
-                </div>
-              </td>
-              <td class="px-4 py-4 text-center">
-                <div class="text-sm font-medium text-gray-900">18:42</div>
-                <div class="text-xs text-gray-500">今天</div>
-              </td>
+              <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">18:42</div></td>
               <td class="px-4 py-4 text-center">
                 <div class="flex flex-col items-center gap-1">
                   <div
@@ -898,7 +754,7 @@
                 </div>
               </td>
             </tr>
-            <tr class="group" data-id="0030" data-shift="yesterday_night">
+            <tr class="group" data-id="0030" data-shift="yesterday_night" data-material="PE/PP颗粒料" data-quantity="420" data-time="03:15" data-operator="李师傅">
               <td class="px-4 py-4">
                 <input
                   type="checkbox"
@@ -907,64 +763,12 @@
                 />
               </td>
               <td class="px-4 py-4">
-                <div class="font-bold text-gray-900 font-mono text-base">
-                  0030
-                </div>
-              </td>
-              <td class="px-4 py-4">
-                <div class="flex flex-col gap-1">
-                  <div class="text-sm font-semibold text-gray-900">97#</div>
-                  <div class="font-mono text-xs text-gray-500">6508725</div>
-                </div>
-              </td>
-              <td class="px-4 py-4">
-                <div class="flex flex-col gap-1">
-                  <div class="text-sm font-medium text-gray-900">15303842</div>
-                  <div class="text-xs text-gray-500">71400</div>
-                </div>
+                <div class="text-sm font-semibold text-gray-900">PE/PP颗粒料</div>
               </td>
               <td class="px-4 py-4 text-center">
-                <div class="flex flex-col gap-1">
-                  <div class="text-sm font-semibold text-gray-900">
-                    11780<span class="text-xs text-gray-500 font-normal"
-                      >mm</span
-                    >
-                  </div>
-                  <div class="text-xs text-gray-500">572.8kg</div>
-                </div>
+                <div class="text-sm font-semibold text-gray-900">420<span class="text-xs text-gray-500 font-normal ml-1">kg</span></div>
               </td>
-              <td class="px-4 py-4 text-center">
-                <span
-                  class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"
-                  ><i class="fas fa-times"></i>不合格</span
-                >
-              </td>
-              <td class="px-4 py-4 text-center">
-                <span
-                  class="inline-flex items-center px-2 py-1 rounded text-xs font-medium corrosion-severe"
-                  >严重</span
-                >
-              </td>
-              <td class="px-4 py-4 text-center">
-                <div class="flex flex-col gap-0.5 text-xs text-gray-600">
-                  <div class="flex justify-center gap-1">
-                    <span class="text-gray-400">T△:</span
-                    ><span class="font-medium text-red-600">15.2℃</span>
-                  </div>
-                  <div class="flex justify-center gap-1">
-                    <span class="text-gray-400">RH:</span
-                    ><span class="font-medium text-red-600">65%</span>
-                  </div>
-                  <div class="flex justify-center gap-1">
-                    <span class="text-gray-400">温度:</span
-                    ><span class="font-medium text-red-600">135℃</span>
-                  </div>
-                </div>
-              </td>
-              <td class="px-4 py-4 text-center">
-                <div class="text-sm font-medium text-gray-900">03:15</div>
-                <div class="text-xs text-gray-500">昨天</div>
-              </td>
+              <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">03:15</div></td>
               <td class="px-4 py-4 text-center">
                 <div class="flex flex-col items-center gap-1">
                   <div
@@ -1065,7 +869,7 @@
           显示
           <span class="font-semibold text-gray-900" id="showingCount">1-3</span>
           条，共
-          <span class="font-semibold text-gray-900" id="totalCount">156</span>
+          <span class="font-semibold text-gray-900" id="totalCount">3</span>
           条记录
           <span class="ml-2 text-xs text-gray-400"
             >(当前班次: <span id="currentShiftName">今日白班</span>)</span
@@ -1150,7 +954,7 @@
             <i class="fas fa-plus"></i>
           </div>
           <div>
-            <h3 class="text-lg font-bold text-gray-900">钢管投料录入</h3>
+            <h3 class="text-lg font-bold text-gray-900">物料投料详情</h3>
             <p class="text-sm text-gray-500">
               当前班次:
               <span class="font-semibold text-green-700">今日白班</span>
@@ -1159,15 +963,6 @@
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <!-- 复制上一支按钮 -->
-          <button
-            onclick="copyLastRecord()"
-            class="flex items-center gap-2 px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg font-medium text-sm transition-colors"
-            title="复制上一支钢管的捆号、炉号、批号"
-          >
-            <i class="fas fa-copy"></i>
-            <span>复制上一支</span>
-          </button>
           <button
             onclick="closeEntryDrawer()"
             class="w-10 h-10 rounded-lg bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-gray-600 transition-colors"
@@ -1180,491 +975,71 @@
       <!-- Content -->
       <div class="flex-1 overflow-y-auto p-6">
         <div class="max-w-4xl mx-auto space-y-6">
-          <!-- 码单选择区域 -->
-          <div
-            class="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-5"
-          >
-            <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center gap-2">
-                <i class="fas fa-list-ol text-blue-600 text-xl"></i>
-                <h4 class="font-bold text-gray-900">
-                  码单选择
-                  <span class="text-sm font-normal text-gray-500"
-                    >（从预置码单中选取）</span
-                  >
-                </h4>
-              </div>
-              <span
-                class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full"
-                >共 150 支待选</span
-              >
-            </div>
-
-            <!-- 码单选择按钮区域 -->
-            <div
-              id="codeListSelectorArea"
-              class="import-btn-area rounded-xl p-6 text-center bg-white border-2 border-dashed border-blue-300"
-              onclick="openCodeListModal()"
-            >
-              <div
-                class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3"
-              >
-                <i class="fas fa-clipboard-list text-2xl text-blue-600"></i>
-              </div>
-              <p class="text-gray-700 font-semibold mb-1">点击选择码单钢管</p>
-              <p class="text-sm text-gray-500">
-                从已导入的码单列表中搜索并选择钢管信息
-              </p>
-              <div
-                class="mt-3 flex items-center justify-center gap-2 text-xs text-blue-600"
-              >
-                <i class="fas fa-search"></i>
-                <span>支持管号、捆号、炉号、批号搜索</span>
-              </div>
-            </div>
-
-            <!-- 已选择码单信息显示 -->
-            <div
-              id="selectedCodeInfo"
-              class="hidden mt-4 p-4 bg-white rounded-lg border-2 border-green-300 shadow-sm"
-            >
-              <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center gap-2">
-                  <i class="fas fa-check-circle text-green-600 text-lg"></i>
-                  <span class="font-bold text-gray-900">已选择码单钢管</span>
-                </div>
-                <button
-                  onclick="clearSelectedCode()"
-                  class="text-sm text-red-500 hover:text-red-700 flex items-center gap-1 px-2 py-1 rounded hover:bg-red-50"
-                >
-                  <i class="fas fa-times"></i> 清除选择
-                </button>
-              </div>
-              <div class="grid grid-cols-3 gap-3 text-sm">
-                <div class="bg-gray-50 p-2 rounded">
-                  <span class="text-gray-500 text-xs block">管号</span>
-                  <span
-                    class="font-mono font-semibold text-gray-900"
-                    id="selectedPipeNo"
-                    >-</span
-                  >
-                </div>
-                <div class="bg-gray-50 p-2 rounded">
-                  <span class="text-gray-500 text-xs block">捆号</span>
-                  <span
-                    class="font-semibold text-gray-900"
-                    id="selectedBundleNo"
-                    >-</span
-                  >
-                </div>
-                <div class="bg-gray-50 p-2 rounded">
-                  <span class="text-gray-500 text-xs block">炉号</span>
-                  <span
-                    class="font-semibold text-gray-900"
-                    id="selectedFurnaceNo"
-                    >-</span
-                  >
-                </div>
-                <div class="bg-gray-50 p-2 rounded">
-                  <span class="text-gray-500 text-xs block">批号</span>
-                  <span class="font-semibold text-gray-900" id="selectedBatchNo"
-                    >-</span
-                  >
-                </div>
-                <div class="bg-gray-50 p-2 rounded">
-                  <span class="text-gray-500 text-xs block">长度</span>
-                  <span class="font-semibold text-blue-600" id="selectedLength"
-                    >-</span
-                  >
-                </div>
-                <div class="bg-gray-50 p-2 rounded">
-                  <span class="text-gray-500 text-xs block">重量</span>
-                  <span class="font-semibold text-blue-600" id="selectedWeight"
-                    >-</span
-                  >
-                </div>
-              </div>
-              <div class="mt-3 p-2 bg-blue-50 rounded text-xs text-blue-700">
-                <i class="fas fa-info-circle mr-1"></i>
-                以上信息将自动填充到下方表单中
-              </div>
-            </div>
-          </div>
-
-          <!-- 分隔线 -->
-          <div class="flex items-center gap-4">
-            <div class="flex-1 h-px bg-gray-300"></div>
-            <span class="text-gray-400 font-medium">或手动填写</span>
-            <div class="flex-1 h-px bg-gray-300"></div>
-          </div>
-
-          <!-- 自动信息卡片 -->
-          <div
-            class="grid grid-cols-4 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-200"
-          >
-            <div class="text-center">
-              <div class="text-xs text-gray-500 mb-1">工单号</div>
-              <div class="font-semibold text-gray-900">WO-2026-0318-001</div>
-            </div>
-            <div class="text-center">
-              <div class="text-xs text-gray-500 mb-1">鐝</div>
-              <div class="font-semibold text-blue-600">今日白班</div>
-            </div>
-            <div class="text-center">
-              <div class="text-xs text-gray-500 mb-1">当前时间</div>
-              <div class="font-semibold text-gray-900" id="currentTime">
-                20:38
-              </div>
-            </div>
-            <div class="text-center">
-              <div class="text-xs text-gray-500 mb-1">操作员</div>
-              <div class="font-semibold text-gray-900">张师傅</div>
-            </div>
-          </div>
-
-          <!-- 钢管标识信息 -->
-          <div class="bg-white rounded-xl border border-gray-200 p-5">
-            <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <i class="fas fa-barcode text-blue-600"></i>
-              钢管标识信息 <span class="text-red-500">*</span>
-              <span class="text-xs font-normal text-gray-400 ml-auto"
-                >自动编号会递增，也可手动修改</span
-              >
+          <div class="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
+            <h4 class="font-bold text-gray-900 flex items-center gap-2">
+              <i class="fas fa-box-open text-blue-600"></i>
+              投料信息
             </h4>
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 gap-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >自编号
-                  <span class="text-xs text-gray-400">(自动+1)</span></label
-                >
-                <input
-                  type="text"
-                  id="entryId"
-                  value="0033"
-                  class="form-input w-full px-4 py-3 bg-yellow-50 border-2 border-yellow-300 rounded-xl font-mono font-semibold text-gray-900 outline-none focus:border-blue-500"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >管号 <span class="text-red-500">*</span></label
-                >
-                <input
-                  type="text"
-                  id="entryPipeNo"
-                  placeholder="输入7位管号"
-                  maxlength="7"
-                  class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl font-mono outline-none focus:border-blue-500"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >捆号 <span class="text-red-500">*</span></label
-                >
-                <input
-                  type="text"
-                  id="entryBundleNo"
-                  placeholder="如: 96#"
-                  class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >炉号 <span class="text-red-500">*</span></label
-                >
-                <input
-                  type="text"
-                  id="entryFurnaceNo"
-                  placeholder="输入8位炉号"
-                  maxlength="8"
-                  class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >批号 <span class="text-red-500">*</span></label
-                >
-                <input
-                  type="text"
-                  id="entryBatchNo"
-                  placeholder="输入批号"
-                  class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"
-                />
-              </div>
-              <div class="flex items-end">
+                <label class="block text-sm font-medium text-gray-700 mb-2">选择物料 <span class="text-red-500">*</span></label>
                 <button
-                  onclick="copyLastRecord()"
-                  class="w-full py-3 rounded-xl border-2 border-dashed border-blue-300 text-blue-600 hover:bg-blue-50 font-medium transition-colors flex items-center justify-center gap-2"
+                  type="button"
+                  onclick="openCodeListModal()"
+                  class="w-full px-4 py-3 bg-white border-2 border-dashed border-blue-300 rounded-xl text-left hover:bg-blue-50 hover:border-blue-400 transition-colors flex items-center justify-between"
                 >
-                  <i class="fas fa-copy"></i>
-                  复制上一支信息
+                  <div>
+                    <div id="entryMaterialName" class="font-semibold text-gray-900">点击选择物料</div>
+                    <div id="entryMaterialCode" class="text-xs text-gray-500 mt-1">物料编号自动带入</div>
+                  </div>
+                  <i class="fas fa-chevron-right text-gray-400"></i>
                 </button>
               </div>
             </div>
-          </div>
-
-          <!-- 规格参数 -->
-          <div class="bg-white rounded-xl border border-gray-200 p-5">
-            <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <i class="fas fa-ruler-combined text-blue-600"></i>
-              规格参数
-            </h4>
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >长度 (mm) <span class="text-red-500">*</span></label
-                >
+                <label class="block text-sm font-medium text-gray-700 mb-2">品牌</label>
                 <input
-                  type="number"
-                  id="entryLength"
-                  placeholder="11500-12000"
-                  min="11500"
-                  max="12000"
-                  step="1"
-                  class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"
-                />
-                <p class="text-xs text-gray-400 mt-1">
-                  标准范围: 11500mm - 12000mm
-                </p>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >重量 (kg)</label
-                >
-                <input
-                  type="number"
-                  id="entryWeight"
-                  placeholder="自动计算或手动输入"
-                  step="0.1"
-                  class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- 检验结果 -->
-          <div class="bg-white rounded-xl border border-gray-200 p-5">
-            <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <i class="fas fa-clipboard-check text-blue-600"></i>
-              检验结果
-            </h4>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-3"
-                  >外观检查 <span class="text-red-500">*</span></label
-                >
-                <div class="flex gap-3">
-                  <button
-                    type="button"
-                    onclick="setAppearance('pass')"
-                    id="btnPass"
-                    class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2"
-                  >
-                    <i class="fas fa-check-circle"></i>合格
-                  </button>
-                  <button
-                    type="button"
-                    onclick="setAppearance('fail')"
-                    id="btnFail"
-                    class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2"
-                  >
-                    <i class="fas fa-times-circle"></i>不合格
-                  </button>
-                </div>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >锈蚀程度</label
-                >
-                <select
-                  id="entryCorrosion"
-                  class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"
-                >
-                  <option value="none">无锈蚀</option>
-                  <option value="light" selected>轻微锈蚀</option>
-                  <option value="medium">中等锈蚀</option>
-                  <option value="severe">严重锈蚀</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- 坡口信息 -->
-          <div
-            class="bg-white rounded-xl border border-gray-200 overflow-hidden"
-          >
-            <div
-              onclick="toggleBevelInfo()"
-              class="cursor-pointer p-5 flex items-center justify-between hover:bg-gray-50 transition-colors select-none"
-            >
-              <div class="flex items-center gap-2">
-                <i class="fas fa-ruler-triangle text-blue-600"></i>
-                <h4 class="font-bold text-gray-900">坡口信息</h4>
-                <span
-                  class="text-xs text-gray-400 font-normal"
-                  id="bevelStatusText"
-                  >(点击展开填写)</span
-                >
-              </div>
-              <div class="flex items-center gap-2">
-                <span
-                  class="text-xs text-gray-500"
-                  id="bevelSummary"
-                  style="display: none"
-                  >已填写</span
-                >
-                <i
-                  id="bevelArrow"
-                  class="fas fa-chevron-down text-gray-400 bevel-arrow"
-                ></i>
-              </div>
-            </div>
-            <div id="bevelContent" class="bevel-content">
-              <div class="p-5 pt-0 border-t border-gray-100">
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-3"
-                      >坡口外观 <span class="text-red-500">*</span></label
-                    >
-                    <div class="flex gap-3">
-                      <button
-                        type="button"
-                        onclick="setBevelAppearance('pass')"
-                        id="btnBevelPass"
-                        class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2"
-                      >
-                        <i class="fas fa-check-circle"></i>合格
-                      </button>
-                      <button
-                        type="button"
-                        onclick="setBevelAppearance('fail')"
-                        id="btnBevelFail"
-                        class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2"
-                      >
-                        <i class="fas fa-times-circle"></i>不合格
-                      </button>
-                    </div>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2"
-                      >角度 (°)</label
-                    >
-                    <input
-                      type="number"
-                      id="bevelAngle"
-                      placeholder="如: 30"
-                      step="0.1"
-                      min="0"
-                      max="60"
-                      class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"
-                    />
-                    <p class="text-xs text-gray-400 mt-1">标准范围: 25°-35°</p>
-                  </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2"
-                      >垂直度 (mm)</label
-                    >
-                    <input
-                      type="number"
-                      id="bevelVerticality"
-                      placeholder="如: 0.5"
-                      step="0.1"
-                      min="0"
-                      max="2"
-                      class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"
-                    />
-                    <p class="text-xs text-gray-400 mt-1">标准: ≤1.0mm</p>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2"
-                      >钝边 (mm)</label
-                    >
-                    <input
-                      type="number"
-                      id="bevelBluntEdge"
-                      placeholder="如: 1.2"
-                      step="0.1"
-                      min="0"
-                      max="5"
-                      class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"
-                    />
-                    <p class="text-xs text-gray-400 mt-1">
-                      标准范围: 1.0mm-2.0mm
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 仪器读数 -->
-          <div class="bg-white rounded-xl border border-gray-200 p-5">
-            <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <i class="fas fa-thermometer-half text-blue-600"></i>
-              仪器读数
-            </h4>
-            <div class="grid grid-cols-3 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >T△ 温差 (℃)</label
-                >
-                <input
-                  type="number"
-                  id="entryTDelta"
-                  value="14.8"
-                  step="0.1"
-                  class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"
+                  type="text"
+                  id="entryMaterialBrand"
+                  readonly
+                  placeholder="选择物料后自动带入"
+                  class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 outline-none"
                 />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >RH 湿度 (%)</label
-                >
+                <label class="block text-sm font-medium text-gray-700 mb-2">规格型号</label>
+                <input
+                  type="text"
+                  id="entryMaterialSpec"
+                  readonly
+                  placeholder="选择物料后自动带入"
+                  class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 outline-none"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">投料数量 (kg) <span class="text-red-500">*</span></label>
+              <div class="relative">
                 <input
                   type="number"
-                  id="entryRH"
-                  value="45"
+                  id="entryQuantity"
+                  placeholder="输入投料数量"
                   min="0"
-                  max="100"
-                  class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"
+                  step="0.1"
+                  class="form-input w-full px-4 py-3 pr-14 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"
                 />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >预热温度 (℃)</label
-                >
-                <input
-                  type="number"
-                  id="entryTemp"
-                  value="120"
-                  class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"
-                />
+                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">kg</span>
               </div>
             </div>
-          </div>
-
-          <!-- 快捷操作提示 -->
-          <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
-            <div class="flex items-start gap-3">
-              <i class="fas fa-lightbulb text-amber-500 mt-1"></i>
-              <div class="text-sm text-amber-800">
-                <p class="font-semibold mb-1">录入提示：</p>
-                <ul class="list-disc list-inside space-y-1 text-amber-700">
-                  <li>
-                    点击<span class="font-semibold">“码单选择”</span
-                    >可从预置码单中快速选取钢管信息
-                  </li>
-                  <li>
-                    使用<span class="font-semibold">“复制上一支”</span
-                    >可快速复用捆号、炉号、批号
-                  </li>
-                  <li>自编号会自动递增，也可手动修改</li>
-                  <li>
-                    点击<span class="font-semibold">“坡口信息”</span
-                    >可展开填写坡口检验数据
-                  </li>
-                </ul>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
+                <div class="text-xs text-gray-500 mb-1">自动记录时间</div>
+                <div class="font-semibold text-gray-900" id="entryFeedTimeReadonly">20:38</div>
+              </div>
+              <div class="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
+                <div class="text-xs text-gray-500 mb-1">自动记录人员</div>
+                <div class="font-semibold text-gray-900" id="entryFeedOperatorReadonly">张师傅</div>
               </div>
             </div>
           </div>
@@ -1682,24 +1057,17 @@
           </button>
           <div class="flex-1"></div>
           <button
-            onclick="saveAndContinue()"
-            class="px-8 py-3 rounded-xl bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 transition-colors flex items-center gap-2"
-          >
-            <i class="fas fa-save"></i>
-            保存并继续
-          </button>
-          <button
             onclick="submitEntry()"
             class="px-8 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors flex items-center gap-2 shadow-lg"
           >
             <i class="fas fa-check"></i>
-            保存录入
+            保存投料
           </button>
         </div>
       </div>
     </div>
 
-    <!-- 码单选择弹窗 -->
+    <!-- 物料主数据弹窗 -->
     <div
       id="codeListModal"
       class="modal fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4"
@@ -1718,9 +1086,9 @@
               <i class="fas fa-list-ol text-xl"></i>
             </div>
             <div>
-              <h3 class="text-lg font-bold">选择码单钢管</h3>
+              <h3 class="text-lg font-bold">选择物料</h3>
               <p class="text-sm text-blue-100">
-                从预置码单中选择钢管信息自动填充
+                从物料主数据中选择物料并自动回填基础信息
               </p>
             </div>
           </div>
@@ -1741,7 +1109,7 @@
             <input
               type="text"
               id="codeListSearch"
-              placeholder="搜索管号、捆号、炉号、批号..."
+              placeholder="搜索物料编号、物料名称、品牌、规格型号..."
               class="search-input w-full pl-12 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-base outline-none transition-all"
               onkeyup="searchCodeList(this.value)"
             />
@@ -1749,16 +1117,16 @@
           <div class="flex gap-2 mt-3">
             <span
               class="text-xs text-gray-500 px-2 py-1 bg-gray-200 rounded-full"
-              >已加载 150 支</span
-            >
+              >已加载 5 条物料</span
+              >
             <span
               class="text-xs text-gray-500 px-2 py-1 bg-gray-200 rounded-full"
-              >捆号: 96#-105#</span
-            >
+              >单位: kg / 袋 / 桶</span
+              >
             <span
               class="text-xs text-gray-500 px-2 py-1 bg-gray-200 rounded-full"
-              >炉号: 15303842-15303850</span
-            >
+              >支持库存查看</span
+              >
           </div>
         </div>
 
@@ -1770,37 +1138,37 @@
                 <th
                   class="px-4 py-3 text-left text-xs font-semibold text-gray-600"
                 >
-                  管号
+                  物料编号
                 </th>
                 <th
                   class="px-4 py-3 text-left text-xs font-semibold text-gray-600"
                 >
-                  捆号
+                  物料名称
                 </th>
                 <th
                   class="px-4 py-3 text-left text-xs font-semibold text-gray-600"
                 >
-                  炉号
+                  品牌
                 </th>
                 <th
                   class="px-4 py-3 text-left text-xs font-semibold text-gray-600"
                 >
-                  批号
+                  规格型号
                 </th>
                 <th
                   class="px-4 py-3 text-center text-xs font-semibold text-gray-600"
                 >
-                  长度(mm)
+                  单位
                 </th>
                 <th
                   class="px-4 py-3 text-center text-xs font-semibold text-gray-600"
                 >
-                  重量(kg)
+                  当前库存
                 </th>
                 <th
                   class="px-4 py-3 text-center text-xs font-semibold text-gray-600"
                 >
-                  状态
+                  选择
                 </th>
               </tr>
             </thead>
@@ -1819,7 +1187,7 @@
             >
               <i class="fas fa-search text-2xl text-gray-400"></i>
             </div>
-            <p class="text-gray-600 font-medium">未找到匹配的码单记录</p>
+            <p class="text-gray-600 font-medium">未找到匹配的物料记录</p>
             <p class="text-sm text-gray-400 mt-1">请尝试其他搜索关键词</p>
           </div>
         </div>
@@ -1833,7 +1201,7 @@
             <span id="codeListSelectedCount" class="font-bold text-blue-600"
               >0</span
             >
-            支
+            项
           </div>
           <div class="flex gap-3">
             <button
@@ -1847,7 +1215,7 @@
               class="px-6 py-2.5 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-lg"
             >
               <i class="fas fa-check"></i>
-              确认选择
+              确认物料
             </button>
           </div>
         </div>
@@ -1874,8 +1242,7 @@
             <i class="fas fa-file-alt"></i>
           </div>
           <div>
-            <h3 class="text-lg font-bold text-gray-900">钢管</h3>
-            <p class="text-sm text-gray-500" id="detailIdDisplay">GP-0032</p>
+            <h3 class="text-lg font-bold text-gray-900">投料详情</h3>
           </div>
         </div>
         <button
@@ -1887,176 +1254,40 @@
       </div>
 
       <div class="flex-1 overflow-y-auto p-6">
-        <div class="max-w-4xl mx-auto space-y-6">
-          <!-- 基本信息 -->
+        <div class="max-w-3xl mx-auto space-y-6">
           <div class="bg-white rounded-xl border border-gray-200 p-5">
             <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <i class="fas fa-info-circle text-blue-600"></i>基本信息
+              <i class="fas fa-info-circle text-blue-600"></i>投料信息
             </h4>
-            <div class="grid grid-cols-3 gap-4">
-              <div class="p-3 bg-gray-50 rounded-lg">
-                <div class="text-xs text-gray-500 mb-1">自编号</div>
-                <div
-                  class="font-mono font-bold text-lg text-gray-900"
-                  id="detailSelfNo"
-                >
-                  0032
-                </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="p-4 bg-gray-50 rounded-xl">
+                <div class="text-xs text-gray-500 mb-1">物料名称</div>
+                <div class="font-semibold text-gray-900" id="detailMaterial">FBE粉末</div>
               </div>
-              <div class="p-3 bg-gray-50 rounded-lg">
-                <div class="text-xs text-gray-500 mb-1">管号</div>
-                <div class="font-mono text-gray-900" id="detailPipeNo">
-                  6508741
-                </div>
+              <div class="p-4 bg-blue-50 rounded-xl border border-blue-200">
+                <div class="text-xs text-blue-600 mb-1">投料数量</div>
+                <div class="text-3xl font-bold text-blue-700" id="detailQuantity">320</div>
+                <div class="text-sm text-blue-600 mt-1">kg</div>
               </div>
-              <div class="p-3 bg-gray-50 rounded-lg">
+              <div class="p-4 bg-gray-50 rounded-xl">
                 <div class="text-xs text-gray-500 mb-1">所属班次</div>
-                <div class="text-blue-600 font-semibold" id="detailShift">
-                  今日白班
-                </div>
-              </div>
-              <div class="p-3 bg-gray-50 rounded-lg">
-                <div class="text-xs text-gray-500 mb-1">捆号</div>
-                <div class="font-semibold text-gray-900" id="detailBundleNo">
-                  96#
-                </div>
-              </div>
-              <div class="p-3 bg-gray-50 rounded-lg">
-                <div class="text-xs text-gray-500 mb-1">炉号</div>
-                <div class="font-semibold text-gray-900" id="detailFurnaceNo">
-                  15303842
-                </div>
-              </div>
-              <div class="p-3 bg-gray-50 rounded-lg">
-                <div class="text-xs text-gray-500 mb-1">批号</div>
-                <div class="text-gray-900" id="detailBatchNo">71399</div>
+                <div class="font-semibold text-gray-900" id="detailShift">今日白班</div>
               </div>
             </div>
           </div>
 
-          <!-- 规格信息 -->
           <div class="bg-white rounded-xl border border-gray-200 p-5">
             <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <i class="fas fa-ruler-combined text-blue-600"></i>规格信息
+              <i class="fas fa-user-clock text-blue-600"></i>投料记录
             </h4>
             <div class="grid grid-cols-2 gap-4">
-              <div
-                class="p-4 bg-blue-50 rounded-xl border border-blue-200 text-center"
-              >
-                <div class="text-3xl font-bold text-blue-700" id="detailLength">
-                  11856
-                </div>
-                <div class="text-sm text-blue-600 mt-1">长度 (mm)</div>
+              <div class="p-4 bg-gray-50 rounded-xl text-center">
+                <div class="text-xs text-gray-500 mb-1">投料时间</div>
+                <div class="text-lg font-semibold text-gray-900" id="detailTime">19:35</div>
               </div>
-              <div
-                class="p-4 bg-green-50 rounded-xl border border-green-200 text-center"
-              >
-                <div
-                  class="text-3xl font-bold text-green-700"
-                  id="detailWeight"
-                >
-                  573.5
-                </div>
-                <div class="text-sm text-green-600 mt-1">重量 (kg)</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 检验结果 -->
-          <div class="bg-white rounded-xl border border-gray-200 p-5">
-            <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <i class="fas fa-clipboard-check text-blue-600"></i>检验结果
-            </h4>
-            <div class="grid grid-cols-2 gap-4">
-              <div
-                class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-              >
-                <span class="text-sm text-gray-600">外观检查</span>
-                <span
-                  id="detailAppearance"
-                  class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"
-                  ><i class="fas fa-check"></i>合格</span
-                >
-              </div>
-              <div
-                class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-              >
-                <span class="text-sm text-gray-600">锈蚀程度</span>
-                <span
-                  id="detailCorrosion"
-                  class="inline-flex items-center px-2 py-1 rounded text-xs font-medium corrosion-light"
-                  >轻微</span
-                >
-              </div>
-            </div>
-          </div>
-
-          <!-- 仪器读数 -->
-          <div class="bg-white rounded-xl border border-gray-200 p-5">
-            <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <i class="fas fa-thermometer-half text-blue-600"></i>仪器读数
-            </h4>
-            <div class="grid grid-cols-3 gap-4">
-              <div class="text-center p-4 bg-gray-50 rounded-xl">
-                <div class="text-xl font-bold text-gray-900" id="detailTDelta">
-                  14.8℃
-                </div>
-                <div class="text-xs text-gray-500 mt-1">T△ 温差</div>
-              </div>
-              <div class="text-center p-4 bg-gray-50 rounded-xl">
-                <div class="text-xl font-bold text-gray-900" id="detailRH">
-                  45%
-                </div>
-                <div class="text-xs text-gray-500 mt-1">RH 湿度</div>
-              </div>
-              <div class="text-center p-4 bg-gray-50 rounded-xl">
-                <div class="text-xl font-bold text-gray-900" id="detailTemp">
-                  120℃
-                </div>
-                <div class="text-xs text-gray-500 mt-1">预热温度</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 录入信息 -->
-          <div class="bg-white rounded-xl border border-gray-200 p-5">
-            <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <i class="fas fa-user-clock text-blue-600"></i>录入信息
-            </h4>
-            <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-              <div
-                class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg"
-                id="detailOperatorIcon"
-              >
-                张
-              </div>
-              <div class="flex-1">
-                <div class="font-semibold text-gray-900" id="detailOperator">
-                  张师傅
-                </div>
-                <div class="text-sm text-gray-500">
-                  质检员 | 工号: OP-2023-045
-                </div>
-              </div>
-            </div>
-            <div class="grid grid-cols-2 gap-4 mt-4">
-              <div class="p-3 bg-gray-50 rounded-xl text-center">
-                <div
-                  class="text-sm font-semibold text-gray-900"
-                  id="detailTime"
-                >
-                  19:35
-                </div>
-                <div class="text-xs text-gray-500">录入时间</div>
-              </div>
-              <div class="p-3 bg-gray-50 rounded-xl text-center">
-                <div
-                  class="text-sm font-semibold text-gray-900"
-                  id="detailDate"
-                >
-                  今天
-                </div>
-                <div class="text-xs text-gray-500">录入日期</div>
+              <div class="p-4 bg-gray-50 rounded-xl text-center">
+                <div class="text-xs text-gray-500 mb-1">投料人</div>
+                <div class="text-lg font-semibold text-gray-900" id="detailOperator">张师傅</div>
               </div>
             </div>
           </div>
@@ -2065,12 +1296,6 @@
 
       <div class="border-t border-gray-200 px-6 py-4 bg-gray-50">
         <div class="max-w-4xl mx-auto flex gap-3">
-          <button
-            onclick="printDetail()"
-            class="flex-1 py-3 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 flex items-center justify-center gap-2"
-          >
-            <i class="fas fa-print"></i>打印标签
-          </button>
           <button
             onclick="closeDetailDrawer()"
             class="flex-1 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700"
@@ -2517,16 +1742,9 @@
       let currentShift = "today_day";
       let currentMainTab = "material";
       let selectedRows = new Set();
-      let currentAppearance = "pass";
-      let bevelAppearance = "pass"; // 坡口外观状态
-      let lastRecord = {
-        bundleNo: "96#",
-        furnaceNo: "15303842",
-        batchNo: "71399",
-      };
       let nextId = 33; // 下一个自编号
       let selectedCodeItem = null; // 当前选中的码单项
-      let isBevelExpanded = false; // 坡口信息展开状态
+      const currentOperatorName = "张师傅";
       // 模拟码单数据
       let instrumentSelection = [
         {
@@ -2718,6 +1936,49 @@
           length: 11785,
           weight: 570.0,
           status: "pending",
+        },
+      ];
+
+      const materialMasterData = [
+        {
+          code: "MAT-FBE-001",
+          name: "FBE粉末",
+          brand: "AkzoNobel",
+          spec: "环氧粉末 / 25kg",
+          unit: "kg",
+          stock: 1280,
+        },
+        {
+          code: "MAT-AD-002",
+          name: "AD胶黏剂",
+          brand: "Dow",
+          spec: "热熔胶 / 20kg",
+          unit: "kg",
+          stock: 860,
+        },
+        {
+          code: "MAT-PE-003",
+          name: "PE/PP颗粒料",
+          brand: "Sinopec",
+          spec: "PP-HM / 25kg",
+          unit: "kg",
+          stock: 2460,
+        },
+        {
+          code: "MAT-CL-004",
+          name: "清洗剂",
+          brand: "BASF",
+          spec: "工业清洗剂 / 50kg",
+          unit: "桶",
+          stock: 32,
+        },
+        {
+          code: "MAT-PK-005",
+          name: "包装辅料",
+          brand: "3M",
+          spec: "缠绕膜 / 15kg",
+          unit: "卷",
+          stock: 120,
         },
       ];
 
@@ -3187,14 +2448,15 @@
       // ========== 码单选择弹窗相关函数 ==========
       function openCodeListModal() {
         document.getElementById("codeListModal").classList.add("open");
-        renderCodeList(codeListData);
+        renderCodeList(materialMasterData);
+        document.getElementById("codeListSelectedCount").textContent = selectedCodeItem
+          ? "1"
+          : "0";
         document.getElementById("codeListSearch").focus();
       }
 
       function closeCodeListModal() {
         document.getElementById("codeListModal").classList.remove("open");
-        selectedCodeItem = null;
-        document.getElementById("codeListSelectedCount").textContent = "0";
       }
 
       function renderCodeList(data) {
@@ -3218,15 +2480,15 @@
           tr.onclick = () => selectCodeItem(item, tr);
 
           tr.innerHTML = `
-                    <td class="px-4 py-3 font-mono text-sm text-gray-900">${item.pipeNo}</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">${item.bundleNo}</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">${item.furnaceNo}</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">${item.batchNo}</td>
-                    <td class="px-4 py-3 text-center text-sm text-gray-900 font-medium">${item.length}</td>
-                    <td class="px-4 py-3 text-center text-sm text-gray-700">${item.weight.toFixed(1)}</td>
+                    <td class="px-4 py-3 font-mono text-sm text-gray-900">${item.code}</td>
+                    <td class="px-4 py-3 text-sm font-semibold text-gray-900">${item.name}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700">${item.brand}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700">${item.spec}</td>
+                    <td class="px-4 py-3 text-center text-sm text-gray-900 font-medium">${item.unit}</td>
+                    <td class="px-4 py-3 text-center text-sm text-gray-700">${item.stock}</td>
                     <td class="px-4 py-3 text-center">
-                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                            待录入
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
+                            选择
                         </span>
                     </td>
                 `;
@@ -3241,12 +2503,12 @@
           return;
         }
 
-        const filtered = codeListData.filter(
+        const filtered = materialMasterData.filter(
           (item) =>
-            item.pipeNo.includes(keyword) ||
-            item.bundleNo.includes(keyword) ||
-            item.furnaceNo.includes(keyword) ||
-            item.batchNo.includes(keyword),
+            item.code.toLowerCase().includes(keyword.toLowerCase()) ||
+            item.name.toLowerCase().includes(keyword.toLowerCase()) ||
+            item.brand.toLowerCase().includes(keyword.toLowerCase()) ||
+            item.spec.toLowerCase().includes(keyword.toLowerCase()),
         );
 
         renderCodeList(filtered);
@@ -3266,49 +2528,25 @@
 
       function confirmCodeSelection() {
         if (!selectedCodeItem) {
-          showToast("请先选择一支钢管", "error");
+          showToast("请先选择一个物料", "error");
           return;
         }
 
-        // 回填数据到录入表单
-        document.getElementById("entryPipeNo").value = selectedCodeItem.pipeNo;
-        document.getElementById("entryBundleNo").value =
-          selectedCodeItem.bundleNo;
-        document.getElementById("entryFurnaceNo").value =
-          selectedCodeItem.furnaceNo;
-        document.getElementById("entryBatchNo").value =
-          selectedCodeItem.batchNo;
-        document.getElementById("entryLength").value = selectedCodeItem.length;
-        document.getElementById("entryWeight").value = selectedCodeItem.weight;
-
-        // 显示已选择的信息卡片
-        document.getElementById("selectedPipeNo").textContent =
-          selectedCodeItem.pipeNo;
-        document.getElementById("selectedBundleNo").textContent =
-          selectedCodeItem.bundleNo;
-        document.getElementById("selectedFurnaceNo").textContent =
-          selectedCodeItem.furnaceNo;
-        document.getElementById("selectedBatchNo").textContent =
-          selectedCodeItem.batchNo;
-        document.getElementById("selectedLength").textContent =
-          selectedCodeItem.length + "mm";
-        document.getElementById("selectedWeight").textContent =
-          selectedCodeItem.weight + "kg";
-
-        document.getElementById("codeListSelectorArea").classList.add("hidden");
-        document.getElementById("selectedCodeInfo").classList.remove("hidden");
+        document.getElementById("entryMaterialName").textContent =
+          selectedCodeItem.name;
+        document.getElementById("entryMaterialCode").textContent =
+          selectedCodeItem.code;
+        document.getElementById("entryMaterialBrand").value =
+          selectedCodeItem.brand;
+        document.getElementById("entryMaterialSpec").value =
+          selectedCodeItem.spec;
 
         closeCodeListModal();
-        showToast("码单信息已填入", "success");
+        showToast("物料信息已带入", "success");
 
-        // 高亮显示已填字段
         const fields = [
-          "entryPipeNo",
-          "entryBundleNo",
-          "entryFurnaceNo",
-          "entryBatchNo",
-          "entryLength",
-          "entryWeight",
+          "entryMaterialBrand",
+          "entryMaterialSpec",
         ];
         fields.forEach((id) => {
           const el = document.getElementById(id);
@@ -3320,21 +2558,13 @@
       }
 
       function clearSelectedCode() {
-        document
-          .getElementById("codeListSelectorArea")
-          .classList.remove("hidden");
-        document.getElementById("selectedCodeInfo").classList.add("hidden");
-
-        // 清空相关字段
-        document.getElementById("entryPipeNo").value = "";
-        document.getElementById("entryBundleNo").value = "";
-        document.getElementById("entryFurnaceNo").value = "";
-        document.getElementById("entryBatchNo").value = "";
-        document.getElementById("entryLength").value = "";
-        document.getElementById("entryWeight").value = "";
+        document.getElementById("entryMaterialName").textContent = "点击选择物料";
+        document.getElementById("entryMaterialCode").textContent = "物料编号自动带入";
+        document.getElementById("entryMaterialBrand").value = "";
+        document.getElementById("entryMaterialSpec").value = "";
 
         selectedCodeItem = null;
-        showToast("已清除码单选择", "info");
+        showToast("已清除物料选择", "info");
       }
 
       // ========== 抽屉控制 ==========
@@ -3880,12 +3110,138 @@
         }, 3000);
       }
 
+      function getCurrentTimeText() {
+        const now = new Date();
+        return `${String(now.getHours()).padStart(2, "0")}:${String(
+          now.getMinutes(),
+        ).padStart(2, "0")}`;
+      }
+
+      function createFeedRow(record) {
+        const operatorInitial = record.operator.charAt(0);
+        const avatarClass = record.operator.includes("李")
+          ? "bg-green-100 text-green-600"
+          : "bg-blue-100 text-blue-600";
+
+        return `
+          <tr class="group" data-id="${record.id}" data-shift="${record.shift}" data-material="${record.material}" data-material-code="${record.materialCode}" data-brand="${record.brand}" data-spec="${record.spec}" data-quantity="${record.quantity}" data-time="${record.time}" data-operator="${record.operator}">
+            <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)" /></td>
+            <td class="px-4 py-4"><div class="text-sm font-semibold text-gray-900">${record.material}</div></td>
+            <td class="px-4 py-4 text-center"><div class="text-sm font-semibold text-gray-900">${record.quantity}<span class="text-xs text-gray-500 font-normal ml-1">kg</span></div></td>
+            <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">${record.time}</div></td>
+            <td class="px-4 py-4 text-center">
+              <div class="flex flex-col items-center gap-1">
+                <div class="w-8 h-8 rounded-full ${avatarClass} flex items-center justify-center font-bold text-sm">${operatorInitial}</div>
+                <span class="text-xs text-gray-600">${record.operator}</span>
+              </div>
+            </td>
+            <td class="px-4 py-4 text-center">
+              <div class="flex items-center justify-center gap-2">
+                <button onclick="viewDetail('${record.id}')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 transition-colors flex items-center justify-center" title="查看"><i class="fas fa-eye text-sm"></i></button>
+                <button onclick="deleteRow('${record.id}')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center justify-center" title="删除"><i class="fas fa-trash-alt text-sm"></i></button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }
+
+      function openEntryDrawer() {
+        const currentTime = getCurrentTimeText();
+        document.getElementById("entryDrawerOverlay").classList.add("open");
+        document.getElementById("entryDrawer").classList.add("open");
+        document.body.style.overflow = "hidden";
+        document.getElementById("entryMaterialName").textContent = "点击选择物料";
+        document.getElementById("entryMaterialCode").textContent = "物料编号自动带入";
+        document.getElementById("entryMaterialBrand").value = "";
+        document.getElementById("entryMaterialSpec").value = "";
+        document.getElementById("entryQuantity").value = "";
+        const headerTime = document.getElementById("currentTime");
+        if (headerTime) headerTime.textContent = currentTime;
+        document.getElementById("entryFeedTimeReadonly").textContent = currentTime;
+        document.getElementById("entryFeedOperatorReadonly").textContent = currentOperatorName;
+        selectedCodeItem = null;
+      }
+
+      function viewDetail(id) {
+        const row = document.querySelector(`#tableBody tr[data-id="${id}"]`);
+        if (!row) return;
+        document.getElementById("detailMaterial").textContent = row.dataset.material || "-";
+        document.getElementById("detailQuantity").textContent = row.dataset.quantity || "-";
+        document.getElementById("detailTime").textContent = row.dataset.time || "-";
+        document.getElementById("detailOperator").textContent = row.dataset.operator || "-";
+        document.getElementById("detailShift").textContent =
+          shiftData[row.dataset.shift]?.name || "今日白班";
+        document.getElementById("detailDrawerOverlay").classList.add("open");
+        document.getElementById("detailDrawer").classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+
+      function submitEntry() {
+        const material = document.getElementById("entryMaterialName").textContent;
+        const materialCode = document.getElementById("entryMaterialCode").textContent;
+        const brand = document.getElementById("entryMaterialBrand").value;
+        const spec = document.getElementById("entryMaterialSpec").value;
+        const quantity = document.getElementById("entryQuantity").value;
+        const time = document.getElementById("entryFeedTimeReadonly").textContent;
+
+        if (!selectedCodeItem || material === "点击选择物料" || !quantity) {
+          showToast("请先选择物料并填写投料数量", "error");
+          return;
+        }
+
+        const record = {
+          id: String(nextId).padStart(4, "0"),
+          material,
+          materialCode,
+          brand,
+          spec,
+          quantity: Number(quantity).toFixed(1).replace(/\.0$/, ""),
+          time,
+          operator: currentOperatorName,
+          shift: currentShift,
+        };
+
+        const tbody = document.getElementById("tableBody");
+        tbody.insertAdjacentHTML("afterbegin", createFeedRow(record));
+        nextId += 1;
+
+        const total = tbody.querySelectorAll("tr").length;
+        document.getElementById("totalCount").textContent = String(total);
+        document.getElementById("showingCount").textContent = `1-${total}`;
+
+        if (shiftData[currentShift]) {
+          shiftData[currentShift].count += 1;
+          const shiftButton = document.querySelector(`button[data-shift="${currentShift}"] span`);
+          if (shiftButton) shiftButton.textContent = `${shiftData[currentShift].count}支`;
+        }
+
+        const shiftCount = document.getElementById("shiftCountValue");
+        if (shiftCount) {
+          const nextCount = parseInt(shiftCount.textContent || "0", 10) + 1;
+          updateWorkOrderProgress(nextCount);
+        }
+
+        showToast("投料记录已保存", "success");
+        closeEntryDrawer();
+      }
+
+      function saveAndContinue() {
+        submitEntry();
+      }
+
+      function copyLastRecord() {}
+
+      function setAppearance() {}
+
+      function setCompressedAirResult(type) {
+        compressedAirResult = type;
+      }
+
       // 初始化
       document.addEventListener("DOMContentLoaded", function () {
         renderShiftFilterOptions();
         renderWorkOrderShiftStats();
         switchShift("today_day");
-        setAppearance("pass");
         switchMainTab("material");
         setCompressedAirResult("pass");
         updateWorkOrderProgress(
@@ -3894,14 +3250,6 @@
             10,
           ),
         );
-
-        // 更新当前时间
-        const now = new Date();
-        const timeStr =
-          String(now.getHours()).padStart(2, "0") +
-          ":" +
-          String(now.getMinutes()).padStart(2, "0");
-        document.getElementById("currentTime").textContent = timeStr;
       });
 
       // ESC 键关闭
