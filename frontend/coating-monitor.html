@@ -1,0 +1,887 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>涂覆点监控记录 - MES系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap");
+
+      * {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+
+      body {
+        font-family: "Inter", "Noto Sans SC", sans-serif;
+        background: #f4f6f8;
+      }
+
+      .industrial-shadow {
+        box-shadow:
+          0 2px 8px rgba(0, 0, 0, 0.08),
+          0 4px 16px rgba(0, 0, 0, 0.04);
+      }
+
+      .industrial-shadow-lg {
+        box-shadow:
+          0 4px 12px rgba(0, 0, 0, 0.1),
+          0 8px 24px rgba(0, 0, 0, 0.06);
+      }
+
+      .wo-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border-left: 4px solid #2563eb;
+      }
+
+      .stat-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 16px;
+      }
+
+      .range-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 88px;
+        padding: 6px 10px;
+        border-radius: 9999px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: 1px solid #bfdbfe;
+      }
+
+      .custom-checkbox {
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #cbd5e1;
+        border-radius: 5px;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.2s ease;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .custom-checkbox:checked {
+        background: #2563eb;
+        border-color: #2563eb;
+      }
+
+      .custom-checkbox:checked::after {
+        content: "\f00c";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        color: white;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 11px;
+      }
+
+      .custom-checkbox:disabled {
+        background: #f1f5f9;
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+
+      .data-table {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+        table-layout: fixed;
+      }
+
+      .data-table th {
+        background: #f8fafc;
+        font-weight: 600;
+        font-size: 0.8125rem;
+        color: #475569;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 14px 8px;
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      .data-table td {
+        border-bottom: 1px solid #e2e8f0;
+        padding: 10px 8px;
+        text-align: left;
+        vertical-align: middle;
+        background: white;
+        transition: background-color 0.15s ease;
+      }
+
+      .data-table tr:hover td {
+        background: #f8fafc;
+      }
+
+      .data-table tr.editing td {
+        background: #eff6ff;
+      }
+
+      .data-table tr.saved td {
+        background: #f9fffb;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 8px 10px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        outline: none;
+        transition: all 0.2s;
+        text-align: center;
+        background: white;
+      }
+
+      .form-input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      .form-input:disabled {
+        background: #f8fafc;
+        color: #64748b;
+        cursor: not-allowed;
+      }
+
+      .time-slot {
+        font-weight: 600;
+        color: #1e293b;
+        font-size: 0.875rem;
+        white-space: nowrap;
+        text-align: center;
+      }
+
+      .data-table td.time-slot {
+        text-align: center;
+      }
+
+      .auto-field {
+        background: #f0f9ff;
+        border: 2px solid #bae6fd;
+        border-radius: 8px;
+        padding: 6px 8px;
+        color: #0369a1;
+        font-weight: 600;
+        font-size: 0.875rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        width: 100%;
+        min-height: 34px;
+      }
+
+      .readonly-field {
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 6px 4px;
+        color: #1e293b;
+        font-weight: 500;
+        font-size: 0.875rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 34px;
+        width: 100%;
+      }
+
+      .action-btn {
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        min-width: 78px;
+      }
+
+      .action-btn:active {
+        transform: scale(0.98);
+      }
+
+      .btn-primary {
+        background: #2563eb;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #1d4ed8;
+      }
+
+      .btn-success {
+        background: #16a34a;
+        color: white;
+      }
+
+      .btn-success:hover {
+        background: #15803d;
+      }
+
+      .btn-secondary {
+        background: #f8fafc;
+        color: #334155;
+        border: 1px solid #cbd5e1;
+      }
+
+      .btn-secondary:hover {
+        background: #e2e8f0;
+      }
+
+      .col-time {
+        width: 110px;
+      }
+      .col-temp {
+        width: 150px;
+      }
+      .col-checktime {
+        width: 170px;
+      }
+      .col-operator {
+        width: 100px;
+      }
+      .col-action {
+        width: 120px;
+      }
+      .col-speed {
+        width: 150px;
+      }
+      .col-freq {
+        width: 150px;
+      }
+      .col-dust {
+        width: 150px;
+      }
+      .col-hydraulic {
+        width: 150px;
+      }
+      .col-status {
+        width: 85px;
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+        border: 1px solid #fcd34d;
+      }
+      .status-saved {
+        background: #dcfce7;
+        color: #166534;
+        border: 1px solid #86efac;
+      }
+      .status-editing {
+        background: #dbeafe;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+      }
+
+      .toast {
+        animation: slideIn 0.3s ease;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 50;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(-20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 1280px) {
+        .data-table {
+          font-size: 0.75rem;
+        }
+
+        .data-table th,
+        .data-table td {
+          padding: 8px 6px;
+        }
+
+        .form-input {
+          font-size: 0.75rem;
+        }
+
+        .col-temp {
+          width: 132px;
+        }
+        .col-checktime {
+          width: 148px;
+        }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-gray-50 pb-24">
+    <header class="bg-white industrial-shadow sticky top-0 z-40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center gap-4">
+            <button
+              onclick="history.back()"
+              class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors"
+            >
+              <i class="fas fa-arrow-left text-lg"></i>
+            </button>
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white"
+              >
+                <i class="fas fa-temperature-three-quarters text-xl"></i>
+              </div>
+              <div>
+                <h1 class="text-xl font-bold text-gray-900 tracking-tight">
+                  涂覆点监控记录
+                </h1>
+                <p class="text-xs text-gray-500">产线A-03 | 当前班次监控巡检</p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="hidden md:flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg text-sm font-medium"
+          >
+            <i class="fas fa-check-circle"></i>
+            <span>系统正常</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      <div
+        class="wo-card rounded-xl p-5 industrial-shadow relative overflow-hidden"
+      >
+        <div
+          class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -mr-10 -mt-10 opacity-50"
+        ></div>
+        <div
+          class="relative flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+        >
+          <div class="flex items-center gap-4">
+            <div class="px-4 py-2 rounded-xl bg-blue-50 border border-blue-200">
+              <div class="text-xs text-blue-700 font-semibold">当前班次</div>
+              <div class="text-sm font-bold text-blue-900" id="shiftDisplay">
+                今日白班 (08:00-20:00)
+              </div>
+            </div>
+            <div class="px-4 py-2 rounded-xl bg-gray-50 border border-gray-200">
+              <div class="text-xs text-gray-500">检测日期</div>
+              <div class="text-sm font-semibold text-gray-900" id="currentDate">
+                2026-04-03
+              </div>
+            </div>
+          </div>
+          <div
+            class="grid grid-cols-2 gap-3 sm:flex sm:items-center sm:gap-4 text-sm"
+          >
+            <div
+              class="text-center px-4 py-2 bg-blue-50 rounded-lg border border-blue-200"
+            >
+              <div class="text-xs text-gray-500">已完成时段</div>
+              <div class="text-lg font-bold text-blue-600" id="filledCount">
+                1/12
+              </div>
+            </div>
+            <div
+              class="text-center px-4 py-2 bg-green-50 rounded-lg border border-green-200"
+            >
+              <div class="text-xs text-gray-500">记录状态</div>
+              <div class="text-sm font-bold text-green-600" id="recordStatus">
+                录入中
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="stat-card">
+          <div class="text-xs text-gray-500 mb-2">钢管加热温度范围</div>
+          <div class="range-chip">190-250℃</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-xs text-gray-500 mb-2">FBE涂覆温度范围</div>
+          <div class="range-chip">190-250℃</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-xs text-gray-500 mb-2">AD挤出温度范围</div>
+          <div class="range-chip">185-235℃</div>
+        </div>
+        <div class="stat-card">
+          <div class="text-xs text-gray-500 mb-2">PE/PP挤出温度范围</div>
+          <div class="range-chip">185-245℃</div>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-xl border border-gray-200 overflow-hidden industrial-shadow"
+      >
+        <div
+          class="px-5 py-4 border-b border-gray-200 bg-gray-50 flex items-center justify-between"
+        >
+          <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+            <i class="fas fa-clock text-blue-600"></i>
+            时段运行记录
+          </h2>
+          <div class="flex items-center gap-2 text-sm text-gray-500">
+            <i class="fas fa-info-circle"></i>
+            <span>点击“录入”开始填写，系统自动记录时间和操作人</span>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="col-time">时段</th>
+                <th class="col-speed">钢管加热温度</th>
+                <th class="col-freq">FBE涂覆温度</th>
+                <th class="col-dust">AD挤出温度</th>
+                <th class="col-hydraulic">PE/PP挤出温度</th>
+                <th class="col-checktime">检测时间</th>
+                <th class="col-operator">检测人</th>
+                <th class="col-status">状态</th>
+                <th class="col-action">操作</th>
+              </tr>
+            </thead>
+            <tbody id="recordTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <div
+      class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 industrial-shadow-lg z-30"
+    >
+      <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div class="text-sm text-gray-600">
+          <span class="font-semibold text-gray-900">今日白班</span>
+          <span class="mx-2">|</span>
+          <span
+            >已保存
+            <span class="font-bold text-green-600" id="bottomSavedCount"
+              >1</span
+            >
+            条</span
+          >
+          <span class="mx-2">|</span>
+          <span
+            >待录入
+            <span class="font-bold text-orange-600" id="bottomPendingCount"
+              >11</span
+            >
+            条</span
+          >
+        </div>
+        <div class="flex gap-3">
+          <button onclick="saveDraft()" class="action-btn btn-secondary">
+            <i class="fas fa-save"></i>保存草稿
+          </button>
+          <button
+            onclick="submitReport()"
+            class="action-btn btn-success industrial-shadow"
+          >
+            <i class="fas fa-check-circle"></i>提交检测记录
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toastContainer"></div>
+
+    <script>
+      const currentUser = {
+        name: "王五",
+        id: "OP-2024-118",
+      };
+
+      const shiftSlots = [
+        "8:00~9:00",
+        "9:00~10:00",
+        "10:00~11:00",
+        "11:00~12:00",
+        "12:00~1:00",
+        "1:00~2:00",
+        "2:00~3:00",
+        "3:00~4:00",
+        "4:00~5:00",
+        "5:00~6:00",
+        "6:00~7:00",
+        "7:00~8:00",
+      ];
+
+      const records = {
+        0: {
+          heat: "200",
+          fbe: "204",
+          ad: "197",
+          pepp: "220",
+          time: "2026.03.16 09:55",
+          operator: "王五",
+        },
+      };
+
+      let editingRow = null;
+
+      document.addEventListener("DOMContentLoaded", function () {
+        updateDate();
+        initTable();
+        updateStats();
+      });
+
+      function updateDate() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, "0");
+        const d = String(now.getDate()).padStart(2, "0");
+        document.getElementById("currentDate").textContent = `${y}-${m}-${d}`;
+      }
+
+      function initTable() {
+        const tbody = document.getElementById("recordTableBody");
+        tbody.innerHTML = "";
+
+        shiftSlots.forEach((slot, index) => {
+          const tr = document.createElement("tr");
+          tr.id = `row-${index}`;
+          tr.dataset.index = index;
+          tr.dataset.status = records[index] ? "saved" : "empty";
+
+          tr.innerHTML = `
+                    <td class="time-slot">${slot}</td>
+                    <td><input type="number" class="form-input heat-input" placeholder="-" disabled step="0.1"></td>
+                    <td><input type="number" class="form-input fbe-input" placeholder="-" disabled step="0.1"></td>
+                    <td><input type="number" class="form-input ad-input" placeholder="-" disabled step="0.1"></td>
+                    <td><input type="number" class="form-input pepp-input" placeholder="-" disabled step="0.1"></td>
+                    <td>
+                        <div class="auto-field" id="time-${index}" style="display: none;">
+                            <i class="fas fa-clock text-xs"></i>
+                            <span>-</span>
+                        </div>
+                        <div class="readonly-field" id="time-empty-${index}">-</div>
+                    </td>
+                    <td>
+                        <div class="auto-field" id="operator-${index}" style="display: none;">
+                            <i class="fas fa-user text-xs"></i>
+                            <span>-</span>
+                        </div>
+                        <div class="readonly-field" id="operator-empty-${index}">-</div>
+                    </td>
+                    <td>
+                        <span class="status-badge status-pending" id="status-${index}">
+                            <i class="fas fa-circle text-xs"></i> 待录入
+                        </span>
+                    </td>
+                    <td>
+                        <div class="flex items-center justify-center gap-2" id="actions-${index}"></div>
+                    </td>
+                `;
+
+          tbody.appendChild(tr);
+
+          if (records[index]) {
+            fillRowData(index, records[index]);
+            setRowSaved(index);
+          } else {
+            setRowPending(index);
+          }
+        });
+      }
+
+      function setRowPending(index) {
+        const row = document.getElementById(`row-${index}`);
+        row.dataset.status = "empty";
+        row.classList.remove("editing", "saved");
+        const timeDisplay = document.getElementById(`time-${index}`);
+        const operatorDisplay = document.getElementById(`operator-${index}`);
+        document.getElementById(`time-empty-${index}`).style.display = "flex";
+        document.getElementById(`operator-empty-${index}`).style.display =
+          "flex";
+        timeDisplay.style.display = "none";
+        operatorDisplay.style.display = "none";
+        row.querySelector(".heat-input").value = "";
+        row.querySelector(".fbe-input").value = "";
+        row.querySelector(".ad-input").value = "";
+        row.querySelector(".pepp-input").value = "";
+        document.getElementById(`status-${index}`).className =
+          "status-badge status-pending";
+        document.getElementById(`status-${index}`).innerHTML =
+          '<i class="fas fa-circle text-xs"></i> 待录入';
+        document.getElementById(`actions-${index}`).innerHTML = `
+                <button onclick="startEdit(${index})" class="action-btn btn-primary">
+                    <i class="fas fa-edit"></i>录入
+                </button>
+            `;
+      }
+
+      function startEdit(index) {
+        if (editingRow !== null && editingRow !== index) {
+          if (!confirm("当前有其他时段正在编辑，是否放弃该时段修改？")) {
+            return;
+          }
+          cancelEdit(editingRow);
+        }
+
+        editingRow = index;
+        const row = document.getElementById(`row-${index}`);
+        row.dataset.status = "editing";
+        row.classList.remove("saved");
+        row.classList.add("editing");
+
+        row.querySelector(".heat-input").disabled = false;
+        row.querySelector(".fbe-input").disabled = false;
+        row.querySelector(".ad-input").disabled = false;
+        row.querySelector(".pepp-input").disabled = false;
+
+        const timeDisplay = document.getElementById(`time-${index}`);
+        const timeEmpty = document.getElementById(`time-empty-${index}`);
+        timeDisplay.style.display = "inline-flex";
+        timeDisplay.querySelector("span").textContent = formatDateTime(
+          new Date(),
+        );
+        timeEmpty.style.display = "none";
+
+        const operatorDisplay = document.getElementById(`operator-${index}`);
+        const operatorEmpty = document.getElementById(
+          `operator-empty-${index}`,
+        );
+        operatorDisplay.style.display = "inline-flex";
+        operatorDisplay.querySelector("span").textContent = currentUser.name;
+        operatorEmpty.style.display = "none";
+
+        document.getElementById(`status-${index}`).className =
+          "status-badge status-editing";
+        document.getElementById(`status-${index}`).innerHTML =
+          '<i class="fas fa-circle text-xs"></i> 录入中';
+
+        document.getElementById(`actions-${index}`).innerHTML = `
+                <button onclick="saveRow(${index})" class="action-btn btn-success">
+                    <i class="fas fa-check"></i>保存
+                </button>
+                <button onclick="cancelEdit(${index})" class="action-btn btn-secondary">
+                    <i class="fas fa-times"></i>取消
+                </button>
+            `;
+
+        row.querySelector(".heat-input").focus();
+        updateStats();
+      }
+
+      function saveRow(index) {
+        const row = document.getElementById(`row-${index}`);
+        const heat = row.querySelector(".heat-input").value.trim();
+        const fbe = row.querySelector(".fbe-input").value.trim();
+        const ad = row.querySelector(".ad-input").value.trim();
+        const pepp = row.querySelector(".pepp-input").value.trim();
+
+        if (!heat || !fbe || !ad || !pepp) {
+          showToast("请填写完整的4项温度数据", "error");
+          return;
+        }
+
+        records[index] = {
+          heat,
+          fbe,
+          ad,
+          pepp,
+          time: document.getElementById(`time-${index}`).querySelector("span")
+            .textContent,
+          operator: currentUser.name,
+        };
+
+        setRowSaved(index);
+        editingRow = null;
+        updateStats();
+        showToast("时段温度记录已保存", "success");
+      }
+
+      function setRowSaved(index) {
+        const row = document.getElementById(`row-${index}`);
+        row.dataset.status = "saved";
+        row.classList.remove("editing");
+        row.classList.add("saved");
+
+        row.querySelector(".heat-input").disabled = true;
+        row.querySelector(".fbe-input").disabled = true;
+        row.querySelector(".ad-input").disabled = true;
+        row.querySelector(".pepp-input").disabled = true;
+
+        const timeDisplay = document.getElementById(`time-${index}`);
+        timeDisplay.className =
+          "readonly-field bg-blue-50 text-blue-700 border-blue-200";
+        timeDisplay.style.display = "inline-flex";
+        timeDisplay.innerHTML = `<i class="fas fa-check-circle text-xs text-green-600 mr-1"></i><span>${records[index].time}</span>`;
+
+        const operatorDisplay = document.getElementById(`operator-${index}`);
+        operatorDisplay.className =
+          "readonly-field bg-blue-50 text-blue-700 border-blue-200";
+        operatorDisplay.style.display = "inline-flex";
+        operatorDisplay.innerHTML = `<i class="fas fa-user-check text-xs text-green-600 mr-1"></i><span>${records[index].operator}</span>`;
+
+        document.getElementById(`time-empty-${index}`).style.display = "none";
+        document.getElementById(`operator-empty-${index}`).style.display =
+          "none";
+        document.getElementById(`status-${index}`).className =
+          "status-badge status-saved";
+        document.getElementById(`status-${index}`).innerHTML =
+          '<i class="fas fa-check-circle text-xs"></i> 已保存';
+
+        document.getElementById(`actions-${index}`).innerHTML = `
+                <button onclick="startEdit(${index})" class="action-btn btn-secondary">
+                    <i class="fas fa-edit"></i>修改
+                </button>
+            `;
+      }
+
+      function cancelEdit(index) {
+        if (records[index]) {
+          fillRowData(index, records[index]);
+          setRowSaved(index);
+        } else {
+          setRowPending(index);
+        }
+
+        editingRow = null;
+        updateStats();
+      }
+
+      function fillRowData(index, data) {
+        const row = document.getElementById(`row-${index}`);
+        row.querySelector(".heat-input").value = data.heat || "";
+        row.querySelector(".fbe-input").value = data.fbe || "";
+        row.querySelector(".ad-input").value = data.ad || "";
+        row.querySelector(".pepp-input").value = data.pepp || "";
+
+        const timeDisplay = document.getElementById(`time-${index}`);
+        timeDisplay.style.display = "inline-flex";
+        timeDisplay.querySelector("span").textContent = data.time || "-";
+        document.getElementById(`time-empty-${index}`).style.display = "none";
+
+        const operatorDisplay = document.getElementById(`operator-${index}`);
+        operatorDisplay.style.display = "inline-flex";
+        operatorDisplay.querySelector("span").textContent =
+          data.operator || "-";
+        document.getElementById(`operator-empty-${index}`).style.display =
+          "none";
+      }
+
+      function updateStats() {
+        const savedCount = Object.keys(records).length;
+        const total = shiftSlots.length;
+
+        document.getElementById("filledCount").textContent =
+          `${savedCount}/${total}`;
+        document.getElementById("bottomSavedCount").textContent = savedCount;
+        document.getElementById("bottomPendingCount").textContent =
+          total - savedCount;
+
+        const statusEl = document.getElementById("recordStatus");
+        if (savedCount === total) {
+          statusEl.textContent = "已完成";
+          statusEl.className = "text-sm font-bold text-green-600";
+        } else if (savedCount > 0 || editingRow !== null) {
+          statusEl.textContent = "录入中";
+          statusEl.className = "text-sm font-bold text-blue-600";
+        } else {
+          statusEl.textContent = "待开始";
+          statusEl.className = "text-sm font-bold text-gray-400";
+        }
+      }
+
+      function saveDraft() {
+        console.log("保存草稿", collectAllData());
+        showToast("草稿已保存到本地", "success");
+      }
+
+      function submitReport() {
+        const pendingCount = shiftSlots.length - Object.keys(records).length;
+        if (pendingCount > 0) {
+          if (!confirm(`还有 ${pendingCount} 个时段未录入，确认继续提交吗？`)) {
+            return;
+          }
+        }
+
+        console.log("提交检测记录", collectAllData());
+        showToast("时段运行记录提交成功", "success");
+      }
+
+      function collectAllData() {
+        return shiftSlots.map((slot, index) => ({
+          slot,
+          ...(records[index] || {}),
+        }));
+      }
+
+      function formatDateTime(date) {
+        const h = String(date.getHours()).padStart(2, "0");
+        const min = String(date.getMinutes()).padStart(2, "0");
+        return `${h}:${min}`;
+      }
+
+      function showToast(message, type = "info") {
+        const container = document.getElementById("toastContainer");
+        const toast = document.createElement("div");
+
+        const colors = {
+          success: "bg-green-600",
+          error: "bg-red-600",
+          info: "bg-gray-900",
+        };
+
+        const icons = {
+          success: "fa-check-circle",
+          error: "fa-exclamation-circle",
+          info: "fa-info-circle",
+        };
+
+        toast.className = `toast ${colors[type]} text-white px-5 py-3 rounded-xl industrial-shadow-lg flex items-center gap-3`;
+        toast.innerHTML = `<i class="fas ${icons[type]}"></i><span>${message}</span>`;
+        container.appendChild(toast);
+
+        setTimeout(() => {
+          toast.style.opacity = "0";
+          toast.style.transform = "translateY(-10px)";
+          toast.style.transition = "all 0.3s ease";
+          setTimeout(() => toast.remove(), 300);
+        }, 2400);
+      }
+    </script>
+  </body>
+</html>

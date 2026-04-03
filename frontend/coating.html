@@ -411,6 +411,10 @@
                     <i class="fas fa-vials"></i>
                     <span>抽检记录</span>
                 </button>
+                <button class="material-subtab-btn flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-gray-200 bg-white text-sm font-semibold whitespace-nowrap" data-subtab="material-info" onclick="switchMaterialSubTab('material-info')">
+                    <i class="fas fa-box-open"></i>
+                    <span>原材料信息</span>
+                </button>
             </div>
         </div>
     </div>
@@ -509,12 +513,10 @@
                         <tr>
                             <th class="px-4 py-4 text-left w-12"><input type="checkbox" class="custom-checkbox" id="selectAllSample" onclick="toggleSelectAll()"></th>
                             <th class="px-4 py-4 text-left">自编号</th>
-                            <th class="px-4 py-4 text-center">清洁度</th>
-                            <th class="px-4 py-4 text-center">灰尘度检测</th>
-                            <th class="px-4 py-4 text-center">表面粗糙度(μm)</th>
-                            <th class="px-4 py-4 text-center">盐分检测</th>
-                            <th class="px-4 py-4 text-center">检验结果</th>
-                            <th class="px-4 py-4 text-center">灰尘度照片</th>
+                            <th class="px-4 py-4 text-center">温度1</th>
+                            <th class="px-4 py-4 text-center">结果1</th>
+                            <th class="px-4 py-4 text-center">温度2</th>
+                            <th class="px-4 py-4 text-center">结果2</th>
                             <th class="px-4 py-4 text-center">操作时间</th>
                             <th class="px-4 py-4 text-center">质检员</th>
                             <th class="px-4 py-4 text-center">操作</th>
@@ -524,15 +526,10 @@
                         <tr class="group" data-id="CJ-0032" data-shift="today_day" data-result="pass">
                             <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                             <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">CJ-0032</div></td>
-                            <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>Sa2.5</span></td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">1级</td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">52</td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">12mg/m²</td>
+                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">198℃</td>
                             <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-circle-check"></i>合格</span></td>
-                            <td class="px-4 py-4 text-center">
-                                <img onclick="openPhotoModal(this.src)" class="w-16 h-12 object-cover rounded-lg border border-gray-200 cursor-zoom-in mx-auto" alt="灰尘度照片"
-                                  src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23dbeafe'/><circle cx='42' cy='46' r='10' fill='%2393c5fd'/><circle cx='86' cy='58' r='8' fill='%2360a5fa'/><circle cx='118' cy='40' r='6' fill='%233b82f6'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 1</text></svg>">
-                            </td>
+                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">201℃</td>
+                            <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-circle-check"></i>合格</span></td>
                             <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">20:10</div><div class="text-xs text-gray-500">今天</div></td>
                             <td class="px-4 py-4 text-center"><span class="text-sm text-gray-700">王检</span></td>
                             <td class="px-4 py-4 text-center">
@@ -546,15 +543,10 @@
                         <tr class="group" data-id="CJ-0031" data-shift="today_day" data-result="pass">
                             <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                             <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">CJ-0031</div></td>
-                            <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>Sa2.5</span></td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">2级</td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">49</td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">15mg/m²</td>
+                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">194℃</td>
                             <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-circle-check"></i>合格</span></td>
-                            <td class="px-4 py-4 text-center">
-                                <img onclick="openPhotoModal(this.src)" class="w-16 h-12 object-cover rounded-lg border border-gray-200 cursor-zoom-in mx-auto" alt="灰尘度照片"
-                                  src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23e0f2fe'/><circle cx='38' cy='48' r='8' fill='%2394a3b8'/><circle cx='74' cy='60' r='7' fill='%2360a5fa'/><circle cx='110' cy='44' r='8' fill='%233b82f6'/><circle cx='126' cy='70' r='5' fill='%2394a3b8'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 2</text></svg>">
-                            </td>
+                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">199℃</td>
+                            <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-circle-check"></i>合格</span></td>
                             <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">18:55</div><div class="text-xs text-gray-500">今天</div></td>
                             <td class="px-4 py-4 text-center"><span class="text-sm text-gray-700">王检</span></td>
                             <td class="px-4 py-4 text-center">
@@ -568,15 +560,10 @@
                         <tr class="group" data-id="CJ-0030" data-shift="yesterday_night" data-result="fail">
                             <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                             <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">CJ-0030</div></td>
-                            <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"><i class="fas fa-times"></i>Sa2.5</span></td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">4级</td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">31</td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">28mg/m²</td>
+                            <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">186℃</td>
                             <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"><i class="fas fa-circle-xmark"></i>不合格</span></td>
-                            <td class="px-4 py-4 text-center">
-                                <img onclick="openPhotoModal(this.src)" class="w-16 h-12 object-cover rounded-lg border border-gray-200 cursor-zoom-in mx-auto" alt="灰尘度照片"
-                                  src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23fee2e2'/><circle cx='32' cy='40' r='9' fill='%23ef4444'/><circle cx='56' cy='54' r='7' fill='%23b91c1c'/><circle cx='84' cy='42' r='9' fill='%23ef4444'/><circle cx='114' cy='58' r='8' fill='%23b91c1c'/><circle cx='132' cy='40' r='7' fill='%23ef4444'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%237f1d1d'>Dust 4</text></svg>">
-                            </td>
+                            <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">191℃</td>
+                            <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"><i class="fas fa-circle-xmark"></i>不合格</span></td>
                             <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">03:40</div><div class="text-xs text-gray-500">昨天</div></td>
                             <td class="px-4 py-4 text-center"><span class="text-sm text-gray-700">赵检</span></td>
                             <td class="px-4 py-4 text-center">
@@ -589,6 +576,92 @@
                         </tr>
                     </tbody>
                 </table>
+            </section>
+
+            <section id="material-subtab-material-info" class="material-subtab-panel hidden p-6">
+                <div class="max-w-6xl mx-auto">
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-1 gap-5">
+                            <div class="bg-white rounded-3xl industrial-shadow border border-gray-200 overflow-hidden">
+                                <div class="flex flex-col xl:flex-row">
+                                    <div class="xl:w-44 bg-gradient-to-br from-sky-500 to-blue-400 px-6 py-5 text-white flex items-center">
+                                        <div class="text-3xl font-bold">FBE</div>
+                                    </div>
+                                    <div class="flex-1 p-5">
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                            <div>
+                                                <label class="block text-xs font-semibold uppercase tracking-[0.18em] text-gray-400 mb-2 text-center">厂家</label>
+                                                <input type="text" placeholder="请输入厂家名称" class="form-input w-full px-4 py-3.5 text-center bg-gray-50 border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-semibold uppercase tracking-[0.18em] text-gray-400 mb-2 text-center">型号</label>
+                                                <input type="text" placeholder="请输入型号" class="form-input w-full px-4 py-3.5 text-center bg-gray-50 border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-semibold uppercase tracking-[0.18em] text-gray-400 mb-2 text-center">批号</label>
+                                                <input type="text" placeholder="请输入批号" class="form-input w-full px-4 py-3.5 text-center bg-gray-50 border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-3xl industrial-shadow border border-gray-200 overflow-hidden">
+                                <div class="flex flex-col xl:flex-row">
+                                    <div class="xl:w-44 bg-gradient-to-br from-blue-500 to-indigo-400 px-6 py-5 text-white flex items-center">
+                                        <div class="text-3xl font-bold">AD</div>
+                                    </div>
+                                    <div class="flex-1 p-5">
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                            <div>
+                                                <label class="block text-xs font-semibold uppercase tracking-[0.18em] text-gray-400 mb-2 text-center">厂家</label>
+                                                <input type="text" placeholder="请输入厂家名称" class="form-input w-full px-4 py-3.5 text-center bg-gray-50 border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-semibold uppercase tracking-[0.18em] text-gray-400 mb-2 text-center">型号</label>
+                                                <input type="text" placeholder="请输入型号" class="form-input w-full px-4 py-3.5 text-center bg-gray-50 border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-semibold uppercase tracking-[0.18em] text-gray-400 mb-2 text-center">批号</label>
+                                                <input type="text" placeholder="请输入批号" class="form-input w-full px-4 py-3.5 text-center bg-gray-50 border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-3xl industrial-shadow border border-gray-200 overflow-hidden">
+                                <div class="flex flex-col xl:flex-row">
+                                    <div class="xl:w-44 bg-gradient-to-br from-cyan-500 to-sky-400 px-6 py-5 text-white flex items-center">
+                                        <div class="text-3xl font-bold">PE/PP</div>
+                                    </div>
+                                    <div class="flex-1 p-5">
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                            <div>
+                                                <label class="block text-xs font-semibold uppercase tracking-[0.18em] text-gray-400 mb-2 text-center">厂家</label>
+                                                <input type="text" placeholder="请输入厂家名称" class="form-input w-full px-4 py-3.5 text-center bg-gray-50 border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-semibold uppercase tracking-[0.18em] text-gray-400 mb-2 text-center">型号</label>
+                                                <input type="text" placeholder="请输入型号" class="form-input w-full px-4 py-3.5 text-center bg-gray-50 border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-semibold uppercase tracking-[0.18em] text-gray-400 mb-2 text-center">批号</label>
+                                                <input type="text" placeholder="请输入批号" class="form-input w-full px-4 py-3.5 text-center bg-gray-50 border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="button" onclick="saveMaterialInfo()" class="px-8 py-3 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-lg">
+                                <i class="fas fa-save"></i>
+                                保存
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
@@ -2544,16 +2617,23 @@ R.H: &lt;70%：&lt;4 hours
         }
 
         function getActiveTableBody() {
-            return document.getElementById(currentMaterialSubTab === 'root' ? 'rootTableBody' : 'sampleTableBody');
+            if (currentMaterialSubTab === 'root') return document.getElementById('rootTableBody');
+            if (currentMaterialSubTab === 'sample') return document.getElementById('sampleTableBody');
+            return null;
         }
 
         function getActiveSelectAll() {
-            return document.getElementById(currentMaterialSubTab === 'root' ? 'selectAllRoot' : 'selectAllSample');
+            if (currentMaterialSubTab === 'root') return document.getElementById('selectAllRoot');
+            if (currentMaterialSubTab === 'sample') return document.getElementById('selectAllSample');
+            return null;
         }
 
         function applyMaterialTableFilters() {
             const tbody = getActiveTableBody();
-            if (!tbody) return;
+            if (!tbody) {
+                document.getElementById('emptyState').classList.add('hidden');
+                return;
+            }
 
             const keyword = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
             const rows = Array.from(tbody.querySelectorAll('tr'));
@@ -2598,6 +2678,7 @@ R.H: &lt;70%：&lt;4 hours
 
             document.getElementById('material-subtab-root').classList.toggle('hidden', tabId !== 'root');
             document.getElementById('material-subtab-sample').classList.toggle('hidden', tabId !== 'sample');
+            document.getElementById('material-subtab-material-info').classList.toggle('hidden', tabId !== 'material-info');
             document.getElementById('toggleRootDetailBtn')?.classList.toggle('hidden', tabId !== 'root');
             clearSelection();
             applyMaterialTableFilters();
@@ -2617,6 +2698,10 @@ R.H: &lt;70%：&lt;4 hours
         function toggleRootDetailColumns() {
             isRootDetailCollapsed = !isRootDetailCollapsed;
             applyRootDetailColumnState();
+        }
+
+        function saveMaterialInfo() {
+            showToast('原材料信息已保存', 'success');
         }
 
         function switchMainTab(tabId) {

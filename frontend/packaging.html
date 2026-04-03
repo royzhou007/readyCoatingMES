@@ -1,0 +1,2563 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>终检包装作业记录 - MES系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+
+        * { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        body { font-family: 'Inter', 'Noto Sans SC', sans-serif; background: #F4F6F8; overflow: hidden; }
+
+        .industrial-shadow { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04); }
+        .industrial-shadow-lg { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 8px 24px rgba(0, 0, 0, 0.06); }
+
+        /* 抽屉宽度为屏幕的 2/3 */
+        .drawer-two-thirds {
+            width: 66.666vw;
+            max-width: 66.666vw;
+        }
+
+        @media (max-width: 768px) {
+            .drawer-two-thirds {
+                width: 100vw;
+                max-width: 100vw;
+            }
+        }
+
+        .drawer {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .drawer.open {
+            transform: translateX(0);
+        }
+
+        .drawer-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .drawer-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .modal.open .modal-content {
+            transform: scale(1);
+        }
+
+        .data-table { border-collapse: separate; border-spacing: 0; }
+        .data-table th { background: #F8FAFC; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.75rem; color: #64748B; border-bottom: 2px solid #E2E8F0; }
+        .data-table td { border-bottom: 1px solid #F1F5F9; transition: background-color 0.15s ease; }
+        .data-table tr:hover td { background-color: #F8FAFC; }
+        .data-table tr.selected td { background-color: #EFF6FF; border-bottom-color: #BFDBFE; }
+
+        .status-pass { background: #DCFCE7; color: #166534; border: 1px solid #86EFAC; }
+        .status-fail { background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5; }
+
+        .corrosion-none { background: #DCFCE7; color: #166534; }
+        .corrosion-light { background: #DBEAFE; color: #1E40AF; }
+        .corrosion-medium { background: #FEF3C7; color: #92400E; }
+        .corrosion-severe { background: #FEE2E2; color: #991B1B; }
+
+        .wo-card { background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%); border-left: 4px solid #2563EB; }
+        .wo-card.producing { border-left-color: #2563EB; background: linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%); }
+
+        .shift-indicator { background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%); border: 2px solid #60A5FA; }
+
+        .custom-checkbox { appearance: none; width: 24px; height: 24px; border: 2px solid #CBD5E1; border-radius: 6px; cursor: pointer; position: relative; transition: all 0.2s ease; }
+        .custom-checkbox:checked { background: #2563EB; border-color: #2563EB; }
+        .custom-checkbox:checked::after { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+
+        .action-btn:active { transform: scale(0.95); }
+        .search-input:focus { border-color: #2563EB; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+        .form-input:focus { border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+
+        .page-btn { transition: all 0.2s ease; }
+        .page-btn.active { background: #2563EB; color: white; border-color: #2563EB; }
+
+        .toast { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .sticky-header { position: sticky; top: 0; z-index: 40; background: white; }
+        .batch-bar { transform: translateY(100%); transition: transform 0.3s ease; }
+        .batch-bar.show { transform: translateY(0); }
+
+        .progress-bar { background: #E5E7EB; border-radius: 9999px; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #3B82F6 0%, #2563EB 100%); transition: width 0.3s ease; }
+
+        .shift-btn { transition: all 0.2s ease; }
+        .shift-btn.active {
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            color: white;
+            border-color: #2563EB;
+            box-shadow: 0 10px 24px rgba(37, 99, 235, 0.28);
+            transform: translateY(-2px);
+        }
+        .shift-btn.active i {
+            color: white;
+        }
+
+        .main-tab-btn {
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        .main-tab-btn.active {
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            color: white;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18);
+        }
+        .main-tab-btn:not(.active) {
+            background: #F8FAFC;
+            color: #475569;
+            border-color: #E2E8F0;
+        }
+        .material-subtab-btn {
+            transition: all 0.2s ease;
+        }
+        .material-subtab-btn.active {
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            color: white;
+            border-color: #2563EB;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18);
+        }
+        .tab-panel {
+            display: none;
+            min-height: 0;
+        }
+        .tab-panel.active {
+            display: flex;
+        }
+        .material-subtab-panel.hidden {
+            display: none;
+        }
+
+        /* 码单选择弹窗样式 */
+        .code-list-item {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .code-list-item:hover {
+            background-color: #F0F9FF;
+            border-color: #BFDBFE;
+        }
+        .code-list-item.selected {
+            background-color: #DBEAFE;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .import-btn-area {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .import-btn-area:hover {
+            border-color: #2563EB;
+            background: #F0F9FF;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        }
+
+        /* 坡口信息折叠动画 */
+        .bevel-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            opacity: 0;
+        }
+        .bevel-content.expanded {
+            max-height: 2000px;
+            opacity: 1;
+        }
+        .bevel-arrow {
+            transition: transform 0.3s ease;
+        }
+        .bevel-arrow.rotated {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white industrial-shadow z-50 flex-none">
+        <div class="flex items-center justify-between px-6 py-4">
+            <div class="flex items-center gap-4">
+                <button onclick="history.back()" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
+                    <i class="fas fa-arrow-left text-lg"></i>
+                </button>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                        <i class="fas fa-list-alt text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900 tracking-tight">终检包装作业记录</h1>
+                        <p class="text-xs text-gray-500">产线 A-03 | 当前工单 245 支 | 当前班次 <span class="font-semibold text-blue-600">今日白班</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="hidden md:flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg text-sm font-medium">
+                    <i class="fas fa-check-circle"></i>
+                    <span>系统正常</span>
+                </div>
+                <button onclick="exportData()" class="action-btn flex items-center gap-2 px-4 py-2.5 bg-white border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:border-blue-400 hover:text-blue-600">
+                    <i class="fas fa-download"></i>
+                    <span class="hidden sm:inline">导出</span>
+                </button>
+                <button onclick="openFilter()" class="action-btn flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 industrial-shadow">
+                    <i class="fas fa-filter"></i>
+                    <span class="hidden sm:inline">筛选</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Work Order Card -->
+    <div class="bg-white border-b border-gray-200 px-6 py-3 flex-none">
+        <div class="wo-card producing rounded-xl px-4 py-3 industrial-shadow relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -mr-10 -mt-10 opacity-50"></div>
+            <div class="relative flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-white flex-shrink-0">
+                        <i class="fas fa-clipboard-list text-xl"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-3 flex-wrap">
+                            <h2 class="text-lg font-bold text-gray-900">WO-2026-0318-001</h2>
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                                包装中
+                            </span>
+                        </div>
+                        <div class="mt-1 space-y-1 text-sm text-gray-600">
+                            <div class="flex items-center gap-1.5 min-w-0"><i class="fas fa-building text-gray-400"></i>客户: <span class="font-medium text-gray-900 truncate">华北石油管道工程有限公司</span></div>
+                            <div class="flex items-center gap-1.5 min-w-0"><i class="fas fa-project-diagram text-gray-400"></i>项目: <span class="font-medium text-gray-900 truncate">京唐港输油管道工程 Phase-2</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shift Info -->
+                <div class="hidden flex items-center gap-4 lg:px-6 lg:border-x border-gray-200">
+                    <div class="shift-indicator px-4 py-2 rounded-xl flex items-center gap-3">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-sm">
+                            <i class="fas fa-sun text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-blue-700 font-semibold">当前班次</div>
+                            <div class="text-sm font-bold text-blue-900">今日白班 <span class="text-xs font-normal">(08:00-20:00)</span></div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xs text-gray-500 mb-1">本班已包装</div>
+                        <div class="text-xl font-bold text-blue-600" id="shiftCount">156<span class="text-xs text-gray-500 font-normal ml-1">支</span></div>
+                    </div>
+                </div>
+
+                <div class="flex-1 lg:px-6 lg:border-x border-gray-200">
+                    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
+                        <div class="px-1 text-center xl:border-r border-gray-200">
+                            <div class="text-sm text-gray-500 mb-2">计划开始</div>
+                            <div class="text-lg font-bold text-gray-900 leading-tight">2026-03-18 08:00</div>
+                        </div>
+                        <div class="px-1 text-center xl:border-r border-gray-200">
+                            <div class="text-sm text-gray-500 mb-2">计划结束</div>
+                            <div class="text-lg font-bold text-gray-900 leading-tight">2026-03-25 18:00</div>
+                        </div>
+                        <div class="px-1 text-center xl:border-r border-gray-200">
+                            <div class="text-sm text-gray-500 mb-2">剩余时间</div>
+                            <div class="text-lg font-bold text-blue-600 leading-tight">2天4小时</div>
+                        </div>
+                        <div class="px-1 text-center">
+                            <div class="flex items-baseline justify-center gap-3 mb-2">
+                                <span class="text-3xl font-extrabold text-blue-600" id="progressPercent">78%</span>
+                                <span class="text-base font-semibold text-gray-600">包装完成度</span>
+                            </div>
+                            <div class="progress-bar h-4">
+                                <div id="workOrderProgressFill" class="progress-fill h-full rounded-full" style="width: 78%"></div>
+                            </div>
+                            <div class="text-sm text-gray-600 mt-2">
+                                已完成 <span id="shiftCountDisplay" class="font-bold text-gray-900">247</span> / 目标 <span id="workOrderTarget" class="font-bold text-gray-900">316</span> 支
+                            </div>
+                            <div id="shiftCountValue" class="hidden">247</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-3">
+                    <button onclick="viewWorkOrderDetail()" class="action-btn flex items-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold industrial-shadow">
+                        <i class="fas fa-info-circle"></i>
+                        <span>工单详情</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white border-b border-gray-200 px-6 py-3 flex-none">
+        <div class="flex gap-3 overflow-x-auto pb-1">
+            <button class="main-tab-btn active flex items-center gap-2 px-5 py-3 rounded-xl font-semibold whitespace-nowrap" data-tab="material" onclick="switchMainTab('material')">
+                <i class="fas fa-grip-lines"></i>
+                <span>管材</span>
+            </button>
+            <button class="main-tab-btn flex items-center gap-2 px-5 py-3 rounded-xl font-semibold whitespace-nowrap" data-tab="instrument" onclick="switchMainTab('instrument')">
+                <i class="fas fa-microchip"></i>
+                <span>仪器</span>
+            </button>
+            <button class="main-tab-btn flex items-center gap-2 px-5 py-3 rounded-xl font-semibold whitespace-nowrap" data-tab="production" onclick="switchMainTab('production')">
+                <i class="fas fa-stream"></i>
+                <span>生产工艺卡</span>
+            </button>
+            <button class="main-tab-btn flex items-center gap-2 px-5 py-3 rounded-xl font-semibold whitespace-nowrap" data-tab="quality" onclick="switchMainTab('quality')">
+                <i class="fas fa-clipboard-check"></i>
+                <span>质检工艺卡</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div id="materialFilterBar" class="bg-white border-b border-gray-200 px-6 py-3 flex-none">
+        <div class="flex flex-col gap-3">
+            <div class="flex flex-col lg:flex-row gap-3 items-start lg:items-center justify-between">
+                <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto lg:flex-1 lg:min-w-0">
+                    <div class="relative w-full lg:max-w-md">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                        <input type="text" id="searchInput" placeholder="搜索自编号、管号、捆号、炉号、批号..." 
+                               class="search-input w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-base outline-none transition-all"
+                               onkeyup="handleSearch(this.value)">
+                    </div>
+                    <button id="toggleRootDetailBtn" type="button" onclick="toggleRootDetailColumns()" class="px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-gray-700 font-semibold whitespace-nowrap hover:border-blue-400 hover:text-blue-600 transition-colors">
+                        折叠钢管详情
+                    </button>
+                </div>
+                <div class="flex gap-2 overflow-x-auto pb-1 lg:pb-0 w-full lg:w-auto">
+                    <button onclick="setFilter(event, 'all')" class="filter-chip active px-4 py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold whitespace-nowrap">全部记录</button>
+                    <button onclick="setFilter(event, 'pass')" class="filter-chip px-4 py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold whitespace-nowrap flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-green-500"></span>合格
+                    </button>
+                    <button onclick="setFilter(event, 'fail')" class="filter-chip px-4 py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold whitespace-nowrap flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-red-500"></span>不合格
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 pt-2 border-t border-gray-100">
+                <div class="flex items-center gap-2 text-sm text-gray-600 flex-shrink-0">
+                    <i class="fas fa-clock-rotate-left text-blue-500"></i>
+                    <span class="font-medium">班次浏览:</span>
+                </div>
+                <div id="shiftButtonList" class="flex gap-2 overflow-x-auto pb-1 flex-1 min-w-0">
+                    
+                    <button onclick="switchShift('yesterday_night')" 
+                            class="shift-btn flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-white text-gray-700 border-gray-200 hover:border-blue-400" 
+                            data-shift="yesterday_night">
+                        <i class="fas fa-moon mr-2"></i>
+                        昨日夜班
+                        <span class="ml-2 text-xs py-0.5 px-1.5 rounded-full bg-gray-100 text-gray-600">89支</span>
+                    </button>
+                    <button onclick="switchShift('today_day')" 
+                            class="shift-btn active flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-blue-600 text-white border-blue-600 ring-4 ring-blue-100" 
+                            data-shift="today_day">
+                        <i class="fas fa-sun mr-2"></i>
+                        今日白班
+                        <span class="ml-2 text-xs py-0.5 px-1.5 rounded-full bg-white/20">156支</span>
+                    </button>
+                    <button onclick="switchShift('today_night')" 
+                            class="shift-btn flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-white text-gray-700 border-gray-200 hover:border-blue-400" 
+                            data-shift="today_night">
+                        <i class="fas fa-moon mr-2"></i>
+                        今日夜班
+                        <span class="ml-2 text-xs py-0.5 px-1.5 rounded-full bg-gray-100 text-gray-600">0支</span>
+                    </button>
+                    <button id="addShiftButton" onclick="openAddShiftModal()" class="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-dashed border-blue-300 text-blue-600 bg-blue-50 hover:bg-blue-100 font-semibold text-sm whitespace-nowrap transition-all">
+                        <i class="fas fa-plus"></i>
+                        <span>新增班次</span>
+                    </button>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 overflow-x-auto pt-2 border-t border-gray-100">
+                <button class="material-subtab-btn active flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-blue-200 bg-blue-50 text-sm font-semibold whitespace-nowrap" data-subtab="root" onclick="switchMaterialSubTab('root')">
+                    <i class="fas fa-list-ul"></i>
+                    <span>根检记录</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="materialMain" class="flex-1 overflow-hidden bg-gray-50 relative">
+        <div class="h-full overflow-auto">
+            <section id="material-subtab-root" class="material-subtab-panel">
+                <table class="data-table w-full bg-white">
+                <thead class="sticky-header">
+                    <tr>
+                        <th class="px-4 py-4 text-left w-12"><input type="checkbox" class="custom-checkbox" id="selectAllRoot" onclick="toggleSelectAll()"></th>
+                        <th class="px-4 py-4 text-left"><div class="flex items-center gap-2"><span>自编号</span><i class="fas fa-sort text-gray-400"></i></div></th>
+                        <th class="root-detail-col px-4 py-4 text-left"><div class="flex flex-col"><span>捆号</span><span class="text-xs text-gray-400 font-normal normal-case">管号</span></div></th>
+                        <th class="root-detail-col px-4 py-4 text-left"><div class="flex flex-col"><span>炉号</span><span class="text-xs text-gray-400 font-normal normal-case">批号</span></div></th>
+                        <th class="root-detail-col px-4 py-4 text-center"><div class="flex flex-col items-center"><span>规格</span><span class="text-xs text-gray-400 font-normal normal-case">长度/重量</span></div></th>
+                        <th class="px-4 py-4 text-center">新捆号</th>
+                        <th class="px-4 py-4 text-center">标签/标识</th>
+                        <th class="px-4 py-4 text-center">管帽/堵头布</th>
+                        <th class="px-4 py-4 text-center">防撞绳/包装质量</th>
+                        <th class="px-4 py-4 text-center">唛头/吊带</th>
+                        <th class="px-4 py-4 text-center">结论</th>
+                        <th class="px-4 py-4 text-center">操作时间</th>
+                        <th class="px-4 py-4 text-center">质检员</th>
+                        <th class="px-4 py-4 text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="rootTableBody">
+                    <tr class="group" data-id="0032" data-shift="today_day" data-result="pass">
+                        <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
+                        <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">0032</div></td>
+                        <td class="root-detail-col px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">96#</div><div class="font-mono text-xs text-gray-500">6508741</div></div></td>
+                        <td class="root-detail-col px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-medium text-gray-900">15303842</div><div class="text-xs text-gray-500">71399</div></div></td>
+                        <td class="root-detail-col px-4 py-4 text-center"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">11856<span class="text-xs text-gray-500 font-normal">mm</span></div><div class="text-xs text-gray-500">573.5kg</div></div></td>
+                        <td class="px-4 py-4 text-center"><div class="text-sm font-semibold text-gray-900">128</div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">标签</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">标识</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div></div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">管帽</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">堵头布</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div></div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">防撞绳</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">包装</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div></div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">唛头</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">吊带</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div></div></td>
+                        <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-sm"></i></span></td>
+                        <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">19:35</div><div class="text-xs text-gray-500">今天</div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">张</div><span class="text-xs text-gray-600">张师傅</span></div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex items-center justify-center gap-2"><button onclick="openEntryDrawer('0032')" class="w-9 h-9 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 transition-colors flex items-center justify-center" title="录入"><i class="fas fa-pen-to-square text-sm"></i></button><button onclick="viewDetail('0032')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 transition-colors flex items-center justify-center" title="查看"><i class="fas fa-eye text-sm"></i></button><button onclick="deleteRow('0032')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center justify-center" title="删除"><i class="fas fa-trash-alt text-sm"></i></button></div></td>
+                    </tr>
+                    <tr class="group" data-id="0031" data-shift="today_day" data-result="pass">
+                        <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
+                        <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">0031</div></td>
+                        <td class="root-detail-col px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">96#</div><div class="font-mono text-xs text-gray-500">6508739</div></div></td>
+                        <td class="root-detail-col px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-medium text-gray-900">15303842</div><div class="text-xs text-gray-500">71399</div></div></td>
+                        <td class="root-detail-col px-4 py-4 text-center"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">11920<span class="text-xs text-gray-500 font-normal">mm</span></div><div class="text-xs text-gray-500">574.2kg</div></div></td>
+                        <td class="px-4 py-4 text-center"><div class="text-sm font-semibold text-gray-900">129</div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">标签</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">标识</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div></div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">管帽</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">堵头布</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-xs"></i></span></div></div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">防撞绳</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">包装</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div></div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">唛头</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">吊带</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div></div></td>
+                        <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-sm"></i></span></td>
+                        <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">18:42</div><div class="text-xs text-gray-500">今天</div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">张</div><span class="text-xs text-gray-600">张师傅</span></div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex items-center justify-center gap-2"><button onclick="openEntryDrawer('0031')" class="w-9 h-9 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 transition-colors flex items-center justify-center" title="录入"><i class="fas fa-pen-to-square text-sm"></i></button><button onclick="viewDetail('0031')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 transition-colors flex items-center justify-center" title="查看"><i class="fas fa-eye text-sm"></i></button><button onclick="deleteRow('0031')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center justify-center" title="删除"><i class="fas fa-trash-alt text-sm"></i></button></div></td>
+                    </tr>
+                    <tr class="group" data-id="0030" data-shift="yesterday_night" data-result="fail">
+                        <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
+                        <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">0030</div></td>
+                        <td class="root-detail-col px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">97#</div><div class="font-mono text-xs text-gray-500">6508725</div></div></td>
+                        <td class="root-detail-col px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-medium text-gray-900">15303842</div><div class="text-xs text-gray-500">71400</div></div></td>
+                        <td class="root-detail-col px-4 py-4 text-center"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">11780<span class="text-xs text-gray-500 font-normal">mm</span></div><div class="text-xs text-gray-500">572.8kg</div></div></td>
+                        <td class="px-4 py-4 text-center"><div class="text-sm font-semibold text-gray-900">130</div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">标签</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">标识</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-xs"></i></span></div></div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">管帽</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">堵头布</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-xs"></i></span></div></div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">防撞绳</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">包装</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-xs"></i></span></div></div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">唛头</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">吊带</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-xs"></i></span></div></div></td>
+                        <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-sm"></i></span></td>
+                        <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">03:15</div><div class="text-xs text-gray-500">昨天</div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1"><div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold text-sm">李</div><span class="text-xs text-gray-600">李师傅</span></div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex items-center justify-center gap-2"><button onclick="openEntryDrawer('0030')" class="w-9 h-9 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 transition-colors flex items-center justify-center" title="录入"><i class="fas fa-pen-to-square text-sm"></i></button><button onclick="viewDetail('0030')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 transition-colors flex items-center justify-center" title="查看"><i class="fas fa-eye text-sm"></i></button><button onclick="deleteRow('0030')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center justify-center" title="删除"><i class="fas fa-trash-alt text-sm"></i></button></div></td>
+                    </tr>
+                </tbody>
+            </table>
+            </section>
+
+
+            <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
+                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-search text-4xl text-gray-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">未找到匹配记录</h3>
+                <p class="text-sm text-gray-500">请调整筛选条件或搜索关键词</p>
+            </div>
+        </div>
+
+    <div id="batchBar" class="batch-bar fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 industrial-shadow-lg z-50 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <span class="text-sm text-gray-600">已选择 <span id="selectedCount" class="font-bold text-blue-600 text-lg">0</span> 项</span>
+                <button onclick="clearSelection()" class="text-sm text-gray-500 hover:text-gray-700 underline">清除选择</button>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="batchPrint()" class="action-btn flex items-center gap-2 px-4 py-2.5 bg-white border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:border-blue-400"><i class="fas fa-print"></i><span>批量打印</span></button>
+                <button onclick="batchExport()" class="action-btn flex items-center gap-2 px-4 py-2.5 bg-white border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:border-blue-400"><i class="fas fa-file-export"></i><span>批量导出</span></button>
+                <button onclick="batchDelete()" class="action-btn flex items-center gap-2 px-4 py-2.5 bg-red-50 border-2 border-red-200 text-red-600 rounded-xl font-semibold hover:bg-red-100"><i class="fas fa-trash-alt"></i><span>批量删除</span></button>
+            </div>
+        </div>
+    </main>
+    <section id="tab-panel-instrument" class="tab-panel flex-1 flex-col min-h-0 bg-gray-50 p-6">
+        <div class="grid grid-cols-1 gap-6 h-full">
+            <div class="bg-white rounded-2xl industrial-shadow p-6 flex flex-col min-h-0">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900">仪器列表</h3>
+                        <p class="text-sm text-gray-500 mt-1">从企业仪器台账中选择当前工单实际使用的仪器</p>
+                    </div>
+                    <button onclick="openInstrumentLedgerModal()" class="action-btn flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 industrial-shadow whitespace-nowrap">
+                        <i class="fas fa-plus"></i>
+                        <span>新增</span>
+                    </button>
+                </div>
+
+                <div class="flex-1 overflow-auto border border-gray-200 rounded-2xl">
+                    <table class="data-table w-full bg-white">
+                        <thead class="sticky-header">
+                            <tr>
+                                <th class="px-4 py-4 text-center w-20">序号</th>
+                                <th class="px-4 py-4 text-left">仪器名称</th>
+                                <th class="px-4 py-4 text-left">型号规格</th>
+                                <th class="px-4 py-4 text-left">仪器编号</th>
+                                <th class="px-4 py-4 text-left">有效期</th>
+                                <th class="px-4 py-4 text-center w-32">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="instrumentTableBody"></tbody>
+                    </table>
+                    <div id="instrumentEmptyState" class="hidden flex-col items-center justify-center py-20 text-center">
+                        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-microchip text-3xl text-gray-400"></i>
+                        </div>
+                        <h3 class="text-base font-semibold text-gray-900 mb-2">还没有关联仪器</h3>
+                        <p class="text-sm text-gray-500">点击右上角“新增”，从企业台账中选择当前工单要关联的设备与仪器。</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        </div>
+    </section>
+
+<section id="tab-panel-production" class="tab-panel flex-1 flex-col min-h-0 bg-gray-50 p-6">
+        <div class="bg-white rounded-2xl industrial-shadow p-6 h-full overflow-auto">
+            <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4 mb-6">
+                <div>
+                    <div class="text-sm text-gray-500">工艺卡名称</div>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1">钢管包装工艺卡</h3>
+                    <p class="text-sm text-gray-500 mt-2">用于查看当前工单的包装参数、材料单耗、项目要求与设备设定。</p>
+                </div>
+                <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3">
+                    <div class="text-sm text-blue-700">工艺卡编号</div>
+                    <div class="text-lg font-bold text-blue-900 mt-1">GYK-3LPE-2026-001</div>
+                </div>
+            </div>
+            <div class="space-y-5">
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('productionSpec')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">1. 钢管规格及包装要求</div>
+                            <div class="text-sm text-gray-500 mt-1">展示当前工艺卡的规格参数与包装执行要求。</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="productionSpecStatus">点击展开</span>
+                            <i id="productionSpecArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="productionSpecContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">钢管外径 (mm)</label><input type="number" value="1219" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">生产米数 (m)</label><input type="number" value="16320" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">防腐类型</label><select class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"><option selected>3LPE</option><option>3LPP</option></select></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">执行标准</label><input type="text" value="GB/T 23257-2017" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">FBE 厚度 (μm)</label><input type="number" value="220" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">AD 厚度 (μm)</label><input type="number" value="180" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">PE 总厚度 (mm)</label><input type="number" step="0.01" value="3.00" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('productionConsume')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">2. 包装材料理论消耗量</div>
+                            <div class="text-sm text-gray-500 mt-1">根据工艺卡要求展示包装材料单耗和理论总量。</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="productionConsumeStatus">点击展开</span>
+                            <i id="productionConsumeArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="productionConsumeContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 overflow-auto">
+                            <table class="data-table w-full bg-white rounded-xl overflow-hidden">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-4 text-center w-20">序号</th>
+                                        <th class="px-4 py-4 text-left">原材料</th>
+                                        <th class="px-4 py-4 text-center">单耗 (kg/m²)</th>
+                                        <th class="px-4 py-4 text-center">理论总量 (kg)</th>
+                                        <th class="px-4 py-4 text-left">备注</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="px-4 py-4 text-center">1</td><td class="px-4 py-4">钢砂 (Steel grit)</td><td class="px-4 py-4 text-center">0.12</td><td class="px-4 py-4 text-center">1954</td><td class="px-4 py-4">湖北浩水</td></tr>
+                                    <tr><td class="px-4 py-4 text-center">2</td><td class="px-4 py-4">钢丸 (Steel shot)</td><td class="px-4 py-4 text-center">0.12</td><td class="px-4 py-4 text-center">1954</td><td class="px-4 py-4">湖北浩水</td></tr>
+                                    <tr><td class="px-4 py-4 text-center">3</td><td class="px-4 py-4">环氧粉末 (FBE)</td><td class="px-4 py-4 text-center">0.42</td><td class="px-4 py-4 text-center">3258</td><td class="px-4 py-4">天津瑞远 DR-301A</td></tr>
+                                    <tr><td class="px-4 py-4 text-center">4</td><td class="px-4 py-4">胶粘剂 (AD)</td><td class="px-4 py-4 text-center">0.25</td><td class="px-4 py-4 text-center">2280</td><td class="px-4 py-4">广州鹤山 L-5R</td></tr>
+                                    <tr><td class="px-4 py-4 text-center">5</td><td class="px-4 py-4">聚乙烯 (PE)</td><td class="px-4 py-4 text-center">3.30</td><td class="px-4 py-4 text-center">45600</td><td class="px-4 py-4">威海富员 FY-JK-02BK</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('productionProject')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">3. 项目要求</div>
+                            <div class="text-sm text-gray-500 mt-1">按项目技术文件展示包装要求与技术交付信息。</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="productionProjectStatus">点击展开</span>
+                            <i id="productionProjectArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="productionProjectContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 overflow-auto">
+                            <table class="data-table w-full bg-white rounded-xl overflow-hidden">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-4 text-center w-24">序号</th>
+                                        <th class="px-4 py-4 text-center w-48">项目</th>
+                                        <th class="px-4 py-4 text-left">要求说明</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="px-4 py-4 text-center font-medium">1</td><td class="px-4 py-4 text-center font-medium">预留端</td><td class="px-4 py-4 text-gray-700">预留端长度 100-125 mm；FBE 预留 10-30 mm；坡口角度不大于 30°。</td></tr>
+                                    <tr><td class="px-4 py-4 text-center font-medium">2</td><td class="px-4 py-4 text-center font-medium">坡口</td><td class="px-4 py-4 text-gray-700">根据来料状态确认，确保坡口区域无明显损伤。</td></tr>
+                                    <tr><td class="px-4 py-4 text-center font-medium">3</td><td class="px-4 py-4 text-center font-medium">包装</td><td class="px-4 py-4 text-gray-700">防撞绳 3 道 / 支；管帽按来料配置；吊带按规格安装；按合同要求区分堆放与发运。</td></tr>
+                                    <tr><td class="px-4 py-4 text-center font-medium">4</td><td class="px-4 py-4 text-center font-medium">技术文件</td><td class="px-4 py-4 text-gray-700">技术文件 PDF 已归档，按工单随时调阅。</td></tr>
+                                    <tr><td class="px-4 py-4 text-center font-medium">5</td><td class="px-4 py-4 text-center font-medium">标识</td><td class="px-4 py-4 text-gray-700">Marking.jpg，按客户要求执行喷标与标签粘贴。</td></tr>
+                                    <tr><td class="px-4 py-4 text-center font-medium">6</td><td class="px-4 py-4 text-center font-medium">工艺评定</td><td class="px-4 py-4 text-gray-700">需要，按评定记录执行。</td></tr>
+                                    <tr><td class="px-4 py-4 text-center font-medium">7</td><td class="px-4 py-4 text-center font-medium">试验管</td><td class="px-4 py-4 text-gray-700">有试验管，单独标识并存档。</td></tr>
+                                    <tr><td class="px-4 py-4 text-center font-medium">8</td><td class="px-4 py-4 text-center font-medium">监制</td><td class="px-4 py-4 text-gray-700">无。</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('productionEquipment')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">4. 包装线设备参数设定</div>
+                            <div class="text-sm text-gray-500 mt-1">展示包装线各区域设备的参数设定要求。</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="productionEquipmentStatus">点击展开</span>
+                            <i id="productionEquipmentArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="productionEquipmentContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 overflow-auto">
+                            <table class="data-table w-full bg-white rounded-xl overflow-hidden">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-4 text-center w-20">序号</th>
+                                        <th class="px-4 py-4 text-center w-40">区域名称</th>
+                                        <th class="px-4 py-4 text-center w-48">参数名称</th>
+                                        <th class="px-4 py-4 text-center w-40">参数要求</th>
+                                        <th class="px-4 py-4 text-left">备注</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="px-4 py-4 text-center font-medium">1</td><td class="px-4 py-4 text-center font-medium">包装区</td><td class="px-4 py-4 text-center">传送线速度</td><td class="px-4 py-4 text-center">1-2 m/min</td><td class="px-4 py-4 text-gray-700">保持输送稳定，避免钢管碰撞。</td></tr>
+                                    <tr><td class="px-4 py-4 text-center font-medium">2</td><td class="px-4 py-4 text-center font-medium">包装区</td><td class="px-4 py-4 text-center">标签打印速度</td><td class="px-4 py-4 text-center">匹配节拍</td><td class="px-4 py-4 text-gray-700">确保内容清晰、可识别。</td></tr>
+                                    <tr><td class="px-4 py-4 text-center font-medium">3</td><td class="px-4 py-4 text-center font-medium">包装区</td><td class="px-4 py-4 text-center">吊带间距</td><td class="px-4 py-4 text-center">按规格调整</td><td class="px-4 py-4 text-gray-700">防止吊装时划伤钢管。</td></tr>
+                                    <tr><td class="px-4 py-4 text-center font-medium">4</td><td class="px-4 py-4 text-center font-medium">包装区</td><td class="px-4 py-4 text-center">防撞绳数量</td><td class="px-4 py-4 text-center">3 道 / 支</td><td class="px-4 py-4 text-gray-700">直径 20 mm，位置均匀。</td></tr>
+                                    <tr><td class="px-4 py-4 text-center font-medium">5</td><td class="px-4 py-4 text-center font-medium">包装区</td><td class="px-4 py-4 text-center">管帽安装</td><td class="px-4 py-4 text-center">到位牢固</td><td class="px-4 py-4 text-gray-700">不得松脱、缺失。</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tab-panel-quality" class="tab-panel flex-1 flex-col min-h-0 bg-gray-50 p-6">
+        <div class="bg-white rounded-2xl industrial-shadow p-6 h-full overflow-auto">
+            <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4 mb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900">质检工艺卡</h3>
+                    <p class="text-sm text-gray-500 mt-1">按工序展示检验项目、检验频次、合格标准与检测方式。</p>
+                </div>
+                <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3">
+                    <div class="text-sm text-blue-700">工艺卡编号</div>
+                    <div class="text-lg font-bold text-blue-900 mt-1">QCP-3LPE-2026-001</div>
+                </div>
+            </div>
+            <div class="overflow-auto border border-gray-200 rounded-2xl">
+                <table class="data-table w-full bg-white">
+                    <thead class="sticky-header">
+                        <tr>
+                            <th class="px-4 py-4 text-center min-w-[120px]">工序</th>
+                            <th class="px-4 py-4 text-center min-w-[220px]">检查项目</th>
+                            <th class="px-4 py-4 text-center min-w-[120px]">检验频次</th>
+                            <th class="px-4 py-4 text-center min-w-[360px]">合格标准</th>
+                            <th class="px-4 py-4 text-center min-w-[160px]">检测方式</th>
+                            <th class="px-4 py-4 text-center min-w-[180px]">标准依据</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="px-4 py-4 text-center font-semibold">包装前</td><td class="px-4 py-4 text-gray-700">钢管标识核对</td><td class="px-4 py-4 text-center">逐支</td><td class="px-4 py-4 text-gray-700">自编号、管号、捆号、炉号和批号信息一致。</td><td class="px-4 py-4 text-center">目视 + 记录核对</td><td class="px-4 py-4 text-center">项目技术文件</td></tr>
+                        <tr><td class="px-4 py-4 text-center font-semibold">包装前</td><td class="px-4 py-4 text-gray-700">标签与标识</td><td class="px-4 py-4 text-center">逐支</td><td class="px-4 py-4 text-gray-700">内容正确、位置准确、粘贴或喷印牢固清晰。</td><td class="px-4 py-4 text-center">目视</td><td class="px-4 py-4 text-center">标识规范</td></tr>
+                        <tr><td class="px-4 py-4 text-center font-semibold">包装前</td><td class="px-4 py-4 text-gray-700">管帽与堵头布</td><td class="px-4 py-4 text-center">逐支</td><td class="px-4 py-4 text-gray-700">安装到位、无缺失、无明显松脱。</td><td class="px-4 py-4 text-center">目视</td><td class="px-4 py-4 text-center">作业指导书</td></tr>
+                        <tr><td class="px-4 py-4 text-center font-semibold">包装过程</td><td class="px-4 py-4 text-gray-700">防撞绳</td><td class="px-4 py-4 text-center">逐支</td><td class="px-4 py-4 text-gray-700">3 道 / 支，位置正确，绑扎牢固。</td><td class="px-4 py-4 text-center">目视 + 测量</td><td class="px-4 py-4 text-center">包装要求</td></tr>
+                        <tr><td class="px-4 py-4 text-center font-semibold">包装过程</td><td class="px-4 py-4 text-gray-700">吊带</td><td class="px-4 py-4 text-center">逐支</td><td class="px-4 py-4 text-gray-700">型号匹配、安装牢固，不得划伤钢管。</td><td class="px-4 py-4 text-center">目视</td><td class="px-4 py-4 text-center">包装要求</td></tr>
+                        <tr><td class="px-4 py-4 text-center font-semibold">包装完成</td><td class="px-4 py-4 text-gray-700">唛头</td><td class="px-4 py-4 text-center">逐支</td><td class="px-4 py-4 text-gray-700">内容完整、字迹清晰、方向正确。</td><td class="px-4 py-4 text-center">目视</td><td class="px-4 py-4 text-center">发运规范</td></tr>
+                        <tr><td class="px-4 py-4 text-center font-semibold">包装完成</td><td class="px-4 py-4 text-gray-700">包装质量</td><td class="px-4 py-4 text-center">逐支</td><td class="px-4 py-4 text-gray-700">无松动、无遗漏、无明显损伤，外观整齐。</td><td class="px-4 py-4 text-center">目视</td><td class="px-4 py-4 text-center">质检要求</td></tr>
+                        <tr><td class="px-4 py-4 text-center font-semibold">包装完成</td><td class="px-4 py-4 text-gray-700">新捆号确认</td><td class="px-4 py-4 text-center">逐捆</td><td class="px-4 py-4 text-gray-700">新捆号与系统记录一致，可追溯。</td><td class="px-4 py-4 text-center">记录核对</td><td class="px-4 py-4 text-center">MES 记录要求</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <div id="filterModal" class="modal fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl industrial-shadow-lg max-w-2xl w-full">
+            <div class="border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                        <i class="fas fa-filter text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">筛选条件</h3>
+                        <p class="text-sm text-gray-500">按班次、编号、质检员和录入时间筛选记录。</p>
+                    </div>
+                </div>
+                <button onclick="closeFilter()" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-3">班次</label>
+                    <div id="filterShiftOptions" class="flex flex-wrap gap-2"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">捆号</label>
+                        <input type="text" placeholder="如：96#" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">炉号</label>
+                        <input type="text" placeholder="输入炉号..." class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">质检员</label>
+                    <div class="flex gap-2">
+                        <button class="filter-opt active flex-1 py-2 px-4 rounded-lg border-2 border-blue-500 bg-blue-50 text-blue-700 font-medium text-sm" onclick="setFilterOpt(this)">全部</button>
+                        <button class="filter-opt flex-1 py-2 px-4 rounded-lg border-2 border-gray-200 text-gray-600 font-medium text-sm hover:border-blue-300" onclick="setFilterOpt(this)">张师傅</button>
+                        <button class="filter-opt flex-1 py-2 px-4 rounded-lg border-2 border-gray-200 text-gray-600 font-medium text-sm hover:border-blue-300" onclick="setFilterOpt(this)">李师傅</button>
+                        <button class="filter-opt flex-1 py-2 px-4 rounded-lg border-2 border-gray-200 text-gray-600 font-medium text-sm hover:border-blue-300" onclick="setFilterOpt(this)">王师傅</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">检验结果</label>
+                    <div class="flex gap-2">
+                        <button class="filter-opt active flex-1 py-2 px-4 rounded-lg border-2 border-blue-500 bg-blue-50 text-blue-700 font-medium text-sm" onclick="setFilterOpt(this)">全部</button>
+                        <button class="filter-opt flex-1 py-2 px-4 rounded-lg border-2 border-green-200 text-green-700 bg-green-50 font-medium text-sm hover:border-green-400" onclick="setFilterOpt(this)">合格</button>
+                        <button class="filter-opt flex-1 py-2 px-4 rounded-lg border-2 border-red-200 text-red-700 bg-red-50 font-medium text-sm hover:border-red-400" onclick="setFilterOpt(this)">不合格</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">录入时间范围</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="relative">
+                            <i class="fas fa-calendar absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input type="datetime-local" class="w-full pl-10 pr-3 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-sm outline-none focus:border-blue-500">
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-calendar absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input type="datetime-local" class="w-full pl-10 pr-3 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-sm outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 rounded-b-2xl flex gap-3">
+                <button onclick="resetFilter()" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 flex items-center justify-center gap-2">
+                    <i class="fas fa-undo"></i>重置
+                </button>
+                <button onclick="applyFilter()" class="flex-1 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 industrial-shadow flex items-center justify-center gap-2">
+                    <i class="fas fa-check"></i>应用筛选
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addShiftModal" class="modal fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl industrial-shadow-lg max-w-md w-full">
+            <div class="border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                        <i class="fas fa-calendar-plus text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">新增班次</h3>
+                        <p class="text-sm text-gray-500">输入日期并选择白班或晚班。</p>
+                    </div>
+                </div>
+                <button onclick="closeAddShiftModal()" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-5">
+                <div>
+                    <label for="newShiftDate" class="block text-sm font-medium text-gray-700 mb-2">班次日期</label>
+                    <input id="newShiftDate" type="date" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-base outline-none transition-all form-input">
+                </div>
+                <div>
+                    <label for="newShiftType" class="block text-sm font-medium text-gray-700 mb-2">班次类型</label>
+                    <select id="newShiftType" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-base outline-none transition-all form-input">
+                        <option value="day">白班</option>
+                        <option value="night">晚班</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 px-6 py-4 bg-gray-50 rounded-b-2xl flex gap-3">
+                <button onclick="closeAddShiftModal()" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:bg-gray-100">
+                    取消
+                </button>
+                <button onclick="submitAddShift()" class="flex-1 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 industrial-shadow">
+                    确认新增
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 工单详情弹窗 -->
+    <div id="woDetailModal" class="modal fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl industrial-shadow-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                        <i class="fas fa-clipboard-list text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">工单详情</h3>
+                        <p class="text-sm text-gray-500">WO-2026-0318-001</p>
+                    </div>
+                </div>
+                <button onclick="closeWoDetail()" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-6">
+                <!-- 状态横幅 -->
+                <div class="flex items-center gap-3 p-4 bg-blue-50 rounded-xl border border-blue-200">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+                        <i class="fas fa-play-circle text-xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-semibold text-blue-900">生产中</div>
+                        <div class="text-sm text-blue-700">工单正在进行，预计按时完成。</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-2xl font-bold text-blue-600">78%</div>
+                        <div class="text-xs text-blue-600">完成度</div>
+                    </div>
+                </div>
+
+                <!-- 班次统计 -->
+                <div class="border-t border-gray-200 pt-6">
+                    <h4 class="font-semibold text-gray-900 mb-4">班次生产统计</h4>
+                    <div id="workOrderShiftStats" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+                </div>
+
+                <!-- 总体进度 -->
+                <div class="border-t border-gray-200 pt-6">
+                    <h4 class="font-semibold text-gray-900 mb-4">总体进度</h4>
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div class="text-center p-4 bg-blue-50 rounded-xl">
+                            <div class="text-2xl font-bold text-blue-600">316</div>
+                            <div class="text-xs text-gray-600 mt-1">计划产量</div>
+                        </div>
+                        <div class="text-center p-4 bg-green-50 rounded-xl">
+                            <div class="text-2xl font-bold text-green-600">245</div>
+                            <div class="text-xs text-gray-600 mt-1">已完成</div>
+                        </div>
+                        <div class="text-center p-4 bg-yellow-50 rounded-xl">
+                            <div class="text-2xl font-bold text-yellow-600">71</div>
+                            <div class="text-xs text-gray-600 mt-1">剩余</div>
+                        </div>
+                    </div>
+                    <div class="progress-bar w-full h-3">
+                        <div class="progress-fill h-full rounded-full" style="width: 78%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 rounded-b-2xl flex gap-3">
+                <button onclick="printWorkOrder()" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 flex items-center justify-center gap-2">
+                    <i class="fas fa-print"></i>鎵撳嵃宸ュ崟
+                </button>
+                <button onclick="closeWoDetail()" class="flex-1 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 industrial-shadow">
+                    鍏抽棴
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="instrumentLedgerModal" class="modal fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl industrial-shadow-lg w-full max-w-5xl max-h-[90vh] overflow-hidden">
+            <div class="bg-blue-600 px-6 py-4 text-white flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-bold">浼佷笟浠櫒鍙拌处</h3>
+                    <p class="text-sm text-blue-100 mt-1">閫夋嫨涓€涓华鍣ㄥ姞鍏ュ綋鍓嶅伐鍗曢櫎閿堣澶囧垪琛?/p>
+                </div>
+                <button onclick="closeInstrumentLedgerModal()" class="w-8 h-8 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="p-6 border-b border-gray-200">
+                <div class="relative">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input id="instrumentLedgerSearch" type="text" placeholder="鎼滅储浠櫒鍚嶇О銆佸瀷鍙疯鏍笺€佷华鍣ㄧ紪鍙?.." class="w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500" onkeyup="searchInstrumentLedger(this.value)">
+                </div>
+            </div>
+
+            <div class="px-6 pb-6 overflow-auto max-h-[52vh]">
+                <table class="data-table w-full bg-white">
+                    <thead class="sticky-header">
+                        <tr>
+                            <th class="px-4 py-4 text-left">浠櫒鍚嶇О</th>
+                            <th class="px-4 py-4 text-left">鍨嬪彿瑙勬牸</th>
+                            <th class="px-4 py-4 text-left">浠櫒缂栧彿</th>
+                            <th class="px-4 py-4 text-left">浠櫒鏈夋晥鏈?/th>
+                            <th class="px-4 py-4 text-center w-28">閫夋嫨</th>
+                        </tr>
+                    </thead>
+                    <tbody id="instrumentLedgerTableBody"></tbody>
+                </table>
+                <div id="instrumentLedgerEmpty" class="hidden flex-col items-center justify-center py-16 text-center">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-search text-2xl text-gray-400"></i>
+                    </div>
+                    <p class="text-sm text-gray-500">娌℃湁鍖归厤鐨勪华鍣ㄥ彴璐﹁褰?/p>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 px-6 py-4 bg-gray-50 flex justify-end">
+                <button onclick="closeInstrumentLedgerModal()" class="px-6 py-2.5 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition-colors">
+                    鍏抽棴
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="entryDrawerOverlay" class="drawer-overlay fixed inset-0 bg-black/50 z-50" onclick="closeEntryDrawer()"></div>
+    <div id="entryDrawer" class="drawer fixed top-0 right-0 h-full drawer-two-thirds bg-white z-50 shadow-2xl flex flex-col">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-green-50 to-emerald-50">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900">终检包装录入</h3>
+                    <p class="text-sm text-gray-500">当前班次: <span class="font-semibold text-green-700">今日白班</span> (08:00-20:00)</p>
+                </div>
+            </div>
+            <button onclick="closeEntryDrawer()" class="w-10 h-10 rounded-lg bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-gray-600 transition-colors">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="max-w-4xl mx-auto space-y-6">
+                <div class="grid grid-cols-4 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <div class="text-center">
+                        <div class="text-xs text-gray-500 mb-1">工单号</div>
+                        <div class="font-semibold text-gray-900">WO-2026-0318-001</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xs text-gray-500 mb-1">班次</div>
+                        <div class="font-semibold text-blue-600">今日白班</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xs text-gray-500 mb-1">当前时间</div>
+                        <div class="font-semibold text-gray-900" id="currentTime">20:38</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xs text-gray-500 mb-1">操作员</div>
+                        <div class="font-semibold text-gray-900">张师傅</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-blue-200 p-4">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div>
+                            <div class="text-sm font-semibold text-blue-700">钢管定位导航</div>
+                            <div class="text-sm text-gray-500 mt-1">可连续切换钢管完成包装录入。</div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button type="button" onclick="navigateEntryRecord(-1)" class="px-4 py-2.5 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:border-blue-400 hover:text-blue-600 transition-colors flex items-center gap-2">
+                                <i class="fas fa-arrow-left"></i>
+                                上一支钢管
+                            </button>
+                            <div class="px-4 py-2 rounded-xl bg-blue-50 border border-blue-200 text-sm font-semibold text-blue-700">
+                                <span id="entryRecordPosition">第 1 支 / 共 3 支</span>
+                            </div>
+                            <button type="button" onclick="navigateEntryRecord(1)" class="px-4 py-2.5 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:border-blue-400 hover:text-blue-600 transition-colors flex items-center gap-2">
+                                下一支钢管
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-5">
+                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-barcode text-blue-600"></i>
+                        钢管标识信息
+                    </h4>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">自编号</label><input id="entryId" type="text" readonly class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl font-mono font-semibold text-gray-900 outline-none"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">管号</label><input id="entryPipeNo" type="text" readonly class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl font-mono outline-none"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">捆号</label><input id="entryBundleNo" type="text" readonly class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">炉号</label><input id="entryFurnaceNo" type="text" readonly class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">批号</label><input id="entryBatchNo" type="text" readonly class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">长度 (mm)</label><input id="entryLength" type="text" readonly class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">重量 (kg)</label><input id="entryWeight" type="text" readonly class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-5">
+                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-clipboard-check text-blue-600"></i>
+                        检验结果
+                    </h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">新捆号</label>
+                            <input id="entryNewBundleNo" type="number" class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500 transition-all" placeholder="请输入新捆号">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">标签</label>
+                            <div class="flex gap-3">
+                                <button type="button" onclick="setAppearance('pass')" id="btnPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2"><i class="fas fa-check-circle"></i>合格</button>
+                                <button type="button" onclick="setAppearance('fail')" id="btnFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2"><i class="fas fa-times-circle"></i>不合格</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">标识</label>
+                            <div class="flex gap-3">
+                                <button type="button" onclick="setBevelCheck('pass')" id="btnBevelPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2"><i class="fas fa-check-circle"></i>合格</button>
+                                <button type="button" onclick="setBevelCheck('fail')" id="btnBevelFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2"><i class="fas fa-times-circle"></i>不合格</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">管帽</label>
+                            <div class="flex gap-3">
+                                <button type="button" onclick="setLeakTest('pass')" id="btnLeakPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2"><i class="fas fa-check-circle"></i>合格</button>
+                                <button type="button" onclick="setLeakTest('fail')" id="btnLeakFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2"><i class="fas fa-times-circle"></i>不合格</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">堵头布</label>
+                            <div class="flex gap-3">
+                                <button type="button" onclick="setEndTreatment('pass')" id="btnEndTreatmentPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2"><i class="fas fa-check-circle"></i>合格</button>
+                                <button type="button" onclick="setEndTreatment('fail')" id="btnEndTreatmentFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2"><i class="fas fa-times-circle"></i>不合格</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">防撞绳</label>
+                            <div class="flex gap-3">
+                                <button type="button" onclick="setLeaveLengthS('pass')" id="btnLeaveLengthSPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">合格</button>
+                                <button type="button" onclick="setLeaveLengthS('fail')" id="btnLeaveLengthSFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">不合格</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">包装质量</label>
+                            <div class="flex gap-3">
+                                <button type="button" onclick="setLeaveLengthN('pass')" id="btnLeaveLengthNPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">合格</button>
+                                <button type="button" onclick="setLeaveLengthN('fail')" id="btnLeaveLengthNFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">不合格</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">唛头</label>
+                            <div class="flex gap-3">
+                                <button type="button" onclick="setBevelAngleS('pass')" id="btnBevelAngleSPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">合格</button>
+                                <button type="button" onclick="setBevelAngleS('fail')" id="btnBevelAngleSFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">不合格</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">吊带</label>
+                            <div class="flex gap-3">
+                                <button type="button" onclick="setBevelAngleN('pass')" id="btnBevelAngleNPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">合格</button>
+                                <button type="button" onclick="setBevelAngleN('fail')" id="btnBevelAngleNFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">不合格</button>
+                            </div>
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-3">结论</label>
+                            <div class="flex gap-3">
+                                <button type="button" onclick="setEvaluation('pass')" id="btnEvaluationPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">合格</button>
+                                <button type="button" onclick="setEvaluation('fail')" id="btnEvaluationFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">不合格</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-200 px-6 py-4 bg-gray-50">
+            <div class="max-w-4xl mx-auto flex gap-3">
+                <button onclick="closeEntryDrawer()" class="px-8 py-3 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition-colors">取消</button>
+                <div class="flex-1"></div>
+                <button onclick="saveAndContinue()" class="px-8 py-3 rounded-xl bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 transition-colors flex items-center gap-2"><i class="fas fa-save"></i>保存并继续</button>
+                <button onclick="submitEntry()" class="px-8 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors flex items-center gap-2 shadow-lg"><i class="fas fa-check"></i>保存录入</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="detailDrawerOverlay" class="drawer-overlay fixed inset-0 bg-black/50 z-50" onclick="closeDetailDrawer()"></div>
+    <div id="detailDrawer" class="drawer fixed top-0 right-0 h-full drawer-two-thirds bg-white z-50 shadow-2xl flex flex-col">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900">钢管详情</h3>
+                    <p class="text-sm text-gray-500" id="detailIdDisplay">0032</p>
+                </div>
+            </div>
+            <button onclick="closeDetailDrawer()" class="w-10 h-10 rounded-lg bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-gray-600 transition-colors">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="max-w-4xl mx-auto space-y-6">
+                <div class="bg-white rounded-xl border border-gray-200 p-5">
+                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-info-circle text-blue-600"></i>基本信息</h4>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="p-3 bg-gray-50 rounded-lg"><div class="text-xs text-gray-500 mb-1">自编号</div><div class="font-mono font-bold text-lg text-gray-900" id="detailSelfNo">0032</div></div>
+                        <div class="p-3 bg-gray-50 rounded-lg"><div class="text-xs text-gray-500 mb-1">管号</div><div class="font-mono text-gray-900" id="detailPipeNo">6508741</div></div>
+                        <div class="p-3 bg-gray-50 rounded-lg"><div class="text-xs text-gray-500 mb-1">所属班次</div><div class="text-blue-600 font-semibold" id="detailShift">今日白班</div></div>
+                        <div class="p-3 bg-gray-50 rounded-lg"><div class="text-xs text-gray-500 mb-1">捆号</div><div class="font-semibold text-gray-900" id="detailBundleNo">96#</div></div>
+                        <div class="p-3 bg-gray-50 rounded-lg"><div class="text-xs text-gray-500 mb-1">炉号</div><div class="font-semibold text-gray-900" id="detailFurnaceNo">15303842</div></div>
+                        <div class="p-3 bg-gray-50 rounded-lg"><div class="text-xs text-gray-500 mb-1">批号</div><div class="text-gray-900" id="detailBatchNo">71399</div></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-5">
+                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-ruler-combined text-blue-600"></i>规格信息</h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 bg-blue-50 rounded-xl border border-blue-200 text-center"><div class="text-3xl font-bold text-blue-700" id="detailLength">11856</div><div class="text-sm text-blue-600 mt-1">长度 (mm)</div></div>
+                        <div class="p-4 bg-green-50 rounded-xl border border-green-200 text-center"><div class="text-3xl font-bold text-green-700" id="detailWeight">573.5</div><div class="text-sm text-green-600 mt-1">重量 (kg)</div></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-5">
+                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-clipboard-check text-blue-600"></i>检验结果</h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600">新捆号</span><span id="detailNewBundleNo" class="text-sm font-semibold text-gray-900">128</span></div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600">标签</span><span id="detailLabelStatus" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600">标识</span><span id="detailMarkStatus" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600">管帽</span><span id="detailCapStatus" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600">堵头布</span><span id="detailPlugClothStatus" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600">防撞绳</span><span id="detailRopeStatus" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600">包装质量</span><span id="detailPackageQualityStatus" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600">唛头</span><span id="detailMarkingHeadStatus" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600">吊带</span><span id="detailSlingStatus" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600">结论</span><span id="detailConclusionStatus" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-5">
+                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-user-clock text-blue-600"></i>录入信息</h4>
+                    <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg" id="detailOperatorIcon">张</div>
+                        <div class="flex-1">
+                            <div class="font-semibold text-gray-900" id="detailOperator">张师傅</div>
+                            <div class="text-sm text-gray-500">质检员 | 工号: OP-2023-045</div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <div class="p-3 bg-gray-50 rounded-xl text-center"><div class="text-sm font-semibold text-gray-900" id="detailTime">19:35</div><div class="text-xs text-gray-500">录入时间</div></div>
+                        <div class="p-3 bg-gray-50 rounded-xl text-center"><div class="text-sm font-semibold text-gray-900" id="detailDate">今天</div><div class="text-xs text-gray-500">录入日期</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-200 px-6 py-4 bg-gray-50">
+            <div class="max-w-4xl mx-auto flex gap-3">
+                <button onclick="closeDetailDrawer()" class="flex-1 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== 鍏ㄥ眬鍙橀噺 ==========
+        let currentShift = 'today_day';
+        let currentMainTab = 'material';
+        let currentMaterialSubTab = 'root';
+        let currentRowFilter = 'all';
+        let isRootDetailCollapsed = true;
+        let selectedRows = new Set();
+        let currentAppearance = 'pass';
+        let currentBevelCheck = 'pass';
+        let currentLeakTest = 'pass';
+        let currentLeaveLengthS = 'pass';
+        let currentLeaveLengthN = 'pass';
+        let currentBevelAngleS = 'pass';
+        let currentBevelAngleN = 'pass';
+        let currentFbeReserveS = 'pass';
+        let currentFbeReserveN = 'pass';
+        let currentEndTreatment = 'pass';
+        let currentThicknessCount = 10;
+        let currentThicknessValues = [];
+        let currentThicknessEditing = false;
+        let currentEvaluation = 'pass';
+        let currentEntryRecordIndex = 0;
+        let lastRecord = {
+            bundleNo: '96#',
+            furnaceNo: '15303842',
+            batchNo: '71399'
+        };
+        let nextId = 33; // 涓嬩竴涓嚜缂栧彿
+        let selectedCodeItem = null; // 褰撳墠閫変腑鐨勭爜鍗曢」
+        let isBevelExpanded = false; // 鍏煎鏃ч€昏緫
+
+        const entryRecordList = [
+            { id: '0032', pipeNo: '6508741', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: '11856', weight: '573.5', newBundleNo: '128', operator: '张师傅', time: '19:35' },
+            { id: '0031', pipeNo: '6508739', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: '11920', weight: '574.2', newBundleNo: '129', operator: '张师傅', time: '18:42' },
+            { id: '0030', pipeNo: '6508725', bundleNo: '97#', furnaceNo: '15303842', batchNo: '71400', length: '11780', weight: '572.8', newBundleNo: '130', operator: '李师傅', time: '03:15' }
+        ];
+        const sampleRecordList = [
+            { id: 'CJ-0032', temp1: '198', temp1Result: 'pass', temp2: '201', temp2Result: 'pass', inspector: '王检', time: '20:10', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23dbeafe'/><circle cx='42' cy='46' r='10' fill='%2393c5fd'/><circle cx='86' cy='58' r='8' fill='%2360a5fa'/><circle cx='118' cy='40' r='6' fill='%233b82f6'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 1</text></svg>" },
+            { id: 'CJ-0031', temp1: '194', temp1Result: 'pass', temp2: '199', temp2Result: 'pass', inspector: '王检', time: '18:55', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23e0f2fe'/><circle cx='38' cy='48' r='8' fill='%2394a3b8'/><circle cx='74' cy='60' r='7' fill='%2360a5fa'/><circle cx='110' cy='44' r='8' fill='%233b82f6'/><circle cx='126' cy='70' r='5' fill='%2394a3b8'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 2</text></svg>" },
+            { id: 'CJ-0030', temp1: '186', temp1Result: 'fail', temp2: '191', temp2Result: 'fail', inspector: '赵检', time: '03:40', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23fee2e2'/><circle cx='32' cy='40' r='9' fill='%23ef4444'/><circle cx='56' cy='54' r='7' fill='%23b91c1c'/><circle cx='84' cy='42' r='9' fill='%23ef4444'/><circle cx='114' cy='58' r='8' fill='%23b91c1c'/><circle cx='132' cy='40' r='7' fill='%23ef4444'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%237f1d1d'>Dust 4</text></svg>" }
+        ];
+        let currentSampleDrawerMode = 'create';
+
+        // 妯℃嫙鐮佸崟鏁版嵁
+        let instrumentSelection = [
+            { name: '环境温湿度采集仪', model: 'TH-2000', code: 'INS-TH-03', expiry: '2026-12-31' },
+            { name: '壁厚激光测量仪', model: 'LT-118A', code: 'INS-LT-12', expiry: '2026-09-30' }
+        ];
+        let compressedAirResult = 'pass';
+
+        const instrumentLedgerData = [
+            { name: '环境温湿度采集仪', model: 'TH-2000', code: 'INS-TH-03', expiry: '2026-12-31' },
+            { name: '壁厚激光测量仪', model: 'LT-118A', code: 'INS-LT-12', expiry: '2026-09-30' },
+            { name: '端口测温枪', model: 'TEMP-7 Pro', code: 'INS-TEMP-07', expiry: '2026-07-15' },
+            { name: '露点检测仪', model: 'DP-860', code: 'INS-DP-05', expiry: '2027-01-20' },
+            { name: '表面盐分测试仪', model: 'SALT-320', code: 'INS-SALT-02', expiry: '2026-11-08' },
+            { name: '光照度计', model: 'LX-500', code: 'INS-LUX-09', expiry: '2026-10-18' }
+        ];
+
+        const codeListData = [
+            { pipeNo: '6508750', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: 11850, weight: 573.0, status: 'pending' },
+            { pipeNo: '6508751', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: 11865, weight: 573.8, status: 'pending' },
+            { pipeNo: '6508752', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: 11845, weight: 572.9, status: 'pending' },
+            { pipeNo: '6508753', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: 11870, weight: 574.1, status: 'pending' },
+            { pipeNo: '6508754', bundleNo: '97#', furnaceNo: '15303843', batchNo: '71400', length: 11900, weight: 575.2, status: 'pending' },
+            { pipeNo: '6508755', bundleNo: '97#', furnaceNo: '15303843', batchNo: '71400', length: 11890, weight: 574.8, status: 'pending' },
+            { pipeNo: '6508756', bundleNo: '97#', furnaceNo: '15303843', batchNo: '71400', length: 11910, weight: 575.5, status: 'pending' },
+            { pipeNo: '6508757', bundleNo: '98#', furnaceNo: '15303844', batchNo: '71401', length: 11830, weight: 571.5, status: 'pending' },
+            { pipeNo: '6508758', bundleNo: '98#', furnaceNo: '15303844', batchNo: '71401', length: 11840, weight: 572.0, status: 'pending' },
+            { pipeNo: '6508759', bundleNo: '98#', furnaceNo: '15303844', batchNo: '71401', length: 11825, weight: 571.2, status: 'pending' },
+            { pipeNo: '6508760', bundleNo: '99#', furnaceNo: '15303845', batchNo: '71402', length: 11950, weight: 577.0, status: 'pending' },
+            { pipeNo: '6508761', bundleNo: '99#', furnaceNo: '15303845', batchNo: '71402', length: 11940, weight: 576.5, status: 'pending' },
+            { pipeNo: '6508762', bundleNo: '100#', furnaceNo: '15303846', batchNo: '71403', length: 11780, weight: 569.8, status: 'pending' },
+            { pipeNo: '6508763', bundleNo: '100#', furnaceNo: '15303846', batchNo: '71403', length: 11790, weight: 570.3, status: 'pending' },
+            { pipeNo: '6508764', bundleNo: '100#', furnaceNo: '15303846', batchNo: '71403', length: 11785, weight: 570.0, status: 'pending' },
+        ];
+
+        const shiftData = {
+            'yesterday_night': { name: '昨日夜班', count: 89, icon: 'fa-moon', color: 'indigo', dateLabel: '03-24', timeRange: '20:00-08:00', type: 'night' },
+            'today_day': { name: '今日白班', count: 156, icon: 'fa-sun', color: 'blue', dateLabel: '03-25', timeRange: '08:00-20:00', type: 'day' },
+            'today_night': { name: '今日夜班', count: 0, icon: 'fa-moon', color: 'indigo', dateLabel: '03-25', timeRange: '20:00-08:00', type: 'night' }
+        };
+
+        function formatShiftDate(dateValue) {
+            const [year, month, day] = dateValue.split('-');
+            return `${year}-${month}-${day}`;
+        }
+
+        function getShiftTypeLabel(type) {
+            return type === 'night' ? '夜班' : '白班';
+        }
+
+        function getShiftTimeRange(type) {
+            return type === 'night' ? '20:00-08:00' : '08:00-20:00';
+        }
+
+        function getShiftDateLabel(dateValue) {
+            const [, month, day] = dateValue.split('-');
+            return `${month}-${day}`;
+        }
+
+        function buildShiftName(dateValue, type) {
+            return `${formatShiftDate(dateValue)} ${getShiftTypeLabel(type)}`;
+        }
+
+        function buildShiftId(dateValue, type) {
+            return `custom_${dateValue.replaceAll('-', '_')}_${type}`;
+        }
+
+        function getTodayDateValue() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function createShiftButton(shiftId, shift) {
+            const button = document.createElement('button');
+            const iconClass = shift.icon === 'fa-moon' ? 'fas fa-moon mr-2' : 'fas fa-sun mr-2';
+            const badgeClass = shiftId === currentShift
+                ? 'ml-2 text-xs py-0.5 px-1.5 rounded-full bg-white/20'
+                : 'ml-2 text-xs py-0.5 px-1.5 rounded-full bg-gray-100 text-gray-600';
+
+            button.type = 'button';
+            button.dataset.shift = shiftId;
+            button.className = shiftId === currentShift
+                ? 'shift-btn active flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-blue-600 text-white border-blue-600 ring-4 ring-blue-100'
+                : 'shift-btn flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-white text-gray-700 border-gray-200 hover:border-blue-400';
+            button.onclick = () => switchShift(shiftId);
+            button.innerHTML = `
+                <i class="${iconClass}"></i>
+                ${shift.name}
+                <span class="${badgeClass}">${shift.count}鏀?/span>
+            `;
+
+            return button;
+        }
+
+        function renderShiftFilterOptions() {
+            const container = document.getElementById('filterShiftOptions');
+            if (!container) return;
+
+            const allButtonClass = 'filter-opt active px-4 py-2 rounded-lg border-2 border-blue-500 bg-blue-50 text-blue-700 font-medium text-sm';
+            const itemButtonClass = 'filter-opt px-4 py-2 rounded-lg border-2 border-gray-200 text-gray-600 font-medium text-sm hover:border-blue-300';
+
+            container.innerHTML = '';
+
+            const allButton = document.createElement('button');
+            allButton.type = 'button';
+            allButton.className = allButtonClass;
+            allButton.textContent = '全部班次';
+            allButton.onclick = function() { setFilterOpt(this); };
+            container.appendChild(allButton);
+
+            Object.values(shiftData).forEach(shift => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = itemButtonClass;
+                button.textContent = shift.name;
+                button.onclick = function() { setFilterOpt(this); };
+                container.appendChild(button);
+            });
+        }
+
+        function getShiftStatCardClass(shiftId, shift) {
+            if (shiftId === currentShift) {
+                return shift.color === 'indigo'
+                    ? 'text-center p-4 bg-indigo-50 rounded-xl border border-indigo-200'
+                    : 'text-center p-4 bg-blue-50 rounded-xl border border-blue-200';
+            }
+
+            return shift.count > 0
+                ? 'text-center p-4 bg-slate-50 rounded-xl border border-slate-200'
+                : 'text-center p-4 bg-gray-50 rounded-xl border border-gray-200';
+        }
+
+        function getShiftStatValueClass(shiftId, shift) {
+            if (shiftId === currentShift) {
+                return shift.color === 'indigo' ? 'text-2xl font-bold text-indigo-600' : 'text-2xl font-bold text-blue-600';
+            }
+
+            return shift.count > 0 ? 'text-2xl font-bold text-slate-700' : 'text-2xl font-bold text-gray-400';
+        }
+
+        function getShiftStatMetaClass(shiftId, shift) {
+            if (shiftId === currentShift) {
+                return shift.color === 'indigo' ? 'text-xs text-indigo-600' : 'text-xs text-blue-600';
+            }
+
+            return shift.count > 0 ? 'text-xs text-slate-500' : 'text-xs text-gray-400';
+        }
+
+        function renderWorkOrderShiftStats() {
+            const container = document.getElementById('workOrderShiftStats');
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            Object.entries(shiftData).forEach(([shiftId, shift]) => {
+                const card = document.createElement('div');
+                card.className = getShiftStatCardClass(shiftId, shift);
+                card.innerHTML = `
+                    <div class="${getShiftStatValueClass(shiftId, shift)}">${shift.count}</div>
+                    <div class="text-xs text-gray-600 mt-1">${shift.name}</div>
+                    <div class="${getShiftStatMetaClass(shiftId, shift)}">${shift.dateLabel} ${shift.timeRange}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function getActiveTableBody() {
+            return document.getElementById('rootTableBody');
+        }
+
+        function getActiveSelectAll() {
+            return document.getElementById('selectAllRoot');
+        }
+
+        function applyMaterialTableFilters() {
+            const tbody = getActiveTableBody();
+            if (!tbody) {
+                document.getElementById('emptyState').classList.add('hidden');
+                return;
+            }
+
+            const keyword = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            let totalCount = 0;
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const matchesShift = row.dataset.shift === currentShift;
+                const matchesSearch = !keyword || row.textContent.toLowerCase().includes(keyword);
+                const matchesFilter = currentRowFilter === 'all' || row.dataset.result === currentRowFilter;
+
+                if (matchesShift) totalCount++;
+
+                if (matchesShift && matchesSearch && matchesFilter) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            document.getElementById('currentShiftName').textContent = shiftData[currentShift]?.name || '';
+            document.getElementById('totalCount').textContent = totalCount;
+            document.getElementById('showingCount').textContent = visibleCount > 0 ? `1-${visibleCount}` : '0';
+            document.getElementById('emptyState').classList.toggle('hidden', visibleCount > 0);
+
+            const selectAll = getActiveSelectAll();
+            if (selectAll) selectAll.checked = false;
+        }
+
+        function switchMaterialSubTab(tabId) {
+            currentMaterialSubTab = 'root';
+
+            document.querySelectorAll('.material-subtab-btn').forEach(btn => {
+                const isActive = btn.dataset.subtab === 'root';
+                btn.classList.toggle('active', isActive);
+                btn.classList.toggle('border-blue-200', isActive);
+                btn.classList.toggle('bg-blue-50', isActive);
+                btn.classList.toggle('border-gray-200', !isActive);
+                btn.classList.toggle('bg-white', !isActive);
+            });
+
+            document.getElementById('material-subtab-root').classList.remove('hidden');
+            document.getElementById('toggleRootDetailBtn')?.classList.remove('hidden');
+            clearSelection();
+            applyMaterialTableFilters();
+        }
+
+        function applyRootDetailColumnState() {
+            document.querySelectorAll('.root-detail-col').forEach(cell => {
+                cell.classList.toggle('hidden', isRootDetailCollapsed);
+            });
+
+            const toggleBtn = document.getElementById('toggleRootDetailBtn');
+            if (toggleBtn) {
+                toggleBtn.textContent = isRootDetailCollapsed ? '展开钢管详情' : '折叠钢管详情';
+            }
+        }
+
+        function toggleRootDetailColumns() {
+            isRootDetailCollapsed = !isRootDetailCollapsed;
+            applyRootDetailColumnState();
+        }
+
+        function renderInstrumentLedger(data) {
+            const tbody = document.getElementById('instrumentLedgerTableBody');
+            const emptyState = document.getElementById('instrumentLedgerEmpty');
+
+            if (!tbody || !emptyState) return;
+
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            emptyState.classList.remove('flex');
+
+            data.forEach(item => {
+                const exists = instrumentSelection.some(selected => selected.code === item.code);
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="px-4 py-4 text-gray-900 font-medium">${item.name}</td>
+                    <td class="px-4 py-4 text-gray-600">${item.model}</td>
+                    <td class="px-4 py-4 font-mono text-gray-700">${item.code}</td>
+                    <td class="px-4 py-4 text-gray-600">${item.expiry}</td>
+                    <td class="px-4 py-4 text-center">
+                        <button ${exists ? 'disabled' : ''} onclick="addInstrumentFromLedger('${item.code}')" class="px-3 py-1.5 rounded-lg border ${exists ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed' : 'border-blue-200 bg-blue-50 text-blue-600 hover:bg-blue-100'} transition-colors">
+                            ${exists ? '已添加' : '选择'}
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function searchInstrumentLedger(keyword) {
+            const normalized = keyword.trim().toLowerCase();
+
+            if (!normalized) {
+                renderInstrumentLedger(instrumentLedgerData);
+                return;
+            }
+
+            const filtered = instrumentLedgerData.filter(item =>
+                item.name.toLowerCase().includes(normalized) ||
+                item.model.toLowerCase().includes(normalized) ||
+                item.code.toLowerCase().includes(normalized)
+            );
+
+            renderInstrumentLedger(filtered);
+        }
+
+        function addInstrumentFromLedger(code) {
+            const item = instrumentLedgerData.find(entry => entry.code === code);
+            if (!item) return;
+
+            if (instrumentSelection.some(entry => entry.code === code)) {
+                showToast('该仪器已在列表中', 'info');
+                return;
+            }
+
+            instrumentSelection.push(item);
+            renderInstrumentTable();
+            renderInstrumentLedger(instrumentLedgerData);
+            showToast('仪器已加入当前列表', 'success');
+        }
+
+        function removeInstrument(code) {
+            instrumentSelection = instrumentSelection.filter(item => item.code !== code);
+            renderInstrumentTable();
+            showToast('仪器已移除', 'success');
+        }
+
+        function setCompressedAirResult(type) {
+            compressedAirResult = type;
+
+            const passBtn = document.getElementById('btnAirPass');
+            const failBtn = document.getElementById('btnAirFail');
+
+            if (type === 'pass') {
+                passBtn.className = 'py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold transition-all';
+                failBtn.className = 'py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all';
+            } else {
+                passBtn.className = 'py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all';
+                failBtn.className = 'py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold transition-all';
+            }
+        }
+        function saveInstrumentAttributes() {
+            const abrasiveConductivity = document.getElementById('instrumentAbrasiveConductivity')?.value.trim() || '';
+            const illuminance = document.getElementById('instrumentIlluminance')?.value.trim() || '';
+            const salinity = document.getElementById('instrumentSalinity')?.value.trim() || '';
+
+            if (!abrasiveConductivity || !illuminance || !salinity) {
+                showToast('请填写完整的仪器附属信息', 'error');
+                return;
+            }
+
+            showToast(`仪器附属信息已保存，压缩空气结果为${compressedAirResult === 'pass' ? '合格' : '不合格'}`, 'success');
+        }
+
+        function updateWorkOrderProgress(recordedCount) {
+            const target = parseInt(document.getElementById('workOrderTarget')?.textContent || '316', 10);
+            const percent = Math.min(100, Math.round((recordedCount / target) * 100));
+            const shiftCount = document.getElementById('shiftCountValue');
+            const shiftCountDisplay = document.getElementById('shiftCountDisplay');
+            const progressPercent = document.getElementById('progressPercent');
+            const progressFill = document.getElementById('workOrderProgressFill');
+
+            if (shiftCount) shiftCount.textContent = String(recordedCount);
+            if (shiftCountDisplay) shiftCountDisplay.textContent = String(recordedCount);
+            if (progressPercent) progressPercent.textContent = `${percent}%`;
+            if (progressFill) progressFill.style.width = `${percent}%`;
+        }
+
+        function toggleProductionSection(sectionKey) {
+            const content = document.getElementById(`${sectionKey}Content`);
+            const arrow = document.getElementById(`${sectionKey}Arrow`);
+            const status = document.getElementById(`${sectionKey}Status`);
+
+            const isExpanded = content.classList.contains('expanded');
+            content.classList.toggle('expanded', !isExpanded);
+            arrow.classList.toggle('rotated', !isExpanded);
+            status.textContent = isExpanded ? '点击展开' : '点击收起';
+        }
+
+        function toggleBevelInfo() {
+            const content = document.getElementById('bevelContent');
+            const arrow = document.getElementById('bevelArrow');
+            const statusText = document.getElementById('bevelStatusText');
+            
+            isBevelExpanded = !isBevelExpanded;
+            
+            if (isBevelExpanded) {
+                content.classList.add('expanded');
+                arrow.classList.add('rotated');
+                statusText.textContent = '(点击折叠)';
+                // 鍒濆鍖栧潯鍙ｅ瑙傛寜閽姸鎬?
+                setBevelAppearance(bevelAppearance);
+            } else {
+                content.classList.remove('expanded');
+                arrow.classList.remove('rotated');
+                statusText.textContent = '(点击展开填写)';
+            }
+        }
+
+        function setBevelAppearance(type) {
+            bevelAppearance = type;
+            const btnPass = document.getElementById('btnBevelPass');
+            const btnFail = document.getElementById('btnBevelFail');
+
+            if (type === 'pass') {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+            
+            updateBevelSummary();
+        }
+
+        function updateBevelSummary() {
+            const summary = document.getElementById('bevelSummary');
+            const angle = document.getElementById('bevelAngle').value;
+            const verticality = document.getElementById('bevelVerticality').value;
+            const bluntEdge = document.getElementById('bevelBluntEdge').value;
+            
+            if (angle || verticality || bluntEdge) {
+                summary.style.display = 'inline';
+                summary.textContent = '已填写';
+                summary.className = 'text-xs text-green-600 px-2 py-1 bg-green-100 rounded-full';
+            } else {
+                summary.style.display = 'none';
+            }
+        }
+
+        // 鐩戝惉鍧″彛鏁板€艰緭鍏ュ彉鍖?
+        document.addEventListener('DOMContentLoaded', function() {
+            const bevelInputs = ['bevelAngle', 'bevelVerticality', 'bevelBluntEdge'];
+            bevelInputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('input', updateBevelSummary);
+                }
+            });
+        });
+
+        // ========== 鐮佸崟閫夋嫨寮圭獥鐩稿叧鍑芥暟 ==========
+        function openCodeListModal() {
+            document.getElementById('codeListModal').classList.add('open');
+            renderCodeList(codeListData);
+            document.getElementById('codeListSearch').focus();
+        }
+
+        function closeCodeListModal() {
+            document.getElementById('codeListModal').classList.remove('open');
+            selectedCodeItem = null;
+            document.getElementById('codeListSelectedCount').textContent = '0';
+        }
+
+        function renderCodeList(data) {
+            const tbody = document.getElementById('codeListTableBody');
+            const emptyState = document.getElementById('codeListEmpty');
+            
+            tbody.innerHTML = '';
+            
+            if (data.length === 0) {
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+            }
+            
+            data.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.className = 'code-list-item border-b border-gray-100';
+                tr.onclick = () => selectCodeItem(item, tr);
+                
+                tr.innerHTML = `
+                    <td class="px-4 py-3 font-mono text-sm text-gray-900">${item.pipeNo}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700">${item.bundleNo}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700">${item.furnaceNo}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700">${item.batchNo}</td>
+                    <td class="px-4 py-3 text-center text-sm text-gray-900 font-medium">${item.length}</td>
+                    <td class="px-4 py-3 text-center text-sm text-gray-700">${item.weight.toFixed(1)}</td>
+                    <td class="px-4 py-3 text-center">
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                            寰呭綍鍏?
+                        </span>
+                    </td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+        }
+
+        function searchCodeList(keyword) {
+            if (!keyword) {
+                renderCodeList(codeListData);
+                return;
+            }
+            
+            const filtered = codeListData.filter(item => 
+                item.pipeNo.includes(keyword) ||
+                item.bundleNo.includes(keyword) ||
+                item.furnaceNo.includes(keyword) ||
+                item.batchNo.includes(keyword)
+            );
+            
+            renderCodeList(filtered);
+        }
+
+        function selectCodeItem(item, rowElement) {
+            // 绉婚櫎鍏朵粬閫変腑鐘舵€?
+            document.querySelectorAll('.code-list-item').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // 娣诲姞褰撳墠閫変腑鐘舵€?
+            rowElement.classList.add('selected');
+            selectedCodeItem = item;
+            document.getElementById('codeListSelectedCount').textContent = '1';
+        }
+
+        function confirmCodeSelection() {
+            if (!selectedCodeItem) {
+                showToast('请先选择一支钢管', 'error');
+                return;
+            }
+            
+            // 鍥炲～鏁版嵁鍒板綍鍏ヨ〃鍗?
+            document.getElementById('entryPipeNo').value = selectedCodeItem.pipeNo;
+            document.getElementById('entryBundleNo').value = selectedCodeItem.bundleNo;
+            document.getElementById('entryFurnaceNo').value = selectedCodeItem.furnaceNo;
+            document.getElementById('entryBatchNo').value = selectedCodeItem.batchNo;
+            document.getElementById('entryLength').value = selectedCodeItem.length;
+            document.getElementById('entryWeight').value = selectedCodeItem.weight;
+            
+            // 鏄剧ず宸查€夋嫨鐨勪俊鎭崱鐗?
+            document.getElementById('selectedPipeNo').textContent = selectedCodeItem.pipeNo;
+            document.getElementById('selectedBundleNo').textContent = selectedCodeItem.bundleNo;
+            document.getElementById('selectedFurnaceNo').textContent = selectedCodeItem.furnaceNo;
+            document.getElementById('selectedBatchNo').textContent = selectedCodeItem.batchNo;
+            document.getElementById('selectedLength').textContent = selectedCodeItem.length + 'mm';
+            document.getElementById('selectedWeight').textContent = selectedCodeItem.weight + 'kg';
+            
+            document.getElementById('codeListSelectorArea').classList.add('hidden');
+            document.getElementById('selectedCodeInfo').classList.remove('hidden');
+            
+            closeCodeListModal();
+            showToast('码单信息已填入', 'success');
+            
+            // 楂樹寒鏄剧ず宸插～鍏呯殑瀛楁
+            const fields = ['entryPipeNo', 'entryBundleNo', 'entryFurnaceNo', 'entryBatchNo', 'entryLength', 'entryWeight'];
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                el.classList.add('bg-blue-50', 'border-blue-300');
+                setTimeout(() => {
+                    el.classList.remove('bg-blue-50', 'border-blue-300');
+                }, 1000);
+            });
+        }
+
+        function clearSelectedCode() {
+            document.getElementById('codeListSelectorArea').classList.remove('hidden');
+            document.getElementById('selectedCodeInfo').classList.add('hidden');
+            
+            // 娓呯┖鐩稿叧瀛楁
+            document.getElementById('entryPipeNo').value = '';
+            document.getElementById('entryBundleNo').value = '';
+            document.getElementById('entryFurnaceNo').value = '';
+            document.getElementById('entryBatchNo').value = '';
+            document.getElementById('entryLength').value = '';
+            document.getElementById('entryWeight').value = '';
+            
+            selectedCodeItem = null;
+            showToast('已清除码单选择', 'info');
+        }
+
+        // ========== 鎶藉眽鎺у埗 ==========
+        function openEntryDrawer(recordId = null) {
+            document.getElementById('entryDrawerOverlay').classList.add('open');
+            document.getElementById('entryDrawer').classList.add('open');
+            document.body.style.overflow = 'hidden';
+
+            // 鏇存柊褰撳墠鏃堕棿
+            const now = new Date();
+            const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('currentTime').textContent = timeStr;
+
+            setAppearance('pass');
+            setBevelCheck('pass');
+            setLeakTest('pass');
+            setLeaveLengthS('pass');
+            setLeaveLengthN('pass');
+            setBevelAngleS('pass');
+            setBevelAngleN('pass');
+            setEndTreatment('pass');
+            setEvaluation('pass');
+
+            const targetIndex = recordId
+                ? Math.max(0, entryRecordList.findIndex(item => item.id === String(recordId).replace(/^DR-/, '').replace(/^CJ-/, '')))
+                : currentEntryRecordIndex;
+            populateEntryRecord(targetIndex >= 0 ? targetIndex : 0);
+        }
+
+        function closeEntryDrawer() {
+            document.getElementById('entryDrawerOverlay').classList.remove('open');
+            document.getElementById('entryDrawer').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function viewDetail(id) {
+            document.getElementById('detailDrawerOverlay').classList.add('open');
+            document.getElementById('detailDrawer').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDetailDrawer() {
+            document.getElementById('detailDrawerOverlay').classList.remove('open');
+            document.getElementById('detailDrawer').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function openFilter() {
+            document.getElementById('filterModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFilter() {
+            document.getElementById('filterModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function openAddShiftModal() {
+            const dateInput = document.getElementById('newShiftDate');
+            const typeInput = document.getElementById('newShiftType');
+
+            if (dateInput && !dateInput.value) {
+                dateInput.value = getTodayDateValue();
+            }
+            if (typeInput) {
+                typeInput.value = 'day';
+            }
+
+            document.getElementById('addShiftModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAddShiftModal() {
+            document.getElementById('addShiftModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function submitAddShift() {
+            const dateValue = document.getElementById('newShiftDate').value;
+            const shiftType = document.getElementById('newShiftType').value;
+
+            if (!dateValue) {
+                showToast('请选择班次日期', 'error');
+                return;
+            }
+
+            const shiftId = buildShiftId(dateValue, shiftType);
+            if (shiftData[shiftId]) {
+                showToast('该日期班次已存在，请勿重复新增', 'error');
+                return;
+            }
+
+            const shift = {
+                name: buildShiftName(dateValue, shiftType),
+                count: 0,
+                icon: shiftType === 'night' ? 'fa-moon' : 'fa-sun',
+                color: shiftType === 'night' ? 'indigo' : 'blue',
+                dateLabel: getShiftDateLabel(dateValue),
+                timeRange: getShiftTimeRange(shiftType),
+                type: shiftType
+            };
+
+            shiftData[shiftId] = shift;
+
+            const shiftButtonList = document.getElementById('shiftButtonList');
+            if (shiftButtonList) {
+                const newButton = createShiftButton(shiftId, shift);
+                const addShiftButton = document.getElementById('addShiftButton');
+                if (addShiftButton) {
+                    shiftButtonList.insertBefore(newButton, addShiftButton);
+                } else {
+                    shiftButtonList.appendChild(newButton);
+                }
+            }
+
+            renderShiftFilterOptions();
+            renderWorkOrderShiftStats();
+            closeAddShiftModal();
+            switchShift(shiftId);
+            showToast(`宸叉柊澧炵彮娆? ${shift.name}`, 'success');
+        }
+
+        function viewWorkOrderDetail() {
+            renderWorkOrderShiftStats();
+            document.getElementById('woDetailModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeWoDetail() {
+            document.getElementById('woDetailModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function populateEntryRecord(index) {
+            const record = entryRecordList[index];
+            if (!record) return;
+
+            currentEntryRecordIndex = index;
+            document.getElementById('entryId').value = record.id;
+            document.getElementById('entryPipeNo').value = record.pipeNo;
+            document.getElementById('entryBundleNo').value = record.bundleNo;
+            document.getElementById('entryFurnaceNo').value = record.furnaceNo;
+            document.getElementById('entryBatchNo').value = record.batchNo;
+            document.getElementById('entryLength').value = record.length;
+            document.getElementById('entryWeight').value = record.weight;
+            document.getElementById('entryNewBundleNo').value = record.newBundleNo || '';
+            document.getElementById('entryRecordPosition').textContent = `绗?${index + 1} 鏀?/ 鍏?${entryRecordList.length} 鏀?`;
+        }
+
+        function navigateEntryRecord(offset) {
+            const nextIndex = currentEntryRecordIndex + offset;
+            if (nextIndex < 0 || nextIndex >= entryRecordList.length) {
+                showToast(offset < 0 ? '宸茬粡鏄涓€鏀挗绠?' : '宸茬粡鏄渶鍚庝竴鏀挗绠?' , 'info');
+                return;
+            }
+
+            populateEntryRecord(nextIndex);
+            showToast(offset < 0 ? '宸插垏鎹㈠埌涓婁竴鏀挗绠?' : '宸插垏鎹㈠埌涓嬩竴鏀挗绠?' , 'success');
+        }
+
+        function renderThicknessInputs() {
+            const grid = document.getElementById('thicknessInputGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+            for (let i = 0; i < currentThicknessCount; i++) {
+                const value = currentThicknessValues[i] ?? '';
+                const card = document.createElement('div');
+                card.className = 'rounded-xl border border-gray-200 bg-white p-3';
+                card.innerHTML = `
+                    <label class="block text-xs font-semibold text-gray-500 mb-2">鐐逛綅 P${i + 1}</label>
+                    <div class="relative">
+                        <input type="number" min="0" step="1" value="${value}" data-index="${i}" ${currentThicknessEditing ? '' : 'disabled'} class="thickness-input w-full px-3 py-2.5 pr-12 border border-gray-200 rounded-lg outline-none text-sm font-semibold text-gray-900 ${currentThicknessEditing ? 'bg-gray-50 focus:border-blue-500' : 'bg-gray-100 text-gray-600 cursor-not-allowed'}" oninput="updateThicknessValue(this)">
+                        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">渭m</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
+
+            syncThicknessEditState();
+            updateThicknessSummary();
+        }
+
+        function setThicknessCount(count) {
+            currentThicknessCount = count;
+            document.querySelectorAll('#btnThicknessCount8, #btnThicknessCount10, #btnThicknessCount12').forEach(btn => {
+                const active = btn.id === `btnThicknessCount${count}`;
+                btn.className = active
+                    ? 'px-3 py-1.5 rounded-lg text-sm font-semibold bg-blue-600 text-white shadow-sm transition-colors'
+                    : 'px-3 py-1.5 rounded-lg text-sm font-semibold text-gray-600 transition-colors';
+                btn.disabled = !currentThicknessEditing;
+                btn.classList.toggle('opacity-50', !currentThicknessEditing);
+                btn.classList.toggle('cursor-not-allowed', !currentThicknessEditing);
+            });
+            currentThicknessValues = currentThicknessValues.slice(0, count);
+            while (currentThicknessValues.length < count) currentThicknessValues.push('');
+            renderThicknessInputs();
+        }
+
+        function syncThicknessEditState() {
+            const toggle = document.getElementById('thicknessEditToggle');
+            if (!toggle) return;
+
+            toggle.textContent = currentThicknessEditing ? '淇濆瓨' : '淇敼';
+            toggle.className = currentThicknessEditing
+                ? 'px-3 py-1.5 rounded-lg border border-green-200 bg-green-600 text-white text-sm font-semibold hover:bg-green-700 transition-colors'
+                : 'px-3 py-1.5 rounded-lg border border-blue-200 bg-white text-blue-600 text-sm font-semibold hover:bg-blue-50 transition-colors';
+
+            document.querySelectorAll('#btnThicknessCount8, #btnThicknessCount10, #btnThicknessCount12').forEach(btn => {
+                btn.disabled = !currentThicknessEditing;
+                btn.classList.toggle('opacity-50', !currentThicknessEditing);
+                btn.classList.toggle('cursor-not-allowed', !currentThicknessEditing);
+            });
+        }
+
+        function toggleThicknessEdit() {
+            if (currentThicknessEditing) {
+                saveThicknessSection();
+                return;
+            }
+
+            currentThicknessEditing = true;
+            renderThicknessInputs();
+        }
+
+        function updateThicknessValue(input) {
+            const index = Number(input.dataset.index);
+            currentThicknessValues[index] = input.value;
+            updateThicknessSummary();
+        }
+
+        function updateThicknessSummary() {
+            const values = currentThicknessValues
+                .slice(0, currentThicknessCount)
+                .map(value => Number(value))
+                .filter(value => !Number.isNaN(value) && value > 0);
+
+            const maxNode = document.getElementById('thicknessMaxValue');
+            const minNode = document.getElementById('thicknessMinValue');
+            const avgNode = document.getElementById('thicknessAvgValue');
+
+            if (!values.length) {
+                maxNode.textContent = '-- 渭m';
+                minNode.textContent = '-- 渭m';
+                avgNode.textContent = '-- 渭m';
+                return;
+            }
+
+            const max = Math.max(...values);
+            const min = Math.min(...values);
+            const avg = Math.round(values.reduce((sum, value) => sum + value, 0) / values.length);
+
+            maxNode.textContent = `${max} 渭m`;
+            minNode.textContent = `${min} 渭m`;
+            avgNode.textContent = `${avg} 渭m`;
+        }
+
+        function saveThicknessSection() {
+            const thicknessValues = currentThicknessValues
+                .slice(0, currentThicknessCount)
+                .map(value => Number(value))
+                .filter(value => !Number.isNaN(value) && value > 0);
+
+            if (thicknessValues.length !== currentThicknessCount) {
+                showToast(`请完成 ${currentThicknessCount} 个厚度点位的录入`, 'error');
+                return;
+            }
+
+            const record = entryRecordList[currentEntryRecordIndex];
+            if (record) {
+                record.thicknesses = [...thicknessValues];
+            }
+
+            currentThicknessEditing = false;
+            renderThicknessInputs();
+            showToast('涂层厚度已单独保存', 'success');
+        }
+
+        // ========== 澶栬閫夋嫨 ==========
+        function setAppearance(type) {
+            currentAppearance = type;
+            const btnPass = document.getElementById('btnPass');
+            const btnFail = document.getElementById('btnFail');
+
+            if (type === 'pass') {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+        }
+
+        function setBevelCheck(type) {
+            currentBevelCheck = type;
+            const btnPass = document.getElementById('btnBevelPass');
+            const btnFail = document.getElementById('btnBevelFail');
+
+            if (type === 'pass') {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+        }
+
+        function setLeakTest(type) {
+            currentLeakTest = type;
+            const btnPass = document.getElementById('btnLeakPass');
+            const btnFail = document.getElementById('btnLeakFail');
+
+            if (type === 'pass') {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+        }
+
+        function setLeaveLengthS(type) {
+            currentLeaveLengthS = type;
+            const btnPass = document.getElementById('btnLeaveLengthSPass');
+            const btnFail = document.getElementById('btnLeaveLengthSFail');
+
+            if (type === 'pass') {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+        }
+
+        function setLeaveLengthN(type) {
+            currentLeaveLengthN = type;
+            const btnPass = document.getElementById('btnLeaveLengthNPass');
+            const btnFail = document.getElementById('btnLeaveLengthNFail');
+
+            if (type === 'pass') {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+        }
+
+        function setBevelAngleS(type) {
+            currentBevelAngleS = type;
+            const btnPass = document.getElementById('btnBevelAngleSPass');
+            const btnFail = document.getElementById('btnBevelAngleSFail');
+
+            if (type === 'pass') {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+        }
+
+        function setBevelAngleN(type) {
+            currentBevelAngleN = type;
+            const btnPass = document.getElementById('btnBevelAngleNPass');
+            const btnFail = document.getElementById('btnBevelAngleNFail');
+
+            if (type === 'pass') {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+        }
+
+        function setFbeReserveS(type) {
+            currentFbeReserveS = type;
+            const btnPass = document.getElementById('btnFbeReserveSPass');
+            const btnFail = document.getElementById('btnFbeReserveSFail');
+
+            if (type === 'pass') {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+        }
+
+        function setFbeReserveN(type) {
+            currentFbeReserveN = type;
+            const btnPass = document.getElementById('btnFbeReserveNPass');
+            const btnFail = document.getElementById('btnFbeReserveNFail');
+
+            if (type === 'pass') {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+        }
+
+        function setEndTreatment(type) {
+            currentEndTreatment = type;
+            const btnPass = document.getElementById('btnEndTreatmentPass');
+            const btnFail = document.getElementById('btnEndTreatmentFail');
+
+            if (type === 'pass') {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+        }
+
+        function setEvaluation(type) {
+            currentEvaluation = type;
+            const btnPass = document.getElementById('btnEvaluationPass');
+            const btnFail = document.getElementById('btnEvaluationFail');
+
+            if (type === 'pass') {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+        }
+
+        // ========== 淇濆瓨褰曞叆 ==========
+        function submitEntry() {
+            const pipeNo = document.getElementById('entryPipeNo').value;
+            const bundleNo = document.getElementById('entryBundleNo').value;
+            const furnaceNo = document.getElementById('entryFurnaceNo').value;
+            const batchNo = document.getElementById('entryBatchNo').value;
+            const length = document.getElementById('entryLength').value;
+            const newBundleNo = document.getElementById('entryNewBundleNo').value.trim();
+
+            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !newBundleNo) {
+                showToast('请填写完整的根检结果', 'error');
+                return;
+            }
+
+            const record = entryRecordList[currentEntryRecordIndex];
+            if (record) {
+                record.newBundleNo = newBundleNo;
+            }
+
+            // 淇濆瓨涓轰笂涓€璁板綍
+            lastRecord = { bundleNo, furnaceNo, batchNo };
+
+            // 鑷紪鍙?1
+            nextId++;
+
+            showToast('包装记录提交成功', 'success');
+            closeEntryDrawer();
+
+            // 鏇存柊鏈彮鏁伴噺
+            const shiftCount = document.getElementById('shiftCountValue');
+            const currentCount = parseInt(shiftCount.textContent, 10) + 1;
+            updateWorkOrderProgress(currentCount);
+        }
+
+        function saveAndContinue() {
+            const pipeNo = document.getElementById('entryPipeNo').value;
+            const bundleNo = document.getElementById('entryBundleNo').value;
+            const furnaceNo = document.getElementById('entryFurnaceNo').value;
+            const batchNo = document.getElementById('entryBatchNo').value;
+            const length = document.getElementById('entryLength').value;
+            const newBundleNo = document.getElementById('entryNewBundleNo').value.trim();
+
+            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !newBundleNo) {
+                showToast('请填写完整的根检结果', 'error');
+                return;
+            }
+
+            const record = entryRecordList[currentEntryRecordIndex];
+            if (record) {
+                record.newBundleNo = newBundleNo;
+            }
+
+            // 淇濆瓨涓轰笂涓€璁板綍
+            lastRecord = { bundleNo, furnaceNo, batchNo };
+
+            nextId++;
+
+            // 鏇存柊鏈彮鏁伴噺
+            const shiftCount = document.getElementById('shiftCountValue');
+            const currentCount = parseInt(shiftCount.textContent, 10) + 1;
+            updateWorkOrderProgress(currentCount);
+
+            showToast('保存成功，请继续录入下一支', 'success');
+            navigateEntryRecord(1);
+        }
+
+        // ========== 鐝鍒囨崲 ==========
+        function switchShift(shiftId) {
+            if (shiftId === currentShift) return;
+
+            currentShift = shiftId;
+            const shift = shiftData[shiftId];
+
+            document.querySelectorAll('.shift-btn').forEach(btn => {
+                const isActive = btn.dataset.shift === shiftId;
+                btn.className = isActive 
+                    ? `shift-btn active flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-blue-600 text-white border-blue-600 ring-4 ring-blue-100`
+                    : `shift-btn flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-white text-gray-700 border-gray-200 hover:border-blue-400`;
+
+                const badge = btn.querySelector('span');
+                if (badge) {
+                    badge.className = isActive 
+                        ? 'ml-2 text-xs py-0.5 px-1.5 rounded-full bg-white/20' 
+                        : 'ml-2 text-xs py-0.5 px-1.5 rounded-full bg-gray-100 text-gray-600';
+                }
+            });
+
+            document.getElementById('currentShiftName').textContent = shift.name;
+            document.getElementById('totalCount').textContent = shift.count;
+            applyMaterialTableFilters();
+            showToast(`宸插垏鎹㈠埌: ${shift.name}`, 'info');
+            clearSelection();
+        }
+
+        // ========== 绛涢€夊姛鑳?==========
+        function setFilterOpt(btn) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.filter-opt').forEach(b => {
+                b.classList.remove('active', 'border-blue-500', 'bg-blue-50', 'text-blue-700');
+                b.classList.add('border-gray-200', 'text-gray-600');
+            });
+            btn.classList.remove('border-gray-200', 'text-gray-600');
+            btn.classList.add('active', 'border-blue-500', 'bg-blue-50', 'text-blue-700');
+        }
+
+        function resetFilter() {
+            document.querySelectorAll('.filter-opt').forEach((btn, idx) => {
+                if (idx === 0) {
+                    btn.classList.add('active', 'border-blue-500', 'bg-blue-50', 'text-blue-700');
+                    btn.classList.remove('border-gray-200', 'text-gray-600');
+                } else {
+                    btn.classList.remove('active', 'border-blue-500', 'bg-blue-50', 'text-blue-700');
+                    btn.classList.add('border-gray-200', 'text-gray-600');
+                }
+            });
+        }
+
+        function applyFilter() {
+            closeFilter();
+            showToast('筛选条件已应用', 'success');
+        }
+
+        // ========== 琛ㄦ牸鎿嶄綔 ==========
+        function setFilter(event, type) {
+            document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
+            event.target.closest('.filter-chip').classList.add('active');
+            currentRowFilter = type;
+            applyMaterialTableFilters();
+            showToast(`宸插垏鎹㈠埌: ${event.target.closest('.filter-chip').textContent.trim()}`, 'info');
+        }
+
+        function handleSearch(value) {
+            applyMaterialTableFilters();
+        }
+
+        function toggleRow(checkbox) {
+            const row = checkbox.closest('tr');
+            const id = row.getAttribute('data-id');
+
+            if (checkbox.checked) {
+                selectedRows.add(id);
+                row.classList.add('selected');
+            } else {
+                selectedRows.delete(id);
+                row.classList.remove('selected');
+            }
+            updateBatchBar();
+        }
+
+        function toggleSelectAll() {
+            const selectAll = getActiveSelectAll();
+            const visibleRows = getActiveTableBody().querySelectorAll('tr:not([style*="display: none"])');
+
+            visibleRows.forEach(row => {
+                const checkbox = row.querySelector('.row-checkbox');
+                const id = row.getAttribute('data-id');
+                checkbox.checked = selectAll.checked;
+
+                if (selectAll.checked) {
+                    selectedRows.add(id);
+                    row.classList.add('selected');
+                } else {
+                    selectedRows.delete(id);
+                    row.classList.remove('selected');
+                }
+            });
+            updateBatchBar();
+        }
+
+        function updateBatchBar() {
+            const count = selectedRows.size;
+            document.getElementById('selectedCount').textContent = count;
+            document.getElementById('batchBar').classList.toggle('show', count > 0 && currentMainTab === 'material');
+        }
+
+        function clearSelection() {
+            selectedRows.clear();
+            document.querySelectorAll('#rootTableBody .row-checkbox').forEach(cb => {
+                cb.checked = false;
+                cb.closest('tr').classList.remove('selected');
+            });
+            const activeSelectAll = getActiveSelectAll();
+            if (activeSelectAll) activeSelectAll.checked = false;
+            updateBatchBar();
+        }
+
+        // ========== 鎵归噺鎿嶄綔 ==========
+        function batchPrint() {
+            showToast(`姝ｅ湪鎵撳嵃 ${selectedRows.size} 鏉¤褰?`, 'info');
+        }
+
+        function batchExport() {
+            showToast(`宸插鍑? ${selectedRows.size} 鏉¤褰曞埌 Excel`, 'success');
+        }
+
+        function batchDelete() {
+            if (confirm(`确定要删除选中的 ${selectedRows.size} 条记录吗？`)) {
+                showToast(`${selectedRows.size} 条记录已删除`, 'success');
+                clearSelection();
+            }
+        }
+
+        function deleteRow(id) {
+            if (confirm(`确定要删除记录 ${id} 吗？`)) {
+                const row = document.querySelector(`tr[data-id="${id}"]`);
+                if (row) {
+                    row.style.transition = 'all 0.3s ease';
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateX(-20px)';
+                    setTimeout(() => {
+                        row.remove();
+                        showToast(`璁板綍 ${id} 宸插垹闄?`, 'success');
+                    }, 300);
+                }
+            }
+        }
+
+        // ========== 鍏朵粬鍔熻兘 ==========
+        function exportData() {
+            showToast('正在导出数据...', 'info');
+        }
+
+        function printDetail() {
+            showToast('正在打印标签...', 'info');
+        }
+
+        function printWorkOrder() {
+            showToast('正在打印工单...', 'info');
+        }
+
+        function changePage(page) {
+            showToast(page === 'prev' || page === 'next' ? '缈婚〉鍔熻兘' : `璺宠浆鍒扮 ${page} 椤?`, 'info');
+        }
+
+        function changePageSize() {
+            const size = document.getElementById('pageSize').value;
+            showToast(`姣忛〉鏄剧ず ${size} 鏉?`, 'info');
+        }
+
+        function sortTable(column) {
+            showToast(`鎸? ${column} 鎺掑簭`, 'info');
+        }
+
+        // Toast閫氱煡
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+
+            const colors = {
+                'success': 'bg-green-600',
+                'error': 'bg-red-600',
+                'info': 'bg-gray-900'
+            };
+            const icons = {
+                'success': 'fa-check-circle',
+                'error': 'fa-exclamation-circle',
+                'info': 'fa-info-circle'
+            };
+
+            toast.className = `toast ${colors[type] || colors.info} text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 min-w-[200px]`;
+            toast.innerHTML = `<i class="fas ${icons[type] || icons.info} text-white"></i><span>${message}</span>`;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-10px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // 鍒濆鍖?
+        document.addEventListener('DOMContentLoaded', function() {
+            renderShiftFilterOptions();
+            renderWorkOrderShiftStats();
+            switchMainTab('material');
+            switchMaterialSubTab('root');
+            applyRootDetailColumnState();
+            applyMaterialTableFilters();
+            setAppearance('pass');
+            renderInstrumentTable();
+            setCompressedAirResult('pass');
+            updateWorkOrderProgress(parseInt(document.getElementById('shiftCountValue')?.textContent || '247', 10));
+
+            // 鏇存柊褰撳墠鏃堕棿
+            const now = new Date();
+            const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('currentTime').textContent = timeStr;
+        });
+
+        // ESC閿叧闂?
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDetailDrawer();
+                closeEntryDrawer();
+                closeFilter();
+                closeAddShiftModal();
+                closeWoDetail();
+                closeCodeListModal();
+            }
+        });
+    </script>
+</body>
+</html>
+
