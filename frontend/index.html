@@ -313,6 +313,7 @@
 
           <div
             class="blue-card industrial-shadow flex items-center gap-5 rounded-2xl p-6"
+            onclick="goToCoatingTemperature()"
           >
             <div
               class="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
@@ -339,6 +340,7 @@
 
           <div
             class="blue-card industrial-shadow flex items-center gap-5 rounded-2xl p-6"
+            onclick="goToCoatingMonitor()"
           >
             <div
               class="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
@@ -361,6 +363,7 @@
 
           <div
             class="blue-card industrial-shadow flex items-center gap-5 rounded-2xl p-6"
+            onclick="goToFeedingWorkOrders()"
           >
             <div
               class="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
@@ -572,6 +575,17 @@
 
       function goToWaipenshaEquipment() {
         window.location.href = "./waipensha-equipment.html";
+      }
+
+      function goToCoatingTemperature() {
+        window.location.href = "./coating-temperature.html";
+      }
+      function goToCoatingMonitor() {
+        window.location.href = "./coating-monitor.html";
+      }
+
+      function goToFeedingWorkOrders() {
+        window.location.href = "./workorders.html";
       }
 
       function formatWeekday(day) {

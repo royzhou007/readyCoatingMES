@@ -659,14 +659,16 @@
                 />
               </th>
               <th class="px-4 py-4 text-left">物料名称</th>
+              <th class="px-4 py-4 text-left">类型</th>
               <th class="px-4 py-4 text-center">投料数量</th>
+              <th class="px-4 py-4 text-center">批号</th>
               <th class="px-4 py-4 text-center">投料时间</th>
               <th class="px-4 py-4 text-center">投料人</th>
               <th class="px-4 py-4 text-center">操作</th>
             </tr>
           </thead>
           <tbody id="tableBody">
-            <tr class="group" data-id="0032" data-shift="today_day" data-material="FBE粉末" data-quantity="320" data-time="19:35" data-operator="张师傅">
+            <tr class="group" data-id="0032" data-shift="today_day" data-material="FBE粉末" data-type="涂覆原料" data-batch="FBE-2026-0316" data-quantity="320" data-time="19:35" data-operator="张师傅">
               <td class="px-4 py-4">
                 <input
                   type="checkbox"
@@ -677,9 +679,13 @@
               <td class="px-4 py-4">
                 <div class="text-sm font-semibold text-gray-900">FBE粉末</div>
               </td>
+              <td class="px-4 py-4">
+                <div class="text-sm text-gray-700">涂覆原料</div>
+              </td>
               <td class="px-4 py-4 text-center">
                 <div class="text-sm font-semibold text-gray-900">320<span class="text-xs text-gray-500 font-normal ml-1">kg</span></div>
               </td>
+              <td class="px-4 py-4 text-center"><div class="text-sm text-gray-700">FBE-2026-0316</div></td>
               <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">19:35</div></td>
               <td class="px-4 py-4 text-center">
                 <div class="flex flex-col items-center gap-1">
@@ -710,7 +716,7 @@
                 </div>
               </td>
             </tr>
-            <tr class="group" data-id="0031" data-shift="today_day" data-material="AD胶黏剂" data-quantity="185" data-time="18:42" data-operator="张师傅">
+            <tr class="group" data-id="0031" data-shift="today_day" data-material="AD胶黏剂" data-type="辅料" data-batch="AD-2026-0315" data-quantity="185" data-time="18:42" data-operator="张师傅">
               <td class="px-4 py-4">
                 <input
                   type="checkbox"
@@ -721,9 +727,13 @@
               <td class="px-4 py-4">
                 <div class="text-sm font-semibold text-gray-900">AD胶黏剂</div>
               </td>
+              <td class="px-4 py-4">
+                <div class="text-sm text-gray-700">辅料</div>
+              </td>
               <td class="px-4 py-4 text-center">
                 <div class="text-sm font-semibold text-gray-900">185<span class="text-xs text-gray-500 font-normal ml-1">kg</span></div>
               </td>
+              <td class="px-4 py-4 text-center"><div class="text-sm text-gray-700">AD-2026-0315</div></td>
               <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">18:42</div></td>
               <td class="px-4 py-4 text-center">
                 <div class="flex flex-col items-center gap-1">
@@ -754,7 +764,7 @@
                 </div>
               </td>
             </tr>
-            <tr class="group" data-id="0030" data-shift="yesterday_night" data-material="PE/PP颗粒料" data-quantity="420" data-time="03:15" data-operator="李师傅">
+            <tr class="group" data-id="0030" data-shift="yesterday_night" data-material="PE/PP颗粒料" data-type="包装原料" data-batch="PP-2026-0314" data-quantity="420" data-time="03:15" data-operator="李师傅">
               <td class="px-4 py-4">
                 <input
                   type="checkbox"
@@ -765,9 +775,13 @@
               <td class="px-4 py-4">
                 <div class="text-sm font-semibold text-gray-900">PE/PP颗粒料</div>
               </td>
+              <td class="px-4 py-4">
+                <div class="text-sm text-gray-700">包装原料</div>
+              </td>
               <td class="px-4 py-4 text-center">
                 <div class="text-sm font-semibold text-gray-900">420<span class="text-xs text-gray-500 font-normal ml-1">kg</span></div>
               </td>
+              <td class="px-4 py-4 text-center"><div class="text-sm text-gray-700">PP-2026-0314</div></td>
               <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">03:15</div></td>
               <td class="px-4 py-4 text-center">
                 <div class="flex flex-col items-center gap-1">
@@ -1032,6 +1046,15 @@
                 <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">kg</span>
               </div>
             </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">批号 <span class="text-red-500">*</span></label>
+              <input
+                type="text"
+                id="entryBatch"
+                placeholder="输入投料批号"
+                class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"
+              />
+            </div>
             <div class="grid grid-cols-2 gap-4">
               <div class="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
                 <div class="text-xs text-gray-500 mb-1">自动记录时间</div>
@@ -1149,6 +1172,11 @@
                   class="px-4 py-3 text-left text-xs font-semibold text-gray-600"
                 >
                   品牌
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-xs font-semibold text-gray-600"
+                >
+                  类型
                 </th>
                 <th
                   class="px-4 py-3 text-left text-xs font-semibold text-gray-600"
@@ -1272,6 +1300,10 @@
               <div class="p-4 bg-gray-50 rounded-xl">
                 <div class="text-xs text-gray-500 mb-1">所属班次</div>
                 <div class="font-semibold text-gray-900" id="detailShift">今日白班</div>
+              </div>
+              <div class="p-4 bg-gray-50 rounded-xl col-span-2">
+                <div class="text-xs text-gray-500 mb-1">批号</div>
+                <div class="font-semibold text-gray-900" id="detailBatch">FBE-2026-0316</div>
               </div>
             </div>
           </div>
@@ -1944,6 +1976,7 @@
           code: "MAT-FBE-001",
           name: "FBE粉末",
           brand: "AkzoNobel",
+          type: "涂覆原料",
           spec: "环氧粉末 / 25kg",
           unit: "kg",
           stock: 1280,
@@ -1952,6 +1985,7 @@
           code: "MAT-AD-002",
           name: "AD胶黏剂",
           brand: "Dow",
+          type: "辅料",
           spec: "热熔胶 / 20kg",
           unit: "kg",
           stock: 860,
@@ -1960,6 +1994,7 @@
           code: "MAT-PE-003",
           name: "PE/PP颗粒料",
           brand: "Sinopec",
+          type: "包装原料",
           spec: "PP-HM / 25kg",
           unit: "kg",
           stock: 2460,
@@ -1968,6 +2003,7 @@
           code: "MAT-CL-004",
           name: "清洗剂",
           brand: "BASF",
+          type: "清洗耗材",
           spec: "工业清洗剂 / 50kg",
           unit: "桶",
           stock: 32,
@@ -1976,6 +2012,7 @@
           code: "MAT-PK-005",
           name: "包装辅料",
           brand: "3M",
+          type: "包装辅料",
           spec: "缠绕膜 / 15kg",
           unit: "卷",
           stock: 120,
@@ -2483,6 +2520,7 @@
                     <td class="px-4 py-3 font-mono text-sm text-gray-900">${item.code}</td>
                     <td class="px-4 py-3 text-sm font-semibold text-gray-900">${item.name}</td>
                     <td class="px-4 py-3 text-sm text-gray-700">${item.brand}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700">${item.type}</td>
                     <td class="px-4 py-3 text-sm text-gray-700">${item.spec}</td>
                     <td class="px-4 py-3 text-center text-sm text-gray-900 font-medium">${item.unit}</td>
                     <td class="px-4 py-3 text-center text-sm text-gray-700">${item.stock}</td>
@@ -2508,6 +2546,7 @@
             item.code.toLowerCase().includes(keyword.toLowerCase()) ||
             item.name.toLowerCase().includes(keyword.toLowerCase()) ||
             item.brand.toLowerCase().includes(keyword.toLowerCase()) ||
+            item.type.toLowerCase().includes(keyword.toLowerCase()) ||
             item.spec.toLowerCase().includes(keyword.toLowerCase()),
         );
 
@@ -3124,10 +3163,12 @@
           : "bg-blue-100 text-blue-600";
 
         return `
-          <tr class="group" data-id="${record.id}" data-shift="${record.shift}" data-material="${record.material}" data-material-code="${record.materialCode}" data-brand="${record.brand}" data-spec="${record.spec}" data-quantity="${record.quantity}" data-time="${record.time}" data-operator="${record.operator}">
+          <tr class="group" data-id="${record.id}" data-shift="${record.shift}" data-material="${record.material}" data-type="${record.type}" data-batch="${record.batch}" data-material-code="${record.materialCode}" data-brand="${record.brand}" data-spec="${record.spec}" data-quantity="${record.quantity}" data-time="${record.time}" data-operator="${record.operator}">
             <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)" /></td>
             <td class="px-4 py-4"><div class="text-sm font-semibold text-gray-900">${record.material}</div></td>
+            <td class="px-4 py-4"><div class="text-sm text-gray-700">${record.type}</div></td>
             <td class="px-4 py-4 text-center"><div class="text-sm font-semibold text-gray-900">${record.quantity}<span class="text-xs text-gray-500 font-normal ml-1">kg</span></div></td>
+            <td class="px-4 py-4 text-center"><div class="text-sm text-gray-700">${record.batch}</div></td>
             <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">${record.time}</div></td>
             <td class="px-4 py-4 text-center">
               <div class="flex flex-col items-center gap-1">
@@ -3155,6 +3196,7 @@
         document.getElementById("entryMaterialBrand").value = "";
         document.getElementById("entryMaterialSpec").value = "";
         document.getElementById("entryQuantity").value = "";
+        document.getElementById("entryBatch").value = "";
         const headerTime = document.getElementById("currentTime");
         if (headerTime) headerTime.textContent = currentTime;
         document.getElementById("entryFeedTimeReadonly").textContent = currentTime;
@@ -3167,6 +3209,7 @@
         if (!row) return;
         document.getElementById("detailMaterial").textContent = row.dataset.material || "-";
         document.getElementById("detailQuantity").textContent = row.dataset.quantity || "-";
+        document.getElementById("detailBatch").textContent = row.dataset.batch || "-";
         document.getElementById("detailTime").textContent = row.dataset.time || "-";
         document.getElementById("detailOperator").textContent = row.dataset.operator || "-";
         document.getElementById("detailShift").textContent =
@@ -3182,10 +3225,11 @@
         const brand = document.getElementById("entryMaterialBrand").value;
         const spec = document.getElementById("entryMaterialSpec").value;
         const quantity = document.getElementById("entryQuantity").value;
+        const batch = document.getElementById("entryBatch").value.trim();
         const time = document.getElementById("entryFeedTimeReadonly").textContent;
 
-        if (!selectedCodeItem || material === "点击选择物料" || !quantity) {
-          showToast("请先选择物料并填写投料数量", "error");
+        if (!selectedCodeItem || material === "点击选择物料" || !quantity || !batch) {
+          showToast("请先选择物料，并填写投料数量和批号", "error");
           return;
         }
 
@@ -3194,7 +3238,9 @@
           material,
           materialCode,
           brand,
+          type: selectedCodeItem.type,
           spec,
+          batch,
           quantity: Number(quantity).toFixed(1).replace(/\.0$/, ""),
           time,
           operator: currentOperatorName,
