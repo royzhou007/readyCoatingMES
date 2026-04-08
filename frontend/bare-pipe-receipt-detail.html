@@ -14,273 +14,99 @@
     />
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap");
-
-      * {
-        -webkit-tap-highlight-color: transparent;
-        touch-action: manipulation;
-      }
-
-      body {
-        font-family: "Inter", "Noto Sans SC", sans-serif;
-        background: #f4f6f8;
-        overflow: hidden;
-      }
-
-      .industrial-shadow {
-        box-shadow:
-          0 2px 8px rgba(15, 23, 42, 0.08),
-          0 4px 18px rgba(15, 23, 42, 0.05);
-      }
-
-      .industrial-shadow-lg {
-        box-shadow:
-          0 10px 28px rgba(15, 23, 42, 0.12),
-          0 8px 22px rgba(37, 99, 235, 0.12);
-      }
-
-      .hero-panel {
-        background:
-          radial-gradient(circle at top right, rgba(147, 197, 253, 0.28), transparent 28%),
-          linear-gradient(135deg, #0f172a 0%, #1d4ed8 58%, #2563eb 100%);
-      }
-
-      .info-card {
-        background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
-        border: 1px solid #dbe7f3;
-      }
-
-      .info-field {
-        border: 1px solid #e2e8f0;
-        background: #f8fafc;
-      }
-
-      .status-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 12px;
-        border-radius: 9999px;
-        font-size: 12px;
-        font-weight: 700;
-        border: 1px solid transparent;
-      }
-
-      .status-pill.pending {
-        background: #f3f4f6;
-        color: #4b5563;
-        border-color: #e5e7eb;
-      }
-
-      .status-pill.partial {
-        background: #fff7ed;
-        color: #c2410c;
-        border-color: #fdba74;
-      }
-
-      .status-pill.done {
-        background: #ecfdf3;
-        color: #15803d;
-        border-color: #86efac;
-      }
-
-      .status-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 9999px;
-        background: currentColor;
-        opacity: 0.85;
-      }
-
-      .result-tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 5px 10px;
-        border-radius: 9999px;
-        font-size: 12px;
-        font-weight: 700;
-      }
-
-      .result-tag.pending {
-        background: #f3f4f6;
-        color: #4b5563;
-      }
-
-      .result-tag.pass {
-        background: #ecfdf3;
-        color: #15803d;
-      }
-
-      .result-tag.partial {
-        background: #fff7ed;
-        color: #c2410c;
-      }
-
-      .action-btn {
-        transition: all 0.2s ease;
-      }
-
-      .action-btn:active {
-        transform: scale(0.96);
-      }
-
-      .toast {
-        animation: slideIn 0.25s ease;
-      }
-
-      @keyframes slideIn {
-        from {
-          transform: translateY(-12px);
-          opacity: 0;
-        }
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
-      }
-
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-
-      ::-webkit-scrollbar-track {
-        background: #e2e8f0;
-      }
-
-      ::-webkit-scrollbar-thumb {
-        background: #94a3b8;
-        border-radius: 9999px;
-      }
+      * { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+      body { font-family: "Inter", "Noto Sans SC", sans-serif; background: #f4f6f8; overflow: hidden; }
+      .industrial-shadow { box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08), 0 4px 18px rgba(15, 23, 42, 0.05); }
+      .industrial-shadow-lg { box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12), 0 10px 24px rgba(37, 99, 235, 0.12); }
+      .hero-panel { background: radial-gradient(circle at top right, rgba(147, 197, 253, 0.28), transparent 28%), linear-gradient(135deg, #0f172a 0%, #1d4ed8 58%, #2563eb 100%); }
+      .info-card { background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%); border: 1px solid #dbe7f3; }
+      .info-field { border: 1px solid #e2e8f0; background: #f8fafc; }
+      .status-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 9999px; font-size: 12px; font-weight: 700; border: 1px solid transparent; }
+      .status-pill.pending { background: #f3f4f6; color: #4b5563; border-color: #e5e7eb; }
+      .status-pill.partial { background: #fff7ed; color: #c2410c; border-color: #fdba74; }
+      .status-pill.done { background: #ecfdf3; color: #15803d; border-color: #86efac; }
+      .status-dot { width: 8px; height: 8px; border-radius: 9999px; background: currentColor; opacity: 0.85; }
+      .result-tag { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 9999px; font-size: 12px; font-weight: 700; }
+      .result-tag.pending { background: #f3f4f6; color: #4b5563; }
+      .result-tag.pass { background: #ecfdf3; color: #15803d; }
+      .result-tag.partial { background: #fff7ed; color: #c2410c; }
+      .icon-btn { width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; transition: all 0.2s ease; }
+      .icon-btn:hover { transform: translateY(-1px); }
+      .icon-btn:active, .action-btn:active { transform: scale(0.96); }
+      .drawer-overlay { opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
+      .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+      .drawer-panel { transform: translateX(100%); transition: transform 0.28s ease; }
+      .drawer-overlay.open .drawer-panel { transform: translateX(0); }
+      .form-input, .form-select { width: 100%; border: 2px solid #dbe3ef; border-radius: 14px; background: #fff; color: #0f172a; padding: 12px 14px; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+      .form-input:focus, .form-select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12); }
+      .drawer-metric { background: linear-gradient(180deg, rgba(255,255,255,.92) 0%, rgba(248,250,252,.96) 100%); border: 1px solid rgba(219, 234, 254, 0.9); }
+      .detail-strip { background: radial-gradient(circle at top right, rgba(191, 219, 254, 0.55), transparent 38%), linear-gradient(135deg, #eff6ff 0%, #ffffff 100%); border: 1px solid #dbeafe; }
+      .storage-table thead th { position: sticky; top: 0; background: #f8fafc; z-index: 1; }
+      .toast { animation: slideIn 0.25s ease; }
+      @keyframes slideIn { from { transform: translateY(-12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+      ::-webkit-scrollbar { width: 8px; height: 8px; }
+      ::-webkit-scrollbar-track { background: #e2e8f0; }
+      ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 9999px; }
     </style>
   </head>
   <body class="h-screen w-screen flex flex-col">
     <header class="bg-white industrial-shadow z-50 flex-none">
       <div class="flex items-center justify-between px-6 py-4">
         <div class="flex items-center gap-4">
-          <button
-            onclick="history.back()"
-            class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors"
-          >
+          <button onclick="history.back()" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
             <i class="fas fa-arrow-left text-lg"></i>
           </button>
           <div class="flex items-center gap-3">
-            <div
-              class="w-11 h-11 bg-blue-600 rounded-xl flex items-center justify-center text-white"
-            >
-              <i class="fas fa-file-invoice text-xl"></i>
-            </div>
+            <div class="w-11 h-11 bg-blue-600 rounded-xl flex items-center justify-center text-white"><i class="fas fa-file-invoice text-xl"></i></div>
             <div>
-              <h1 class="text-xl font-bold text-gray-900 tracking-tight">
-                裸管入库单详情
-              </h1>
-              <p class="text-xs text-gray-500">
-                入库单信息与物料信息维护
-              </p>
+              <h1 class="text-xl font-bold text-gray-900 tracking-tight">裸管入库单详情</h1>
+              <p class="text-xs text-gray-500">入库单信息与物料信息维护</p>
             </div>
           </div>
         </div>
-        <button
-          type="button"
-          onclick="saveReceipt()"
-          class="action-btn flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 text-white font-semibold industrial-shadow-lg hover:bg-blue-700"
-        >
-          <i class="fas fa-floppy-disk"></i>
-          <span>保存</span>
+        <button type="button" onclick="saveReceipt()" class="action-btn flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 text-white font-semibold industrial-shadow-lg hover:bg-blue-700">
+          <i class="fas fa-floppy-disk"></i><span>保存</span>
         </button>
       </div>
     </header>
-
     <section class="px-6 pt-5 pb-4 flex-none">
       <div class="hero-panel rounded-3xl industrial-shadow-lg text-white p-6">
         <div class="flex flex-col xl:flex-row xl:items-end gap-5">
           <div class="flex-1">
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/12 border border-white/15 text-sm font-semibold">
-              <i class="fas fa-warehouse"></i>
-              <span>入库执行</span>
-            </div>
-            <h2 id="heroReceiptNo" class="mt-4 text-3xl font-bold tracking-tight">
-              RKD-20260407-001
-            </h2>
-            <p id="heroProject" class="mt-2 text-sm text-blue-50/90">
-              唐山港输油管道二期项目
-            </p>
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/12 border border-white/15 text-sm font-semibold"><i class="fas fa-warehouse"></i><span>入库执行</span></div>
+            <h2 id="heroReceiptNo" class="mt-4 text-3xl font-bold tracking-tight">RKD-20260407-001</h2>
+            <p id="heroProject" class="mt-2 text-sm text-blue-50/90">唐山港输油管道二期项目</p>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 min-w-full xl:min-w-[540px]">
-            <div class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4">
-              <div class="text-xs text-blue-100/85">应收总数量</div>
-              <div id="metricExpected" class="mt-2 text-3xl font-bold">0</div>
-            </div>
-            <div class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4">
-              <div class="text-xs text-blue-100/85">实收总数量</div>
-              <div id="metricActual" class="mt-2 text-3xl font-bold">0</div>
-            </div>
-            <div class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4">
-              <div class="text-xs text-blue-100/85">物料条目</div>
-              <div id="metricItems" class="mt-2 text-3xl font-bold">0</div>
-            </div>
+            <div class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4"><div class="text-xs text-blue-100/85">应收总数量</div><div id="metricExpected" class="mt-2 text-3xl font-bold">0</div></div>
+            <div class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4"><div class="text-xs text-blue-100/85">实收总数量</div><div id="metricActual" class="mt-2 text-3xl font-bold">0</div></div>
+            <div class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4"><div class="text-xs text-blue-100/85">物料条目</div><div id="metricItems" class="mt-2 text-3xl font-bold">0</div></div>
           </div>
         </div>
       </div>
     </section>
-
     <main class="px-6 pb-6 flex-1 min-h-0 overflow-hidden">
       <div class="h-full overflow-y-auto space-y-4 pr-1">
         <section class="info-card rounded-3xl industrial-shadow p-5">
           <div class="flex items-center justify-between gap-4 mb-4">
-            <div>
-              <h3 class="text-lg font-bold text-slate-900">入库单信息</h3>
-              <p class="text-xs text-slate-500 mt-1">当前单据基础信息与负责人</p>
-            </div>
-            <span id="headerStatus" class="status-pill pending">
-              <span class="status-dot"></span>
-              未入库
-            </span>
+            <div><h3 class="text-lg font-bold text-slate-900">入库单信息</h3><p class="text-xs text-slate-500 mt-1">当前单据基础信息与负责人</p></div>
+            <span id="headerStatus" class="status-pill pending"><span class="status-dot"></span>未入库</span>
           </div>
-
           <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-            <div class="info-field rounded-2xl px-4 py-3">
-              <div class="text-xs text-slate-500">入库单号</div>
-              <div id="infoReceiptNo" class="mt-2 text-sm font-semibold text-slate-900"></div>
-            </div>
-            <div class="info-field rounded-2xl px-4 py-3">
-              <div class="text-xs text-slate-500">销售单号</div>
-              <div id="infoSalesNo" class="mt-2 text-sm font-semibold text-slate-900"></div>
-            </div>
-            <div class="info-field rounded-2xl px-4 py-3">
-              <div class="text-xs text-slate-500">项目名称</div>
-              <div id="infoProject" class="mt-2 text-sm font-semibold text-slate-900"></div>
-            </div>
-            <div class="info-field rounded-2xl px-4 py-3">
-              <div class="text-xs text-slate-500">入库类型</div>
-              <div id="infoType" class="mt-2 text-sm font-semibold text-slate-900"></div>
-            </div>
-            <div class="info-field rounded-2xl px-4 py-3">
-              <div class="text-xs text-slate-500">状态</div>
-              <div id="infoStatusText" class="mt-2 text-sm font-semibold text-slate-900"></div>
-            </div>
-            <div class="info-field rounded-2xl px-4 py-3">
-              <div class="text-xs text-slate-500">入库日期</div>
-              <div id="infoDate" class="mt-2 text-sm font-semibold text-slate-900"></div>
-            </div>
-            <div class="info-field rounded-2xl px-4 py-3">
-              <div class="text-xs text-slate-500">操作人</div>
-              <div id="infoOperator" class="mt-2 text-sm font-semibold text-slate-900"></div>
-            </div>
+            <div class="info-field rounded-2xl px-4 py-3"><div class="text-xs text-slate-500">入库单号</div><div id="infoReceiptNo" class="mt-2 text-sm font-semibold text-slate-900"></div></div>
+            <div class="info-field rounded-2xl px-4 py-3"><div class="text-xs text-slate-500">销售单号</div><div id="infoSalesNo" class="mt-2 text-sm font-semibold text-slate-900"></div></div>
+            <div class="info-field rounded-2xl px-4 py-3"><div class="text-xs text-slate-500">项目名称</div><div id="infoProject" class="mt-2 text-sm font-semibold text-slate-900"></div></div>
+            <div class="info-field rounded-2xl px-4 py-3"><div class="text-xs text-slate-500">入库类型</div><div id="infoType" class="mt-2 text-sm font-semibold text-slate-900"></div></div>
+            <div class="info-field rounded-2xl px-4 py-3"><div class="text-xs text-slate-500">状态</div><div id="infoStatusText" class="mt-2 text-sm font-semibold text-slate-900"></div></div>
+            <div class="info-field rounded-2xl px-4 py-3"><div class="text-xs text-slate-500">入库日期</div><div id="infoDate" class="mt-2 text-sm font-semibold text-slate-900"></div></div>
+            <div class="info-field rounded-2xl px-4 py-3"><div class="text-xs text-slate-500">操作人</div><div id="infoOperator" class="mt-2 text-sm font-semibold text-slate-900"></div></div>
           </div>
         </section>
-
         <section class="info-card rounded-3xl industrial-shadow overflow-hidden">
           <div class="flex items-center justify-between gap-4 px-5 py-4 border-b border-slate-200">
-            <div>
-              <h3 class="text-lg font-bold text-slate-900">物料信息</h3>
-              <p class="text-xs text-slate-500 mt-1">维护收货数量、检验状态与入库状态</p>
-            </div>
-            <div class="text-sm text-slate-500">
-              共 <span id="materialCount" class="font-bold text-blue-600">0</span> 项
-            </div>
+            <div><h3 class="text-lg font-bold text-slate-900">物料信息</h3><p class="text-xs text-slate-500 mt-1">维护收货数量、检验状态与入库状态</p></div>
+            <div class="text-sm text-slate-500">共 <span id="materialCount" class="font-bold text-blue-600">0</span> 项</div>
           </div>
-
           <div class="overflow-auto">
             <table class="min-w-full text-sm text-slate-700">
               <thead class="bg-slate-50 text-slate-600">
@@ -304,238 +130,115 @@
         </section>
       </div>
     </main>
-
-    <div
-      id="toast"
-      class="toast fixed top-5 right-5 hidden items-center gap-3 rounded-2xl bg-slate-900 text-white px-4 py-3 industrial-shadow-lg z-[60]"
-    >
-      <i class="fas fa-circle-check text-green-400"></i>
-      <span id="toastText">保存成功</span>
+    <div id="storageDrawerOverlay" class="drawer-overlay fixed inset-0 z-[80] bg-slate-950/35">
+      <div class="drawer-panel ml-auto h-full w-[66.666vw] min-w-[920px] bg-[#f8fbff] industrial-shadow-lg flex flex-col">
+        <div class="px-7 py-5 border-b border-slate-200 bg-white">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold border border-blue-100"><i class="fas fa-arrow-right-to-bracket"></i><span>入库操作</span></div>
+              <h3 class="mt-3 text-2xl font-bold text-slate-900">选择库位并执行入库</h3>
+              <p class="mt-1 text-sm text-slate-500">当前物料的库位分配与收货数量录入</p>
+            </div>
+            <button type="button" onclick="closeStorageDrawer()" class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center">
+              <i class="fas fa-xmark text-2xl"></i>
+            </button>
+          </div>
+        </div>
+        <div class="px-7 pt-6 pb-5 bg-[#f8fbff]">
+          <div class="detail-strip rounded-[28px] p-5 industrial-shadow">
+            <div class="flex items-start justify-between gap-4 mb-5">
+              <div>
+                <div class="text-xs font-semibold tracking-[0.18em] text-blue-700 uppercase">当前物料</div>
+                <div id="drawerMaterialName" class="mt-2 text-2xl font-bold text-slate-900"></div>
+              </div>
+              <div class="text-right">
+                <div class="text-xs text-slate-500">本次待入库</div>
+                <div id="drawerPendingQty" class="mt-2 text-3xl font-bold text-blue-700">0</div>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div class="drawer-metric rounded-2xl px-4 py-4"><div class="text-xs text-slate-500">名称</div><div id="drawerMaterialNameMini" class="mt-2 text-sm font-semibold text-slate-900"></div></div>
+              <div class="drawer-metric rounded-2xl px-4 py-4"><div class="text-xs text-slate-500">编码</div><div id="drawerMaterialCode" class="mt-2 text-sm font-semibold text-slate-900"></div></div>
+              <div class="drawer-metric rounded-2xl px-4 py-4"><div class="text-xs text-slate-500">型号</div><div id="drawerMaterialSpec" class="mt-2 text-sm font-semibold text-slate-900"></div></div>
+              <div class="drawer-metric rounded-2xl px-4 py-4"><div class="text-xs text-slate-500">本次应收数量</div><div id="drawerExpectedQty" class="mt-2 text-sm font-semibold text-slate-900"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="px-7 pb-4 flex items-center justify-between gap-4">
+          <div>
+            <h4 class="text-lg font-bold text-slate-900">入库明细</h4>
+            <p class="text-sm text-slate-500 mt-1">支持拆分到多个仓库和库位</p>
+          </div>
+          <button type="button" onclick="addStorageRow()" class="action-btn inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700">
+            <i class="fas fa-plus"></i><span>新增明细</span>
+          </button>
+        </div>
+        <div class="px-7 flex-1 min-h-0 pb-6">
+          <div class="h-full rounded-[28px] border border-slate-200 bg-white overflow-auto industrial-shadow">
+            <table class="storage-table min-w-full text-sm text-slate-700">
+              <thead class="text-slate-500">
+                <tr>
+                  <th class="px-6 py-5 text-left font-bold border-b border-slate-200 whitespace-nowrap">序号</th>
+                  <th class="px-6 py-5 text-left font-bold border-b border-slate-200 whitespace-nowrap">入库仓库</th>
+                  <th class="px-6 py-5 text-left font-bold border-b border-slate-200 whitespace-nowrap">库位</th>
+                  <th class="px-6 py-5 text-left font-bold border-b border-slate-200 whitespace-nowrap">实收数量</th>
+                  <th class="px-6 py-5 text-left font-bold border-b border-slate-200 whitespace-nowrap">操作</th>
+                </tr>
+              </thead>
+              <tbody id="storageTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="px-7 py-5 border-t border-slate-200 bg-white flex items-center justify-end gap-4">
+          <div class="mr-auto">
+            <div class="text-xs text-slate-500">本次入库合计</div>
+            <div class="mt-1 text-2xl font-bold text-slate-900"><span id="storageTotalQty">0</span></div>
+          </div>
+          <button type="button" onclick="closeStorageDrawer()" class="action-btn px-8 py-3 rounded-2xl border-2 border-slate-200 bg-white text-slate-600 font-semibold hover:border-slate-300">取消</button>
+          <button type="button" onclick="confirmStorage()" class="action-btn px-8 py-3 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700">确认入库</button>
+        </div>
+      </div>
     </div>
-
+    <div id="toast" class="toast fixed top-5 right-5 hidden items-center gap-3 rounded-2xl bg-slate-900 text-white px-4 py-3 industrial-shadow-lg z-[90]">
+      <i class="fas fa-circle-check text-green-400"></i><span id="toastText">保存成功</span>
+    </div>
     <script>
       const CURRENT_USER = "张三";
-
+      const STORAGE_WAREHOUSES = ["一号原料库", "二号原料库", "甲供管暂存库"];
+      const STORAGE_LOCATIONS = ["A-01-01", "A-01-02", "B-03-01", "B-05-06", "C-02-03"];
       const receiptRecords = {
-        "RKD-20260407-001": {
-          receiptNo: "RKD-20260407-001",
-          salesNo: "XS-20260328-016",
-          projectName: "唐山港输油管道二期项目",
-          receiptType: "甲供管入库",
-          status: "pending",
-          statusText: "未入库",
-          date: "2026-04-07",
-          operator: CURRENT_USER,
-          materials: [
-            {
-              seq: 1,
-              name: "裸管 L415M",
-              code: "MAT-BP-001",
-              spec: "D813 x 17.5 x 12000",
-              unit: "支",
-              expectedQty: 48,
-              actualQty: 0,
-              inspectStatus: "待检验",
-              inspectClass: "pending",
-              storageStatus: "未入库",
-              storageClass: "pending",
-              remark: "待首批到货",
-            },
-            {
-              seq: 2,
-              name: "裸管 L450M",
-              code: "MAT-BP-002",
-              spec: "D813 x 19.1 x 12000",
-              unit: "支",
-              expectedQty: 80,
-              actualQty: 0,
-              inspectStatus: "待检验",
-              inspectClass: "pending",
-              storageStatus: "未入库",
-              storageClass: "pending",
-              remark: "按合同批次收货",
-            },
-          ],
-        },
-        "RKD-20260407-002": {
-          receiptNo: "RKD-20260407-002",
-          salesNo: "XS-20260328-021",
-          projectName: "华北石油管道更新工程",
-          receiptType: "甲供管入库",
-          status: "partial",
-          statusText: "部分入库",
-          date: "2026-04-07",
-          operator: CURRENT_USER,
-          materials: [
-            {
-              seq: 1,
-              name: "裸管 X65",
-              code: "MAT-BP-018",
-              spec: "D711 x 14.2 x 11800",
-              unit: "支",
-              expectedQty: 56,
-              actualQty: 28,
-              inspectStatus: "检验合格",
-              inspectClass: "pass",
-              storageStatus: "部分入库",
-              storageClass: "partial",
-              remark: "首批完成验收",
-            },
-            {
-              seq: 2,
-              name: "裸管 X70",
-              code: "MAT-BP-019",
-              spec: "D711 x 16.0 x 11800",
-              unit: "支",
-              expectedQty: 40,
-              actualQty: 15,
-              inspectStatus: "检验中",
-              inspectClass: "partial",
-              storageStatus: "部分入库",
-              storageClass: "partial",
-              remark: "剩余批次在途",
-            },
-          ],
-        },
-        "RKD-20260406-018": {
-          receiptNo: "RKD-20260406-018",
-          salesNo: "XS-20260327-009",
-          projectName: "西北长输原油管线配套项目",
-          receiptType: "甲供管入库",
-          status: "done",
-          statusText: "已入库",
-          date: "2026-04-06",
-          operator: CURRENT_USER,
-          materials: [
-            {
-              seq: 1,
-              name: "裸管 X65MS",
-              code: "MAT-BP-032",
-              spec: "D1016 x 21.0 x 12000",
-              unit: "支",
-              expectedQty: 120,
-              actualQty: 120,
-              inspectStatus: "检验合格",
-              inspectClass: "pass",
-              storageStatus: "已入库",
-              storageClass: "pass",
-              remark: "已完成整单入库",
-            },
-            {
-              seq: 2,
-              name: "裸管 X70MS",
-              code: "MAT-BP-033",
-              spec: "D1016 x 24.0 x 12000",
-              unit: "支",
-              expectedQty: 100,
-              actualQty: 100,
-              inspectStatus: "检验合格",
-              inspectClass: "pass",
-              storageStatus: "已入库",
-              storageClass: "pass",
-              remark: "库位已分配完成",
-            },
-          ],
-        },
+        "RKD-20260407-001": { receiptNo: "RKD-20260407-001", salesNo: "XS-20260328-016", projectName: "唐山港输油管道二期项目", receiptType: "甲供管入库", status: "pending", statusText: "未入库", date: "2026-04-07", operator: CURRENT_USER, materials: [{ seq: 1, name: "裸管 L415M", code: "MAT-BP-001", spec: "D813 x 17.5 x 12000", unit: "支", expectedQty: 48, actualQty: 0, inspectStatus: "待检验", inspectClass: "pending", storageStatus: "未入库", storageClass: "pending", remark: "待首批到货" }, { seq: 2, name: "裸管 L450M", code: "MAT-BP-002", spec: "D813 x 19.1 x 12000", unit: "支", expectedQty: 80, actualQty: 0, inspectStatus: "待检验", inspectClass: "pending", storageStatus: "未入库", storageClass: "pending", remark: "按合同批次收货" }] },
+        "RKD-20260407-002": { receiptNo: "RKD-20260407-002", salesNo: "XS-20260328-021", projectName: "华北石油管道更新工程", receiptType: "甲供管入库", status: "partial", statusText: "部分入库", date: "2026-04-07", operator: CURRENT_USER, materials: [{ seq: 1, name: "裸管 X65", code: "MAT-BP-018", spec: "D711 x 14.2 x 11800", unit: "支", expectedQty: 56, actualQty: 28, inspectStatus: "检验合格", inspectClass: "pass", storageStatus: "部分入库", storageClass: "partial", remark: "首批完成验收" }, { seq: 2, name: "裸管 X70", code: "MAT-BP-019", spec: "D711 x 16.0 x 11800", unit: "支", expectedQty: 40, actualQty: 15, inspectStatus: "检验中", inspectClass: "partial", storageStatus: "部分入库", storageClass: "partial", remark: "剩余批次在途" }] },
+        "RKD-20260406-018": { receiptNo: "RKD-20260406-018", salesNo: "XS-20260327-009", projectName: "西北长输原油管线配套项目", receiptType: "甲供管入库", status: "done", statusText: "已入库", date: "2026-04-06", operator: CURRENT_USER, materials: [{ seq: 1, name: "裸管 X65MS", code: "MAT-BP-032", spec: "D1016 x 21.0 x 12000", unit: "支", expectedQty: 120, actualQty: 120, inspectStatus: "检验合格", inspectClass: "pass", storageStatus: "已入库", storageClass: "pass", remark: "已完成整单入库" }, { seq: 2, name: "裸管 X70MS", code: "MAT-BP-033", spec: "D1016 x 24.0 x 12000", unit: "支", expectedQty: 100, actualQty: 100, inspectStatus: "检验合格", inspectClass: "pass", storageStatus: "已入库", storageClass: "pass", remark: "库位已分配完成" }] }
       };
-
-      function getQueryParam(name) {
-        return new URLSearchParams(window.location.search).get(name);
-      }
-
-      function getStatusClass(status) {
-        if (status === "done") return "done";
-        if (status === "partial") return "partial";
-        return "pending";
-      }
-
-      function getResultClass(type) {
-        if (type === "pass") return "pass";
-        if (type === "partial") return "partial";
-        return "pending";
-      }
-
-      function showToast(message) {
-        const toast = document.getElementById("toast");
-        document.getElementById("toastText").textContent = message;
-        toast.classList.remove("hidden");
-        toast.classList.add("flex");
-        setTimeout(() => {
-          toast.classList.add("hidden");
-          toast.classList.remove("flex");
-        }, 1800);
-      }
-
-      function renderReceiptInfo(record) {
-        document.getElementById("heroReceiptNo").textContent = record.receiptNo;
-        document.getElementById("heroProject").textContent = record.projectName;
-        document.getElementById("infoReceiptNo").textContent = record.receiptNo;
-        document.getElementById("infoSalesNo").textContent = record.salesNo;
-        document.getElementById("infoProject").textContent = record.projectName;
-        document.getElementById("infoType").textContent = record.receiptType;
-        document.getElementById("infoStatusText").textContent = record.statusText;
-        document.getElementById("infoDate").textContent = record.date;
-        document.getElementById("infoOperator").textContent = record.operator;
-
-        const statusNode = document.getElementById("headerStatus");
-        statusNode.className = `status-pill ${getStatusClass(record.status)}`;
-        statusNode.innerHTML = `<span class="status-dot"></span>${record.statusText}`;
-      }
-
-      function renderMaterials(record) {
-        const body = document.getElementById("materialTableBody");
-        body.innerHTML = record.materials
-          .map(
-            (item) => `
-              <tr>
-                <td class="px-4 py-4 border-b border-slate-100 font-semibold text-slate-900">${item.seq}</td>
-                <td class="px-4 py-4 border-b border-slate-100">${item.name}</td>
-                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${item.code}</td>
-                <td class="px-4 py-4 border-b border-slate-100">${item.spec}</td>
-                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${item.unit}</td>
-                <td class="px-4 py-4 border-b border-slate-100 text-right font-semibold">${item.expectedQty}</td>
-                <td class="px-4 py-4 border-b border-slate-100 text-right font-semibold">${item.actualQty}</td>
-                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">
-                  <span class="result-tag ${getResultClass(item.inspectClass)}">${item.inspectStatus}</span>
-                </td>
-                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">
-                  <span class="result-tag ${getResultClass(item.storageClass)}">${item.storageStatus}</span>
-                </td>
-                <td class="px-4 py-4 border-b border-slate-100">${item.remark}</td>
-                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">
-                  <div class="flex items-center gap-2">
-                    <button type="button" class="action-btn px-3 py-2 rounded-xl bg-blue-50 text-blue-700 font-semibold hover:bg-blue-100" onclick="event.stopPropagation(); handleAction('去入库')">去入库</button>
-                    <button type="button" class="action-btn px-3 py-2 rounded-xl bg-amber-50 text-amber-700 font-semibold hover:bg-amber-100" onclick="event.stopPropagation(); handleAction('编辑')">编辑</button>
-                    <button type="button" class="action-btn px-3 py-2 rounded-xl bg-red-50 text-red-600 font-semibold hover:bg-red-100" onclick="event.stopPropagation(); handleAction('删除')">删除</button>
-                  </div>
-                </td>
-              </tr>
-            `
-          )
-          .join("");
-
-        const expectedTotal = record.materials.reduce((sum, item) => sum + item.expectedQty, 0);
-        const actualTotal = record.materials.reduce((sum, item) => sum + item.actualQty, 0);
-
-        document.getElementById("metricExpected").textContent = expectedTotal;
-        document.getElementById("metricActual").textContent = actualTotal;
-        document.getElementById("metricItems").textContent = record.materials.length;
-        document.getElementById("materialCount").textContent = record.materials.length;
-      }
-
-      function handleAction(label) {
-        showToast(`${label}功能已预留`);
-      }
-
-      function saveReceipt() {
-        showToast("入库单保存成功");
-      }
-
+      let record = null;
+      let activeMaterialIndex = -1;
+      let storageRows = [];
+      function getQueryParam(name) { return new URLSearchParams(window.location.search).get(name); }
+      function getStatusClass(status) { if (status === "done") return "done"; if (status === "partial") return "partial"; return "pending"; }
+      function getResultClass(type) { if (type === "pass") return "pass"; if (type === "partial") return "partial"; return "pending"; }
+      function showToast(message) { const toast = document.getElementById("toast"); document.getElementById("toastText").textContent = message; toast.classList.remove("hidden"); toast.classList.add("flex"); clearTimeout(showToast.timer); showToast.timer = setTimeout(() => { toast.classList.add("hidden"); toast.classList.remove("flex"); }, 1800); }
+      function renderReceiptInfo() { document.getElementById("heroReceiptNo").textContent = record.receiptNo; document.getElementById("heroProject").textContent = record.projectName; document.getElementById("infoReceiptNo").textContent = record.receiptNo; document.getElementById("infoSalesNo").textContent = record.salesNo; document.getElementById("infoProject").textContent = record.projectName; document.getElementById("infoType").textContent = record.receiptType; document.getElementById("infoStatusText").textContent = record.statusText; document.getElementById("infoDate").textContent = record.date; document.getElementById("infoOperator").textContent = record.operator; const statusNode = document.getElementById("headerStatus"); statusNode.className = `status-pill ${getStatusClass(record.status)}`; statusNode.innerHTML = `<span class="status-dot"></span>${record.statusText}`; }
+      function renderMetrics() { const expectedTotal = record.materials.reduce((sum, item) => sum + item.expectedQty, 0); const actualTotal = record.materials.reduce((sum, item) => sum + item.actualQty, 0); document.getElementById("metricExpected").textContent = expectedTotal; document.getElementById("metricActual").textContent = actualTotal; document.getElementById("metricItems").textContent = record.materials.length; document.getElementById("materialCount").textContent = record.materials.length; }
+      function renderMaterials() { const body = document.getElementById("materialTableBody"); body.innerHTML = record.materials.map((item, index) => `<tr><td class="px-4 py-4 border-b border-slate-100 font-semibold text-slate-900">${item.seq}</td><td class="px-4 py-4 border-b border-slate-100">${item.name}</td><td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${item.code}</td><td class="px-4 py-4 border-b border-slate-100">${item.spec}</td><td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${item.unit}</td><td class="px-4 py-4 border-b border-slate-100 text-right font-semibold">${item.expectedQty}</td><td class="px-4 py-4 border-b border-slate-100 text-right font-semibold">${item.actualQty}</td><td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap"><span class="result-tag ${getResultClass(item.inspectClass)}">${item.inspectStatus}</span></td><td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap"><span class="result-tag ${getResultClass(item.storageClass)}">${item.storageStatus}</span></td><td class="px-4 py-4 border-b border-slate-100">${item.remark}</td><td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap"><div class="flex items-center gap-2"><button type="button" title="去入库" class="icon-btn bg-blue-50 text-blue-700 hover:bg-blue-100" onclick="event.stopPropagation(); openStorageDrawer(${index})"><i class="fas fa-right-to-bracket"></i></button><button type="button" title="编辑" class="icon-btn bg-amber-50 text-amber-700 hover:bg-amber-100" onclick="event.stopPropagation(); editMaterial(${index})"><i class="fas fa-pen"></i></button><button type="button" title="删除" class="icon-btn bg-red-50 text-red-600 hover:bg-red-100" onclick="event.stopPropagation(); deleteMaterial(${index})"><i class="fas fa-trash"></i></button></div></td></tr>`).join(""); renderMetrics(); renderReceiptInfo(); }
+      function editMaterial(index) { showToast(`已进入 ${record.materials[index].name} 编辑态`); }
+      function deleteMaterial(index) { const material = record.materials[index]; if (!confirm(`确认删除 ${material.name} 吗？`)) return; record.materials.splice(index, 1); record.materials.forEach((item, idx) => { item.seq = idx + 1; }); refreshReceiptStatus(); renderMaterials(); showToast("物料已删除"); }
+      function createStorageRow(values = {}) { return { warehouse: values.warehouse || "", location: values.location || "", actualQty: values.actualQty || "" }; }
+      function openStorageDrawer(index) { activeMaterialIndex = index; const material = record.materials[index]; storageRows = [createStorageRow()]; const pendingQty = Math.max(material.expectedQty - material.actualQty, 0); document.getElementById("drawerMaterialName").textContent = material.name; document.getElementById("drawerMaterialNameMini").textContent = material.name; document.getElementById("drawerMaterialCode").textContent = material.code; document.getElementById("drawerMaterialSpec").textContent = material.spec; document.getElementById("drawerExpectedQty").textContent = `${pendingQty}${material.unit}`; document.getElementById("drawerPendingQty").textContent = `${pendingQty}${material.unit}`; renderStorageRows(); document.getElementById("storageDrawerOverlay").classList.add("open"); }
+      function closeStorageDrawer() { document.getElementById("storageDrawerOverlay").classList.remove("open"); activeMaterialIndex = -1; storageRows = []; }
+      function addStorageRow() { storageRows.push(createStorageRow()); renderStorageRows(); }
+      function removeStorageRow(index) { storageRows.splice(index, 1); if (!storageRows.length) storageRows.push(createStorageRow()); renderStorageRows(); }
+      function updateStorageRow(index, key, value) { storageRows[index][key] = value; renderStorageTotal(); }
+      function renderStorageRows() { const body = document.getElementById("storageTableBody"); body.innerHTML = storageRows.map((row, index) => `<tr><td class="px-6 py-4 border-b border-slate-100 font-semibold text-slate-900">${index + 1}</td><td class="px-6 py-4 border-b border-slate-100"><select class="form-select" onchange="updateStorageRow(${index}, 'warehouse', this.value)"><option value="">请选择仓库</option>${STORAGE_WAREHOUSES.map((item) => `<option value="${item}" ${row.warehouse === item ? "selected" : ""}>${item}</option>`).join("")}</select></td><td class="px-6 py-4 border-b border-slate-100"><select class="form-select" onchange="updateStorageRow(${index}, 'location', this.value)"><option value="">请选择库位</option>${STORAGE_LOCATIONS.map((item) => `<option value="${item}" ${row.location === item ? "selected" : ""}>${item}</option>`).join("")}</select></td><td class="px-6 py-4 border-b border-slate-100"><input type="number" min="0" class="form-input" value="${row.actualQty}" placeholder="输入实收数量" oninput="updateStorageRow(${index}, 'actualQty', this.value)" /></td><td class="px-6 py-4 border-b border-slate-100"><button type="button" class="action-btn px-4 py-2 rounded-xl bg-red-50 text-red-600 font-semibold hover:bg-red-100" onclick="removeStorageRow(${index})">删除</button></td></tr>`).join(""); renderStorageTotal(); }
+      function renderStorageTotal() { const total = storageRows.reduce((sum, row) => sum + (Number(row.actualQty) || 0), 0); document.getElementById("storageTotalQty").textContent = total; }
+      function refreshReceiptStatus() { const expectedTotal = record.materials.reduce((sum, item) => sum + item.expectedQty, 0); const actualTotal = record.materials.reduce((sum, item) => sum + item.actualQty, 0); if (actualTotal <= 0) { record.status = "pending"; record.statusText = "未入库"; } else if (actualTotal < expectedTotal) { record.status = "partial"; record.statusText = "部分入库"; } else { record.status = "done"; record.statusText = "已入库"; } }
+      function confirmStorage() { if (activeMaterialIndex < 0) return; const invalid = storageRows.some((row) => !row.warehouse || !row.location || !(Number(row.actualQty) > 0)); if (invalid) { showToast("请完整填写仓库、库位和实收数量"); return; } const addedQty = storageRows.reduce((sum, row) => sum + Number(row.actualQty || 0), 0); const material = record.materials[activeMaterialIndex]; const pendingQty = Math.max(material.expectedQty - material.actualQty, 0); if (addedQty !== pendingQty) { const confirmed = confirm("应收实收数量不一致，是否确认入库？"); if (!confirmed) return; } material.actualQty += addedQty; if (material.actualQty >= material.expectedQty) { material.actualQty = material.expectedQty; material.storageStatus = "已入库"; material.storageClass = "pass"; material.inspectStatus = "检验合格"; material.inspectClass = "pass"; material.remark = "已完成入库"; } else { material.storageStatus = "部分入库"; material.storageClass = "partial"; material.inspectStatus = "检验中"; material.inspectClass = "partial"; material.remark = "本次已分配库位"; } refreshReceiptStatus(); renderMaterials(); closeStorageDrawer(); showToast("入库完成"); }
+      function saveReceipt() { showToast("入库单保存成功"); }
+      document.getElementById("storageDrawerOverlay").addEventListener("click", (event) => { if (event.target.id === "storageDrawerOverlay") closeStorageDrawer(); });
       const receiptNo = decodeURIComponent(getQueryParam("receiptNo") || "RKD-20260407-001");
-      const record = receiptRecords[receiptNo] || receiptRecords["RKD-20260407-001"];
-
-      renderReceiptInfo(record);
-      renderMaterials(record);
+      record = receiptRecords[receiptNo] || receiptRecords["RKD-20260407-001"];
+      renderReceiptInfo();
+      renderMaterials();
     </script>
   </body>
 </html>
