@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>裸管入库单详情 - MES系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap");
+
+      * {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+
+      body {
+        font-family: "Inter", "Noto Sans SC", sans-serif;
+        background: #f4f6f8;
+        overflow: hidden;
+      }
+
+      .industrial-shadow {
+        box-shadow:
+          0 2px 8px rgba(15, 23, 42, 0.08),
+          0 4px 18px rgba(15, 23, 42, 0.05);
+      }
+
+      .industrial-shadow-lg {
+        box-shadow:
+          0 10px 28px rgba(15, 23, 42, 0.12),
+          0 8px 22px rgba(37, 99, 235, 0.12);
+      }
+
+      .hero-panel {
+        background:
+          radial-gradient(circle at top right, rgba(147, 197, 253, 0.28), transparent 28%),
+          linear-gradient(135deg, #0f172a 0%, #1d4ed8 58%, #2563eb 100%);
+      }
+
+      .info-card {
+        background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+        border: 1px solid #dbe7f3;
+      }
+
+      .info-field {
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 9999px;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1px solid transparent;
+      }
+
+      .status-pill.pending {
+        background: #f3f4f6;
+        color: #4b5563;
+        border-color: #e5e7eb;
+      }
+
+      .status-pill.partial {
+        background: #fff7ed;
+        color: #c2410c;
+        border-color: #fdba74;
+      }
+
+      .status-pill.done {
+        background: #ecfdf3;
+        color: #15803d;
+        border-color: #86efac;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 9999px;
+        background: currentColor;
+        opacity: 0.85;
+      }
+
+      .result-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 10px;
+        border-radius: 9999px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .result-tag.pending {
+        background: #f3f4f6;
+        color: #4b5563;
+      }
+
+      .result-tag.pass {
+        background: #ecfdf3;
+        color: #15803d;
+      }
+
+      .result-tag.partial {
+        background: #fff7ed;
+        color: #c2410c;
+      }
+
+      .action-btn {
+        transition: all 0.2s ease;
+      }
+
+      .action-btn:active {
+        transform: scale(0.96);
+      }
+
+      .toast {
+        animation: slideIn 0.25s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(-12px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #e2e8f0;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 9999px;
+      }
+    </style>
+  </head>
+  <body class="h-screen w-screen flex flex-col">
+    <header class="bg-white industrial-shadow z-50 flex-none">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-4">
+          <button
+            onclick="history.back()"
+            class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors"
+          >
+            <i class="fas fa-arrow-left text-lg"></i>
+          </button>
+          <div class="flex items-center gap-3">
+            <div
+              class="w-11 h-11 bg-blue-600 rounded-xl flex items-center justify-center text-white"
+            >
+              <i class="fas fa-file-invoice text-xl"></i>
+            </div>
+            <div>
+              <h1 class="text-xl font-bold text-gray-900 tracking-tight">
+                裸管入库单详情
+              </h1>
+              <p class="text-xs text-gray-500">
+                入库单信息与物料信息维护
+              </p>
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          onclick="saveReceipt()"
+          class="action-btn flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 text-white font-semibold industrial-shadow-lg hover:bg-blue-700"
+        >
+          <i class="fas fa-floppy-disk"></i>
+          <span>保存</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="px-6 pt-5 pb-4 flex-none">
+      <div class="hero-panel rounded-3xl industrial-shadow-lg text-white p-6">
+        <div class="flex flex-col xl:flex-row xl:items-end gap-5">
+          <div class="flex-1">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/12 border border-white/15 text-sm font-semibold">
+              <i class="fas fa-warehouse"></i>
+              <span>入库执行</span>
+            </div>
+            <h2 id="heroReceiptNo" class="mt-4 text-3xl font-bold tracking-tight">
+              RKD-20260407-001
+            </h2>
+            <p id="heroProject" class="mt-2 text-sm text-blue-50/90">
+              唐山港输油管道二期项目
+            </p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 min-w-full xl:min-w-[540px]">
+            <div class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4">
+              <div class="text-xs text-blue-100/85">应收总数量</div>
+              <div id="metricExpected" class="mt-2 text-3xl font-bold">0</div>
+            </div>
+            <div class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4">
+              <div class="text-xs text-blue-100/85">实收总数量</div>
+              <div id="metricActual" class="mt-2 text-3xl font-bold">0</div>
+            </div>
+            <div class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4">
+              <div class="text-xs text-blue-100/85">物料条目</div>
+              <div id="metricItems" class="mt-2 text-3xl font-bold">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="px-6 pb-6 flex-1 min-h-0 overflow-hidden">
+      <div class="h-full overflow-y-auto space-y-4 pr-1">
+        <section class="info-card rounded-3xl industrial-shadow p-5">
+          <div class="flex items-center justify-between gap-4 mb-4">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">入库单信息</h3>
+              <p class="text-xs text-slate-500 mt-1">当前单据基础信息与负责人</p>
+            </div>
+            <span id="headerStatus" class="status-pill pending">
+              <span class="status-dot"></span>
+              未入库
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div class="info-field rounded-2xl px-4 py-3">
+              <div class="text-xs text-slate-500">入库单号</div>
+              <div id="infoReceiptNo" class="mt-2 text-sm font-semibold text-slate-900"></div>
+            </div>
+            <div class="info-field rounded-2xl px-4 py-3">
+              <div class="text-xs text-slate-500">销售单号</div>
+              <div id="infoSalesNo" class="mt-2 text-sm font-semibold text-slate-900"></div>
+            </div>
+            <div class="info-field rounded-2xl px-4 py-3">
+              <div class="text-xs text-slate-500">项目名称</div>
+              <div id="infoProject" class="mt-2 text-sm font-semibold text-slate-900"></div>
+            </div>
+            <div class="info-field rounded-2xl px-4 py-3">
+              <div class="text-xs text-slate-500">入库类型</div>
+              <div id="infoType" class="mt-2 text-sm font-semibold text-slate-900"></div>
+            </div>
+            <div class="info-field rounded-2xl px-4 py-3">
+              <div class="text-xs text-slate-500">状态</div>
+              <div id="infoStatusText" class="mt-2 text-sm font-semibold text-slate-900"></div>
+            </div>
+            <div class="info-field rounded-2xl px-4 py-3">
+              <div class="text-xs text-slate-500">入库日期</div>
+              <div id="infoDate" class="mt-2 text-sm font-semibold text-slate-900"></div>
+            </div>
+            <div class="info-field rounded-2xl px-4 py-3">
+              <div class="text-xs text-slate-500">操作人</div>
+              <div id="infoOperator" class="mt-2 text-sm font-semibold text-slate-900"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="info-card rounded-3xl industrial-shadow overflow-hidden">
+          <div class="flex items-center justify-between gap-4 px-5 py-4 border-b border-slate-200">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">物料信息</h3>
+              <p class="text-xs text-slate-500 mt-1">维护收货数量、检验状态与入库状态</p>
+            </div>
+            <div class="text-sm text-slate-500">
+              共 <span id="materialCount" class="font-bold text-blue-600">0</span> 项
+            </div>
+          </div>
+
+          <div class="overflow-auto">
+            <table class="min-w-full text-sm text-slate-700">
+              <thead class="bg-slate-50 text-slate-600">
+                <tr>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">序号</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 min-w-[180px]">物料名称</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">物料编码</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 min-w-[180px]">规格型号</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">单位</th>
+                  <th class="px-4 py-4 text-right font-bold border-b border-slate-200 whitespace-nowrap">应收数量</th>
+                  <th class="px-4 py-4 text-right font-bold border-b border-slate-200 whitespace-nowrap">实收数量</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">检验状态</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">入库状态</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 min-w-[200px]">备注</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">操作</th>
+                </tr>
+              </thead>
+              <tbody id="materialTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div
+      id="toast"
+      class="toast fixed top-5 right-5 hidden items-center gap-3 rounded-2xl bg-slate-900 text-white px-4 py-3 industrial-shadow-lg z-[60]"
+    >
+      <i class="fas fa-circle-check text-green-400"></i>
+      <span id="toastText">保存成功</span>
+    </div>
+
+    <script>
+      const CURRENT_USER = "张三";
+
+      const receiptRecords = {
+        "RKD-20260407-001": {
+          receiptNo: "RKD-20260407-001",
+          salesNo: "XS-20260328-016",
+          projectName: "唐山港输油管道二期项目",
+          receiptType: "甲供管入库",
+          status: "pending",
+          statusText: "未入库",
+          date: "2026-04-07",
+          operator: CURRENT_USER,
+          materials: [
+            {
+              seq: 1,
+              name: "裸管 L415M",
+              code: "MAT-BP-001",
+              spec: "D813 x 17.5 x 12000",
+              unit: "支",
+              expectedQty: 48,
+              actualQty: 0,
+              inspectStatus: "待检验",
+              inspectClass: "pending",
+              storageStatus: "未入库",
+              storageClass: "pending",
+              remark: "待首批到货",
+            },
+            {
+              seq: 2,
+              name: "裸管 L450M",
+              code: "MAT-BP-002",
+              spec: "D813 x 19.1 x 12000",
+              unit: "支",
+              expectedQty: 80,
+              actualQty: 0,
+              inspectStatus: "待检验",
+              inspectClass: "pending",
+              storageStatus: "未入库",
+              storageClass: "pending",
+              remark: "按合同批次收货",
+            },
+          ],
+        },
+        "RKD-20260407-002": {
+          receiptNo: "RKD-20260407-002",
+          salesNo: "XS-20260328-021",
+          projectName: "华北石油管道更新工程",
+          receiptType: "甲供管入库",
+          status: "partial",
+          statusText: "部分入库",
+          date: "2026-04-07",
+          operator: CURRENT_USER,
+          materials: [
+            {
+              seq: 1,
+              name: "裸管 X65",
+              code: "MAT-BP-018",
+              spec: "D711 x 14.2 x 11800",
+              unit: "支",
+              expectedQty: 56,
+              actualQty: 28,
+              inspectStatus: "检验合格",
+              inspectClass: "pass",
+              storageStatus: "部分入库",
+              storageClass: "partial",
+              remark: "首批完成验收",
+            },
+            {
+              seq: 2,
+              name: "裸管 X70",
+              code: "MAT-BP-019",
+              spec: "D711 x 16.0 x 11800",
+              unit: "支",
+              expectedQty: 40,
+              actualQty: 15,
+              inspectStatus: "检验中",
+              inspectClass: "partial",
+              storageStatus: "部分入库",
+              storageClass: "partial",
+              remark: "剩余批次在途",
+            },
+          ],
+        },
+        "RKD-20260406-018": {
+          receiptNo: "RKD-20260406-018",
+          salesNo: "XS-20260327-009",
+          projectName: "西北长输原油管线配套项目",
+          receiptType: "甲供管入库",
+          status: "done",
+          statusText: "已入库",
+          date: "2026-04-06",
+          operator: CURRENT_USER,
+          materials: [
+            {
+              seq: 1,
+              name: "裸管 X65MS",
+              code: "MAT-BP-032",
+              spec: "D1016 x 21.0 x 12000",
+              unit: "支",
+              expectedQty: 120,
+              actualQty: 120,
+              inspectStatus: "检验合格",
+              inspectClass: "pass",
+              storageStatus: "已入库",
+              storageClass: "pass",
+              remark: "已完成整单入库",
+            },
+            {
+              seq: 2,
+              name: "裸管 X70MS",
+              code: "MAT-BP-033",
+              spec: "D1016 x 24.0 x 12000",
+              unit: "支",
+              expectedQty: 100,
+              actualQty: 100,
+              inspectStatus: "检验合格",
+              inspectClass: "pass",
+              storageStatus: "已入库",
+              storageClass: "pass",
+              remark: "库位已分配完成",
+            },
+          ],
+        },
+      };
+
+      function getQueryParam(name) {
+        return new URLSearchParams(window.location.search).get(name);
+      }
+
+      function getStatusClass(status) {
+        if (status === "done") return "done";
+        if (status === "partial") return "partial";
+        return "pending";
+      }
+
+      function getResultClass(type) {
+        if (type === "pass") return "pass";
+        if (type === "partial") return "partial";
+        return "pending";
+      }
+
+      function showToast(message) {
+        const toast = document.getElementById("toast");
+        document.getElementById("toastText").textContent = message;
+        toast.classList.remove("hidden");
+        toast.classList.add("flex");
+        setTimeout(() => {
+          toast.classList.add("hidden");
+          toast.classList.remove("flex");
+        }, 1800);
+      }
+
+      function renderReceiptInfo(record) {
+        document.getElementById("heroReceiptNo").textContent = record.receiptNo;
+        document.getElementById("heroProject").textContent = record.projectName;
+        document.getElementById("infoReceiptNo").textContent = record.receiptNo;
+        document.getElementById("infoSalesNo").textContent = record.salesNo;
+        document.getElementById("infoProject").textContent = record.projectName;
+        document.getElementById("infoType").textContent = record.receiptType;
+        document.getElementById("infoStatusText").textContent = record.statusText;
+        document.getElementById("infoDate").textContent = record.date;
+        document.getElementById("infoOperator").textContent = record.operator;
+
+        const statusNode = document.getElementById("headerStatus");
+        statusNode.className = `status-pill ${getStatusClass(record.status)}`;
+        statusNode.innerHTML = `<span class="status-dot"></span>${record.statusText}`;
+      }
+
+      function renderMaterials(record) {
+        const body = document.getElementById("materialTableBody");
+        body.innerHTML = record.materials
+          .map(
+            (item) => `
+              <tr>
+                <td class="px-4 py-4 border-b border-slate-100 font-semibold text-slate-900">${item.seq}</td>
+                <td class="px-4 py-4 border-b border-slate-100">${item.name}</td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${item.code}</td>
+                <td class="px-4 py-4 border-b border-slate-100">${item.spec}</td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${item.unit}</td>
+                <td class="px-4 py-4 border-b border-slate-100 text-right font-semibold">${item.expectedQty}</td>
+                <td class="px-4 py-4 border-b border-slate-100 text-right font-semibold">${item.actualQty}</td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">
+                  <span class="result-tag ${getResultClass(item.inspectClass)}">${item.inspectStatus}</span>
+                </td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">
+                  <span class="result-tag ${getResultClass(item.storageClass)}">${item.storageStatus}</span>
+                </td>
+                <td class="px-4 py-4 border-b border-slate-100">${item.remark}</td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">
+                  <div class="flex items-center gap-2">
+                    <button type="button" class="action-btn px-3 py-2 rounded-xl bg-blue-50 text-blue-700 font-semibold hover:bg-blue-100" onclick="event.stopPropagation(); handleAction('去入库')">去入库</button>
+                    <button type="button" class="action-btn px-3 py-2 rounded-xl bg-amber-50 text-amber-700 font-semibold hover:bg-amber-100" onclick="event.stopPropagation(); handleAction('编辑')">编辑</button>
+                    <button type="button" class="action-btn px-3 py-2 rounded-xl bg-red-50 text-red-600 font-semibold hover:bg-red-100" onclick="event.stopPropagation(); handleAction('删除')">删除</button>
+                  </div>
+                </td>
+              </tr>
+            `
+          )
+          .join("");
+
+        const expectedTotal = record.materials.reduce((sum, item) => sum + item.expectedQty, 0);
+        const actualTotal = record.materials.reduce((sum, item) => sum + item.actualQty, 0);
+
+        document.getElementById("metricExpected").textContent = expectedTotal;
+        document.getElementById("metricActual").textContent = actualTotal;
+        document.getElementById("metricItems").textContent = record.materials.length;
+        document.getElementById("materialCount").textContent = record.materials.length;
+      }
+
+      function handleAction(label) {
+        showToast(`${label}功能已预留`);
+      }
+
+      function saveReceipt() {
+        showToast("入库单保存成功");
+      }
+
+      const receiptNo = decodeURIComponent(getQueryParam("receiptNo") || "RKD-20260407-001");
+      const record = receiptRecords[receiptNo] || receiptRecords["RKD-20260407-001"];
+
+      renderReceiptInfo(record);
+      renderMaterials(record);
+    </script>
+  </body>
+</html>
