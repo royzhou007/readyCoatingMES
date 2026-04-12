@@ -423,6 +423,7 @@
 
           <div
             class="blue-card industrial-shadow flex items-center gap-5 rounded-2xl p-6"
+            onclick="goToFinishedProductReceiptList()"
           >
             <div
               class="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
@@ -442,6 +443,7 @@
 
           <div
             class="blue-card industrial-shadow flex items-center gap-5 rounded-2xl p-6"
+            onclick="goToFinishedProductIssueList()"
           >
             <div
               class="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
@@ -461,6 +463,7 @@
 
           <div
             class="blue-card industrial-shadow flex items-center gap-5 rounded-2xl p-6"
+            onclick="goToLogisticsOrderList()"
           >
             <div
               class="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
@@ -587,6 +590,18 @@
 
       function goToBarePipeReceiptCreate() {
         window.location.href = "./bare-pipe-receipt-create.html";
+      }
+
+      function goToFinishedProductReceiptList() {
+        window.location.href = "./finished-product-receipt.html";
+      }
+
+      function goToFinishedProductIssueList() {
+        window.location.href = "./finished-product-issue.html";
+      }
+
+      function goToLogisticsOrderList() {
+        window.location.href = "./logistics-order-list.html";
       }
 
       function formatWeekday(day) {

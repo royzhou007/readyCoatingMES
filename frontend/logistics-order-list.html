@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>物流单列表 - MES系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap");
+      * {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+      body {
+        font-family: "Inter", "Noto Sans SC", sans-serif;
+        background: #f4f6f8;
+        overflow: hidden;
+      }
+      .industrial-shadow {
+        box-shadow:
+          0 2px 8px rgba(15, 23, 42, 0.08),
+          0 4px 18px rgba(15, 23, 42, 0.05);
+      }
+      .industrial-shadow-lg {
+        box-shadow:
+          0 12px 30px rgba(15, 23, 42, 0.12),
+          0 10px 24px rgba(37, 99, 235, 0.12);
+      }
+      .hero-panel {
+        background:
+          radial-gradient(
+            circle at top right,
+            rgba(147, 197, 253, 0.28),
+            transparent 28%
+          ),
+          linear-gradient(135deg, #0f172a 0%, #1d4ed8 58%, #2563eb 100%);
+      }
+      .chip {
+        transition: all 0.2s ease;
+      }
+      .chip.active {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        color: #fff;
+        border-color: #2563eb;
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.2);
+      }
+      .search-input:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+      }
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 9999px;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1px solid transparent;
+      }
+      .status-pill.pending {
+        background: #fff7ed;
+        color: #c2410c;
+        border-color: #fdba74;
+      }
+      .status-pill.done {
+        background: #ecfdf3;
+        color: #15803d;
+        border-color: #86efac;
+      }
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 9999px;
+        background: currentColor;
+        opacity: 0.85;
+      }
+      .table-wrap {
+        background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      }
+      thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: #f8fafc;
+      }
+      tbody tr {
+        transition: background-color 0.18s ease;
+      }
+      tbody tr:hover {
+        background: #f8fbff;
+      }
+      .icon-btn {
+        width: 38px;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+      }
+      .icon-btn:hover {
+        transform: translateY(-1px);
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #e2e8f0;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 9999px;
+      }
+    </style>
+  </head>
+  <body class="h-screen w-screen flex flex-col">
+    <header class="bg-white industrial-shadow z-50 flex-none">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-4">
+          <button
+            onclick="history.back()"
+            class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors"
+          >
+            <i class="fas fa-arrow-left text-lg"></i>
+          </button>
+          <div class="flex items-center gap-3">
+            <div
+              class="w-11 h-11 bg-blue-600 rounded-xl flex items-center justify-center text-white"
+            >
+              <i class="fas fa-truck-fast text-xl"></i>
+            </div>
+            <div>
+              <h1 class="text-xl font-bold text-gray-900 tracking-tight">
+                物流单列表
+              </h1>
+              <p class="text-xs text-gray-500">
+                物流配送管理 | 客户签收状态跟踪
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div
+            class="hidden md:flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg text-sm font-medium"
+          >
+            <i class="fas fa-circle-check"></i><span>运输同步正常</span>
+          </div>
+          <button
+            type="button"
+            class="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
+          >
+            <i class="fas fa-plus"></i><span>新增物流单</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <section class="px-6 pt-5 pb-4 flex-none">
+      <div
+        class="hero-panel rounded-3xl industrial-shadow-lg text-white p-6 md:p-7"
+      >
+        <div class="flex flex-col xl:flex-row xl:items-end gap-5">
+          <div class="flex-1">
+            <div
+              class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/12 border border-white/15 text-sm font-semibold"
+            >
+              <i class="fas fa-route"></i><span>今日配送任务</span>
+            </div>
+            <h2 class="mt-4 text-3xl md:text-4xl font-bold tracking-tight">
+              物流单管理台账
+            </h2>
+            <p
+              class="mt-3 text-sm md:text-base text-blue-50/90 max-w-3xl leading-relaxed"
+            >
+              统一查看销售单对应的物流派车安排、车牌信息与客户签收状态，
+              支持按物流单号、销售单号、项目名称和签收状态快速检索。
+            </p>
+          </div>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-3 gap-3 min-w-full xl:min-w-[520px]"
+          >
+            <div
+              class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4"
+            >
+              <div class="text-xs text-blue-100/85">物流单总数</div>
+              <div id="metricTotal" class="mt-2 text-3xl font-bold">0</div>
+            </div>
+            <div
+              class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4"
+            >
+              <div class="text-xs text-blue-100/85">客户未收货</div>
+              <div id="metricPending" class="mt-2 text-3xl font-bold">0</div>
+            </div>
+            <div
+              class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4"
+            >
+              <div class="text-xs text-blue-100/85">客户已收货</div>
+              <div id="metricDone" class="mt-2 text-3xl font-bold">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="px-6 pb-4 flex-none">
+      <div class="bg-white rounded-3xl industrial-shadow px-5 py-4">
+        <div class="flex flex-col xl:flex-row xl:items-center gap-4">
+          <div class="relative flex-1">
+            <i
+              class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            ></i>
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="搜索物流单号、销售单号、项目名称、物流公司或车牌号"
+              class="search-input w-full pl-11 pr-4 py-3 rounded-2xl border-2 border-gray-200 text-gray-700 placeholder:text-gray-400 transition-all"
+            />
+          </div>
+          <div class="flex items-center gap-3 flex-wrap">
+            <button
+              type="button"
+              class="chip active px-4 py-2.5 rounded-2xl border-2 border-gray-200 text-sm font-semibold text-gray-700"
+              data-status-filter="all"
+            >
+              全部
+            </button>
+            <button
+              type="button"
+              class="chip px-4 py-2.5 rounded-2xl border-2 border-gray-200 text-sm font-semibold text-gray-700 bg-white"
+              data-status-filter="pending"
+            >
+              客户未收货
+            </button>
+            <button
+              type="button"
+              class="chip px-4 py-2.5 rounded-2xl border-2 border-gray-200 text-sm font-semibold text-gray-700 bg-white"
+              data-status-filter="done"
+            >
+              客户已收货
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="px-6 pb-6 flex-1 min-h-0">
+      <div
+        class="table-wrap h-full rounded-3xl industrial-shadow border border-slate-200 overflow-hidden flex flex-col"
+      >
+        <div
+          class="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-white"
+        >
+          <div>
+            <h3 class="text-lg font-bold text-slate-900">物流单列表</h3>
+            <p class="text-sm text-slate-500 mt-1">
+              支持编辑、查看和删除物流单记录
+            </p>
+          </div>
+          <div class="text-sm text-slate-500">
+            当前共
+            <span id="recordCount" class="font-bold text-blue-600">0</span> 条
+          </div>
+        </div>
+        <div class="flex-1 min-h-0 overflow-auto">
+          <table class="min-w-full text-sm text-slate-700">
+            <thead class="text-slate-500">
+              <tr>
+                <th
+                  class="px-4 py-4 text-left font-bold border-b border-slate-200"
+                >
+                  序号
+                </th>
+                <th
+                  class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap"
+                >
+                  物流单号
+                </th>
+                <th
+                  class="px-4 py-4 text-left font-bold border-b border-slate-200 min-w-[240px]"
+                >
+                  销售单号 / 项目名称
+                </th>
+                <th
+                  class="px-4 py-4 text-left font-bold border-b border-slate-200 min-w-[220px]"
+                >
+                  物流公司 / 车牌号
+                </th>
+                <th
+                  class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap"
+                >
+                  物流单日期
+                </th>
+                <th
+                  class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap"
+                >
+                  签收状态
+                </th>
+                <th
+                  class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap"
+                >
+                  操作
+                </th>
+              </tr>
+            </thead>
+            <tbody id="logisticsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const logisticsRecords = [
+        {
+          serial: 1,
+          logisticsNo: "WLD-20260412-001",
+          salesNo: "XS-20260328-016",
+          projectName: "唐山港输油管道二期项目",
+          company: "中远物流",
+          plateNo: "冀B·56218",
+          date: "2026-04-12",
+          status: "pending",
+          statusText: "客户未收货",
+        },
+        {
+          serial: 2,
+          logisticsNo: "WLD-20260412-002",
+          salesNo: "XS-20260330-021",
+          projectName: "华北石油管道更新工程",
+          company: "顺安运输",
+          plateNo: "津A·90876",
+          date: "2026-04-12",
+          status: "done",
+          statusText: "客户已收货",
+        },
+        {
+          serial: 3,
+          logisticsNo: "WLD-20260411-008",
+          salesNo: "XS-20260327-009",
+          projectName: "西北长输原油管线配套项目",
+          company: "陆港供应链",
+          plateNo: "陕K·22831",
+          date: "2026-04-11",
+          status: "pending",
+          statusText: "客户未收货",
+        },
+        {
+          serial: 4,
+          logisticsNo: "WLD-20260410-015",
+          salesNo: "XS-20260324-013",
+          projectName: "沿海LNG外输管线项目",
+          company: "广联车队",
+          plateNo: "鲁F·71355",
+          date: "2026-04-10",
+          status: "done",
+          statusText: "客户已收货",
+        },
+      ];
+
+      let currentStatusFilter = "all";
+
+      function getStatusClass(status) {
+        return status === "done" ? "done" : "pending";
+      }
+
+      function renderMetrics() {
+        document.getElementById("metricTotal").textContent =
+          logisticsRecords.length;
+        document.getElementById("metricPending").textContent =
+          logisticsRecords.filter((item) => item.status === "pending").length;
+        document.getElementById("metricDone").textContent =
+          logisticsRecords.filter((item) => item.status === "done").length;
+      }
+
+      function renderTable() {
+        const keyword = document
+          .getElementById("searchInput")
+          .value.trim()
+          .toLowerCase();
+        const filtered = logisticsRecords.filter((item) => {
+          const matchStatus =
+            currentStatusFilter === "all" ||
+            item.status === currentStatusFilter;
+          const searchText =
+            `${item.logisticsNo} ${item.salesNo} ${item.projectName} ${item.company} ${item.plateNo}`.toLowerCase();
+          const matchKeyword = !keyword || searchText.includes(keyword);
+          return matchStatus && matchKeyword;
+        });
+
+        document.getElementById("recordCount").textContent = filtered.length;
+        document.getElementById("logisticsTableBody").innerHTML = filtered
+          .map(
+            (item) => `
+              <tr>
+                <td class="px-4 py-4 border-b border-slate-100 font-semibold text-slate-900">${item.serial}</td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap font-semibold text-blue-700">${item.logisticsNo}</td>
+                <td class="px-4 py-4 border-b border-slate-100">
+                  <div class="font-semibold text-slate-900">${item.salesNo}</div>
+                  <div class="mt-1 text-xs text-slate-500">${item.projectName}</div>
+                </td>
+                <td class="px-4 py-4 border-b border-slate-100">
+                  <div class="font-semibold text-slate-900">${item.company}</div>
+                  <div class="mt-1 text-xs text-slate-500">${item.plateNo}</div>
+                </td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${item.date}</td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">
+                  <span class="status-pill ${getStatusClass(item.status)}">
+                    <span class="status-dot"></span>${item.statusText}
+                  </span>
+                </td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">
+                  <div class="flex items-center gap-2">
+                    <button type="button" title="编辑" class="icon-btn bg-amber-50 text-amber-700 hover:bg-amber-100" onclick="editLogistics('${item.logisticsNo}')">
+                      <i class="fas fa-pen"></i>
+                    </button>
+                    <button type="button" title="查看" class="icon-btn bg-blue-50 text-blue-700 hover:bg-blue-100" onclick="viewLogistics('${item.logisticsNo}')">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button type="button" title="删除" class="icon-btn bg-red-50 text-red-600 hover:bg-red-100" onclick="deleteLogistics('${item.logisticsNo}')">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>`,
+          )
+          .join("");
+      }
+
+      function editLogistics(logisticsNo) {
+        alert(`编辑物流单：${logisticsNo}`);
+      }
+
+      function viewLogistics(logisticsNo) {
+        alert(`查看物流单：${logisticsNo}`);
+      }
+
+      function deleteLogistics(logisticsNo) {
+        const index = logisticsRecords.findIndex(
+          (item) => item.logisticsNo === logisticsNo,
+        );
+        if (index < 0) return;
+        if (!confirm(`确认删除物流单 ${logisticsNo} 吗？`)) return;
+        logisticsRecords.splice(index, 1);
+        logisticsRecords.forEach((item, idx) => {
+          item.serial = idx + 1;
+        });
+        renderMetrics();
+        renderTable();
+      }
+
+      document
+        .getElementById("searchInput")
+        .addEventListener("input", renderTable);
+      document.querySelectorAll("[data-status-filter]").forEach((button) => {
+        button.addEventListener("click", () => {
+          currentStatusFilter = button.dataset.statusFilter;
+          document.querySelectorAll("[data-status-filter]").forEach((node) => {
+            node.classList.toggle(
+              "active",
+              node.dataset.statusFilter === currentStatusFilter,
+            );
+          });
+          renderTable();
+        });
+      });
+
+      renderMetrics();
+      renderTable();
+    </script>
+  </body>
+</html>
