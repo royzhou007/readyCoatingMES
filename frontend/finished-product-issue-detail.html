@@ -91,6 +91,45 @@
         opacity: 1;
         pointer-events: auto;
       }
+      .pipe-card {
+        border: 1px solid #dbe3ef;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+        transition:
+          transform 0.18s ease,
+          border-color 0.18s ease,
+          box-shadow 0.18s ease,
+          background 0.18s ease;
+      }
+      .pipe-card:hover {
+        transform: translateY(-2px);
+        border-color: #93c5fd;
+        box-shadow: 0 10px 24px rgba(59, 130, 246, 0.12);
+      }
+      .pipe-card.selected {
+        border-color: #2563eb;
+        background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+        box-shadow: 0 12px 28px rgba(37, 99, 235, 0.18);
+      }
+      .pipe-card.disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        background: #f8fafc;
+      }
+      .scanner-video {
+        width: 100%;
+        height: 188px;
+        object-fit: cover;
+        border-radius: 20px;
+        background: #0f172a;
+      }
+      .scanner-frame {
+        position: absolute;
+        inset: 18px;
+        border: 2px solid rgba(255, 255, 255, 0.9);
+        border-radius: 18px;
+        box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.18);
+        pointer-events: none;
+      }
       .modal-panel {
         transform: scale(0.96) translateY(10px);
         transition: transform 0.25s ease;
@@ -297,6 +336,9 @@
                   <th class="px-6 py-5 text-left font-bold border-b border-slate-200 whitespace-nowrap">实出数量</th>
                 </tr>
               </thead>
+                  <th class="px-6 py-5 text-left font-bold border-b border-slate-200 whitespace-nowrap">操作</th>
+                </tr>
+              </thead>
               <tbody id="storageTableBody"></tbody>
             </table>
           </div>
@@ -315,6 +357,119 @@
 
     <div id="toast" class="fixed top-5 right-5 hidden items-center gap-3 rounded-2xl bg-slate-900 text-white px-4 py-3 z-[90]">
       <i class="fas fa-circle-check text-green-400"></i><span id="toastText">保存成功</span>
+    </div>
+
+    <div
+      id="pipeSelectorOverlay"
+      class="modal-overlay fixed inset-0 z-[96] bg-slate-950/40 flex items-center justify-center px-6 py-8"
+    >
+      <div
+        class="w-full max-w-6xl max-h-full rounded-[32px] bg-white shadow-2xl overflow-hidden flex flex-col"
+      >
+        <div
+          class="px-8 py-6 border-b border-slate-200 flex items-center justify-between gap-4"
+        >
+          <div>
+            <h3 class="mt-2 text-2xl font-bold text-slate-900">
+              &#33258;&#32534;&#21495;&#20986;&#24211;&#30331;&#35760;
+            </h3>
+          </div>
+          <button
+            type="button"
+            onclick="closePipeSelector()"
+            class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center"
+          >
+            <i class="fas fa-xmark text-2xl"></i>
+          </button>
+        </div>
+        <div class="px-8 py-6 overflow-hidden flex-1 min-h-0">
+          <div class="h-full grid grid-cols-1 xl:grid-cols-[420px_minmax(0,1fr)] gap-6">
+            <div class="min-h-0 rounded-[28px] border border-slate-200 bg-slate-50 overflow-hidden flex flex-col">
+              <div class="px-6 py-5 border-b border-slate-200 bg-white">
+                <div class="text-lg font-bold text-slate-900">&#24050;&#30331;&#35760;&#38050;&#31649;</div>
+                <div class="mt-1 text-sm text-slate-500">
+                  &#24050;&#28155;&#21152; <span id="pipeRegisteredCount" class="font-semibold text-blue-600">0</span> &#26465;
+                </div>
+              </div>
+              <div class="min-h-0 overflow-auto">
+                <table class="min-w-full text-sm text-slate-700">
+                  <thead class="sticky top-0 bg-slate-50 text-slate-500">
+                    <tr>
+                      <th class="px-5 py-4 text-left font-bold border-b border-slate-200">&#33258;&#32534;&#21495;</th>
+                      <th class="px-5 py-4 text-left font-bold border-b border-slate-200">&#25414;&#21495;</th>
+                      <th class="px-5 py-4 text-left font-bold border-b border-slate-200">&#31649;&#21495;</th>
+                      <th class="px-5 py-4 text-left font-bold border-b border-slate-200">&#25805;&#20316;</th>
+                    </tr>
+                  </thead>
+                  <tbody id="pipeRegisteredTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="min-h-0 rounded-[28px] border border-slate-200 bg-white overflow-hidden flex flex-col">
+              <div class="px-6 py-5 border-b border-slate-200 bg-slate-50">
+                <div class="flex items-center justify-between gap-4">
+                  <div class="text-lg font-bold text-slate-900">&#25104;&#21697;&#31649;&#21015;&#34920;</div>
+                  <div class="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onclick="togglePipeScanner()"
+                      class="w-10 h-10 rounded-xl bg-white text-blue-700 border border-blue-100 hover:bg-blue-50 flex items-center justify-center"
+                      title="&#20108;&#32500;&#30721;&#25195;&#30721;&#30331;&#35760;"
+                    >
+                      <i class="fas fa-qrcode"></i>
+                    </button>
+                    <div class="text-sm text-slate-500">
+                      &#24403;&#21069;&#24050;&#36873;&#25321; <span id="pipeSelectorCount" class="font-bold text-blue-600">0</span> &#25903;
+                    </div>
+                    <button
+                      type="button"
+                      onclick="confirmPipeSelection()"
+                      class="px-5 py-2.5 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700"
+                    >
+                      &#30331;&#35760;
+                    </button>
+                  </div>
+                </div>
+                <div class="mt-3 relative">
+                  <i class="fas fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                  <input
+                    id="pipeSelectorSearch"
+                    type="text"
+                    placeholder="&#25353;&#33258;&#32534;&#21495;&#12289;&#25414;&#21495;&#12289;&#31649;&#21495;&#25628;&#32034;"
+                    oninput="updatePipeSearch(this.value)"
+                    class="form-input pl-11"
+                  />
+                </div>
+                <div id="pipeScannerPanel" class="hidden mt-4 rounded-[24px] border border-blue-100 bg-white p-4">
+                  <div class="flex items-center justify-between gap-3">
+                    <div>
+                      <div class="text-sm font-semibold text-slate-900">&#20108;&#32500;&#30721;&#25195;&#30721;&#30331;&#35760;</div>
+                      <div id="pipeScannerHint" class="mt-1 text-xs text-slate-500">&#23558;&#20108;&#32500;&#30721;&#23545;&#20934;&#25195;&#25551;&#26694;&#65292;&#35782;&#21035;&#21518;&#33258;&#21160;&#30331;&#35760;</div>
+                    </div>
+                    <button
+                      type="button"
+                      onclick="stopPipeScanner()"
+                      class="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center"
+                    >
+                      <i class="fas fa-xmark"></i>
+                    </button>
+                  </div>
+                  <div class="relative mt-4">
+                    <video id="pipeScannerVideo" class="scanner-video" autoplay playsinline muted></video>
+                    <div class="scanner-frame"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="px-6 py-5 overflow-auto flex-1 min-h-0">
+                <div
+                  id="pipeSelectorGrid"
+                  class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div
@@ -343,7 +498,19 @@
         <div class="p-6 bg-slate-50 space-y-5">
           <div class="rounded-2xl border border-slate-200 bg-white px-5 py-4">
             <div class="text-xs text-slate-500">当前物料</div>
-            <div id="editMaterialName" class="mt-2 text-lg font-bold text-slate-900"></div>
+            <div class="mt-3 flex items-start justify-between gap-6">
+              <div id="editMaterialName" class="text-lg font-bold text-slate-900"></div>
+              <div class="grid grid-cols-2 gap-4 min-w-[320px]">
+                <div class="rounded-2xl bg-slate-50 px-4 py-3 border border-slate-200">
+                  <div class="text-xs text-slate-500">物料编码</div>
+                  <div id="editMaterialCode" class="mt-1 text-sm font-semibold text-slate-900"></div>
+                </div>
+                <div class="rounded-2xl bg-slate-50 px-4 py-3 border border-slate-200">
+                  <div class="text-xs text-slate-500">规格型号</div>
+                  <div id="editMaterialSpec" class="mt-1 text-sm font-semibold text-slate-900"></div>
+                </div>
+              </div>
+            </div>
           </div>
           <div>
             <label for="editExpectedQtyInput" class="text-sm font-semibold text-slate-700">应出数量</label>
@@ -437,6 +604,15 @@
       let activeMaterialIndex = -1;
       let editingMaterialIndex = -1;
       let storageRows = [];
+      let currentPipeCatalog = [];
+      let activePipeRowIndex = -1;
+      let pipeSelectorDraft = [];
+      let pipeSelectorKeyword = "";
+      let pipeScannerStream = null;
+      let pipeScannerActive = false;
+      let pipeScanRafId = 0;
+      let lastScannedValue = "";
+      let lastScannedAt = 0;
 
       function getQueryParam(name) {
         return new URLSearchParams(window.location.search).get(name);
@@ -490,11 +666,37 @@
         renderMetrics();
         renderReceiptInfo();
       }
+      function renderEditMaterialSummary() {
+        const summaryCard = document.querySelector(
+          "#editMaterialModal .p-6 > .rounded-2xl.border.border-slate-200.bg-white.px-5.py-4",
+        );
+        if (!summaryCard) return;
+        summaryCard.innerHTML = `
+          <div class="text-xs text-slate-500">当前物料</div>
+          <div class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="rounded-[22px] border border-[#cfe0ff] bg-[#f8fbff] px-5 py-4">
+              <div class="text-sm text-slate-500">名称</div>
+              <div id="editMaterialName" class="mt-4 text-[19px] font-bold tracking-tight text-slate-900"></div>
+            </div>
+            <div class="rounded-[22px] border border-[#cfe0ff] bg-[#f8fbff] px-5 py-4">
+              <div class="text-sm text-slate-500">编码</div>
+              <div id="editMaterialCode" class="mt-4 text-[19px] font-bold tracking-tight text-slate-900"></div>
+            </div>
+            <div class="rounded-[22px] border border-[#cfe0ff] bg-[#f8fbff] px-5 py-4">
+              <div class="text-sm text-slate-500">型号</div>
+              <div id="editMaterialSpec" class="mt-4 text-[19px] font-bold tracking-tight text-slate-900"></div>
+            </div>
+          </div>
+        `;
+      }
       function editMaterial(index) {
         const material = record.materials[index];
         editingMaterialIndex = index;
+        renderEditMaterialSummary();
         document.getElementById("editMaterialName").textContent = material.name;
-        document.getElementById("editMaterialSubtitle").textContent = `${material.code} | ${material.spec}`;
+        document.getElementById("editMaterialCode").textContent = material.code;
+        document.getElementById("editMaterialSpec").textContent = material.spec;
+        document.getElementById("editMaterialSubtitle").textContent = "更新当前物料的计划出库信息";
         document.getElementById("editExpectedQtyInput").value = material.expectedQty;
         document.getElementById("editRemarkInput").value = material.remark || "";
         document.getElementById("editMaterialModal").classList.add("open");
@@ -547,7 +749,44 @@
           location: values.location || "",
           stockQty: Number(values.stockQty) || 0,
           actualQty: values.actualQty || "",
+          registeredPipeIds: values.registeredPipeIds || [],
         };
+      }
+      function ensureStorageTableStructure() {
+        const table = document.querySelector(".storage-table");
+        if (!table) return;
+        table.innerHTML = `
+          <thead class="text-slate-500">
+            <tr>
+              <th class="px-6 py-5 text-left font-bold border-b border-slate-200 whitespace-nowrap">序号</th>
+              <th class="px-6 py-5 text-left font-bold border-b border-slate-200 whitespace-nowrap">出库仓库</th>
+              <th class="px-6 py-5 text-left font-bold border-b border-slate-200 whitespace-nowrap">库位</th>
+              <th class="px-6 py-5 text-left font-bold border-b border-slate-200 whitespace-nowrap">库存数量</th>
+              <th class="px-6 py-5 text-left font-bold border-b border-slate-200 whitespace-nowrap">实出数量</th>
+              <th class="px-6 py-5 text-left font-bold border-b border-slate-200 whitespace-nowrap">操作</th>
+            </tr>
+          </thead>
+          <tbody id="storageTableBody"></tbody>
+        `;
+      }
+      function createPipeCatalog(material, count) {
+        const total = Math.max(count, 1);
+        const bundleSize = 5;
+        return Array.from({ length: total }, (_, index) => {
+          const seq = index + 1;
+          const bundleNo = `BH-${String(Math.floor(index / bundleSize) + 1).padStart(3, "0")}`;
+          return {
+            id: `${material.code}-${seq}`,
+            selfCode: `ZBH-${String(seq).padStart(4, "0")}`,
+            bundleNo,
+            pipeNo: `GH-${String(seq).padStart(4, "0")}`,
+          };
+        });
+      }
+      function getOccupiedPipeIds(excludeRowIndex = -1) {
+        return storageRows
+          .filter((_, index) => index !== excludeRowIndex)
+          .flatMap((row) => row.registeredPipeIds || []);
       }
       function openStorageDrawer(index) {
         activeMaterialIndex = index;
@@ -561,6 +800,12 @@
         );
         if (!storageRows.length) storageRows = [createStorageRow()];
         const pendingQty = Math.max(material.expectedQty - material.actualQty, 0);
+        currentPipeCatalog = createPipeCatalog(material, pendingQty);
+        activePipeRowIndex = -1;
+        pipeSelectorDraft = [];
+        pipeSelectorKeyword = "";
+        lastScannedValue = "";
+        lastScannedAt = 0;
         document.getElementById("drawerMaterialName").textContent = material.name;
         document.getElementById("drawerMaterialNameMini").textContent = material.name;
         document.getElementById("drawerMaterialCode").textContent = material.code;
@@ -572,8 +817,10 @@
       }
       function closeStorageDrawer() {
         document.getElementById("storageDrawerOverlay").classList.remove("open");
+        closePipeSelector(true);
         activeMaterialIndex = -1;
         storageRows = [];
+        currentPipeCatalog = [];
       }
       function updateStorageRow(index, key, value) {
         storageRows[index][key] = value;
@@ -581,8 +828,213 @@
       }
       function renderStorageRows() {
         const body = document.getElementById("storageTableBody");
-        body.innerHTML = storageRows.map((row, index) => `<tr><td class="px-6 py-4 border-b border-slate-100 font-semibold text-slate-900">${index + 1}</td><td class="px-6 py-4 border-b border-slate-100"><div class="readonly-field">${row.warehouse || "-"}</div></td><td class="px-6 py-4 border-b border-slate-100"><div class="readonly-field">${row.location || "-"}</div></td><td class="px-6 py-4 border-b border-slate-100"><div class="readonly-field">${row.stockQty}</div></td><td class="px-6 py-4 border-b border-slate-100"><input type="number" min="0" max="${row.stockQty}" class="form-input" value="${row.actualQty}" placeholder="输入实出数量" oninput="updateStorageRow(${index}, 'actualQty', this.value)" /></td></tr>`).join("");
+        body.innerHTML = storageRows.map((row, index) => `<tr><td class="px-6 py-4 border-b border-slate-100 font-semibold text-slate-900">${index + 1}</td><td class="px-6 py-4 border-b border-slate-100"><div class="readonly-field">${row.warehouse || "-"}</div></td><td class="px-6 py-4 border-b border-slate-100"><div class="readonly-field">${row.location || "-"}</div></td><td class="px-6 py-4 border-b border-slate-100"><div class="readonly-field">${row.stockQty}</div></td><td class="px-6 py-4 border-b border-slate-100"><input type="number" min="0" max="${row.stockQty}" class="form-input" value="${row.actualQty}" placeholder="输入实出数量" oninput="updateStorageRow(${index}, 'actualQty', this.value)" /></td><td class="px-6 py-4 border-b border-slate-100"><button type="button" title="登记自编号" class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 relative flex items-center justify-center" onclick="openPipeSelector(${index})"><i class="fas fa-barcode"></i>${row.registeredPipeIds.length ? `<span class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-blue-600 text-white text-[11px] font-bold flex items-center justify-center">${row.registeredPipeIds.length}</span>` : ""}</button></td></tr>`).join("");
         renderStorageTotal();
+      }
+      function openPipeSelector(index) {
+        activePipeRowIndex = index;
+        pipeSelectorDraft = [];
+        pipeSelectorKeyword = "";
+        lastScannedValue = "";
+        lastScannedAt = 0;
+        document.getElementById("pipeSelectorSearch").value = "";
+        renderRegisteredPipeList();
+        renderPipeSelector();
+        document.getElementById("pipeSelectorOverlay").classList.add("open");
+      }
+      function closePipeSelector(forceReset = false) {
+        document.getElementById("pipeSelectorOverlay").classList.remove("open");
+        stopPipeScanner();
+        if (forceReset) {
+          activePipeRowIndex = -1;
+          pipeSelectorDraft = [];
+          pipeSelectorKeyword = "";
+        }
+      }
+      function updatePipeSearch(value) {
+        pipeSelectorKeyword = (value || "").trim().toLowerCase();
+        renderPipeSelector();
+      }
+      function getPipeById(pipeId) {
+        return currentPipeCatalog.find((item) => item.id === pipeId);
+      }
+      function getRegisteredPipeIds() {
+        if (activePipeRowIndex < 0) return [];
+        return storageRows[activePipeRowIndex].registeredPipeIds || [];
+      }
+      function togglePipeScanner() {
+        if (pipeScannerActive) {
+          stopPipeScanner();
+          return;
+        }
+        startPipeScanner();
+      }
+      async function startPipeScanner() {
+        if (activePipeRowIndex < 0) return;
+        if (!("mediaDevices" in navigator) || !navigator.mediaDevices.getUserMedia) {
+          showToast("当前浏览器不支持摄像头扫码");
+          return;
+        }
+        if (!("BarcodeDetector" in window)) {
+          showToast("当前浏览器不支持二维码识别");
+          return;
+        }
+        try {
+          const panel = document.getElementById("pipeScannerPanel");
+          const hint = document.getElementById("pipeScannerHint");
+          const video = document.getElementById("pipeScannerVideo");
+          panel.classList.remove("hidden");
+          hint.innerHTML = "&#23558;&#20108;&#32500;&#30721;&#23545;&#20934;&#25195;&#25551;&#26694;&#65292;&#35782;&#21035;&#21518;&#33258;&#21160;&#30331;&#35760;";
+          pipeScannerStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { ideal: "environment" } },
+            audio: false,
+          });
+          video.srcObject = pipeScannerStream;
+          await video.play();
+          pipeScannerActive = true;
+          scanPipeFrame();
+        } catch (error) {
+          stopPipeScanner();
+          showToast("摄像头开启失败，请检查权限");
+        }
+      }
+      function stopPipeScanner() {
+        pipeScannerActive = false;
+        if (pipeScanRafId) cancelAnimationFrame(pipeScanRafId);
+        pipeScanRafId = 0;
+        const video = document.getElementById("pipeScannerVideo");
+        if (video) video.srcObject = null;
+        if (pipeScannerStream) {
+          pipeScannerStream.getTracks().forEach((track) => track.stop());
+          pipeScannerStream = null;
+        }
+        const panel = document.getElementById("pipeScannerPanel");
+        if (panel) panel.classList.add("hidden");
+      }
+      async function scanPipeFrame() {
+        if (!pipeScannerActive) return;
+        const video = document.getElementById("pipeScannerVideo");
+        const hint = document.getElementById("pipeScannerHint");
+        try {
+          if (video.readyState >= 2) {
+            const detector = new BarcodeDetector({
+              formats: ["qr_code", "code_128", "code_39", "ean_13", "ean_8"],
+            });
+            const barcodes = await detector.detect(video);
+            if (barcodes.length) {
+              const rawValue = (barcodes[0].rawValue || "").trim();
+              const now = Date.now();
+              if (rawValue && (rawValue !== lastScannedValue || now - lastScannedAt > 1500)) {
+                lastScannedValue = rawValue;
+                lastScannedAt = now;
+                const result = registerPipeByScan(rawValue);
+                hint.innerHTML = result.message;
+              }
+            }
+          }
+        } catch (error) {
+          hint.innerHTML = "&#35782;&#21035;&#22833;&#36133;&#65292;&#35831;&#31245;&#21518;&#37325;&#35797;";
+        }
+        pipeScanRafId = requestAnimationFrame(scanPipeFrame);
+      }
+      function registerPipeByScan(rawValue) {
+        const keyword = rawValue.trim().toLowerCase();
+        const pipe =
+          currentPipeCatalog.find((item) => item.selfCode.toLowerCase() === keyword || item.bundleNo.toLowerCase() === keyword || item.pipeNo.toLowerCase() === keyword) ||
+          currentPipeCatalog.find((item) => `${item.selfCode} ${item.bundleNo} ${item.pipeNo}`.toLowerCase().includes(keyword));
+        if (!pipe) {
+          showToast("未匹配到对应钢管");
+          return { ok: false, message: "&#26410;&#21305;&#37197;&#21040;&#23545;&#24212;&#38050;&#31649;&#65292;&#35831;&#37325;&#26032;&#25195;&#30721;" };
+        }
+        const occupied = new Set(getOccupiedPipeIds(activePipeRowIndex));
+        const registered = new Set(getRegisteredPipeIds());
+        if (occupied.has(pipe.id)) {
+          showToast("该钢管已分配到其他明细");
+          return { ok: false, message: "&#35813;&#38050;&#31649;&#24050;&#20998;&#37197;&#21040;&#20854;&#20182;&#26126;&#32454;" };
+        }
+        if (registered.has(pipe.id)) {
+          showToast("该钢管已登记");
+          return { ok: false, message: "&#35813;&#38050;&#31649;&#24050;&#30331;&#35760;" };
+        }
+        const mergedIds = [...registered, pipe.id];
+        storageRows[activePipeRowIndex].registeredPipeIds = mergedIds;
+        storageRows[activePipeRowIndex].actualQty = mergedIds.length || "";
+        renderStorageRows();
+        renderRegisteredPipeList();
+        renderPipeSelector();
+        showToast(`已登记 ${pipe.selfCode}`);
+        return { ok: true, message: `&#24050;&#33258;&#21160;&#30331;&#35760; ${pipe.selfCode}` };
+      }
+      function renderRegisteredPipeList() {
+        const body = document.getElementById("pipeRegisteredTableBody");
+        const ids = getRegisteredPipeIds();
+        document.getElementById("pipeRegisteredCount").textContent = ids.length;
+        if (!ids.length) {
+          body.innerHTML = '<tr><td colspan="4" class="px-5 py-10 text-center text-slate-400">&#26242;&#26080;&#24050;&#30331;&#35760;&#38050;&#31649;</td></tr>';
+          return;
+        }
+        body.innerHTML = ids.map((pipeId, index) => {
+          const pipe = getPipeById(pipeId);
+          if (!pipe) return "";
+          return `<tr><td class="px-5 py-4 border-b border-slate-200 font-semibold text-slate-900">${pipe.selfCode}</td><td class="px-5 py-4 border-b border-slate-200">${pipe.bundleNo}</td><td class="px-5 py-4 border-b border-slate-200">${pipe.pipeNo}</td><td class="px-5 py-4 border-b border-slate-200"><button type="button" class="px-3 py-1.5 rounded-xl bg-red-50 text-red-600 font-semibold hover:bg-red-100" onclick="removeRegisteredPipe(${index})">&#21024;&#38500;</button></td></tr>`;
+        }).join("");
+      }
+      function removeRegisteredPipe(index) {
+        if (activePipeRowIndex < 0) return;
+        const currentIds = [...getRegisteredPipeIds()];
+        currentIds.splice(index, 1);
+        storageRows[activePipeRowIndex].registeredPipeIds = currentIds;
+        storageRows[activePipeRowIndex].actualQty = currentIds.length || "";
+        renderStorageRows();
+        renderRegisteredPipeList();
+        renderPipeSelector();
+      }
+      function togglePipeSelection(pipeId) {
+        if (activePipeRowIndex < 0) return;
+        const occupied = new Set(getOccupiedPipeIds(activePipeRowIndex));
+        const registered = new Set(getRegisteredPipeIds());
+        if (occupied.has(pipeId) || registered.has(pipeId)) return;
+        if (pipeSelectorDraft.includes(pipeId)) {
+          pipeSelectorDraft = pipeSelectorDraft.filter((id) => id !== pipeId);
+        } else {
+          pipeSelectorDraft = [...pipeSelectorDraft, pipeId];
+        }
+        renderPipeSelector();
+      }
+      function renderPipeSelector() {
+        const countNode = document.getElementById("pipeSelectorCount");
+        const grid = document.getElementById("pipeSelectorGrid");
+        countNode.textContent = pipeSelectorDraft.length;
+        const occupied = new Set(getOccupiedPipeIds(activePipeRowIndex));
+        const registered = new Set(getRegisteredPipeIds());
+        const filteredCatalog = currentPipeCatalog.filter((pipe) => {
+          if (!pipeSelectorKeyword) return true;
+          const text = `${pipe.selfCode} ${pipe.bundleNo} ${pipe.pipeNo}`.toLowerCase();
+          return text.includes(pipeSelectorKeyword);
+        });
+        if (!filteredCatalog.length) {
+          grid.innerHTML = '<div class="col-span-full rounded-3xl border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center text-slate-400">未找到匹配的钢管</div>';
+          return;
+        }
+        grid.innerHTML = filteredCatalog.map((pipe) => {
+          const selected = pipeSelectorDraft.includes(pipe.id);
+          const occupiedByOther = occupied.has(pipe.id);
+          const alreadyRegistered = registered.has(pipe.id);
+          const disabled = occupiedByOther || alreadyRegistered;
+          const statusText = occupiedByOther ? "已分配到其他出库明细" : alreadyRegistered ? "已添加到左侧列表" : "";
+          return `<button type="button" ${disabled ? "disabled" : ""} class="pipe-card ${selected ? "selected" : ""} ${disabled ? "disabled" : ""} rounded-[24px] p-4 text-left" onclick="togglePipeSelection('${pipe.id}')"><div class="flex items-start justify-between gap-3"><div class="min-w-0"><div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">自编号</div><div class="mt-1 text-base font-bold text-slate-900 leading-6">${pipe.selfCode}</div></div><div class="w-7 h-7 rounded-full ${selected ? "bg-blue-600 text-white" : disabled ? "bg-slate-200 text-slate-500" : "bg-slate-100 text-slate-400"} flex items-center justify-center flex-none"><i class="fas ${selected ? "fa-check" : disabled ? "fa-lock" : "fa-plus"} text-xs"></i></div></div><div class="mt-3 space-y-2 text-sm"><div class="rounded-2xl bg-slate-50 px-3 py-2"><div class="text-[11px] text-slate-400">捆号</div><div class="mt-0.5 font-semibold text-slate-800 leading-5">${pipe.bundleNo}</div></div><div class="rounded-2xl bg-slate-50 px-3 py-2"><div class="text-[11px] text-slate-400">管号</div><div class="mt-0.5 font-semibold text-slate-800 leading-5">${pipe.pipeNo}</div></div></div>${statusText ? `<div class="mt-3 text-xs font-semibold text-amber-600 leading-5">${statusText}</div>` : ""}</button>`;
+        }).join("");
+      }
+      function confirmPipeSelection() {
+        if (activePipeRowIndex < 0) return;
+        const currentIds = storageRows[activePipeRowIndex].registeredPipeIds || [];
+        const mergedIds = [...new Set([...currentIds, ...pipeSelectorDraft])];
+        storageRows[activePipeRowIndex].registeredPipeIds = mergedIds;
+        storageRows[activePipeRowIndex].actualQty = mergedIds.length || "";
+        renderStorageRows();
+        renderRegisteredPipeList();
+        pipeSelectorDraft = [];
+        renderPipeSelector();
       }
       function renderStorageTotal() {
         const total = storageRows.reduce((sum, row) => sum + (Number(row.actualQty) || 0), 0);
@@ -646,9 +1098,13 @@
       document.getElementById("storageDrawerOverlay").addEventListener("click", (event) => {
         if (event.target.id === "storageDrawerOverlay") closeStorageDrawer();
       });
+      document.getElementById("pipeSelectorOverlay").addEventListener("click", (event) => {
+        if (event.target.id === "pipeSelectorOverlay") closePipeSelector();
+      });
       document.getElementById("editMaterialModal").addEventListener("click", (event) => {
         if (event.target.id === "editMaterialModal") closeEditMaterialModal();
       });
+      ensureStorageTableStructure();
       const receiptNo = decodeURIComponent(getQueryParam("receiptNo") || "CKD-20260407-001");
       record = receiptRecords[receiptNo] || receiptRecords["CKD-20260407-001"];
       renderReceiptInfo();
