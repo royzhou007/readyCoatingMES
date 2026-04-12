@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
@@ -403,6 +403,7 @@
         <div class="grid auto-rows-fr grid-cols-4 gap-4">
           <div
             class="blue-card industrial-shadow flex items-center gap-5 rounded-2xl p-6"
+            onclick="goToBarePipeReceiptCreate()"
           >
             <div
               class="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
@@ -411,11 +412,9 @@
             </div>
             <div class="min-w-0 flex-1">
               <h3 class="mb-2 truncate text-xl font-bold text-gray-900">
-                原料库存
+                裸管入库
               </h3>
-              <p class="truncate text-base text-gray-500">
-                查看原料实时库存情况
-              </p>
+              <p class="truncate text-base text-gray-500">维护甲供管入库情况</p>
             </div>
             <i
               class="fas fa-chevron-right flex-shrink-0 text-xl text-blue-300"
@@ -432,9 +431,9 @@
             </div>
             <div class="min-w-0 flex-1">
               <h3 class="mb-2 truncate text-xl font-bold text-gray-900">
-                辅料管理
+                成品入库
               </h3>
-              <p class="truncate text-base text-gray-500">维护耗材与辅料台账</p>
+              <p class="truncate text-base text-gray-500">维护成品入库记录</p>
             </div>
             <i
               class="fas fa-chevron-right flex-shrink-0 text-xl text-blue-300"
@@ -451,9 +450,9 @@
             </div>
             <div class="min-w-0 flex-1">
               <h3 class="mb-2 truncate text-xl font-bold text-gray-900">
-                出入库记录
+                成品出库
               </h3>
-              <p class="truncate text-base text-gray-500">追踪物料流转明细</p>
+              <p class="truncate text-base text-gray-500">管理成品出库记录</p>
             </div>
             <i
               class="fas fa-chevron-right flex-shrink-0 text-xl text-blue-300"
@@ -470,11 +469,9 @@
             </div>
             <div class="min-w-0 flex-1">
               <h3 class="mb-2 truncate text-xl font-bold text-gray-900">
-                配送任务
+                物流单管理
               </h3>
-              <p class="truncate text-base text-gray-500">
-                查看待发货与配送安排
-              </p>
+              <p class="truncate text-base text-gray-500">物流车的配送安排</p>
             </div>
             <i
               class="fas fa-chevron-right flex-shrink-0 text-xl text-blue-300"
@@ -586,6 +583,10 @@
 
       function goToFeedingWorkOrders() {
         window.location.href = "./workorders.html";
+      }
+
+      function goToBarePipeReceiptCreate() {
+        window.location.href = "./bare-pipe-receipt-create.html";
       }
 
       function formatWeekday(day) {

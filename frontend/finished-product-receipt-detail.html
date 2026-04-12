@@ -261,13 +261,13 @@
             <div
               class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4"
             >
-              <div class="text-xs text-blue-100/85">应收总数量</div>
+              <div class="text-xs text-blue-100/85">应入总数量</div>
               <div id="metricExpected" class="mt-2 text-3xl font-bold">0</div>
             </div>
             <div
               class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4"
             >
-              <div class="text-xs text-blue-100/85">实收总数量</div>
+              <div class="text-xs text-blue-100/85">实入总数量</div>
               <div id="metricActual" class="mt-2 text-3xl font-bold">0</div>
             </div>
             <div
@@ -396,12 +396,12 @@
                   <th
                     class="px-4 py-4 text-right font-bold border-b border-slate-200 whitespace-nowrap"
                   >
-                    应收数量
+                    应入数量
                   </th>
                   <th
                     class="px-4 py-4 text-right font-bold border-b border-slate-200 whitespace-nowrap"
                   >
-                    实收数量
+                    实入数量
                   </th>
                   <th
                     class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap"
@@ -510,7 +510,7 @@
                 ></div>
               </div>
               <div class="drawer-metric rounded-2xl px-4 py-4">
-                <div class="text-xs text-slate-500">本次应收数量</div>
+                <div class="text-xs text-slate-500">本次应入数量</div>
                 <div
                   id="drawerExpectedQty"
                   class="mt-2 text-sm font-semibold text-slate-900"
@@ -557,7 +557,7 @@
                   <th
                     class="px-6 py-5 text-left font-bold border-b border-slate-200 whitespace-nowrap"
                   >
-                    实收数量
+                    实入数量
                   </th>
                   <th
                     class="px-6 py-5 text-left font-bold border-b border-slate-200 whitespace-nowrap"
@@ -873,7 +873,7 @@
         body.innerHTML = storageRows
           .map(
             (row, index) =>
-              `<tr><td class="px-6 py-4 border-b border-slate-100 font-semibold text-slate-900">${index + 1}</td><td class="px-6 py-4 border-b border-slate-100"><select class="form-select" onchange="updateStorageRow(${index}, 'warehouse', this.value)"><option value="">请选择仓库</option>${STORAGE_WAREHOUSES.map((item) => `<option value="${item}" ${row.warehouse === item ? "selected" : ""}>${item}</option>`).join("")}</select></td><td class="px-6 py-4 border-b border-slate-100"><select class="form-select" onchange="updateStorageRow(${index}, 'location', this.value)"><option value="">请选择库位</option>${STORAGE_LOCATIONS.map((item) => `<option value="${item}" ${row.location === item ? "selected" : ""}>${item}</option>`).join("")}</select></td><td class="px-6 py-4 border-b border-slate-100"><input type="number" min="0" class="form-input" value="${row.actualQty}" placeholder="输入实收数量" oninput="updateStorageRow(${index}, 'actualQty', this.value)" /></td><td class="px-6 py-4 border-b border-slate-100"><button type="button" class="action-btn px-4 py-2 rounded-xl bg-red-50 text-red-600 font-semibold hover:bg-red-100" onclick="removeStorageRow(${index})">删除</button></td></tr>`,
+              `<tr><td class="px-6 py-4 border-b border-slate-100 font-semibold text-slate-900">${index + 1}</td><td class="px-6 py-4 border-b border-slate-100"><select class="form-select" onchange="updateStorageRow(${index}, 'warehouse', this.value)"><option value="">请选择仓库</option>${STORAGE_WAREHOUSES.map((item) => `<option value="${item}" ${row.warehouse === item ? "selected" : ""}>${item}</option>`).join("")}</select></td><td class="px-6 py-4 border-b border-slate-100"><select class="form-select" onchange="updateStorageRow(${index}, 'location', this.value)"><option value="">请选择库位</option>${STORAGE_LOCATIONS.map((item) => `<option value="${item}" ${row.location === item ? "selected" : ""}>${item}</option>`).join("")}</select></td><td class="px-6 py-4 border-b border-slate-100"><input type="number" min="0" class="form-input" value="${row.actualQty}" placeholder="输入实入数量" oninput="updateStorageRow(${index}, 'actualQty', this.value)" /></td><td class="px-6 py-4 border-b border-slate-100"><button type="button" class="action-btn px-4 py-2 rounded-xl bg-red-50 text-red-600 font-semibold hover:bg-red-100" onclick="removeStorageRow(${index})">删除</button></td></tr>`,
           )
           .join("");
         renderStorageTotal();
@@ -912,7 +912,7 @@
             !row.warehouse || !row.location || !(Number(row.actualQty) > 0),
         );
         if (invalid) {
-          showToast("请完整填写仓库、库位和实收数量");
+          showToast("请完整填写仓库、库位和实入数量");
           return;
         }
         const addedQty = storageRows.reduce(
@@ -925,7 +925,7 @@
           0,
         );
         if (addedQty !== pendingQty) {
-          const confirmed = confirm("应收实收数量不一致，是否确认入库？");
+          const confirmed = confirm("应入实入数量不一致，是否确认入库？");
           if (!confirmed) return;
         }
         material.actualQty += addedQty;
