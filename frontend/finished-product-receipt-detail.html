@@ -647,15 +647,9 @@
           class="px-8 py-6 border-b border-slate-200 flex items-center justify-between gap-4"
         >
           <div>
-            <div class="text-xs font-semibold uppercase tracking-[0.24em] text-blue-600">
-              自编号登记
-            </div>
             <h3 class="mt-2 text-2xl font-bold text-slate-900">
-              钢管卡片选择
+              &#33258;&#32534;&#21495;&#20837;&#24211;&#30331;&#35760;
             </h3>
-            <p class="mt-1 text-sm text-slate-500">
-              当前已选择 <span id="pipeSelectorCount" class="font-bold text-blue-600">0</span> 支
-            </p>
           </div>
           <button
             type="button"
@@ -665,29 +659,65 @@
             <i class="fas fa-xmark"></i>
           </button>
         </div>
-        <div class="px-8 py-6 overflow-auto">
-          <div
-            id="pipeSelectorGrid"
-            class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"
-          ></div>
-        </div>
-        <div
-          class="px-8 py-5 border-t border-slate-200 bg-slate-50 flex items-center justify-end gap-4"
-        >
-          <button
-            type="button"
-            onclick="closePipeSelector()"
-            class="action-btn px-8 py-3 rounded-2xl border-2 border-slate-200 bg-white text-slate-600 font-semibold hover:border-slate-300"
-          >
-            取消
-          </button>
-          <button
-            type="button"
-            onclick="confirmPipeSelection()"
-            class="action-btn px-8 py-3 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700"
-          >
-            确定
-          </button>
+        <div class="px-8 py-6 overflow-hidden flex-1 min-h-0">
+          <div class="h-full grid grid-cols-1 xl:grid-cols-[420px_minmax(0,1fr)] gap-6">
+            <div class="min-h-0 rounded-[28px] border border-slate-200 bg-slate-50 overflow-hidden flex flex-col">
+              <div class="px-6 py-5 border-b border-slate-200 bg-white">
+                <div class="text-lg font-bold text-slate-900">&#24050;&#30331;&#35760;&#38050;&#31649;</div>
+                <div class="mt-1 text-sm text-slate-500">
+                  &#24050;&#28155;&#21152; <span id="pipeRegisteredCount" class="font-semibold text-blue-600">0</span> &#26465;
+                </div>
+              </div>
+              <div class="min-h-0 overflow-auto">
+                <table class="min-w-full text-sm text-slate-700">
+                  <thead class="sticky top-0 bg-slate-50 text-slate-500">
+                    <tr>
+                      <th class="px-5 py-4 text-left font-bold border-b border-slate-200">&#33258;&#32534;&#21495;</th>
+                      <th class="px-5 py-4 text-left font-bold border-b border-slate-200">&#25414;&#21495;</th>
+                      <th class="px-5 py-4 text-left font-bold border-b border-slate-200">&#31649;&#21495;</th>
+                      <th class="px-5 py-4 text-left font-bold border-b border-slate-200">&#25805;&#20316;</th>
+                    </tr>
+                  </thead>
+                  <tbody id="pipeRegisteredTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="min-h-0 rounded-[28px] border border-slate-200 bg-white overflow-hidden flex flex-col">
+              <div class="px-6 py-5 border-b border-slate-200 bg-slate-50">
+                <div class="flex items-center justify-between gap-4">
+                  <div class="text-lg font-bold text-slate-900">&#25104;&#21697;&#31649;&#21015;&#34920;</div>
+                  <div class="flex items-center gap-3">
+                    <div class="text-sm text-slate-500">
+                      &#24403;&#21069;&#24050;&#36873;&#25321; <span id="pipeSelectorCount" class="font-bold text-blue-600">0</span> &#25903;
+                    </div>
+                    <button
+                      type="button"
+                      onclick="confirmPipeSelection()"
+                      class="action-btn px-5 py-2.5 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700"
+                    >
+                      &#30331;&#35760;
+                    </button>
+                  </div>
+                </div>
+                <div class="mt-3 relative">
+                  <i class="fas fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                  <input
+                    id="pipeSelectorSearch"
+                    type="text"
+                    placeholder="&#25353;&#33258;&#32534;&#21495;&#12289;&#25414;&#21495;&#12289;&#31649;&#21495;&#25628;&#32034;"
+                    oninput="updatePipeSearch(this.value)"
+                    class="form-input pl-11"
+                  />
+                </div>
+              </div>
+              <div class="px-6 py-5 overflow-auto flex-1 min-h-0">
+                <div
+                  id="pipeSelectorGrid"
+                  class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4"
+                ></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -829,6 +859,7 @@
       let currentPipeCatalog = [];
       let activePipeRowIndex = -1;
       let pipeSelectorDraft = [];
+      let pipeSelectorKeyword = "";
       function getQueryParam(name) {
         return new URLSearchParams(window.location.search).get(name);
       }
@@ -996,7 +1027,10 @@
       }
       function openPipeSelector(index) {
         activePipeRowIndex = index;
-        pipeSelectorDraft = [...(storageRows[index].registeredPipeIds || [])];
+        pipeSelectorDraft = [];
+        pipeSelectorKeyword = "";
+        document.getElementById("pipeSelectorSearch").value = "";
+        renderRegisteredPipeList();
         renderPipeSelector();
         document.getElementById("pipeSelectorOverlay").classList.add("open");
       }
@@ -1005,12 +1039,52 @@
         if (forceReset) {
           activePipeRowIndex = -1;
           pipeSelectorDraft = [];
+          pipeSelectorKeyword = "";
         }
+      }
+      function updatePipeSearch(value) {
+        pipeSelectorKeyword = (value || "").trim().toLowerCase();
+        renderPipeSelector();
+      }
+      function getPipeById(pipeId) {
+        return currentPipeCatalog.find((item) => item.id === pipeId);
+      }
+      function getRegisteredPipeIds() {
+        if (activePipeRowIndex < 0) return [];
+        return storageRows[activePipeRowIndex].registeredPipeIds || [];
+      }
+      function renderRegisteredPipeList() {
+        const body = document.getElementById("pipeRegisteredTableBody");
+        const ids = getRegisteredPipeIds();
+        document.getElementById("pipeRegisteredCount").textContent = ids.length;
+        if (!ids.length) {
+          body.innerHTML =
+            '<tr><td colspan="4" class="px-5 py-10 text-center text-slate-400">&#26242;&#26080;&#24050;&#30331;&#35760;&#38050;&#31649;</td></tr>';
+          return;
+        }
+        body.innerHTML = ids
+          .map((pipeId, index) => {
+            const pipe = getPipeById(pipeId);
+            if (!pipe) return "";
+            return `<tr><td class="px-5 py-4 border-b border-slate-200 font-semibold text-slate-900">${pipe.selfCode}</td><td class="px-5 py-4 border-b border-slate-200">${pipe.bundleNo}</td><td class="px-5 py-4 border-b border-slate-200">${pipe.pipeNo}</td><td class="px-5 py-4 border-b border-slate-200"><button type="button" class="action-btn px-3 py-1.5 rounded-xl bg-red-50 text-red-600 font-semibold hover:bg-red-100" onclick="removeRegisteredPipe(${index})">&#21024;&#38500;</button></td></tr>`;
+          })
+          .join("");
+      }
+      function removeRegisteredPipe(index) {
+        if (activePipeRowIndex < 0) return;
+        const currentIds = [...getRegisteredPipeIds()];
+        currentIds.splice(index, 1);
+        storageRows[activePipeRowIndex].registeredPipeIds = currentIds;
+        storageRows[activePipeRowIndex].actualQty = currentIds.length || "";
+        renderStorageRows();
+        renderRegisteredPipeList();
+        renderPipeSelector();
       }
       function togglePipeSelection(pipeId) {
         if (activePipeRowIndex < 0) return;
         const occupied = new Set(getOccupiedPipeIds(activePipeRowIndex));
-        if (occupied.has(pipeId)) return;
+        const registered = new Set(getRegisteredPipeIds());
+        if (occupied.has(pipeId) || registered.has(pipeId)) return;
         if (pipeSelectorDraft.includes(pipeId)) {
           pipeSelectorDraft = pipeSelectorDraft.filter((id) => id !== pipeId);
         } else {
@@ -1023,22 +1097,42 @@
         const grid = document.getElementById("pipeSelectorGrid");
         countNode.textContent = pipeSelectorDraft.length;
         const occupied = new Set(getOccupiedPipeIds(activePipeRowIndex));
-        grid.innerHTML = currentPipeCatalog
+        const registered = new Set(getRegisteredPipeIds());
+        const filteredCatalog = currentPipeCatalog.filter((pipe) => {
+          if (!pipeSelectorKeyword) return true;
+          const text = `${pipe.selfCode} ${pipe.bundleNo} ${pipe.pipeNo}`.toLowerCase();
+          return text.includes(pipeSelectorKeyword);
+        });
+        if (!filteredCatalog.length) {
+          grid.innerHTML =
+            '<div class="col-span-full rounded-3xl border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center text-slate-400">未找到匹配的钢管</div>';
+          return;
+        }
+        grid.innerHTML = filteredCatalog
           .map((pipe) => {
             const selected = pipeSelectorDraft.includes(pipe.id);
-            const disabled = occupied.has(pipe.id);
-            return `<button type="button" ${disabled ? "disabled" : ""} class="pipe-card ${selected ? "selected" : ""} ${disabled ? "disabled" : ""} rounded-3xl p-5 text-left" onclick="togglePipeSelection('${pipe.id}')"><div class="flex items-start justify-between gap-3"><div><div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">\u81ea\u7f16\u53f7</div><div class="mt-2 text-lg font-bold text-slate-900">${pipe.selfCode}</div></div><div class="w-8 h-8 rounded-full ${selected ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-400"} flex items-center justify-center flex-none"><i class="fas ${selected ? "fa-check" : "fa-plus"} text-sm"></i></div></div><div class="mt-5 grid grid-cols-2 gap-3 text-sm"><div class="rounded-2xl bg-slate-50 px-4 py-3"><div class="text-slate-400">\u6346\u53f7</div><div class="mt-1 font-semibold text-slate-800">${pipe.bundleNo}</div></div><div class="rounded-2xl bg-slate-50 px-4 py-3"><div class="text-slate-400">\u7ba1\u53f7</div><div class="mt-1 font-semibold text-slate-800">${pipe.pipeNo}</div></div></div>${disabled ? '<div class="mt-4 text-xs font-semibold text-amber-600">\u5df2\u5206\u914d\u5230\u5176\u4ed6\u5165\u5e93\u660e\u7ec6</div>' : ""}</button>`;
+            const occupiedByOther = occupied.has(pipe.id);
+            const alreadyRegistered = registered.has(pipe.id);
+            const disabled = occupiedByOther || alreadyRegistered;
+            const statusText = occupiedByOther
+              ? "\u5df2\u5206\u914d\u5230\u5176\u4ed6\u5165\u5e93\u660e\u7ec6"
+              : alreadyRegistered
+                ? "\u5df2\u6dfb\u52a0\u5230\u5de6\u4fa7\u5217\u8868"
+                : "";
+            return `<button type="button" ${disabled ? "disabled" : ""} class="pipe-card ${selected ? "selected" : ""} ${disabled ? "disabled" : ""} rounded-[24px] p-4 text-left" onclick="togglePipeSelection('${pipe.id}')"><div class="flex items-start justify-between gap-3"><div class="min-w-0"><div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">\u81ea\u7f16\u53f7</div><div class="mt-1 text-base font-bold text-slate-900 leading-6">${pipe.selfCode}</div></div><div class="w-7 h-7 rounded-full ${selected ? "bg-blue-600 text-white" : disabled ? "bg-slate-200 text-slate-500" : "bg-slate-100 text-slate-400"} flex items-center justify-center flex-none"><i class="fas ${selected ? "fa-check" : disabled ? "fa-lock" : "fa-plus"} text-xs"></i></div></div><div class="mt-3 space-y-2 text-sm"><div class="rounded-2xl bg-slate-50 px-3 py-2"><div class="text-[11px] text-slate-400">\u6346\u53f7</div><div class="mt-0.5 font-semibold text-slate-800 leading-5">${pipe.bundleNo}</div></div><div class="rounded-2xl bg-slate-50 px-3 py-2"><div class="text-[11px] text-slate-400">\u7ba1\u53f7</div><div class="mt-0.5 font-semibold text-slate-800 leading-5">${pipe.pipeNo}</div></div></div>${statusText ? `<div class="mt-3 text-xs font-semibold text-amber-600 leading-5">${statusText}</div>` : ""}</button>`;
           })
           .join("");
       }
       function confirmPipeSelection() {
         if (activePipeRowIndex < 0) return;
-        storageRows[activePipeRowIndex].registeredPipeIds = [...pipeSelectorDraft];
-        storageRows[activePipeRowIndex].actualQty = pipeSelectorDraft.length || "";
+        const currentIds = storageRows[activePipeRowIndex].registeredPipeIds || [];
+        const mergedIds = [...new Set([...currentIds, ...pipeSelectorDraft])];
+        storageRows[activePipeRowIndex].registeredPipeIds = mergedIds;
+        storageRows[activePipeRowIndex].actualQty = mergedIds.length || "";
         renderStorageRows();
-        activePipeRowIndex = -1;
+        renderRegisteredPipeList();
         pipeSelectorDraft = [];
-        closePipeSelector();
+        renderPipeSelector();
       }
       function renderStorageTotal() {
         const total = storageRows.reduce(
