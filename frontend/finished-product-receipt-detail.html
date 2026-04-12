@@ -168,6 +168,21 @@
         cursor: not-allowed;
         background: #f8fafc;
       }
+      .scanner-video {
+        width: 100%;
+        height: 188px;
+        object-fit: cover;
+        border-radius: 20px;
+        background: #0f172a;
+      }
+      .scanner-frame {
+        position: absolute;
+        inset: 18px;
+        border: 2px solid rgba(255, 255, 255, 0.9);
+        border-radius: 18px;
+        box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.18);
+        pointer-events: none;
+      }
       .form-input,
       .form-select {
         width: 100%;
@@ -687,6 +702,14 @@
                 <div class="flex items-center justify-between gap-4">
                   <div class="text-lg font-bold text-slate-900">&#25104;&#21697;&#31649;&#21015;&#34920;</div>
                   <div class="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onclick="togglePipeScanner()"
+                      class="icon-btn bg-white text-blue-700 border border-blue-100 hover:bg-blue-50"
+                      title="&#20108;&#32500;&#30721;&#25195;&#30721;&#30331;&#35760;"
+                    >
+                      <i class="fas fa-qrcode"></i>
+                    </button>
                     <div class="text-sm text-slate-500">
                       &#24403;&#21069;&#24050;&#36873;&#25321; <span id="pipeSelectorCount" class="font-bold text-blue-600">0</span> &#25903;
                     </div>
@@ -708,6 +731,25 @@
                     oninput="updatePipeSearch(this.value)"
                     class="form-input pl-11"
                   />
+                </div>
+                <div id="pipeScannerPanel" class="hidden mt-4 rounded-[24px] border border-blue-100 bg-white p-4">
+                  <div class="flex items-center justify-between gap-3">
+                    <div>
+                      <div class="text-sm font-semibold text-slate-900">&#20108;&#32500;&#30721;&#25195;&#30721;&#30331;&#35760;</div>
+                      <div id="pipeScannerHint" class="mt-1 text-xs text-slate-500">&#23558;&#20108;&#32500;&#30721;&#23545;&#20934;&#25195;&#25551;&#26694;&#65292;&#35782;&#21035;&#21518;&#33258;&#21160;&#30331;&#35760;</div>
+                    </div>
+                    <button
+                      type="button"
+                      onclick="stopPipeScanner()"
+                      class="icon-btn bg-slate-100 text-slate-500 hover:bg-slate-200"
+                    >
+                      <i class="fas fa-xmark"></i>
+                    </button>
+                  </div>
+                  <div class="relative mt-4">
+                    <video id="pipeScannerVideo" class="scanner-video" autoplay playsinline muted></video>
+                    <div class="scanner-frame"></div>
+                  </div>
                 </div>
               </div>
               <div class="px-6 py-5 overflow-auto flex-1 min-h-0">
@@ -860,6 +902,11 @@
       let activePipeRowIndex = -1;
       let pipeSelectorDraft = [];
       let pipeSelectorKeyword = "";
+      let pipeScannerStream = null;
+      let pipeScannerActive = false;
+      let pipeScanRafId = 0;
+      let lastScannedValue = "";
+      let lastScannedAt = 0;
       function getQueryParam(name) {
         return new URLSearchParams(window.location.search).get(name);
       }
@@ -1029,6 +1076,8 @@
         activePipeRowIndex = index;
         pipeSelectorDraft = [];
         pipeSelectorKeyword = "";
+        lastScannedValue = "";
+        lastScannedAt = 0;
         document.getElementById("pipeSelectorSearch").value = "";
         renderRegisteredPipeList();
         renderPipeSelector();
@@ -1036,6 +1085,7 @@
       }
       function closePipeSelector(forceReset = false) {
         document.getElementById("pipeSelectorOverlay").classList.remove("open");
+        stopPipeScanner();
         if (forceReset) {
           activePipeRowIndex = -1;
           pipeSelectorDraft = [];
@@ -1052,6 +1102,139 @@
       function getRegisteredPipeIds() {
         if (activePipeRowIndex < 0) return [];
         return storageRows[activePipeRowIndex].registeredPipeIds || [];
+      }
+      function togglePipeScanner() {
+        if (pipeScannerActive) {
+          stopPipeScanner();
+          return;
+        }
+        startPipeScanner();
+      }
+      async function startPipeScanner() {
+        if (activePipeRowIndex < 0) return;
+        if (
+          !("mediaDevices" in navigator) ||
+          !navigator.mediaDevices.getUserMedia
+        ) {
+          showToast("当前浏览器不支持摄像头扫码");
+          return;
+        }
+        if (!("BarcodeDetector" in window)) {
+          showToast("当前浏览器不支持二维码识别");
+          return;
+        }
+        try {
+          const panel = document.getElementById("pipeScannerPanel");
+          const hint = document.getElementById("pipeScannerHint");
+          const video = document.getElementById("pipeScannerVideo");
+          panel.classList.remove("hidden");
+          hint.innerHTML =
+            "&#23558;&#20108;&#32500;&#30721;&#23545;&#20934;&#25195;&#25551;&#26694;&#65292;&#35782;&#21035;&#21518;&#33258;&#21160;&#30331;&#35760;";
+          pipeScannerStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { ideal: "environment" } },
+            audio: false,
+          });
+          video.srcObject = pipeScannerStream;
+          await video.play();
+          pipeScannerActive = true;
+          scanPipeFrame();
+        } catch (error) {
+          stopPipeScanner();
+          showToast("摄像头开启失败，请检查权限");
+        }
+      }
+      function stopPipeScanner() {
+        pipeScannerActive = false;
+        if (pipeScanRafId) cancelAnimationFrame(pipeScanRafId);
+        pipeScanRafId = 0;
+        const video = document.getElementById("pipeScannerVideo");
+        if (video) video.srcObject = null;
+        if (pipeScannerStream) {
+          pipeScannerStream.getTracks().forEach((track) => track.stop());
+          pipeScannerStream = null;
+        }
+        const panel = document.getElementById("pipeScannerPanel");
+        if (panel) panel.classList.add("hidden");
+      }
+      async function scanPipeFrame() {
+        if (!pipeScannerActive) return;
+        const video = document.getElementById("pipeScannerVideo");
+        const hint = document.getElementById("pipeScannerHint");
+        try {
+          if (video.readyState >= 2) {
+            const detector = new BarcodeDetector({
+              formats: ["qr_code", "code_128", "code_39", "ean_13", "ean_8"],
+            });
+            const barcodes = await detector.detect(video);
+            if (barcodes.length) {
+              const rawValue = (barcodes[0].rawValue || "").trim();
+              const now = Date.now();
+              if (
+                rawValue &&
+                (rawValue !== lastScannedValue || now - lastScannedAt > 1500)
+              ) {
+                lastScannedValue = rawValue;
+                lastScannedAt = now;
+                const result = registerPipeByScan(rawValue);
+                hint.innerHTML = result.message;
+              }
+            }
+          }
+        } catch (error) {
+          hint.innerHTML =
+            "&#35782;&#21035;&#22833;&#36133;&#65292;&#35831;&#31245;&#21518;&#37325;&#35797;";
+        }
+        pipeScanRafId = requestAnimationFrame(scanPipeFrame);
+      }
+      function registerPipeByScan(rawValue) {
+        const keyword = rawValue.trim().toLowerCase();
+        const pipe =
+          currentPipeCatalog.find(
+            (item) =>
+              item.selfCode.toLowerCase() === keyword ||
+              item.bundleNo.toLowerCase() === keyword ||
+              item.pipeNo.toLowerCase() === keyword,
+          ) ||
+          currentPipeCatalog.find((item) => {
+            const text = `${item.selfCode} ${item.bundleNo} ${item.pipeNo}`.toLowerCase();
+            return text.includes(keyword);
+          });
+        if (!pipe) {
+          showToast("未匹配到对应钢管");
+          return {
+            ok: false,
+            message:
+              "&#26410;&#21305;&#37197;&#21040;&#23545;&#24212;&#38050;&#31649;&#65292;&#35831;&#37325;&#26032;&#25195;&#30721;",
+          };
+        }
+        const occupied = new Set(getOccupiedPipeIds(activePipeRowIndex));
+        const registered = new Set(getRegisteredPipeIds());
+        if (occupied.has(pipe.id)) {
+          showToast("该钢管已分配到其他明细");
+          return {
+            ok: false,
+            message:
+              "&#35813;&#38050;&#31649;&#24050;&#20998;&#37197;&#21040;&#20854;&#20182;&#26126;&#32454;",
+          };
+        }
+        if (registered.has(pipe.id)) {
+          showToast("该钢管已登记");
+          return {
+            ok: false,
+            message: "&#35813;&#38050;&#31649;&#24050;&#30331;&#35760;",
+          };
+        }
+        const mergedIds = [...registered, pipe.id];
+        storageRows[activePipeRowIndex].registeredPipeIds = mergedIds;
+        storageRows[activePipeRowIndex].actualQty = mergedIds.length || "";
+        renderStorageRows();
+        renderRegisteredPipeList();
+        renderPipeSelector();
+        showToast(`已登记 ${pipe.selfCode}`);
+        return {
+          ok: true,
+          message: `&#24050;&#33258;&#21160;&#30331;&#35760; ${pipe.selfCode}`,
+        };
       }
       function renderRegisteredPipeList() {
         const body = document.getElementById("pipeRegisteredTableBody");
