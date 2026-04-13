@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>快速移库 - MES系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap");
+      * {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+      body {
+        font-family: "Inter", "Noto Sans SC", sans-serif;
+        background:
+          radial-gradient(circle at top right, rgba(191, 219, 254, 0.45), transparent 24%),
+          linear-gradient(180deg, #f3f7fb 0%, #eef3f8 100%);
+        overflow: hidden;
+      }
+      .industrial-shadow {
+        box-shadow:
+          0 2px 10px rgba(15, 23, 42, 0.08),
+          0 14px 32px rgba(37, 99, 235, 0.08);
+      }
+      .hero-card {
+        background:
+          radial-gradient(circle at top right, rgba(147, 197, 253, 0.22), transparent 26%),
+          linear-gradient(135deg, #0f172a 0%, #1e40af 58%, #2563eb 100%);
+      }
+      .panel-card {
+        background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+        border: 1px solid #dbe7f3;
+      }
+      .form-input,
+      .form-select,
+      .textarea-input,
+      .select-trigger {
+        width: 100%;
+        border: 2px solid #dbe3ef;
+        border-radius: 18px;
+        background: #fff;
+        color: #0f172a;
+        padding: 13px 15px;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .form-input:focus,
+      .form-select:focus,
+      .textarea-input:focus,
+      .select-trigger:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+      }
+      .mini-card {
+        background:
+          radial-gradient(circle at top right, rgba(219, 234, 254, 0.55), transparent 45%),
+          linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+        border: 1px solid #dbeafe;
+      }
+      .stock-row {
+        border: 1px solid #dbe3ef;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+        transition: all 0.18s ease;
+      }
+      .stock-row:hover {
+        border-color: #93c5fd;
+      }
+      .stock-row.active {
+        border-color: #2563eb;
+        background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.14);
+      }
+      .modal-overlay {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+      }
+      .modal-overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .modal-panel {
+        transform: scale(0.96) translateY(10px);
+        transition: transform 0.25s ease;
+      }
+      .modal-overlay.open .modal-panel {
+        transform: scale(1) translateY(0);
+      }
+      .pick-card {
+        transition: all 0.18s ease;
+      }
+      .pick-card:hover {
+        background: #f8fbff;
+        border-color: #bfdbfe;
+      }
+      .pipe-chip {
+        border: 1px solid #dbe3ef;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+        transition: all 0.18s ease;
+      }
+      .pipe-chip:hover {
+        border-color: #93c5fd;
+      }
+      .pipe-chip.selected {
+        border-color: #2563eb;
+        background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.14);
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #e2e8f0;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 9999px;
+      }
+    </style>
+  </head>
+  <body class="h-screen w-screen flex flex-col">
+    <header class="bg-white industrial-shadow z-50 flex-none">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-4">
+          <button
+            onclick="history.back()"
+            class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors"
+          >
+            <i class="fas fa-arrow-left text-lg"></i>
+          </button>
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 bg-blue-600 rounded-xl flex items-center justify-center text-white">
+              <i class="fas fa-right-left text-xl"></i>
+            </div>
+            <div>
+              <h1 class="text-xl font-bold text-gray-900 tracking-tight">快速移库</h1>
+              <p class="text-xs text-gray-500">
+                先选物料，再从有库存的仓库库位里快速发起移库
+              </p>
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          onclick="confirmTransfer()"
+          class="flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 text-white font-semibold industrial-shadow hover:bg-blue-700"
+        >
+          <i class="fas fa-check"></i><span>确认移动</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="flex-1 min-h-0 overflow-auto px-6 py-5">
+      <div class="max-w-[1180px] mx-auto space-y-5">
+        <section class="hero-card rounded-3xl industrial-shadow text-white p-6">
+          <div class="flex flex-col lg:flex-row lg:items-end gap-5">
+            <div class="flex-1">
+              <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/12 border border-white/15 text-sm font-semibold">
+                <i class="fas fa-bolt"></i><span>轻量操作</span>
+              </div>
+              <h2 class="mt-4 text-3xl font-bold tracking-tight">选物料后直接从库存中发起移库</h2>
+              <p class="mt-3 text-sm text-blue-50/90 max-w-3xl">
+                系统会列出当前物料库存大于 0 的仓库与库位，你只需要选出库位、填数量，再指定目标库位。
+              </p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 min-w-full lg:min-w-[360px]">
+              <div class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4">
+                <div class="text-xs text-blue-100/85">当前模式</div>
+                <div id="modeText" class="mt-2 text-2xl font-bold">按自编号</div>
+              </div>
+              <div class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4">
+                <div class="text-xs text-blue-100/85">本次移动数量</div>
+                <div id="selectedPipeMetric" class="mt-2 text-2xl font-bold">0</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-card rounded-3xl industrial-shadow p-5">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">移库信息</h3>
+              <p class="text-xs text-slate-500 mt-1">按“物料 -> 当前库存位置 -> 目标位置”的顺序完成本次移库</p>
+            </div>
+          </div>
+
+          <div class="space-y-5 mt-5">
+            <div>
+              <label class="text-xs text-slate-500">物料</label>
+              <button
+                id="materialTrigger"
+                type="button"
+                class="select-trigger mt-2 flex items-center justify-between text-left"
+              >
+                <span id="materialTriggerText" class="text-slate-900">成品管 L415M</span>
+                <i class="fas fa-chevron-down text-slate-400"></i>
+              </button>
+            </div>
+
+            <div class="mini-card rounded-[24px] px-5 py-4">
+              <div class="text-xs text-slate-400">当前库存概况</div>
+              <div id="stockSummary" class="mt-2 text-lg font-bold text-slate-900">共 2 个有库存库位 | 合计 56 支</div>
+              <div id="stockHint" class="mt-2 text-sm text-slate-500">当前物料为成品管，选择出库位后需要逐支选择对应自编号。</div>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between gap-4">
+                <div>
+                  <h4 class="text-base font-bold text-slate-900">当前仓库 / 当前库位 / 可移数量</h4>
+                  <p class="text-xs text-slate-500 mt-1">只展示库存大于 0 的仓库库位，请先选择一条作为本次移库来源</p>
+                </div>
+              </div>
+              <div id="stockList" class="grid grid-cols-1 gap-3 mt-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div class="space-y-4">
+                <div>
+                  <label class="text-xs text-slate-500">目标仓库</label>
+                  <select id="targetWarehouse" class="form-select mt-2">
+                    <option>一号成品仓</option>
+                    <option selected>二号成品仓</option>
+                    <option>项目备货仓</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="text-xs text-slate-500">目标库位</label>
+                  <select id="targetLocation" class="form-select mt-2">
+                    <option selected>B-03-02</option>
+                    <option>B-03-05</option>
+                    <option>C-01-01</option>
+                    <option>C-01-03</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <label class="text-xs text-slate-500">备注</label>
+                  <textarea id="remarkInput" class="textarea-input mt-2 resize-none" rows="5">库位优化调整，本次移库按项目备货顺序集中整理。</textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-card rounded-3xl industrial-shadow p-5">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">本次移库预览</h3>
+              <p class="text-xs text-slate-500 mt-1">确认前快速核对出库位置、目标位置和本次移动数量</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-5">
+            <div class="mini-card rounded-[24px] px-5 py-4">
+              <div class="text-xs text-slate-400">物料</div>
+              <div id="previewMaterial" class="mt-2 text-lg font-bold text-slate-900">成品管 L415M</div>
+            </div>
+            <div class="mini-card rounded-[24px] px-5 py-4">
+              <div class="text-xs text-slate-400">出库位置</div>
+              <div id="previewSource" class="mt-2 text-lg font-bold text-slate-900">一号成品仓 / A-01-03</div>
+            </div>
+            <div class="mini-card rounded-[24px] px-5 py-4">
+              <div class="text-xs text-slate-400">目标位置</div>
+              <div id="previewTarget" class="mt-2 text-lg font-bold text-slate-900">二号成品仓 / B-03-02</div>
+            </div>
+            <div class="mini-card rounded-[24px] px-5 py-4">
+              <div class="text-xs text-slate-400">移动数量</div>
+              <div id="previewQty" class="mt-2 text-lg font-bold text-slate-900">3 支</div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div
+      id="materialPickerModal"
+      class="modal-overlay fixed inset-0 z-[85] bg-slate-950/35 flex items-center justify-center p-5"
+    >
+      <div class="modal-panel w-full max-w-5xl max-h-[84vh] bg-white rounded-[28px] industrial-shadow overflow-hidden flex flex-col">
+        <div class="px-6 py-5 border-b border-slate-200 bg-white">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h3 class="text-2xl font-bold text-slate-900">选择物料</h3>
+              <p class="mt-1 text-sm text-slate-500">支持按物料名称、编码、规格搜索</p>
+            </div>
+            <button
+              type="button"
+              onclick="closeMaterialPicker()"
+              class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center"
+            >
+              <i class="fas fa-xmark text-2xl"></i>
+            </button>
+          </div>
+          <div class="mt-4 relative">
+            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input
+              id="materialSearchInput"
+              type="text"
+              class="form-input pl-11"
+              placeholder="搜索物料名称、物料编码、规格型号..."
+              oninput="renderMaterialList()"
+            />
+          </div>
+        </div>
+        <div class="flex-1 overflow-auto p-6 bg-slate-50">
+          <div id="materialList" class="grid grid-cols-1 gap-3"></div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="pipeSelectorModal"
+      class="modal-overlay fixed inset-0 z-[88] bg-slate-950/35 flex items-center justify-center p-5"
+    >
+      <div class="modal-panel w-full max-w-6xl max-h-[86vh] bg-white rounded-[28px] industrial-shadow overflow-hidden flex flex-col">
+        <div class="px-6 py-5 border-b border-slate-200 bg-white">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h3 class="text-2xl font-bold text-slate-900">选择成品管自编号</h3>
+              <p class="mt-1 text-sm text-slate-500">从当前选中的库存库位里逐支勾选要移动的钢管</p>
+            </div>
+            <button
+              type="button"
+              onclick="closePipeSelector()"
+              class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center"
+            >
+              <i class="fas fa-xmark text-2xl"></i>
+            </button>
+          </div>
+          <div class="mt-4 flex items-center justify-between gap-4">
+            <div class="text-sm text-slate-500">
+              当前已选
+              <span id="pipeSelectedCount" class="font-bold text-blue-600">0</span>
+              支
+            </div>
+            <button
+              type="button"
+              onclick="confirmPipeSelection()"
+              class="px-5 py-2.5 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700"
+            >
+              确定
+            </button>
+          </div>
+        </div>
+        <div class="flex-1 overflow-auto p-6 bg-slate-50">
+          <div id="pipeGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const materialCatalog = [
+        {
+          name: "成品管 L415M",
+          code: "MAT-BP-001",
+          spec: "D813 × 17.5 × 12000",
+          unit: "支",
+          mode: "pipe",
+          stocks: [
+            {
+              warehouse: "一号成品仓",
+              location: "A-01-03",
+              qty: 34,
+              pipes: [
+                { id: "MAT-BP-001-A1", selfCode: "ZBH-0001", bundleNo: "BH-001", pipeNo: "GH-0001" },
+                { id: "MAT-BP-001-A2", selfCode: "ZBH-0002", bundleNo: "BH-001", pipeNo: "GH-0002" },
+                { id: "MAT-BP-001-A3", selfCode: "ZBH-0003", bundleNo: "BH-001", pipeNo: "GH-0003" },
+                { id: "MAT-BP-001-A4", selfCode: "ZBH-0004", bundleNo: "BH-001", pipeNo: "GH-0004" },
+              ],
+            },
+            {
+              warehouse: "一号成品仓",
+              location: "A-01-05",
+              qty: 22,
+              pipes: [
+                { id: "MAT-BP-001-B1", selfCode: "ZBH-0011", bundleNo: "BH-002", pipeNo: "GH-0011" },
+                { id: "MAT-BP-001-B2", selfCode: "ZBH-0012", bundleNo: "BH-002", pipeNo: "GH-0012" },
+                { id: "MAT-BP-001-B3", selfCode: "ZBH-0013", bundleNo: "BH-002", pipeNo: "GH-0013" },
+              ],
+            },
+          ],
+        },
+        {
+          name: "成品管 X65",
+          code: "MAT-BP-018",
+          spec: "D711 × 14.2 × 11800",
+          unit: "支",
+          mode: "pipe",
+          stocks: [
+            {
+              warehouse: "二号成品仓",
+              location: "B-02-01",
+              qty: 18,
+              pipes: [
+                { id: "MAT-BP-018-A1", selfCode: "ZBH-0201", bundleNo: "BH-008", pipeNo: "GH-0201" },
+                { id: "MAT-BP-018-A2", selfCode: "ZBH-0202", bundleNo: "BH-008", pipeNo: "GH-0202" },
+                { id: "MAT-BP-018-A3", selfCode: "ZBH-0203", bundleNo: "BH-008", pipeNo: "GH-0203" },
+              ],
+            },
+          ],
+        },
+        {
+          name: "防腐套管",
+          code: "MAT-FG-011",
+          spec: "DN800 / 标准件",
+          unit: "件",
+          mode: "qty",
+          stocks: [
+            { warehouse: "待检暂存仓", location: "T-01-01", qty: 120, pipes: [] },
+            { warehouse: "一号成品仓", location: "A-03-02", qty: 40, pipes: [] },
+          ],
+        },
+      ];
+
+      let selectedMaterialCode = "MAT-BP-001";
+      let selectedStockIndex = 0;
+      let selectedPipeIds = [];
+      let pipeSelectionDraft = [];
+
+      function getSelectedMaterial() {
+        return materialCatalog.find((item) => item.code === selectedMaterialCode);
+      }
+
+      function getSelectedStock() {
+        const material = getSelectedMaterial();
+        if (!material) return null;
+        return material.stocks[selectedStockIndex] || null;
+      }
+
+      function resetSelectionForMaterial() {
+        selectedStockIndex = 0;
+        selectedPipeIds = [];
+        pipeSelectionDraft = [];
+      }
+
+      function refreshForm() {
+        const material = getSelectedMaterial();
+        const stock = getSelectedStock();
+        if (!material) return;
+
+        const totalQty = material.stocks.reduce((sum, item) => sum + item.qty, 0);
+        const isPipe = material.mode === "pipe";
+
+        document.getElementById("materialTriggerText").textContent = material.name;
+        document.getElementById("previewMaterial").textContent = material.name;
+        document.getElementById("modeText").textContent = isPipe ? "按自编号" : "按数量";
+        document.getElementById("stockSummary").textContent = `共 ${material.stocks.length} 个有库存库位 | 合计 ${totalQty} ${material.unit}`;
+        document.getElementById("stockHint").textContent = isPipe
+          ? "当前物料为成品管，选择出库位后需要逐支选择对应自编号。"
+          : "当前物料按数量移库，请在选中的库存行中填写本次移动数量。";
+
+        document.getElementById("selectedPipeMetric").textContent = isPipe
+          ? selectedPipeIds.length
+          : document.getElementById("qtyInput")?.value || 0;
+
+        renderStockList();
+
+        if (stock) {
+          document.getElementById("previewSource").textContent = `${stock.warehouse} / ${stock.location}`;
+        } else {
+          document.getElementById("previewSource").textContent = "未选择";
+        }
+        document.getElementById("previewTarget").textContent = `${document.getElementById("targetWarehouse").value} / ${document.getElementById("targetLocation").value}`;
+
+        const qtyInput = document.getElementById("qtyInput");
+        if (qtyInput) {
+          const qty = isPipe ? selectedPipeIds.length : Number(qtyInput.value || 0);
+          document.getElementById("previewQty").textContent = `${qty} ${material.unit}`;
+        }
+      }
+
+      function renderStockList() {
+        const material = getSelectedMaterial();
+        const list = document.getElementById("stockList");
+        if (!material || !material.stocks.length) {
+          list.innerHTML = '<div class="text-center py-16 text-slate-400">当前物料没有可用库存</div>';
+          return;
+        }
+
+        const isPipe = material.mode === "pipe";
+        list.innerHTML = material.stocks
+          .map((stock, index) => {
+            const active = index === selectedStockIndex;
+            const qtyValue = isPipe
+              ? active
+                ? selectedPipeIds.length
+                : 0
+              : active
+                ? (document.getElementById("qtyInput")?.value || Math.min(1, stock.qty))
+                : 0;
+
+            return `
+              <div class="stock-row ${active ? "active" : ""} rounded-[24px] p-4">
+                <div class="flex flex-col lg:flex-row lg:items-center gap-4">
+                  <button
+                    type="button"
+                    class="text-left flex-1"
+                    onclick="selectStockRow(${index})"
+                  >
+                    <div class="text-lg font-bold text-slate-900">${stock.warehouse}</div>
+                    <div class="mt-1 text-sm text-slate-500">${stock.location}</div>
+                    <div class="mt-3 text-sm text-slate-600">当前可移数量：<span class="font-bold text-blue-600">${stock.qty}</span> ${material.unit}</div>
+                  </button>
+                  <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                    <input
+                      id="qtyInput-${index}"
+                      type="number"
+                      min="1"
+                      max="${stock.qty}"
+                      value="${qtyValue}"
+                      ${active ? "" : "disabled"}
+                      ${isPipe ? "readonly" : ""}
+                      class="form-input w-[150px] ${isPipe ? "bg-slate-50" : ""}"
+                      oninput="updateQtyFromRow(${index}, this.value)"
+                    />
+                    ${isPipe ? `
+                      <button
+                        type="button"
+                        ${active ? "" : "disabled"}
+                        onclick="openPipeSelector()"
+                        class="px-4 py-3 rounded-2xl bg-blue-600 text-white font-semibold whitespace-nowrap hover:bg-blue-700 disabled:bg-slate-300"
+                      >
+                        选择自编号
+                      </button>
+                    ` : ""}
+                  </div>
+                </div>
+              </div>`;
+          })
+          .join("");
+
+        const activeInput = document.getElementById(`qtyInput-${selectedStockIndex}`);
+        if (activeInput) {
+          activeInput.id = "qtyInput";
+        }
+      }
+
+      function selectStockRow(index) {
+        const material = getSelectedMaterial();
+        if (!material || !material.stocks[index]) return;
+        selectedStockIndex = index;
+        if (material.mode === "pipe") {
+          selectedPipeIds = [];
+          pipeSelectionDraft = [];
+        } else {
+          const activeStock = material.stocks[index];
+          const previous = document.getElementById("qtyInput");
+          if (previous) previous.value = Math.min(Number(previous.value) || 1, activeStock.qty);
+        }
+        refreshForm();
+      }
+
+      function updateQtyFromRow(index, value) {
+        if (index !== selectedStockIndex) return;
+        const material = getSelectedMaterial();
+        const stock = getSelectedStock();
+        if (!material || !stock || material.mode === "pipe") return;
+        const qty = Math.min(Math.max(Number(value) || 0, 0), stock.qty);
+        const input = document.getElementById("qtyInput");
+        if (input) input.value = qty;
+        document.getElementById("selectedPipeMetric").textContent = qty;
+        document.getElementById("previewQty").textContent = `${qty} ${material.unit}`;
+      }
+
+      function openMaterialPicker() {
+        document.getElementById("materialSearchInput").value = "";
+        renderMaterialList();
+        document.getElementById("materialPickerModal").classList.add("open");
+      }
+
+      function closeMaterialPicker() {
+        document.getElementById("materialPickerModal").classList.remove("open");
+      }
+
+      function renderMaterialList() {
+        const keyword = document.getElementById("materialSearchInput").value.trim().toLowerCase();
+        const filtered = materialCatalog.filter((item) => {
+          const text = `${item.name} ${item.code} ${item.spec}`.toLowerCase();
+          return !keyword || text.includes(keyword);
+        });
+        const list = document.getElementById("materialList");
+        if (!filtered.length) {
+          list.innerHTML = '<div class="text-center py-16 text-slate-400"><div class="text-base font-semibold text-slate-500">未找到匹配的物料</div><div class="text-sm mt-2">请调整关键词后重试</div></div>';
+          return;
+        }
+        list.innerHTML = filtered.map((item) => {
+          const totalQty = item.stocks.reduce((sum, stock) => sum + stock.qty, 0);
+          return `
+            <button
+              type="button"
+              class="pick-card text-left p-5 bg-white border border-slate-200 rounded-2xl"
+              onclick="selectMaterial('${item.code}')"
+            >
+              <div class="flex items-center justify-between gap-4">
+                <div>
+                  <div class="text-lg font-bold text-slate-900">${item.name}</div>
+                  <div class="mt-1 text-sm text-slate-500">${item.code} | ${item.spec}</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-xs text-slate-400">库存位置数</div>
+                  <div class="mt-1 text-lg font-bold text-blue-600">${item.stocks.length}</div>
+                  <div class="mt-2 text-xs text-slate-400">合计 ${totalQty} ${item.unit}</div>
+                </div>
+              </div>
+            </button>`;
+        }).join("");
+      }
+
+      function selectMaterial(code) {
+        selectedMaterialCode = code;
+        resetSelectionForMaterial();
+        refreshForm();
+        closeMaterialPicker();
+      }
+
+      function openPipeSelector() {
+        const material = getSelectedMaterial();
+        const stock = getSelectedStock();
+        if (!material || !stock || material.mode !== "pipe") return;
+        pipeSelectionDraft = [...selectedPipeIds];
+        renderPipeGrid();
+        document.getElementById("pipeSelectorModal").classList.add("open");
+      }
+
+      function closePipeSelector() {
+        document.getElementById("pipeSelectorModal").classList.remove("open");
+      }
+
+      function togglePipe(pipeId) {
+        if (pipeSelectionDraft.includes(pipeId)) {
+          pipeSelectionDraft = pipeSelectionDraft.filter((item) => item !== pipeId);
+        } else {
+          pipeSelectionDraft = [...pipeSelectionDraft, pipeId];
+        }
+        renderPipeGrid();
+      }
+
+      function renderPipeGrid() {
+        const stock = getSelectedStock();
+        if (!stock) return;
+        document.getElementById("pipeSelectedCount").textContent = pipeSelectionDraft.length;
+        document.getElementById("pipeGrid").innerHTML = stock.pipes.map((pipe) => {
+          const selected = pipeSelectionDraft.includes(pipe.id);
+          return `
+            <button
+              type="button"
+              class="pipe-chip ${selected ? "selected" : ""} rounded-[22px] p-4 text-left"
+              onclick="togglePipe('${pipe.id}')"
+            >
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">自编号</div>
+                  <div class="mt-1 text-base font-bold text-slate-900">${pipe.selfCode}</div>
+                </div>
+                <div class="w-7 h-7 rounded-full ${selected ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-400"} flex items-center justify-center">
+                  <i class="fas ${selected ? "fa-check" : "fa-plus"} text-xs"></i>
+                </div>
+              </div>
+              <div class="mt-3 space-y-2 text-sm">
+                <div class="rounded-2xl bg-slate-50 px-3 py-2">
+                  <div class="text-[11px] text-slate-400">捆号</div>
+                  <div class="mt-0.5 font-semibold text-slate-800">${pipe.bundleNo}</div>
+                </div>
+                <div class="rounded-2xl bg-slate-50 px-3 py-2">
+                  <div class="text-[11px] text-slate-400">管号</div>
+                  <div class="mt-0.5 font-semibold text-slate-800">${pipe.pipeNo}</div>
+                </div>
+              </div>
+            </button>`;
+        }).join("");
+      }
+
+      function confirmPipeSelection() {
+        const material = getSelectedMaterial();
+        if (!material) return;
+        selectedPipeIds = [...pipeSelectionDraft];
+        document.getElementById("selectedPipeMetric").textContent = selectedPipeIds.length;
+        document.getElementById("previewQty").textContent = `${selectedPipeIds.length} ${material.unit}`;
+        refreshForm();
+        closePipeSelector();
+      }
+
+      function confirmTransfer() {
+        const material = getSelectedMaterial();
+        const stock = getSelectedStock();
+        if (!material || !stock) {
+          alert("请先选择物料和出库库存位置");
+          return;
+        }
+        const targetWarehouse = document.getElementById("targetWarehouse").value;
+        const targetLocation = document.getElementById("targetLocation").value;
+        if (stock.warehouse === targetWarehouse && stock.location === targetLocation) {
+          alert("当前库位和目标库位不能相同");
+          return;
+        }
+        if (material.mode === "pipe") {
+          if (!selectedPipeIds.length) {
+            alert("请先选择要移动的自编号");
+            return;
+          }
+        } else {
+          const qty = Number(document.getElementById("qtyInput").value) || 0;
+          if (qty <= 0 || qty > stock.qty) {
+            alert("请输入正确的移动数量");
+            return;
+          }
+        }
+        alert("移库已确认");
+      }
+
+      document.getElementById("materialTrigger").addEventListener("click", openMaterialPicker);
+      document.getElementById("targetWarehouse").addEventListener("change", refreshForm);
+      document.getElementById("targetLocation").addEventListener("change", refreshForm);
+      document.getElementById("materialPickerModal").addEventListener("click", (event) => {
+        if (event.target.id === "materialPickerModal") closeMaterialPicker();
+      });
+      document.getElementById("pipeSelectorModal").addEventListener("click", (event) => {
+        if (event.target.id === "pipeSelectorModal") closePipeSelector();
+      });
+
+      refreshForm();
+    </script>
+  </body>
+</html>
