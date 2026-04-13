@@ -1,0 +1,819 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>新增物流单 - MES系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap");
+      * {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+      body {
+        font-family: "Inter", "Noto Sans SC", sans-serif;
+        background: #f4f6f8;
+        overflow: hidden;
+      }
+      .industrial-shadow {
+        box-shadow:
+          0 2px 8px rgba(15, 23, 42, 0.08),
+          0 4px 18px rgba(15, 23, 42, 0.05);
+      }
+      .industrial-shadow-lg {
+        box-shadow:
+          0 12px 30px rgba(15, 23, 42, 0.12),
+          0 10px 24px rgba(37, 99, 235, 0.12);
+      }
+      .hero-panel {
+        background:
+          radial-gradient(
+            circle at top right,
+            rgba(147, 197, 253, 0.28),
+            transparent 28%
+          ),
+          linear-gradient(135deg, #0f172a 0%, #1d4ed8 58%, #2563eb 100%);
+      }
+      .info-card {
+        background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+        border: 1px solid #dbe7f3;
+      }
+      .form-input,
+      .form-select,
+      .textarea-input {
+        width: 100%;
+        border: 2px solid #dbe3ef;
+        border-radius: 16px;
+        background: #fff;
+        color: #0f172a;
+        padding: 13px 15px;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .form-input:focus,
+      .form-select:focus,
+      .textarea-input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+      }
+      .line-card {
+        background:
+          radial-gradient(
+            circle at top right,
+            rgba(219, 234, 254, 0.6),
+            transparent 45%
+          ),
+          linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+        border: 1px solid #dbeafe;
+      }
+      .drawer-overlay {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+      }
+      .drawer-overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .drawer-panel {
+        transform: translateX(100%);
+        transition: transform 0.28s ease;
+      }
+      .drawer-overlay.open .drawer-panel {
+        transform: translateX(0);
+      }
+      .modal-overlay {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+      }
+      .modal-overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .modal-panel {
+        transform: scale(0.96) translateY(10px);
+        transition: transform 0.25s ease;
+      }
+      .modal-overlay.open .modal-panel {
+        transform: scale(1) translateY(0);
+      }
+      .pipe-card {
+        border: 1px solid #dbe3ef;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+        transition:
+          transform 0.18s ease,
+          border-color 0.18s ease,
+          box-shadow 0.18s ease,
+          background 0.18s ease;
+      }
+      .pipe-card:hover {
+        transform: translateY(-2px);
+        border-color: #93c5fd;
+        box-shadow: 0 10px 24px rgba(59, 130, 246, 0.12);
+      }
+      .pipe-card.selected {
+        border-color: #2563eb;
+        background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+        box-shadow: 0 12px 28px rgba(37, 99, 235, 0.18);
+      }
+      .pipe-card.disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        background: #f8fafc;
+      }
+    </style>
+  </head>
+  <body class="h-screen w-screen flex flex-col">
+    <header class="bg-white industrial-shadow z-50 flex-none">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-4">
+          <button
+            onclick="history.back()"
+            class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors"
+          >
+            <i class="fas fa-arrow-left text-lg"></i>
+          </button>
+          <div class="flex items-center gap-3">
+            <div
+              class="w-11 h-11 bg-blue-600 rounded-xl flex items-center justify-center text-white"
+            >
+              <i class="fas fa-file-circle-plus text-xl"></i>
+            </div>
+            <div>
+              <h1 class="text-xl font-bold text-gray-900 tracking-tight">
+                新增物流单
+              </h1>
+              <p class="text-xs text-gray-500">
+                创建派车配送单并登记物流车辆信息
+              </p>
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          onclick="saveLogisticsOrder()"
+          class="flex items-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 text-white font-semibold industrial-shadow-lg hover:bg-blue-700"
+        >
+          <i class="fas fa-floppy-disk"></i><span>保存</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="px-6 pt-5 pb-4 flex-none">
+      <div class="hero-panel rounded-3xl industrial-shadow-lg text-white p-6">
+        <div class="flex flex-col xl:flex-row xl:items-end gap-5">
+          <div class="flex-1">
+            <div
+              class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/12 border border-white/15 text-sm font-semibold"
+            >
+              <i class="fas fa-plus-circle"></i><span>新建物流任务</span>
+            </div>
+            <h2 class="mt-4 text-3xl font-bold tracking-tight">
+              从销售单快速生成物流单
+            </h2>
+            <p class="mt-3 text-sm text-blue-50/90 max-w-3xl">
+              先选择销售单并补充物流公司、司机、车辆和收货信息，系统自动汇总项目与配送明细，保存后即可进入物流跟踪流程。
+            </p>
+          </div>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 gap-3 min-w-full xl:min-w-[420px]"
+          >
+            <div
+              class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4"
+            >
+              <div class="text-xs text-blue-100/85">新物流单号</div>
+              <div class="mt-2 text-2xl font-bold">WLD-20260412-005</div>
+            </div>
+            <div
+              class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4"
+            >
+              <div class="text-xs text-blue-100/85">当前配送明细</div>
+              <div class="mt-2 text-2xl font-bold">3 条</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="px-6 pb-6 flex-1 min-h-0 overflow-hidden">
+      <div class="h-full overflow-y-auto space-y-4 pr-1">
+        <section class="info-card rounded-3xl industrial-shadow p-5">
+          <div class="mb-5">
+            <h3 class="text-lg font-bold text-slate-900">物流单基础信息</h3>
+            <p class="text-xs text-slate-500 mt-1">
+              维护销售单、项目、物流单位和客户签收信息
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div>
+              <label class="text-xs text-slate-500">物流单号</label>
+              <input class="form-input mt-2 bg-slate-50" value="WLD-20260412-005" readonly />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">销售单号</label>
+              <select class="form-select mt-2">
+                <option>XS-20260328-016</option>
+                <option>XS-20260330-021</option>
+                <option>XS-20260327-009</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">项目名称</label>
+              <input class="form-input mt-2 bg-slate-50" value="唐山港输油管道二期项目" readonly />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">物流单日期</label>
+              <input type="date" class="form-input mt-2" value="2026-04-12" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">物流公司</label>
+              <select class="form-select mt-2">
+                <option>中远物流</option>
+                <option>顺安运输</option>
+                <option>陆港供应链</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">车牌号</label>
+              <input class="form-input mt-2" value="冀B·56218" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">司机姓名</label>
+              <input class="form-input mt-2" value="王建国" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">司机电话</label>
+              <input class="form-input mt-2" value="13800001234" />
+            </div>
+            <div class="md:col-span-2">
+              <label class="text-xs text-slate-500">发货地址</label>
+              <input class="form-input mt-2" value="唐山港成品管堆场 A 区 1# 装车位" />
+            </div>
+            <div class="md:col-span-2">
+              <label class="text-xs text-slate-500">收货地址</label>
+              <input class="form-input mt-2" value="河北省唐山市曹妃甸工业区项目现场 2 号卸货区" />
+            </div>
+          </div>
+        </section>
+
+        <section class="info-card rounded-3xl industrial-shadow p-5">
+          <div class="mb-5">
+            <h3 class="text-lg font-bold text-slate-900">签收与交付设置</h3>
+            <p class="text-xs text-slate-500 mt-1">
+              设定客户联系人、期望到货时间与交付说明
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div>
+              <label class="text-xs text-slate-500">客户联系人</label>
+              <input class="form-input mt-2" value="刘工" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">联系电话</label>
+              <input class="form-input mt-2" value="13900005678" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">预计到货时间</label>
+              <input type="datetime-local" class="form-input mt-2" value="2026-04-13T09:30" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">状态</label>
+              <input class="form-input mt-2 bg-slate-50" value="客户未收货" readonly />
+            </div>
+            <div class="md:col-span-2 xl:col-span-4">
+              <label class="text-xs text-slate-500">备注</label>
+              <textarea class="textarea-input mt-2 resize-none" rows="4">到场前 2 小时通知客户收货人员，优先安排 2 号卸货区，雨天需要覆盖防雨篷布。</textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="info-card rounded-3xl industrial-shadow overflow-hidden">
+          <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between gap-4">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">配送明细</h3>
+              <p class="text-xs text-slate-500 mt-1">
+                自动带出销售单对应的成品管配送内容
+              </p>
+            </div>
+            <button
+              type="button"
+              onclick="addDeliveryRow()"
+              class="px-4 py-2.5 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700"
+            >
+              <i class="fas fa-plus mr-2"></i>新增明细
+            </button>
+          </div>
+          <div class="overflow-auto">
+            <table class="min-w-full text-sm text-slate-700">
+              <thead class="text-slate-500 bg-slate-50">
+                <tr>
+                  <th
+                    class="px-4 py-4 text-left font-bold border-b border-slate-200"
+                  >
+                    序号
+                  </th>
+                  <th
+                    class="px-4 py-4 text-left font-bold border-b border-slate-200"
+                  >
+                    物料名称
+                  </th>
+                  <th
+                    class="px-4 py-4 text-left font-bold border-b border-slate-200"
+                  >
+                    物料编码
+                  </th>
+                  <th
+                    class="px-4 py-4 text-left font-bold border-b border-slate-200"
+                  >
+                    规格型号
+                  </th>
+                  <th
+                    class="px-4 py-4 text-left font-bold border-b border-slate-200"
+                  >
+                    配送数量
+                  </th>
+                  <th
+                    class="px-4 py-4 text-left font-bold border-b border-slate-200"
+                  >
+                    操作
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="deliveryTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      function saveLogisticsOrder() {
+        alert("物流单已保存");
+      }
+    </script>
+    <div
+      id="pipeDrawerOverlay"
+      class="drawer-overlay fixed inset-0 z-[90] bg-slate-950/35"
+    >
+      <div
+        class="drawer-panel ml-auto h-full w-[66.666vw] min-w-[980px] bg-[#f8fbff] shadow-2xl flex flex-col"
+      >
+        <div class="px-7 py-5 border-b border-slate-200 bg-white">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold border border-blue-100"
+              >
+                <i class="fas fa-barcode"></i><span>自编号承运登记</span>
+              </div>
+              <h3 class="mt-3 text-2xl font-bold text-slate-900">
+                为当前物流车分配承运钢管
+              </h3>
+              <p class="mt-1 text-sm text-slate-500">
+                选择由这辆物流车实际承运的自编号钢管，并同步到配送明细
+              </p>
+            </div>
+            <button
+              type="button"
+              onclick="closePipeDrawer()"
+              class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center"
+            >
+              <i class="fas fa-xmark text-2xl"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="px-7 py-6 overflow-hidden flex-1 min-h-0">
+          <div
+            class="h-full grid grid-cols-1 xl:grid-cols-[400px_minmax(0,1fr)] gap-6"
+          >
+            <div
+              class="min-h-0 rounded-[28px] border border-slate-200 bg-slate-50 overflow-hidden flex flex-col"
+            >
+              <div class="px-6 py-5 border-b border-slate-200 bg-white">
+                <div class="text-lg font-bold text-slate-900">已分配自编号</div>
+                <div class="mt-1 text-sm text-slate-500">
+                  当前已添加
+                  <span
+                    id="assignedPipeCount"
+                    class="font-semibold text-blue-600"
+                    >0</span
+                  >
+                  条
+                </div>
+              </div>
+              <div class="min-h-0 overflow-auto">
+                <table class="min-w-full text-sm text-slate-700">
+                  <thead class="sticky top-0 bg-slate-50 text-slate-500">
+                    <tr>
+                      <th
+                        class="px-5 py-4 text-left font-bold border-b border-slate-200"
+                      >
+                        自编号
+                      </th>
+                      <th
+                        class="px-5 py-4 text-left font-bold border-b border-slate-200"
+                      >
+                        捆号
+                      </th>
+                      <th
+                        class="px-5 py-4 text-left font-bold border-b border-slate-200"
+                      >
+                        管号
+                      </th>
+                      <th
+                        class="px-5 py-4 text-left font-bold border-b border-slate-200"
+                      >
+                        操作
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="assignedPipeTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div
+              class="min-h-0 rounded-[28px] border border-slate-200 bg-white overflow-hidden flex flex-col"
+            >
+              <div class="px-6 py-5 border-b border-slate-200 bg-slate-50">
+                <div class="flex items-center justify-between gap-4">
+                  <div class="text-lg font-bold text-slate-900">
+                    可选承运钢管
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <div class="text-sm text-slate-500">
+                      当前已选择
+                      <span
+                        id="pipeSelectionCount"
+                        class="font-bold text-blue-600"
+                        >0</span
+                      >
+                      支
+                    </div>
+                    <button
+                      type="button"
+                      onclick="confirmPipeAssignment()"
+                      class="px-5 py-2.5 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700"
+                    >
+                      添加承运
+                    </button>
+                  </div>
+                </div>
+                <div class="mt-3 relative">
+                  <i
+                    class="fas fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  ></i>
+                  <input
+                    id="pipeSearchInput"
+                    type="text"
+                    placeholder="按自编号、捆号、管号搜索"
+                    oninput="updatePipeKeyword(this.value)"
+                    class="form-input pl-11"
+                  />
+                </div>
+              </div>
+              <div class="px-6 py-5 overflow-auto flex-1 min-h-0">
+                <div
+                  id="pipeCardGrid"
+                  class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="pipeViewModal"
+      class="modal-overlay fixed inset-0 z-[95] bg-slate-950/35 flex items-center justify-center p-5"
+    >
+      <div
+        class="modal-panel w-full max-w-4xl rounded-[28px] bg-white shadow-2xl overflow-hidden"
+      >
+        <div class="px-6 py-5 border-b border-slate-200 bg-white">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-sm font-semibold border border-slate-200"
+              >
+                <i class="fas fa-eye"></i><span>已承运自编号详情</span>
+              </div>
+              <h3 class="mt-3 text-2xl font-bold text-slate-900">
+                当前配送明细承运钢管
+              </h3>
+              <p id="pipeViewSubtitle" class="mt-1 text-sm text-slate-500">
+                查看这条配送明细已分配的自编号钢管
+              </p>
+            </div>
+            <button
+              type="button"
+              onclick="closePipeViewModal()"
+              class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center"
+            >
+              <i class="fas fa-xmark text-2xl"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-6 bg-slate-50">
+          <div
+            class="rounded-[28px] border border-slate-200 bg-white overflow-hidden"
+          >
+            <div
+              class="px-6 py-5 border-b border-slate-200 flex items-center justify-between gap-4"
+            >
+              <div class="text-lg font-bold text-slate-900">已承运钢管列表</div>
+              <div class="text-sm text-slate-500">
+                共
+                <span id="pipeViewCount" class="font-bold text-blue-600"
+                  >0</span
+                >
+                条
+              </div>
+            </div>
+            <div class="max-h-[420px] overflow-auto">
+              <table class="min-w-full text-sm text-slate-700">
+                <thead class="sticky top-0 bg-slate-50 text-slate-500">
+                  <tr>
+                    <th
+                      class="px-5 py-4 text-left font-bold border-b border-slate-200"
+                    >
+                      自编号
+                    </th>
+                    <th
+                      class="px-5 py-4 text-left font-bold border-b border-slate-200"
+                    >
+                      捆号
+                    </th>
+                    <th
+                      class="px-5 py-4 text-left font-bold border-b border-slate-200"
+                    >
+                      管号
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="pipeViewTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const deliveryRows = [
+        {
+          seq: 1,
+          name: "成品管 L415M",
+          code: "MAT-BP-001",
+          spec: "D813 脳 17.5 脳 12000",
+          qty: 18,
+          assignedPipeIds: ["MAT-BP-001-1", "MAT-BP-001-2"],
+        },
+        {
+          seq: 2,
+          name: "成品管 L450M",
+          code: "MAT-BP-002",
+          spec: "D813 脳 19.1 脳 12000",
+          qty: 24,
+          assignedPipeIds: ["MAT-BP-002-1"],
+        },
+      ];
+      let currentPipeRowIndex = -1;
+      let currentPipeCatalog = [];
+      let pipeSelectionDraft = [];
+      let pipeKeyword = "";
+
+      function createPipeCatalog(row) {
+        return Array.from({ length: row.qty }, (_, index) => {
+          const seq = index + 1;
+          return {
+            id: `${row.code}-${seq}`,
+            selfCode: `ZBH-${String(seq).padStart(4, "0")}`,
+            bundleNo: `BH-${String(Math.floor(index / 5) + 1).padStart(3, "0")}`,
+            pipeNo: `GH-${String(seq).padStart(4, "0")}`,
+          };
+        });
+      }
+
+      function getPipeById(pipeId) {
+        return currentPipeCatalog.find((item) => item.id === pipeId);
+      }
+
+      function renderDeliveryRows() {
+        const body = document.getElementById("deliveryTableBody");
+        body.innerHTML = deliveryRows
+          .map(
+            (row, index) => `
+              <tr>
+                <td class="px-4 py-4 border-b border-slate-100 font-semibold text-slate-900">${row.seq}</td>
+                <td class="px-4 py-4 border-b border-slate-100">${row.name}</td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${row.code}</td>
+                <td class="px-4 py-4 border-b border-slate-100">${row.spec}</td>
+                <td class="px-4 py-4 border-b border-slate-100"><input class="form-input" value="${row.qty}" /></td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">
+                  <div class="flex items-center gap-2">
+                    <button type="button" title="添加自编号" class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 relative flex items-center justify-center" onclick="openPipeDrawer(${index})">
+                      <i class="fas fa-barcode"></i>
+                      ${row.assignedPipeIds.length ? `<span class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-blue-600 text-white text-[11px] font-bold flex items-center justify-center">${row.assignedPipeIds.length}</span>` : ""}
+                    </button>
+                    <button type="button" title="查看已承运自编号详情" class="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center justify-center" onclick="openPipeViewModal(${index})">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button type="button" title="删除" class="w-10 h-10 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 flex items-center justify-center" onclick="deleteDeliveryRow(${index})">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>`,
+          )
+          .join("");
+      }
+
+      function addDeliveryRow() {
+        const nextSeq = deliveryRows.length + 1;
+        deliveryRows.push({
+          seq: nextSeq,
+          name: `成品管 L${420 + nextSeq * 5}M`,
+          code: `MAT-BP-${String(nextSeq + 2).padStart(3, "0")}`,
+          spec: "D813 脳 17.5 脳 12000",
+          qty: 12,
+          assignedPipeIds: [],
+        });
+        renderDeliveryRows();
+      }
+
+      function deleteDeliveryRow(index) {
+        const row = deliveryRows[index];
+        if (!row) return;
+        if (!confirm(`确认删除配送明细 ${row.name} 吗？`)) return;
+        deliveryRows.splice(index, 1);
+        deliveryRows.forEach((item, idx) => {
+          item.seq = idx + 1;
+        });
+        renderDeliveryRows();
+      }
+
+      function openPipeDrawer(index) {
+        currentPipeRowIndex = index;
+        currentPipeCatalog = createPipeCatalog(deliveryRows[index]);
+        pipeSelectionDraft = [];
+        pipeKeyword = "";
+        document.getElementById("pipeSearchInput").value = "";
+        renderAssignedPipes();
+        renderPipeCards();
+        document.getElementById("pipeDrawerOverlay").classList.add("open");
+      }
+
+      function closePipeDrawer() {
+        document.getElementById("pipeDrawerOverlay").classList.remove("open");
+        currentPipeRowIndex = -1;
+        currentPipeCatalog = [];
+        pipeSelectionDraft = [];
+        pipeKeyword = "";
+      }
+
+      function openPipeViewModal(index) {
+        const row = deliveryRows[index];
+        if (!row) return;
+        const pipeCatalog = createPipeCatalog(row);
+        const assignedIds = row.assignedPipeIds || [];
+        document.getElementById("pipeViewSubtitle").textContent =
+          `${row.name} | ${row.code} | 已承运 ${assignedIds.length} 支`;
+        document.getElementById("pipeViewCount").textContent = assignedIds.length;
+        const body = document.getElementById("pipeViewTableBody");
+        if (!assignedIds.length) {
+          body.innerHTML =
+            '<tr><td colspan="3" class="px-5 py-10 text-center text-slate-400">暂无已承运自编号</td></tr>';
+        } else {
+          body.innerHTML = assignedIds
+            .map((pipeId) => {
+              const pipe = pipeCatalog.find((item) => item.id === pipeId);
+              if (!pipe) return "";
+              return `<tr><td class="px-5 py-4 border-b border-slate-200 font-semibold text-slate-900">${pipe.selfCode}</td><td class="px-5 py-4 border-b border-slate-200">${pipe.bundleNo}</td><td class="px-5 py-4 border-b border-slate-200">${pipe.pipeNo}</td></tr>`;
+            })
+            .join("");
+        }
+        document.getElementById("pipeViewModal").classList.add("open");
+      }
+
+      function closePipeViewModal() {
+        document.getElementById("pipeViewModal").classList.remove("open");
+      }
+
+      function updatePipeKeyword(value) {
+        pipeKeyword = (value || "").trim().toLowerCase();
+        renderPipeCards();
+      }
+
+      function renderAssignedPipes() {
+        const ids =
+          currentPipeRowIndex >= 0
+            ? deliveryRows[currentPipeRowIndex].assignedPipeIds || []
+            : [];
+        document.getElementById("assignedPipeCount").textContent = ids.length;
+        const body = document.getElementById("assignedPipeTableBody");
+        if (!ids.length) {
+          body.innerHTML =
+            '<tr><td colspan="4" class="px-5 py-10 text-center text-slate-400">暂无已分配自编号</td></tr>';
+          return;
+        }
+        body.innerHTML = ids
+          .map((pipeId, index) => {
+            const pipe = getPipeById(pipeId);
+            if (!pipe) return "";
+            return `<tr><td class="px-5 py-4 border-b border-slate-200 font-semibold text-slate-900">${pipe.selfCode}</td><td class="px-5 py-4 border-b border-slate-200">${pipe.bundleNo}</td><td class="px-5 py-4 border-b border-slate-200">${pipe.pipeNo}</td><td class="px-5 py-4 border-b border-slate-200"><button type="button" class="px-3 py-1.5 rounded-xl bg-red-50 text-red-600 font-semibold hover:bg-red-100" onclick="removeAssignedPipe(${index})">删除</button></td></tr>`;
+          })
+          .join("");
+      }
+
+      function removeAssignedPipe(index) {
+        if (currentPipeRowIndex < 0) return;
+        deliveryRows[currentPipeRowIndex].assignedPipeIds.splice(index, 1);
+        renderAssignedPipes();
+        renderPipeCards();
+        renderDeliveryRows();
+      }
+
+      function togglePipeSelection(pipeId) {
+        if (pipeSelectionDraft.includes(pipeId)) {
+          pipeSelectionDraft = pipeSelectionDraft.filter((id) => id !== pipeId);
+        } else {
+          pipeSelectionDraft = [...pipeSelectionDraft, pipeId];
+        }
+        renderPipeCards();
+      }
+
+      function renderPipeCards() {
+        const assigned = new Set(
+          currentPipeRowIndex >= 0
+            ? deliveryRows[currentPipeRowIndex].assignedPipeIds
+            : [],
+        );
+        const filteredCatalog = currentPipeCatalog.filter((pipe) => {
+          if (!pipeKeyword) return true;
+          const text =
+            `${pipe.selfCode} ${pipe.bundleNo} ${pipe.pipeNo}`.toLowerCase();
+          return text.includes(pipeKeyword);
+        });
+        document.getElementById("pipeSelectionCount").textContent =
+          pipeSelectionDraft.length;
+        const grid = document.getElementById("pipeCardGrid");
+        if (!filteredCatalog.length) {
+          grid.innerHTML =
+            '<div class="col-span-full rounded-3xl border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center text-slate-400">未找到匹配的钢管</div>';
+          return;
+        }
+        grid.innerHTML = filteredCatalog
+          .map((pipe) => {
+            const selected = pipeSelectionDraft.includes(pipe.id);
+            const disabled = assigned.has(pipe.id);
+            return `<button type="button" ${disabled ? "disabled" : ""} class="pipe-card ${selected ? "selected" : ""} ${disabled ? "disabled" : ""} rounded-[24px] p-4 text-left" onclick="togglePipeSelection('${pipe.id}')"><div class="flex items-start justify-between gap-3"><div class="min-w-0"><div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">自编号</div><div class="mt-1 text-base font-bold text-slate-900 leading-6">${pipe.selfCode}</div></div><div class="w-7 h-7 rounded-full ${selected ? "bg-blue-600 text-white" : disabled ? "bg-slate-200 text-slate-500" : "bg-slate-100 text-slate-400"} flex items-center justify-center flex-none"><i class="fas ${selected ? "fa-check" : disabled ? "fa-lock" : "fa-plus"} text-xs"></i></div></div><div class="mt-3 space-y-2 text-sm"><div class="rounded-2xl bg-slate-50 px-3 py-2"><div class="text-[11px] text-slate-400">捆号</div><div class="mt-0.5 font-semibold text-slate-800 leading-5">${pipe.bundleNo}</div></div><div class="rounded-2xl bg-slate-50 px-3 py-2"><div class="text-[11px] text-slate-400">管号</div><div class="mt-0.5 font-semibold text-slate-800 leading-5">${pipe.pipeNo}</div></div></div>${disabled ? '<div class="mt-3 text-xs font-semibold text-amber-600 leading-5">已分配到当前物流车</div>' : ""}</button>`;
+          })
+          .join("");
+      }
+
+      function confirmPipeAssignment() {
+        if (currentPipeRowIndex < 0) return;
+        const currentIds =
+          deliveryRows[currentPipeRowIndex].assignedPipeIds || [];
+        deliveryRows[currentPipeRowIndex].assignedPipeIds = [
+          ...new Set([...currentIds, ...pipeSelectionDraft]),
+        ];
+        pipeSelectionDraft = [];
+        renderAssignedPipes();
+        renderPipeCards();
+        renderDeliveryRows();
+      }
+
+      function saveLogisticsOrder() {
+        alert("物流单已保存");
+      }
+
+      document
+        .getElementById("pipeDrawerOverlay")
+        .addEventListener("click", (event) => {
+          if (event.target.id === "pipeDrawerOverlay") closePipeDrawer();
+        });
+      document
+        .getElementById("pipeViewModal")
+        .addEventListener("click", (event) => {
+          if (event.target.id === "pipeViewModal") closePipeViewModal();
+        });
+
+      renderDeliveryRows();
+    </script>
+  </body>
+</html>
+
