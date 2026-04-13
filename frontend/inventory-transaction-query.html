@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>出入库记录查询 - MES系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap");
+      * {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+      body {
+        font-family: "Inter", "Noto Sans SC", sans-serif;
+        background: #f4f6f8;
+        overflow: hidden;
+      }
+      .industrial-shadow {
+        box-shadow:
+          0 2px 8px rgba(15, 23, 42, 0.08),
+          0 4px 18px rgba(15, 23, 42, 0.05);
+      }
+      .industrial-shadow-lg {
+        box-shadow:
+          0 12px 30px rgba(15, 23, 42, 0.12),
+          0 10px 24px rgba(37, 99, 235, 0.12);
+      }
+      .hero-panel {
+        background:
+          radial-gradient(circle at top right, rgba(147, 197, 253, 0.28), transparent 28%),
+          linear-gradient(135deg, #0f172a 0%, #1d4ed8 58%, #2563eb 100%);
+      }
+      .query-card,
+      .table-wrap {
+        background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+        border: 1px solid #dbe7f3;
+      }
+      .form-input,
+      .form-select {
+        width: 100%;
+        border: 2px solid #dbe3ef;
+        border-radius: 16px;
+        background: #fff;
+        color: #0f172a;
+        padding: 13px 15px;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .form-input:focus,
+      .form-select:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+      }
+      .metric-card {
+        background:
+          radial-gradient(circle at top right, rgba(219, 234, 254, 0.55), transparent 45%),
+          linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+        border: 1px solid #dbeafe;
+      }
+      .type-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 9999px;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1px solid transparent;
+      }
+      .type-pill.inbound {
+        background: #ecfdf3;
+        color: #15803d;
+        border-color: #86efac;
+      }
+      .type-pill.outbound {
+        background: #fff7ed;
+        color: #c2410c;
+        border-color: #fdba74;
+      }
+      .type-pill.transfer {
+        background: #eff6ff;
+        color: #1d4ed8;
+        border-color: #93c5fd;
+      }
+      .type-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 9999px;
+        background: currentColor;
+        opacity: 0.85;
+      }
+      thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: #f8fafc;
+      }
+      tbody tr {
+        transition: background-color 0.18s ease;
+      }
+      tbody tr:hover {
+        background: #f8fbff;
+      }
+      .icon-btn {
+        width: 38px;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+      }
+      .icon-btn:hover {
+        transform: translateY(-1px);
+      }
+      .modal-overlay {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+      }
+      .modal-overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .modal-panel {
+        transform: scale(0.96) translateY(10px);
+        transition: transform 0.25s ease;
+      }
+      .modal-overlay.open .modal-panel {
+        transform: scale(1) translateY(0);
+      }
+      .drawer-overlay {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+      }
+      .drawer-overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .drawer-panel {
+        transform: translateX(100%);
+        transition: transform 0.28s ease;
+      }
+      .drawer-overlay.open .drawer-panel {
+        transform: translateX(0);
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #e2e8f0;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 9999px;
+      }
+    </style>
+  </head>
+  <body class="h-screen w-screen flex flex-col">
+    <header class="bg-white industrial-shadow z-50 flex-none">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-4">
+          <button
+            onclick="history.back()"
+            class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors"
+          >
+            <i class="fas fa-arrow-left text-lg"></i>
+          </button>
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 bg-blue-600 rounded-xl flex items-center justify-center text-white">
+              <i class="fas fa-magnifying-glass-chart text-xl"></i>
+            </div>
+            <div>
+              <h1 class="text-xl font-bold text-gray-900 tracking-tight">
+                出入库记录查询
+              </h1>
+              <p class="text-xs text-gray-500">
+                按时间、类型、物料与项目快速检索仓储业务记录
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            onclick="openAdvancedQuery()"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700"
+          >
+            <i class="fas fa-sliders"></i><span>高级查询</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <section class="px-6 pt-5 pb-4 flex-none">
+      <div class="hero-panel rounded-3xl industrial-shadow-lg text-white p-6 md:p-7">
+        <div class="flex flex-col xl:flex-row xl:items-end gap-5">
+          <div class="flex-1">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/12 border border-white/15 text-sm font-semibold">
+              <i class="fas fa-filter"></i><span>业务查询</span>
+            </div>
+            <h2 class="mt-4 text-3xl md:text-4xl font-bold tracking-tight">
+              仓储出入库流水查询台账
+            </h2>
+            <p class="mt-3 text-sm md:text-base text-blue-50/90 max-w-3xl leading-relaxed">
+              支持按操作日期、出入库类型、物料编号、物料名称和项目名称检索出库、入库、移库等业务流水，
+              方便追踪单据来源、仓库变更和物料流向。
+            </p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 min-w-full xl:min-w-[560px]">
+            <div class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4">
+              <div class="text-xs text-blue-100/85">查询结果</div>
+              <div id="metricTotal" class="mt-2 text-3xl font-bold">0</div>
+            </div>
+            <div class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4">
+              <div class="text-xs text-blue-100/85">入库记录</div>
+              <div id="metricInbound" class="mt-2 text-3xl font-bold">0</div>
+            </div>
+            <div class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4">
+              <div class="text-xs text-blue-100/85">出库记录</div>
+              <div id="metricOutbound" class="mt-2 text-3xl font-bold">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="px-6 pb-6 flex-1 min-h-0">
+      <div class="table-wrap h-full rounded-3xl industrial-shadow overflow-hidden flex flex-col">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-white">
+          <div>
+            <h3 class="text-lg font-bold text-slate-900">出入库流水记录</h3>
+            <p class="text-sm text-slate-500 mt-1">
+              可查看记录类型、仓库去向、数量变化及来源单据
+            </p>
+          </div>
+          <div class="flex items-center gap-5 text-sm text-slate-500">
+            <div>
+              当前共
+              <span id="recordCount" class="font-bold text-blue-600">0</span>
+              条
+            </div>
+            <div>
+              数量汇总
+              <span id="qtySummary" class="font-bold text-slate-900">0</span>
+            </div>
+            <div class="text-xs text-slate-400">
+              规则：入库为正，出库为负，移库不计
+            </div>
+          </div>
+        </div>
+        <div class="flex-1 min-h-0 overflow-auto">
+          <table class="min-w-full text-sm text-slate-700">
+            <thead class="text-slate-500">
+              <tr>
+                <th class="px-4 py-4 text-left font-bold border-b border-slate-200">序号</th>
+                <th class="px-4 py-4 text-left font-bold border-b border-slate-200 min-w-[220px]">物料名称 / 编号</th>
+                <th class="px-4 py-4 text-left font-bold border-b border-slate-200 min-w-[220px]">项目名称</th>
+                <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">类型</th>
+                <th class="px-4 py-4 text-left font-bold border-b border-slate-200 min-w-[240px]">仓库 / 库位变化</th>
+                <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">数量</th>
+                <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">来源单据</th>
+                <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">操作人</th>
+                <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">操作日期</th>
+                <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">操作</th>
+              </tr>
+            </thead>
+            <tbody id="transactionTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <div
+      id="advancedQueryDrawer"
+      class="drawer-overlay fixed inset-0 z-[88] bg-slate-950/35"
+    >
+      <div
+        class="drawer-panel ml-auto h-full w-[520px] max-w-full bg-white shadow-2xl flex flex-col"
+      >
+        <div class="px-6 py-5 border-b border-slate-200 bg-white">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold border border-blue-100">
+                <i class="fas fa-sliders"></i><span>高级查询</span>
+              </div>
+              <h3 class="mt-3 text-2xl font-bold text-slate-900">出入库查询条件</h3>
+              <p class="mt-1 text-sm text-slate-500">按日期、类型、物料与项目组合筛选仓储流水</p>
+            </div>
+            <button
+              type="button"
+              onclick="closeAdvancedQuery()"
+              class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center"
+            >
+              <i class="fas fa-xmark text-2xl"></i>
+            </button>
+          </div>
+        </div>
+        <div class="flex-1 overflow-auto px-6 py-6">
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs text-slate-500">操作日期起</label>
+                <input id="dateFrom" type="date" class="form-input mt-2" value="2026-04-10" />
+              </div>
+              <div>
+                <label class="text-xs text-slate-500">操作日期止</label>
+                <input id="dateTo" type="date" class="form-input mt-2" value="2026-04-13" />
+              </div>
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">出入库类型</label>
+              <select id="typeFilter" class="form-select mt-2">
+                <option value="all" selected>全部类型</option>
+                <option value="inbound">入库</option>
+                <option value="outbound">出库</option>
+                <option value="transfer">移库</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">物料编号</label>
+              <input id="materialCodeFilter" class="form-input mt-2" placeholder="输入物料编号" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">物料名称</label>
+              <input id="materialNameFilter" class="form-input mt-2" placeholder="输入物料名称" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">项目名称</label>
+              <input id="projectNameFilter" class="form-input mt-2" placeholder="输入项目名称" />
+            </div>
+          </div>
+        </div>
+        <div class="px-6 py-5 border-t border-slate-200 bg-white flex items-center justify-between gap-4">
+          <button
+            type="button"
+            onclick="resetFilters()"
+            class="px-4 py-2.5 rounded-2xl border border-slate-200 text-slate-600 font-semibold hover:bg-slate-50"
+          >
+            重置条件
+          </button>
+          <button
+            type="button"
+            onclick="applyAdvancedQuery()"
+            class="px-5 py-2.5 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700"
+          >
+            查询
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="detailModal"
+      class="modal-overlay fixed inset-0 z-[90] bg-slate-950/35 flex items-center justify-center p-5"
+    >
+      <div
+        class="modal-panel w-full max-w-5xl rounded-[28px] bg-white shadow-2xl overflow-hidden"
+      >
+        <div class="px-6 py-5 border-b border-slate-200 bg-white">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold border border-blue-100">
+                <i class="fas fa-file-lines"></i><span>记录详情</span>
+              </div>
+              <h3 class="mt-3 text-2xl font-bold text-slate-900">出入库记录详情</h3>
+              <p id="detailSubtitle" class="mt-1 text-sm text-slate-500">查看当前记录的基础信息</p>
+            </div>
+            <button
+              type="button"
+              onclick="closeDetailModal()"
+              class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center"
+            >
+              <i class="fas fa-xmark text-2xl"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-6 bg-slate-50">
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div class="metric-card rounded-[22px] px-4 py-4">
+              <div class="text-xs text-slate-400">业务类型</div>
+              <div id="detailType" class="mt-2 text-lg font-bold text-slate-900"></div>
+            </div>
+            <div class="metric-card rounded-[22px] px-4 py-4">
+              <div class="text-xs text-slate-400">物料</div>
+              <div id="detailMaterial" class="mt-2 text-lg font-bold text-slate-900"></div>
+            </div>
+            <div class="metric-card rounded-[22px] px-4 py-4">
+              <div class="text-xs text-slate-400">数量</div>
+              <div id="detailQty" class="mt-2 text-lg font-bold text-slate-900"></div>
+            </div>
+            <div class="metric-card rounded-[22px] px-4 py-4">
+              <div class="text-xs text-slate-400">来源单据</div>
+              <div id="detailDoc" class="mt-2 text-lg font-bold text-slate-900"></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div class="query-card rounded-[22px] px-5 py-4">
+              <div class="text-xs text-slate-400">仓库 / 库位变化</div>
+              <div id="detailLocation" class="mt-2 text-base font-bold text-slate-900"></div>
+            </div>
+            <div class="query-card rounded-[22px] px-5 py-4">
+              <div class="text-xs text-slate-400">项目与操作人</div>
+              <div id="detailProject" class="mt-2 text-base font-bold text-slate-900"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const transactions = [
+        {
+          serial: 1,
+          date: "2026-04-13 09:26",
+          type: "transfer",
+          typeText: "移库",
+          materialName: "成品管 L415M",
+          materialCode: "MAT-BP-001",
+          projectName: "唐山港输油管道二期项目",
+          locationText: "一号成品仓 / A-01-03 -> 二号成品仓 / B-03-02",
+          qty: "3 支",
+          sourceDoc: "YKD-20260413-001",
+          operator: "张海峰",
+        },
+        {
+          serial: 2,
+          date: "2026-04-13 10:12",
+          type: "inbound",
+          typeText: "入库",
+          materialName: "防腐套管",
+          materialCode: "MAT-FG-011",
+          projectName: "华北石油管道更新工程",
+          locationText: "待检暂存仓 / T-01-01",
+          qty: "20 件",
+          sourceDoc: "RKD-20260413-004",
+          operator: "王志远",
+        },
+        {
+          serial: 3,
+          date: "2026-04-12 16:40",
+          type: "outbound",
+          typeText: "出库",
+          materialName: "成品管 X65",
+          materialCode: "MAT-BP-018",
+          projectName: "沿海 LNG 外输管线项目",
+          locationText: "二号成品仓 / B-02-01 -> 项目备货仓 / C-01-03",
+          qty: "2 支",
+          sourceDoc: "CKD-20260412-014",
+          operator: "李建军",
+        },
+        {
+          serial: 4,
+          date: "2026-04-11 14:18",
+          type: "transfer",
+          typeText: "移库",
+          materialName: "成品管 L450M",
+          materialCode: "MAT-BP-002",
+          projectName: "唐山港输油管道二期项目",
+          locationText: "一号成品仓 / A-01-05 -> 二号成品仓 / B-03-05",
+          qty: "8 支",
+          sourceDoc: "YKD-20260411-009",
+          operator: "周明涛",
+        },
+        {
+          serial: 5,
+          date: "2026-04-10 11:05",
+          type: "inbound",
+          typeText: "入库",
+          materialName: "成品管 X70",
+          materialCode: "MAT-BP-019",
+          projectName: "华北石油管道更新工程",
+          locationText: "二号成品仓 / B-03-01",
+          qty: "12 支",
+          sourceDoc: "RKD-20260410-002",
+          operator: "刘涛",
+        },
+      ];
+
+      function getTypeClass(type) {
+        if (type === "inbound") return "inbound";
+        if (type === "outbound") return "outbound";
+        return "transfer";
+      }
+
+      function renderMetrics(filtered) {
+        document.getElementById("metricTotal").textContent = filtered.length;
+        document.getElementById("metricInbound").textContent = filtered.filter(
+          (item) => item.type === "inbound",
+        ).length;
+        document.getElementById("metricOutbound").textContent = filtered.filter(
+          (item) => item.type === "outbound",
+        ).length;
+      }
+
+      function getFilteredTransactions() {
+        const dateFrom = document.getElementById("dateFrom").value;
+        const dateTo = document.getElementById("dateTo").value;
+        const typeFilter = document.getElementById("typeFilter").value;
+        const materialCodeFilter = document
+          .getElementById("materialCodeFilter")
+          .value.trim()
+          .toLowerCase();
+        const materialNameFilter = document
+          .getElementById("materialNameFilter")
+          .value.trim()
+          .toLowerCase();
+        const projectNameFilter = document
+          .getElementById("projectNameFilter")
+          .value.trim()
+          .toLowerCase();
+
+        return transactions.filter((item) => {
+          const itemDate = item.date.slice(0, 10);
+          const matchDate =
+            (!dateFrom || itemDate >= dateFrom) && (!dateTo || itemDate <= dateTo);
+          const matchType = typeFilter === "all" || item.type === typeFilter;
+          const matchCode =
+            !materialCodeFilter ||
+            item.materialCode.toLowerCase().includes(materialCodeFilter);
+          const matchName =
+            !materialNameFilter ||
+            item.materialName.toLowerCase().includes(materialNameFilter);
+          const matchProject =
+            !projectNameFilter ||
+            item.projectName.toLowerCase().includes(projectNameFilter);
+          return matchDate && matchType && matchCode && matchName && matchProject;
+        });
+      }
+
+      function renderTable() {
+        const filtered = getFilteredTransactions();
+        renderMetrics(filtered);
+        document.getElementById("recordCount").textContent = filtered.length;
+        const qtySummary = filtered.reduce((sum, item) => {
+          const qty = Number((item.qty.match(/\d+(\.\d+)?/) || ["0"])[0]);
+          if (item.type === "inbound") return sum + qty;
+          if (item.type === "outbound") return sum - qty;
+          return sum;
+        }, 0);
+        document.getElementById("qtySummary").textContent =
+          qtySummary > 0 ? `+${qtySummary}` : String(qtySummary);
+        document.getElementById("transactionTableBody").innerHTML = filtered
+          .map(
+            (item) => `
+              <tr>
+                <td class="px-4 py-4 border-b border-slate-100 font-semibold text-slate-900">${item.serial}</td>
+                <td class="px-4 py-4 border-b border-slate-100">
+                  <div class="font-semibold text-slate-900">${item.materialName}</div>
+                  <div class="mt-1 text-xs text-slate-500">${item.materialCode}</div>
+                </td>
+                <td class="px-4 py-4 border-b border-slate-100">${item.projectName}</td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">
+                  <span class="type-pill ${getTypeClass(item.type)}">
+                    <span class="type-dot"></span>${item.typeText}
+                  </span>
+                </td>
+                <td class="px-4 py-4 border-b border-slate-100">${item.locationText}</td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap font-semibold text-slate-900">${item.qty}</td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap text-blue-700 font-semibold">${item.sourceDoc}</td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${item.operator}</td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${item.date}</td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">
+                  <div class="flex items-center gap-2">
+                    <button type="button" title="查看" class="icon-btn bg-blue-50 text-blue-700 hover:bg-blue-100" onclick="openDetail('${item.sourceDoc}')">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>`,
+          )
+          .join("");
+      }
+
+      function openDetail(sourceDoc) {
+        const item = transactions.find((row) => row.sourceDoc === sourceDoc);
+        if (!item) return;
+        document.getElementById("detailSubtitle").textContent =
+          `${item.sourceDoc} | ${item.materialName} | ${item.date}`;
+        document.getElementById("detailType").textContent = item.typeText;
+        document.getElementById("detailMaterial").textContent =
+          `${item.materialName} / ${item.materialCode}`;
+        document.getElementById("detailQty").textContent = item.qty;
+        document.getElementById("detailDoc").textContent = item.sourceDoc;
+        document.getElementById("detailLocation").textContent = item.locationText;
+        document.getElementById("detailProject").textContent =
+          `${item.projectName} / ${item.operator}`;
+        document.getElementById("detailModal").classList.add("open");
+      }
+
+      function closeDetailModal() {
+        document.getElementById("detailModal").classList.remove("open");
+      }
+
+      function openAdvancedQuery() {
+        document.getElementById("advancedQueryDrawer").classList.add("open");
+      }
+
+      function closeAdvancedQuery() {
+        document.getElementById("advancedQueryDrawer").classList.remove("open");
+      }
+
+      function applyAdvancedQuery() {
+        renderTable();
+        closeAdvancedQuery();
+      }
+
+      function resetFilters() {
+        document.getElementById("dateFrom").value = "2026-04-10";
+        document.getElementById("dateTo").value = "2026-04-13";
+        document.getElementById("typeFilter").value = "all";
+        document.getElementById("materialCodeFilter").value = "";
+        document.getElementById("materialNameFilter").value = "";
+        document.getElementById("projectNameFilter").value = "";
+        renderTable();
+      }
+
+      [
+        "dateFrom",
+        "dateTo",
+        "typeFilter",
+        "materialCodeFilter",
+        "materialNameFilter",
+        "projectNameFilter",
+      ].forEach((id) => {
+        document.getElementById(id).addEventListener("change", renderTable);
+        document.getElementById(id).addEventListener("input", renderTable);
+      });
+
+      document
+        .getElementById("advancedQueryDrawer")
+        .addEventListener("click", (event) => {
+          if (event.target.id === "advancedQueryDrawer") closeAdvancedQuery();
+        });
+      document
+        .getElementById("detailModal")
+        .addEventListener("click", (event) => {
+          if (event.target.id === "detailModal") closeDetailModal();
+        });
+
+      renderTable();
+    </script>
+  </body>
+</html>
