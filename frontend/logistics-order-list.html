@@ -110,6 +110,22 @@
       .icon-btn:hover {
         transform: translateY(-1px);
       }
+      .modal-overlay {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+      }
+      .modal-overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .modal-panel {
+        transform: scale(0.96) translateY(10px);
+        transition: transform 0.25s ease;
+      }
+      .modal-overlay.open .modal-panel {
+        transform: scale(1) translateY(0);
+      }
       ::-webkit-scrollbar {
         width: 8px;
         height: 8px;
@@ -157,6 +173,7 @@
           </div>
           <button
             type="button"
+            onclick="location.href='logistics-order-create.html'"
             class="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
           >
             <i class="fas fa-plus"></i><span>新增物流单</span>
@@ -318,6 +335,74 @@
       </div>
     </main>
 
+    <div
+      id="pipeDetailModal"
+      class="modal-overlay fixed inset-0 z-[90] bg-slate-950/35 flex items-center justify-center p-5"
+    >
+      <div
+        class="modal-panel w-full max-w-7xl rounded-[28px] bg-white shadow-2xl overflow-hidden"
+      >
+        <div class="px-6 py-5 border-b border-slate-200 bg-white">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold border border-blue-100"
+              >
+                <i class="fas fa-list-ul"></i><span>自编号清单</span>
+              </div>
+              <h3 class="mt-3 text-2xl font-bold text-slate-900">
+                物流单钢管自编号详情
+              </h3>
+              <p id="pipeDetailSubtitle" class="mt-1 text-sm text-slate-500">
+                查看当前物流单中所有钢管类型的自编号信息
+              </p>
+            </div>
+            <button
+              type="button"
+              onclick="closePipeDetailModal()"
+              class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center"
+            >
+              <i class="fas fa-xmark text-2xl"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-6 bg-slate-50">
+          <div
+            class="rounded-[28px] border border-slate-200 bg-white overflow-hidden"
+          >
+            <div
+              class="px-6 py-5 border-b border-slate-200 flex items-center justify-between gap-4"
+            >
+              <div class="text-lg font-bold text-slate-900">钢管自编号列表</div>
+              <div class="text-sm text-slate-500">
+                钢管总数量
+                <span id="pipeDetailCount" class="font-bold text-blue-600"
+                  >0</span
+                >
+                支
+              </div>
+            </div>
+            <div class="max-h-[520px] overflow-auto">
+              <table class="min-w-full text-sm text-slate-700">
+                <thead class="text-slate-500">
+                  <tr>
+                    <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">序号</th>
+                    <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">物料名称</th>
+                    <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">物料编码</th>
+                    <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">规格型号</th>
+                    <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">自编号</th>
+                    <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">捆号</th>
+                    <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">管号</th>
+                  </tr>
+                </thead>
+                <tbody id="pipeDetailTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
       const logisticsRecords = [
         {
@@ -330,6 +415,11 @@
           date: "2026-04-12",
           status: "pending",
           statusText: "客户未收货",
+          pipes: [
+            { name: "成品管 L415M", code: "MAT-BP-001", spec: "D813 × 17.5 × 12000", selfCode: "ZBH-0001", bundleNo: "BH-001", pipeNo: "GH-0001" },
+            { name: "成品管 L415M", code: "MAT-BP-001", spec: "D813 × 17.5 × 12000", selfCode: "ZBH-0002", bundleNo: "BH-001", pipeNo: "GH-0002" },
+            { name: "成品管 L450M", code: "MAT-BP-002", spec: "D813 × 19.1 × 12000", selfCode: "ZBH-0101", bundleNo: "BH-003", pipeNo: "GH-0101" },
+          ],
         },
         {
           serial: 2,
@@ -341,6 +431,12 @@
           date: "2026-04-12",
           status: "done",
           statusText: "客户已收货",
+          pipes: [
+            { name: "成品管 X65", code: "MAT-BP-018", spec: "D711 × 14.2 × 11800", selfCode: "ZBH-0201", bundleNo: "BH-008", pipeNo: "GH-0201" },
+            { name: "成品管 X65", code: "MAT-BP-018", spec: "D711 × 14.2 × 11800", selfCode: "ZBH-0202", bundleNo: "BH-008", pipeNo: "GH-0202" },
+            { name: "成品管 X70", code: "MAT-BP-019", spec: "D711 × 16.0 × 11800", selfCode: "ZBH-0301", bundleNo: "BH-011", pipeNo: "GH-0301" },
+            { name: "成品管 X70", code: "MAT-BP-019", spec: "D711 × 16.0 × 11800", selfCode: "ZBH-0302", bundleNo: "BH-011", pipeNo: "GH-0302" },
+          ],
         },
         {
           serial: 3,
@@ -352,6 +448,10 @@
           date: "2026-04-11",
           status: "pending",
           statusText: "客户未收货",
+          pipes: [
+            { name: "成品管 L360QS", code: "MAT-BP-005", spec: "D610 × 14.2 × 12000", selfCode: "ZBH-0401", bundleNo: "BH-015", pipeNo: "GH-0401" },
+            { name: "成品管 L360QS", code: "MAT-BP-005", spec: "D610 × 14.2 × 12000", selfCode: "ZBH-0402", bundleNo: "BH-015", pipeNo: "GH-0402" },
+          ],
         },
         {
           serial: 4,
@@ -363,6 +463,11 @@
           date: "2026-04-10",
           status: "done",
           statusText: "客户已收货",
+          pipes: [
+            { name: "成品管 L415M", code: "MAT-BP-001", spec: "D813 × 17.5 × 12000", selfCode: "ZBH-0501", bundleNo: "BH-021", pipeNo: "GH-0501" },
+            { name: "成品管 L450M", code: "MAT-BP-002", spec: "D813 × 19.1 × 12000", selfCode: "ZBH-0502", bundleNo: "BH-022", pipeNo: "GH-0502" },
+            { name: "成品管 X70", code: "MAT-BP-019", spec: "D711 × 16.0 × 11800", selfCode: "ZBH-0503", bundleNo: "BH-023", pipeNo: "GH-0503" },
+          ],
         },
       ];
 
@@ -436,11 +541,43 @@
       }
 
       function editLogistics(logisticsNo) {
-        alert(`编辑物流单：${logisticsNo}`);
+        location.href = "logistics-order-edit.html";
       }
 
       function viewLogistics(logisticsNo) {
-        alert(`查看物流单：${logisticsNo}`);
+        const record = logisticsRecords.find(
+          (item) => item.logisticsNo === logisticsNo,
+        );
+        if (!record) return;
+        const pipes = record.pipes || [];
+        document.getElementById("pipeDetailSubtitle").textContent =
+          `${record.logisticsNo} | ${record.salesNo} | ${record.projectName}`;
+        document.getElementById("pipeDetailCount").textContent = pipes.length;
+        const body = document.getElementById("pipeDetailTableBody");
+        if (!pipes.length) {
+          body.innerHTML =
+            '<tr><td colspan="7" class="px-4 py-12 text-center text-slate-400">暂无钢管自编号数据</td></tr>';
+        } else {
+          body.innerHTML = pipes
+            .map(
+              (pipe, index) => `
+                <tr>
+                  <td class="px-4 py-4 border-b border-slate-100 font-semibold text-slate-900">${index + 1}</td>
+                  <td class="px-4 py-4 border-b border-slate-100">${pipe.name}</td>
+                  <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${pipe.code}</td>
+                  <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${pipe.spec}</td>
+                  <td class="px-4 py-4 border-b border-slate-100 font-semibold text-slate-900 whitespace-nowrap">${pipe.selfCode}</td>
+                  <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${pipe.bundleNo}</td>
+                  <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${pipe.pipeNo}</td>
+                </tr>`,
+            )
+            .join("");
+        }
+        document.getElementById("pipeDetailModal").classList.add("open");
+      }
+
+      function closePipeDetailModal() {
+        document.getElementById("pipeDetailModal").classList.remove("open");
       }
 
       function deleteLogistics(logisticsNo) {
@@ -472,6 +609,11 @@
           renderTable();
         });
       });
+      document
+        .getElementById("pipeDetailModal")
+        .addEventListener("click", (event) => {
+          if (event.target.id === "pipeDetailModal") closePipeDetailModal();
+        });
 
       renderMetrics();
       renderTable();

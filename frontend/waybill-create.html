@@ -1,0 +1,885 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>新增运单 - MES系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap");
+      * {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+      body {
+        font-family: "Inter", "Noto Sans SC", sans-serif;
+        background: #f4f6f8;
+        overflow: hidden;
+      }
+      .industrial-shadow {
+        box-shadow:
+          0 2px 8px rgba(15, 23, 42, 0.08),
+          0 4px 18px rgba(15, 23, 42, 0.05);
+      }
+      .industrial-shadow-lg {
+        box-shadow:
+          0 12px 30px rgba(15, 23, 42, 0.12),
+          0 10px 24px rgba(37, 99, 235, 0.12);
+      }
+      .hero-panel {
+        background:
+          radial-gradient(
+            circle at top right,
+            rgba(147, 197, 253, 0.28),
+            transparent 28%
+          ),
+          linear-gradient(135deg, #0f172a 0%, #1d4ed8 58%, #2563eb 100%);
+      }
+      .info-card {
+        background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+        border: 1px solid #dbe7f3;
+      }
+      .form-input,
+      .select-trigger {
+        width: 100%;
+        border: 2px solid #dbe3ef;
+        border-radius: 16px;
+        background: #fff;
+        color: #0f172a;
+        padding: 13px 15px;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .form-input:focus,
+      .select-trigger:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+      }
+      .order-card {
+        transition: all 0.18s ease;
+      }
+      .order-card:hover {
+        background: #f8fbff;
+        border-color: #bfdbfe;
+      }
+      .icon-btn {
+        width: 38px;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+      }
+      .icon-btn:hover {
+        transform: translateY(-1px);
+      }
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 9999px;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1px solid transparent;
+      }
+      .status-pill.pending {
+        background: #fff7ed;
+        color: #c2410c;
+        border-color: #fdba74;
+      }
+      .status-pill.done {
+        background: #ecfdf3;
+        color: #15803d;
+        border-color: #86efac;
+      }
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 9999px;
+        background: currentColor;
+        opacity: 0.85;
+      }
+      .modal-overlay {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+      }
+      .modal-overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .modal-panel {
+        transform: scale(0.96) translateY(10px);
+        transition: transform 0.25s ease;
+      }
+      .modal-overlay.open .modal-panel {
+        transform: scale(1) translateY(0);
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #e2e8f0;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 9999px;
+      }
+    </style>
+  </head>
+  <body class="h-screen w-screen flex flex-col">
+    <header class="bg-white industrial-shadow z-50 flex-none">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center gap-4">
+          <button
+            onclick="history.back()"
+            class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors"
+          >
+            <i class="fas fa-arrow-left text-lg"></i>
+          </button>
+          <div class="flex items-center gap-3">
+            <div
+              class="w-11 h-11 bg-blue-600 rounded-xl flex items-center justify-center text-white"
+            >
+              <i class="fas fa-file-circle-plus text-xl"></i>
+            </div>
+            <div>
+              <h1 class="text-xl font-bold text-gray-900 tracking-tight">
+                新增运单
+              </h1>
+              <p class="text-xs text-gray-500">
+                合并多个物流单 | 形成统一发运运单
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            onclick="saveWaybill()"
+            class="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
+          >
+            <i class="fas fa-floppy-disk"></i><span>保存运单</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 min-h-0 overflow-auto px-6 py-5">
+      <div class="max-w-[1600px] mx-auto space-y-5">
+        <section
+          class="hero-panel rounded-3xl industrial-shadow-lg text-white p-6 md:p-7"
+        >
+          <div class="flex flex-col xl:flex-row xl:items-end gap-5">
+            <div class="flex-1">
+              <div
+                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/12 border border-white/15 text-sm font-semibold"
+              >
+                <i class="fas fa-layer-group"></i><span>运单编制</span>
+              </div>
+              <h2 class="mt-4 text-3xl md:text-4xl font-bold tracking-tight">
+                新增运单详情
+              </h2>
+              <p
+                class="mt-3 text-sm md:text-base text-blue-50/90 max-w-3xl leading-relaxed"
+              >
+                从多个物流单中汇总本次发运的钢管清单，生成统一运单并维护关联物流单记录。
+              </p>
+            </div>
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 gap-3 min-w-full xl:min-w-[380px]"
+            >
+              <div
+                class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4"
+              >
+                <div class="text-xs text-blue-100/85">关联物流单</div>
+                <div id="logisticsCount" class="mt-2 text-3xl font-bold">0</div>
+              </div>
+              <div
+                class="rounded-2xl border border-white/15 bg-white/10 backdrop-blur px-4 py-4"
+              >
+                <div class="text-xs text-blue-100/85">签收完成</div>
+                <div id="doneCount" class="mt-2 text-3xl font-bold">0</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="info-card rounded-3xl industrial-shadow p-5">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">运单基本信息</h3>
+              <p class="text-xs text-slate-500 mt-1">
+                填写本次运单的主信息并绑定销售项目
+              </p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mt-5">
+            <div>
+              <label class="text-xs text-slate-500">运单号</label>
+              <input class="form-input mt-2" value="YD-20260413-003" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">销售单号</label>
+              <button
+                id="salesOrderTrigger"
+                type="button"
+                class="select-trigger mt-2 flex items-center justify-between text-left"
+              >
+                <span id="salesOrderTriggerText" class="text-slate-900"
+                  >XS-20260401-018</span
+                >
+                <i class="fas fa-chevron-down text-slate-400"></i>
+              </button>
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">项目名称</label>
+              <input
+                id="projectNameInput"
+                class="form-input mt-2 bg-slate-50"
+                value="唐山港输油管道二期项目"
+                readonly
+              />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">运单日期</label>
+              <input type="date" class="form-input mt-2" value="2026-04-13" />
+            </div>
+          </div>
+        </section>
+
+        <section class="info-card rounded-3xl industrial-shadow overflow-hidden">
+          <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between gap-4">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">物流单明细</h3>
+              <p class="text-xs text-slate-500 mt-1">
+                当前属于该运单的多个物流单记录
+              </p>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="text-sm text-slate-500">
+                共 <span id="recordCount" class="font-bold text-blue-600">0</span> 条
+              </div>
+              <button
+                type="button"
+                onclick="openAddLogisticsModal()"
+                class="px-4 py-2.5 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700"
+              >
+                <i class="fas fa-plus mr-2"></i>新增物流单
+              </button>
+            </div>
+          </div>
+          <div class="overflow-auto">
+            <table class="min-w-full text-sm text-slate-700">
+              <thead class="text-slate-500 bg-slate-50">
+                <tr>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200">序号</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">物流单号</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">物流单日期</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200">物流公司</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">签收状态</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">操作</th>
+                </tr>
+              </thead>
+              <tbody id="logisticsTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div
+      id="salesOrderModal"
+      class="modal-overlay fixed inset-0 z-[85] bg-slate-950/35 flex items-center justify-center p-5"
+    >
+      <div
+        class="modal-panel w-full max-w-5xl max-h-[86vh] bg-white rounded-[28px] industrial-shadow-lg overflow-hidden flex flex-col"
+      >
+        <div class="px-6 py-5 border-b border-slate-200 bg-white">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h3 class="text-2xl font-bold text-slate-900">选择销售单</h3>
+              <p class="mt-1 text-sm text-slate-500">
+                支持按销售单号或项目名称搜索
+              </p>
+            </div>
+            <button
+              type="button"
+              onclick="closeSalesOrderModal()"
+              class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center"
+            >
+              <i class="fas fa-xmark text-2xl"></i>
+            </button>
+          </div>
+          <div class="mt-4 relative">
+            <i
+              class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+            ></i>
+            <input
+              id="salesOrderSearchInput"
+              type="text"
+              class="form-input pl-11"
+              placeholder="搜索销售单号、项目名称..."
+            />
+          </div>
+        </div>
+        <div class="flex-1 overflow-auto p-6 bg-slate-50">
+          <div id="salesOrderList" class="grid grid-cols-1 gap-3"></div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="addLogisticsModal"
+      class="modal-overlay fixed inset-0 z-[88] bg-slate-950/35 flex items-center justify-center p-5"
+    >
+      <div
+        class="modal-panel w-full max-w-6xl max-h-[86vh] bg-white rounded-[28px] industrial-shadow-lg overflow-hidden flex flex-col"
+      >
+        <div class="px-6 py-5 border-b border-slate-200 bg-white">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h3 class="text-2xl font-bold text-slate-900">选择物流单</h3>
+              <p class="mt-1 text-sm text-slate-500">
+                仅展示当前销售单下的物流单，可多选后加入当前运单
+              </p>
+            </div>
+            <button
+              type="button"
+              onclick="closeAddLogisticsModal()"
+              class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center"
+            >
+              <i class="fas fa-xmark text-2xl"></i>
+            </button>
+          </div>
+          <div class="mt-4 relative">
+            <i
+              class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+            ></i>
+            <input
+              id="addLogisticsSearchInput"
+              type="text"
+              class="form-input pl-11"
+              placeholder="搜索物流单号、物流公司、签收状态..."
+              oninput="renderAddLogisticsList()"
+            />
+          </div>
+        </div>
+        <div class="flex-1 overflow-auto p-6 bg-slate-50">
+          <div class="rounded-[24px] border border-slate-200 overflow-hidden bg-white">
+            <table class="min-w-full text-sm text-slate-700">
+              <thead class="text-slate-500 bg-slate-50">
+                <tr>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">选择</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">物流单号</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">物流单日期</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200">物流公司</th>
+                  <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">签收状态</th>
+                </tr>
+              </thead>
+              <tbody id="addLogisticsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="px-6 py-5 border-t border-slate-200 bg-white flex items-center justify-between gap-4">
+          <div class="text-sm text-slate-500">
+            当前已选
+            <span id="addLogisticsSelectionCount" class="font-bold text-blue-600">0</span>
+            条
+          </div>
+          <div class="flex items-center gap-3">
+            <button
+              type="button"
+              onclick="closeAddLogisticsModal()"
+              class="px-5 py-2.5 rounded-2xl border border-slate-200 text-slate-600 font-semibold hover:bg-slate-50"
+            >
+              取消
+            </button>
+            <button
+              type="button"
+              onclick="confirmAddLogistics()"
+              class="px-5 py-2.5 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700"
+            >
+              确定添加
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="logisticsViewModal"
+      class="modal-overlay fixed inset-0 z-[90] bg-slate-950/35 flex items-center justify-center p-5"
+    >
+      <div
+        class="modal-panel w-full max-w-7xl rounded-[28px] bg-white shadow-2xl overflow-hidden"
+      >
+        <div class="px-6 py-5 border-b border-slate-200 bg-white">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold border border-blue-100"
+              >
+                <i class="fas fa-list-ul"></i><span>自编号清单</span>
+              </div>
+              <h3 class="mt-3 text-2xl font-bold text-slate-900">
+                物流单钢管自编号详情
+              </h3>
+              <p id="viewSubtitle" class="mt-1 text-sm text-slate-500">
+                查看当前物流单中所有钢管类型的自编号信息
+              </p>
+            </div>
+            <button
+              type="button"
+              onclick="closeLogisticsView()"
+              class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center"
+            >
+              <i class="fas fa-xmark text-2xl"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-6 bg-slate-50">
+          <div
+            class="rounded-[28px] border border-slate-200 bg-white overflow-hidden"
+          >
+            <div
+              class="px-6 py-5 border-b border-slate-200 flex items-center justify-between gap-4"
+            >
+              <div class="text-lg font-bold text-slate-900">钢管自编号列表</div>
+              <div class="text-sm text-slate-500">
+                钢管总数量
+                <span id="viewPipeCount" class="font-bold text-blue-600"
+                  >0</span
+                >
+                支
+              </div>
+            </div>
+            <div class="max-h-[520px] overflow-auto">
+              <table class="min-w-full text-sm text-slate-700">
+                <thead class="text-slate-500 bg-slate-50">
+                  <tr>
+                    <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">序号</th>
+                    <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">物料名称</th>
+                    <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">物料编码</th>
+                    <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">规格型号</th>
+                    <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">自编号</th>
+                    <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">捆号</th>
+                    <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">管号</th>
+                  </tr>
+                </thead>
+                <tbody id="viewPipeTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const salesOrders = [
+        {
+          id: "XS-20260401-018",
+          projectName: "唐山港输油管道二期项目",
+          logisticsRows: [
+            {
+              logisticsNo: "WLD-20260412-001",
+              date: "2026-04-12",
+              company: "中远物流",
+              status: "pending",
+              statusText: "客户未收货",
+              pipes: [
+                { name: "成品管 L415M", code: "MAT-BP-001", spec: "D813 × 17.5 × 12000", selfCode: "ZBH-0001", bundleNo: "BH-001", pipeNo: "GH-0001" },
+                { name: "成品管 L415M", code: "MAT-BP-001", spec: "D813 × 17.5 × 12000", selfCode: "ZBH-0002", bundleNo: "BH-001", pipeNo: "GH-0002" },
+                { name: "成品管 L450M", code: "MAT-BP-002", spec: "D813 × 19.1 × 12000", selfCode: "ZBH-0101", bundleNo: "BH-003", pipeNo: "GH-0101" },
+              ],
+            },
+            {
+              logisticsNo: "WLD-20260412-002",
+              date: "2026-04-12",
+              company: "顺安运输",
+              status: "done",
+              statusText: "客户已收货",
+              pipes: [
+                { name: "成品管 X65", code: "MAT-BP-018", spec: "D711 × 14.2 × 11800", selfCode: "ZBH-0201", bundleNo: "BH-008", pipeNo: "GH-0201" },
+                { name: "成品管 X65", code: "MAT-BP-018", spec: "D711 × 14.2 × 11800", selfCode: "ZBH-0202", bundleNo: "BH-008", pipeNo: "GH-0202" },
+              ],
+            },
+            {
+              logisticsNo: "WLD-20260411-008",
+              date: "2026-04-11",
+              company: "陆港供应链",
+              status: "pending",
+              statusText: "客户未收货",
+              pipes: [
+                { name: "成品管 L360QS", code: "MAT-BP-005", spec: "D610 × 14.2 × 12000", selfCode: "ZBH-0401", bundleNo: "BH-015", pipeNo: "GH-0401" },
+                { name: "成品管 L360QS", code: "MAT-BP-005", spec: "D610 × 14.2 × 12000", selfCode: "ZBH-0402", bundleNo: "BH-015", pipeNo: "GH-0402" },
+              ],
+            },
+          ],
+        },
+        {
+          id: "XS-20260402-006",
+          projectName: "华北石油管道更新工程",
+          logisticsRows: [
+            {
+              logisticsNo: "WLD-20260410-015",
+              date: "2026-04-10",
+              company: "广联车队",
+              status: "done",
+              statusText: "客户已收货",
+              pipes: [
+                { name: "成品管 L415M", code: "MAT-BP-001", spec: "D813 × 17.5 × 12000", selfCode: "ZBH-0501", bundleNo: "BH-021", pipeNo: "GH-0501" },
+                { name: "成品管 L450M", code: "MAT-BP-002", spec: "D813 × 19.1 × 12000", selfCode: "ZBH-0502", bundleNo: "BH-022", pipeNo: "GH-0502" },
+              ],
+            },
+            {
+              logisticsNo: "WLD-20260409-004",
+              date: "2026-04-09",
+              company: "顺安运输",
+              status: "pending",
+              statusText: "客户未收货",
+              pipes: [
+                { name: "成品管 X70", code: "MAT-BP-019", spec: "D711 × 16.0 × 11800", selfCode: "ZBH-0301", bundleNo: "BH-011", pipeNo: "GH-0301" },
+                { name: "成品管 X70", code: "MAT-BP-019", spec: "D711 × 16.0 × 11800", selfCode: "ZBH-0302", bundleNo: "BH-011", pipeNo: "GH-0302" },
+              ],
+            },
+          ],
+        },
+        {
+          id: "XS-20260403-011",
+          projectName: "沿海 LNG 外输管线项目",
+          logisticsRows: [
+            {
+              logisticsNo: "WLD-20260409-005",
+              date: "2026-04-09",
+              company: "广联车队",
+              status: "done",
+              statusText: "客户已收货",
+              pipes: [
+                { name: "成品管 L415M", code: "MAT-BP-001", spec: "D813 × 17.5 × 12000", selfCode: "ZBH-0601", bundleNo: "BH-031", pipeNo: "GH-0601" },
+              ],
+            },
+            {
+              logisticsNo: "WLD-20260409-006",
+              date: "2026-04-09",
+              company: "陆港供应链",
+              status: "pending",
+              statusText: "客户未收货",
+              pipes: [
+                { name: "成品管 L450M", code: "MAT-BP-002", spec: "D813 × 19.1 × 12000", selfCode: "ZBH-0602", bundleNo: "BH-032", pipeNo: "GH-0602" },
+              ],
+            },
+            {
+              logisticsNo: "WLD-20260408-009",
+              date: "2026-04-08",
+              company: "中远物流",
+              status: "pending",
+              statusText: "客户未收货",
+              pipes: [
+                { name: "成品管 X65", code: "MAT-BP-018", spec: "D711 × 14.2 × 11800", selfCode: "ZBH-0603", bundleNo: "BH-033", pipeNo: "GH-0603" },
+                { name: "成品管 X70", code: "MAT-BP-019", spec: "D711 × 16.0 × 11800", selfCode: "ZBH-0604", bundleNo: "BH-033", pipeNo: "GH-0604" },
+              ],
+            },
+          ],
+        },
+      ];
+
+      const logisticsRows = [];
+      let selectedSalesOrderId = "XS-20260401-018";
+      let addLogisticsDraft = [];
+
+      function getStatusClass(status) {
+        return status === "done" ? "done" : "pending";
+      }
+
+      function getCurrentSalesOrder() {
+        return salesOrders.find((item) => item.id === selectedSalesOrderId);
+      }
+
+      function openSalesOrderModal() {
+        document.getElementById("salesOrderModal").classList.add("open");
+        document.getElementById("salesOrderSearchInput").value = "";
+        renderSalesOrderList();
+        requestAnimationFrame(() => {
+          document.getElementById("salesOrderSearchInput").focus();
+        });
+      }
+
+      function closeSalesOrderModal() {
+        document.getElementById("salesOrderModal").classList.remove("open");
+      }
+
+      function renderSalesOrderList() {
+        const keyword = document
+          .getElementById("salesOrderSearchInput")
+          .value.trim()
+          .toLowerCase();
+        const list = document.getElementById("salesOrderList");
+        const filtered = salesOrders.filter(
+          (item) =>
+            !keyword ||
+            item.id.toLowerCase().includes(keyword) ||
+            item.projectName.toLowerCase().includes(keyword),
+        );
+
+        list.innerHTML = filtered
+          .map(
+            (item) => `
+              <button type="button" class="order-card text-left p-5 bg-white border border-slate-200 rounded-2xl" onclick="selectSalesOrder('${item.id}')">
+                <div class="flex items-center justify-between gap-4">
+                  <div>
+                    <div class="text-lg font-bold text-slate-900">${item.id}</div>
+                    <div class="mt-1 text-sm text-slate-500">${item.projectName}</div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-xs text-slate-400">物流单条目</div>
+                    <div class="mt-1 text-lg font-bold text-blue-600">${item.logisticsRows.length}</div>
+                  </div>
+                </div>
+              </button>
+            `,
+          )
+          .join("");
+
+        if (!filtered.length) {
+          list.innerHTML =
+            '<div class="text-center py-16 text-slate-400"><div class="text-base font-semibold text-slate-500">未找到匹配的销售单</div><div class="text-sm mt-2">请调整关键词后重试</div></div>';
+        }
+      }
+
+      function selectSalesOrder(id) {
+        const salesOrder = salesOrders.find((item) => item.id === id);
+        if (!salesOrder) return;
+        selectedSalesOrderId = id;
+        document.getElementById("salesOrderTriggerText").textContent = id;
+        document.getElementById("salesOrderTriggerText").className =
+          "text-slate-900";
+        document.getElementById("projectNameInput").value =
+          salesOrder.projectName;
+        logisticsRows.splice(0, logisticsRows.length);
+        renderLogisticsRows();
+        closeSalesOrderModal();
+      }
+
+      function openAddLogisticsModal() {
+        const salesOrder = getCurrentSalesOrder();
+        if (!salesOrder) return;
+        addLogisticsDraft = [];
+        document.getElementById("addLogisticsSearchInput").value = "";
+        renderAddLogisticsList();
+        document.getElementById("addLogisticsModal").classList.add("open");
+      }
+
+      function closeAddLogisticsModal() {
+        document.getElementById("addLogisticsModal").classList.remove("open");
+        addLogisticsDraft = [];
+      }
+
+      function toggleAddLogistics(logisticsNo) {
+        if (addLogisticsDraft.includes(logisticsNo)) {
+          addLogisticsDraft = addLogisticsDraft.filter((item) => item !== logisticsNo);
+        } else {
+          addLogisticsDraft = [...addLogisticsDraft, logisticsNo];
+        }
+        renderAddLogisticsList();
+      }
+
+      function renderAddLogisticsList() {
+        const salesOrder = getCurrentSalesOrder();
+        const keyword = document
+          .getElementById("addLogisticsSearchInput")
+          .value.trim()
+          .toLowerCase();
+        const body = document.getElementById("addLogisticsTableBody");
+        document.getElementById("addLogisticsSelectionCount").textContent =
+          addLogisticsDraft.length;
+
+        if (!salesOrder) {
+          body.innerHTML =
+            '<tr><td colspan="5" class="px-4 py-12 text-center text-slate-400">请先选择销售单</td></tr>';
+          return;
+        }
+
+        const filtered = salesOrder.logisticsRows.filter((item) => {
+          const haystack =
+            `${item.logisticsNo} ${item.company} ${item.statusText}`.toLowerCase();
+          return !keyword || haystack.includes(keyword);
+        });
+
+        if (!filtered.length) {
+          body.innerHTML =
+            '<tr><td colspan="5" class="px-4 py-12 text-center text-slate-400">未找到匹配的物流单</td></tr>';
+          return;
+        }
+
+        body.innerHTML = filtered
+          .map((item) => {
+            const selected = addLogisticsDraft.includes(item.logisticsNo);
+            const exists = logisticsRows.some(
+              (row) => row.logisticsNo === item.logisticsNo,
+            );
+            return `
+              <tr class="${exists ? "bg-slate-50 text-slate-400" : selected ? "bg-blue-50" : "hover:bg-slate-50"}">
+                <td class="px-4 py-4 border-b border-slate-200">
+                  <label class="inline-flex items-center">
+                    <input
+                      type="checkbox"
+                      class="w-4 h-4 accent-blue-600"
+                      ${selected ? "checked" : ""}
+                      ${exists ? "disabled" : ""}
+                      onchange="toggleAddLogistics('${item.logisticsNo}')"
+                    />
+                  </label>
+                </td>
+                <td class="px-4 py-4 border-b border-slate-200 whitespace-nowrap font-semibold ${selected ? "text-blue-700" : "text-slate-900"}">${item.logisticsNo}</td>
+                <td class="px-4 py-4 border-b border-slate-200 whitespace-nowrap">${item.date}</td>
+                <td class="px-4 py-4 border-b border-slate-200">${item.company}</td>
+                <td class="px-4 py-4 border-b border-slate-200 whitespace-nowrap">${exists ? "已添加到运单" : item.statusText}</td>
+              </tr>`;
+          })
+          .join("");
+      }
+
+      function confirmAddLogistics() {
+        const salesOrder = getCurrentSalesOrder();
+        if (!salesOrder || !addLogisticsDraft.length) return;
+        const currentNos = new Set(logisticsRows.map((item) => item.logisticsNo));
+        const additions = salesOrder.logisticsRows
+          .filter(
+            (item) =>
+              addLogisticsDraft.includes(item.logisticsNo) &&
+              !currentNos.has(item.logisticsNo),
+          )
+          .map((item, index) => ({
+            seq: logisticsRows.length + index + 1,
+            ...item,
+          }));
+        logisticsRows.push(...additions);
+        renderLogisticsRows();
+        closeAddLogisticsModal();
+      }
+
+      function renderLogisticsRows() {
+        document.getElementById("recordCount").textContent = logisticsRows.length;
+        document.getElementById("logisticsCount").textContent = logisticsRows.length;
+        document.getElementById("doneCount").textContent = logisticsRows.filter(
+          (item) => item.status === "done",
+        ).length;
+        const body = document.getElementById("logisticsTableBody");
+        if (!logisticsRows.length) {
+          body.innerHTML =
+            '<tr><td colspan="6" class="px-4 py-14 text-center text-slate-400">当前还没有添加物流单，请点击右上角“新增物流单”</td></tr>';
+          return;
+        }
+        body.innerHTML = logisticsRows
+          .map(
+            (item, index) => `
+              <tr>
+                <td class="px-4 py-4 border-b border-slate-100 font-semibold text-slate-900">${index + 1}</td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap font-semibold text-blue-700">${item.logisticsNo}</td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${item.date}</td>
+                <td class="px-4 py-4 border-b border-slate-100">${item.company}</td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">
+                  <span class="status-pill ${getStatusClass(item.status)}">
+                    <span class="status-dot"></span>${item.statusText}
+                  </span>
+                </td>
+                <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">
+                  <div class="flex items-center gap-2">
+                    <button type="button" title="查看" class="icon-btn bg-blue-50 text-blue-700 hover:bg-blue-100" onclick="openLogisticsView(${index})">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button type="button" title="删除" class="icon-btn bg-red-50 text-red-600 hover:bg-red-100" onclick="deleteLogisticsRow(${index})">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>`,
+          )
+          .join("");
+      }
+
+      function openLogisticsView(index) {
+        const row = logisticsRows[index];
+        if (!row) return;
+        const pipes = row.pipes || [];
+        document.getElementById("viewSubtitle").textContent =
+          `${row.logisticsNo} | ${selectedSalesOrderId} | ${document.getElementById("projectNameInput").value}`;
+        document.getElementById("viewPipeCount").textContent = pipes.length;
+        const body = document.getElementById("viewPipeTableBody");
+        if (!pipes.length) {
+          body.innerHTML =
+            '<tr><td colspan="7" class="px-4 py-12 text-center text-slate-400">暂无钢管自编号数据</td></tr>';
+        } else {
+          body.innerHTML = pipes
+            .map(
+              (pipe, pipeIndex) => `
+                <tr>
+                  <td class="px-4 py-4 border-b border-slate-100 font-semibold text-slate-900">${pipeIndex + 1}</td>
+                  <td class="px-4 py-4 border-b border-slate-100">${pipe.name}</td>
+                  <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${pipe.code}</td>
+                  <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${pipe.spec}</td>
+                  <td class="px-4 py-4 border-b border-slate-100 font-semibold text-slate-900 whitespace-nowrap">${pipe.selfCode}</td>
+                  <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${pipe.bundleNo}</td>
+                  <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${pipe.pipeNo}</td>
+                </tr>`,
+            )
+            .join("");
+        }
+        document.getElementById("logisticsViewModal").classList.add("open");
+      }
+
+      function closeLogisticsView() {
+        document.getElementById("logisticsViewModal").classList.remove("open");
+      }
+
+      function deleteLogisticsRow(index) {
+        const row = logisticsRows[index];
+        if (!row) return;
+        if (!confirm(`确认删除物流单 ${row.logisticsNo} 吗？`)) return;
+        logisticsRows.splice(index, 1);
+        renderLogisticsRows();
+      }
+
+      function saveWaybill() {
+        alert("运单已保存");
+      }
+
+      document
+        .getElementById("logisticsViewModal")
+        .addEventListener("click", (event) => {
+          if (event.target.id === "logisticsViewModal") closeLogisticsView();
+        });
+      document
+        .getElementById("salesOrderTrigger")
+        .addEventListener("click", openSalesOrderModal);
+      document
+        .getElementById("salesOrderSearchInput")
+        .addEventListener("input", renderSalesOrderList);
+      document
+        .getElementById("salesOrderModal")
+        .addEventListener("click", (event) => {
+          if (event.target.id === "salesOrderModal") closeSalesOrderModal();
+        });
+      document
+        .getElementById("addLogisticsModal")
+        .addEventListener("click", (event) => {
+          if (event.target.id === "addLogisticsModal") closeAddLogisticsModal();
+        });
+
+      renderLogisticsRows();
+    </script>
+  </body>
+</html>

@@ -257,10 +257,6 @@
               <input class="form-input mt-2" value="13800001234" />
             </div>
             <div class="md:col-span-2">
-              <label class="text-xs text-slate-500">发货地址</label>
-              <input class="form-input mt-2" value="唐山港成品管堆场 A 区 1# 装车位" />
-            </div>
-            <div class="md:col-span-2">
               <label class="text-xs text-slate-500">收货地址</label>
               <input class="form-input mt-2" value="河北省唐山市曹妃甸工业区项目现场 2 号卸货区" />
             </div>
@@ -308,7 +304,7 @@
             </div>
             <button
               type="button"
-              onclick="addDeliveryRow()"
+              onclick="openMaterialPicker()"
               class="px-4 py-2.5 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700"
             >
               <i class="fas fa-plus mr-2"></i>新增明细
@@ -362,6 +358,94 @@
         alert("物流单已保存");
       }
     </script>
+    <div
+      id="materialPickerModal"
+      class="modal-overlay fixed inset-0 z-[92] bg-slate-950/35 flex items-center justify-center p-5"
+    >
+      <div
+        class="modal-panel w-full max-w-6xl rounded-[28px] bg-white shadow-2xl overflow-hidden"
+      >
+        <div class="px-7 py-5 border-b border-slate-200 bg-slate-50">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold border border-blue-100"
+              >
+                <i class="fas fa-boxes-stacked"></i><span>物料选择</span>
+              </div>
+              <h3 class="mt-3 text-2xl font-bold text-slate-900">
+                选择要加入配送明细的成品管物料
+              </h3>
+              <p class="mt-1 text-sm text-slate-500">
+                可按物料名称、物料编码或规格型号搜索，点击一行后加入当前物流单
+              </p>
+            </div>
+            <button
+              type="button"
+              onclick="closeMaterialPicker()"
+              class="w-11 h-11 rounded-2xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-500 flex items-center justify-center"
+            >
+              <i class="fas fa-xmark text-2xl"></i>
+            </button>
+          </div>
+        </div>
+        <div class="px-7 py-6">
+          <div class="relative">
+            <i
+              class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+            ></i>
+            <input
+              id="materialSearchInput"
+              type="text"
+              placeholder="搜索物料名称、物料编码、规格型号"
+              class="form-input pl-11"
+              oninput="updateMaterialKeyword(this.value)"
+            />
+          </div>
+          <div class="mt-5 rounded-[24px] border border-slate-200 overflow-hidden">
+            <div class="max-h-[420px] overflow-auto">
+              <table class="min-w-full text-sm text-slate-700">
+                <thead class="sticky top-0 bg-slate-50 text-slate-500">
+                  <tr>
+                    <th class="px-5 py-4 text-left font-bold border-b border-slate-200">物料名称</th>
+                    <th class="px-5 py-4 text-left font-bold border-b border-slate-200">物料编码</th>
+                    <th class="px-5 py-4 text-left font-bold border-b border-slate-200">规格型号</th>
+                    <th class="px-5 py-4 text-left font-bold border-b border-slate-200">建议数量</th>
+                    <th class="px-5 py-4 text-left font-bold border-b border-slate-200">状态</th>
+                  </tr>
+                </thead>
+                <tbody id="materialPickerTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="px-7 py-5 border-t border-slate-200 bg-white flex items-center justify-between gap-4">
+          <div class="text-sm text-slate-500">
+            当前选择：
+            <span id="materialPickerSelectionLabel" class="font-semibold text-slate-900">未选择物料</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <button
+              type="button"
+              onclick="closeMaterialPicker()"
+              class="px-5 py-2.5 rounded-2xl border border-slate-200 text-slate-600 font-semibold hover:bg-slate-50"
+            >
+              取消
+            </button>
+            <button
+              id="materialPickerConfirmBtn"
+              type="button"
+              onclick="confirmMaterialSelection()"
+              class="px-5 py-2.5 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed"
+              disabled
+            >
+              确定添加
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div
       id="pipeDrawerOverlay"
       class="drawer-overlay fixed inset-0 z-[90] bg-slate-950/35"
@@ -579,12 +663,44 @@
     </div>
 
     <script>
+      const materialCatalog = [
+        {
+          name: "成品管 L415M",
+          code: "MAT-BP-001",
+          spec: "D813 × 17.5 × 12000",
+          qty: 18,
+        },
+        {
+          name: "成品管 L450M",
+          code: "MAT-BP-002",
+          spec: "D813 × 19.1 × 12000",
+          qty: 24,
+        },
+        {
+          name: "成品管 X65",
+          code: "MAT-BP-003",
+          spec: "D711 × 15.9 × 12000",
+          qty: 16,
+        },
+        {
+          name: "成品管 X70",
+          code: "MAT-BP-004",
+          spec: "D914 × 21.0 × 12000",
+          qty: 20,
+        },
+        {
+          name: "成品管 L360QS",
+          code: "MAT-BP-005",
+          spec: "D610 × 14.2 × 12000",
+          qty: 12,
+        },
+      ];
       const deliveryRows = [
         {
           seq: 1,
           name: "成品管 L415M",
           code: "MAT-BP-001",
-          spec: "D813 脳 17.5 脳 12000",
+          spec: "D813 × 17.5 × 12000",
           qty: 18,
           assignedPipeIds: ["MAT-BP-001-1", "MAT-BP-001-2"],
         },
@@ -592,11 +708,13 @@
           seq: 2,
           name: "成品管 L450M",
           code: "MAT-BP-002",
-          spec: "D813 脳 19.1 脳 12000",
+          spec: "D813 × 19.1 × 12000",
           qty: 24,
           assignedPipeIds: ["MAT-BP-002-1"],
         },
       ];
+      let materialKeyword = "";
+      let selectedMaterialCode = "";
       let currentPipeRowIndex = -1;
       let currentPipeCatalog = [];
       let pipeSelectionDraft = [];
@@ -648,16 +766,92 @@
           .join("");
       }
 
-      function addDeliveryRow() {
+      function getSelectedMaterial() {
+        return materialCatalog.find((item) => item.code === selectedMaterialCode);
+      }
+
+      function openMaterialPicker() {
+        materialKeyword = "";
+        selectedMaterialCode = "";
+        document.getElementById("materialSearchInput").value = "";
+        renderMaterialRows();
+        syncMaterialSelectionState();
+        document.getElementById("materialPickerModal").classList.add("open");
+      }
+
+      function closeMaterialPicker() {
+        document.getElementById("materialPickerModal").classList.remove("open");
+        materialKeyword = "";
+        selectedMaterialCode = "";
+      }
+
+      function updateMaterialKeyword(value) {
+        materialKeyword = (value || "").trim().toLowerCase();
+        renderMaterialRows();
+      }
+
+      function selectMaterial(code) {
+        const exists = deliveryRows.some((row) => row.code === code);
+        if (exists) return;
+        selectedMaterialCode = code;
+        renderMaterialRows();
+        syncMaterialSelectionState();
+      }
+
+      function syncMaterialSelectionState() {
+        const selected = getSelectedMaterial();
+        document.getElementById("materialPickerSelectionLabel").textContent =
+          selected ? `${selected.name} / ${selected.code}` : "未选择物料";
+        document.getElementById("materialPickerConfirmBtn").disabled = !selected;
+      }
+
+      function renderMaterialRows() {
+        const body = document.getElementById("materialPickerTableBody");
+        const filtered = materialCatalog.filter((item) => {
+          const haystack = `${item.name} ${item.code} ${item.spec}`.toLowerCase();
+          return !materialKeyword || haystack.includes(materialKeyword);
+        });
+
+        if (!filtered.length) {
+          body.innerHTML =
+            '<tr><td colspan="5" class="px-5 py-12 text-center text-slate-400">未找到匹配的物料</td></tr>';
+          syncMaterialSelectionState();
+          return;
+        }
+
+        body.innerHTML = filtered
+          .map((item) => {
+            const selected = selectedMaterialCode === item.code;
+            const exists = deliveryRows.some((row) => row.code === item.code);
+            return `
+              <tr
+                class="${exists ? "bg-slate-50 text-slate-400" : selected ? "bg-blue-50" : "hover:bg-slate-50"} transition ${exists ? "" : "cursor-pointer"}"
+                onclick="${exists ? "" : `selectMaterial('${item.code}')`}"
+              >
+                <td class="px-5 py-4 border-b border-slate-200 font-semibold ${selected ? "text-blue-700" : "text-slate-900"}">${item.name}</td>
+                <td class="px-5 py-4 border-b border-slate-200 whitespace-nowrap">${item.code}</td>
+                <td class="px-5 py-4 border-b border-slate-200">${item.spec}</td>
+                <td class="px-5 py-4 border-b border-slate-200">${item.qty}</td>
+                <td class="px-5 py-4 border-b border-slate-200">${exists ? "已在明细中" : selected ? "已选择" : "可添加"}</td>
+              </tr>`;
+          })
+          .join("");
+        syncMaterialSelectionState();
+      }
+
+      function confirmMaterialSelection() {
+        const selected = getSelectedMaterial();
+        if (!selected) return;
         const nextSeq = deliveryRows.length + 1;
         deliveryRows.push({
           seq: nextSeq,
-          name: `成品管 L${420 + nextSeq * 5}M`,
-          code: `MAT-BP-${String(nextSeq + 2).padStart(3, "0")}`,
-          spec: "D813 脳 17.5 脳 12000",
-          qty: 12,
+          name: selected.name,
+          code: selected.code,
+          spec: selected.spec,
+          qty: selected.qty,
           assignedPipeIds: [],
         });
+        closeMaterialPicker();
         renderDeliveryRows();
       }
 
@@ -808,6 +1002,11 @@
         alert("物流单已保存");
       }
 
+      document
+        .getElementById("materialPickerModal")
+        .addEventListener("click", (event) => {
+          if (event.target.id === "materialPickerModal") closeMaterialPicker();
+        });
       document
         .getElementById("pipeDrawerOverlay")
         .addEventListener("click", (event) => {
