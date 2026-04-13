@@ -523,6 +523,7 @@
 
           <div
             class="blue-card industrial-shadow flex items-center gap-5 rounded-2xl p-6"
+            onclick="goToInventoryTransactionQuery()"
           >
             <div
               class="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
@@ -542,6 +543,7 @@
 
           <div
             class="blue-card industrial-shadow flex items-center gap-5 rounded-2xl p-6"
+            onclick="goToWarehouseLayoutDashboard()"
           >
             <div
               class="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
@@ -629,8 +631,16 @@
         window.location.href = "./waybill-list.html";
       }
 
+      function goToWarehouseLayoutDashboard() {
+        window.location.href = "./warehouse-layout-dashboard.html";
+      }
+
       function goToMaterialTransferList() {
         window.location.href = "./material-transfer-list.html";
+      }
+
+      function goToInventoryTransactionQuery() {
+        window.location.href = "./inventory-transaction-query.html";
       }
 
       function formatWeekday(day) {
