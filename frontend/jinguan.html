@@ -133,6 +133,24 @@
             color: #475569;
             border-color: #E2E8F0;
         }
+        body.material-list-fullscreen header,
+        body.material-list-fullscreen #workOrderSection,
+        body.material-list-fullscreen #mainTabSection,
+        body.material-list-fullscreen #materialPrimaryToolbar {
+            display: none !important;
+        }
+        body.material-list-fullscreen #materialFilterBar {
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        }
+        body.material-list-fullscreen #materialShiftToolbar {
+            padding-top: 0.25rem;
+        }
+        body.material-list-fullscreen #materialMain {
+            background: #FFFFFF;
+        }
+        body.material-list-fullscreen #materialFooter {
+            box-shadow: 0 -10px 24px rgba(15, 23, 42, 0.06);
+        }
         .tab-panel {
             display: none;
             min-height: 0;
@@ -224,7 +242,7 @@
     </header>
 
     <!-- Work Order Card -->
-    <div class="bg-white border-b border-gray-200 px-6 py-3 flex-none">
+    <div id="workOrderSection" class="bg-white border-b border-gray-200 px-6 py-3 flex-none">
         <div class="wo-card producing rounded-xl px-4 py-3 industrial-shadow relative overflow-hidden">
             <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -mr-10 -mt-10 opacity-50"></div>
             <div class="relative flex flex-col lg:flex-row lg:items-center justify-between gap-3">
@@ -305,7 +323,7 @@
         </div>
     </div>
 
-    <div class="bg-white border-b border-gray-200 px-6 py-3 flex-none">
+    <div id="mainTabSection" class="bg-white border-b border-gray-200 px-6 py-3 flex-none">
         <div class="flex gap-3 overflow-x-auto pb-1">
             <button class="main-tab-btn active flex items-center gap-2 px-5 py-3 rounded-xl font-semibold whitespace-nowrap" data-tab="material" onclick="switchMainTab('material')">
                 <i class="fas fa-grip-lines"></i>
@@ -328,9 +346,8 @@
 
     <!-- Filter Bar -->
     <div id="materialFilterBar" class="bg-white border-b border-gray-200 px-6 py-3 flex-none">
-        <div class="flex flex-col gap-3">
-            <div class="flex flex-col lg:flex-row gap-3 items-start lg:items-center justify-between">
-                <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto lg:flex-1 lg:min-w-0">
+       <div class="flex flex-col gap-3">
+                <div id="materialPrimaryToolbar" class="flex flex-col lg:flex-row gap-3 items-start lg:items-center justify-between">                <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto lg:flex-1 lg:min-w-0">
                     <div class="relative w-full lg:max-w-md">
                         <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
                         <input type="text" id="searchInput" placeholder="搜索自编号、捆号、炉号、管号..." 
@@ -353,7 +370,7 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-3 pt-2 border-t border-gray-100">
+            <div id="materialShiftToolbar" class="flex items-center gap-3 pt-2 border-t border-gray-100">
                 <div class="flex items-center gap-2 text-sm text-gray-600 flex-shrink-0">
                     <i class="fas fa-clock-rotate-left text-blue-500"></i>
                     <span class="font-medium">班次浏览:</span>
@@ -380,12 +397,17 @@
                         <i class="fas fa-moon mr-2"></i>
                         今日夜班
                         <span class="ml-2 text-xs py-0.5 px-1.5 rounded-full bg-gray-100 text-gray-600">0支</span>
+                    
                     </button>
                     <button id="addShiftButton" onclick="openAddShiftModal()" class="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-dashed border-blue-300 text-blue-600 bg-blue-50 hover:bg-blue-100 font-semibold text-sm whitespace-nowrap transition-all">
                         <i class="fas fa-plus"></i>
                         <span>新增班次</span>
                     </button>
                 </div>
+                <button id="materialFullscreenBtn" type="button" onclick="toggleMaterialListFullscreen()" class="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-gray-200 bg-white hover:bg-gray-50 text-gray-700 font-semibold text-sm whitespace-nowrap transition-all">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                    <span id="materialFullscreenBtnText">全屏展示</span>
+                </button>
             </div>
         </div>
     </div>
@@ -3001,6 +3023,7 @@
         let selectedRows = new Set();
         let currentAppearance = 'pass';
         let bevelAppearance = 'pass'; // 坡口外观状态
+        let isMaterialListFullscreen = false;
         let lastRecord = {
             bundleNo: '96#',
             furnaceNo: '15303842',
@@ -3190,11 +3213,41 @@
             document.getElementById('materialMain').style.display = isMaterial ? '' : 'none';
             document.getElementById('materialFooter').style.display = isMaterial ? '' : 'none';
 
+            if (!isMaterial && isMaterialListFullscreen) {
+                isMaterialListFullscreen = false;
+                document.body.classList.remove('material-list-fullscreen');
+                updateMaterialListFullscreenButton();
+            }
+
             document.querySelectorAll('.tab-panel').forEach(panel => {
                 panel.classList.toggle('active', panel.id === `tab-panel-${tabId}`);
             });
 
-            updateBatchBar();
+updateBatchBar();
+        }
+
+        function updateMaterialListFullscreenButton() {
+            const btn = document.getElementById('materialFullscreenBtn');
+            const text = document.getElementById('materialFullscreenBtnText');
+            const icon = btn ? btn.querySelector('i') : null;
+            if (!btn || !text || !icon) return;
+
+            if (isMaterialListFullscreen) {
+                btn.className = 'flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold text-sm whitespace-nowrap transition-all';
+                icon.className = 'fas fa-compress-arrows-alt';
+                text.textContent = '退出全屏';
+            } else {
+                btn.className = 'flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-gray-200 bg-white hover:bg-gray-50 text-gray-700 font-semibold text-sm whitespace-nowrap transition-all';
+                icon.className = 'fas fa-expand-arrows-alt';
+                text.textContent = '全屏展示';
+            }
+        }
+
+        function toggleMaterialListFullscreen() {
+            if (currentMainTab !== 'material') return;
+            isMaterialListFullscreen = !isMaterialListFullscreen;
+            document.body.classList.toggle('material-list-fullscreen', isMaterialListFullscreen);
+            updateMaterialListFullscreenButton();
         }
 
         // ========== 坡口信息折叠功能 ==========
@@ -4102,6 +4155,7 @@
             switchShift('today_day');
             setAppearance('pass');
             switchMainTab('material');
+            updateMaterialListFullscreenButton();
             renderInstrumentTable();
             setCompressedAirResult('pass');
             updateWorkOrderProgress(parseInt(document.getElementById('shiftCountValue')?.textContent || '247', 10));
