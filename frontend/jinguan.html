@@ -2188,7 +2188,7 @@
             <div class="max-w-4xl mx-auto space-y-6">
 
                 <!-- 码单选择区域（修改后） -->
-                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-5">
+                <div class="hidden bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-5">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-2">
                             <i class="fas fa-list-ol text-blue-600 text-xl"></i>
@@ -2198,7 +2198,7 @@
                     </div>
                     
                     <!-- 码单选择按钮区域 -->
-                    <div id="codeListSelectorArea" class="import-btn-area rounded-xl p-6 text-center bg-white border-2 border-dashed border-blue-300" onclick="openCodeListModal()">
+                    <div id="legacyCodeListSelectorArea" class="import-btn-area rounded-xl p-6 text-center bg-white border-2 border-dashed border-blue-300" onclick="openCodeListModal()">
                         <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
                             <i class="fas fa-clipboard-list text-2xl text-blue-600"></i>
                         </div>
@@ -2211,7 +2211,7 @@
                     </div>
 
                     <!-- 已选择码单信息显示 -->
-                    <div id="selectedCodeInfo" class="hidden mt-4 p-4 bg-white rounded-lg border-2 border-green-300 shadow-sm">
+                    <div id="legacySelectedCodeInfo" class="hidden mt-4 p-4 bg-white rounded-lg border-2 border-green-300 shadow-sm">
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center gap-2">
                                 <i class="fas fa-check-circle text-green-600 text-lg"></i>
@@ -2224,27 +2224,27 @@
                         <div class="grid grid-cols-3 gap-3 text-sm">
                             <div class="bg-gray-50 p-2 rounded">
                                 <span class="text-gray-500 text-xs block">管号</span>
-                                <span class="font-mono font-semibold text-gray-900" id="selectedPipeNo">-</span>
+                                <span class="font-mono font-semibold text-gray-900" id="legacySelectedPipeNo">-</span>
                             </div>
                             <div class="bg-gray-50 p-2 rounded">
                                 <span class="text-gray-500 text-xs block">捆号</span>
-                                <span class="font-semibold text-gray-900" id="selectedBundleNo">-</span>
+                                <span class="font-semibold text-gray-900" id="legacySelectedBundleNo">-</span>
                             </div>
                             <div class="bg-gray-50 p-2 rounded">
                                 <span class="text-gray-500 text-xs block">炉号</span>
-                                <span class="font-semibold text-gray-900" id="selectedFurnaceNo">-</span>
+                                <span class="font-semibold text-gray-900" id="legacySelectedFurnaceNo">-</span>
                             </div>
                             <div class="bg-gray-50 p-2 rounded">
                                 <span class="text-gray-500 text-xs block">批号</span>
-                                <span class="font-semibold text-gray-900" id="selectedBatchNo">-</span>
+                                <span class="font-semibold text-gray-900" id="legacySelectedBatchNo">-</span>
                             </div>
                             <div class="bg-gray-50 p-2 rounded">
                                 <span class="text-gray-500 text-xs block">长度</span>
-                                <span class="font-semibold text-blue-600" id="selectedLength">-</span>
+                                <span class="font-semibold text-blue-600" id="legacySelectedLength">-</span>
                             </div>
                             <div class="bg-gray-50 p-2 rounded">
                                 <span class="text-gray-500 text-xs block">重量</span>
-                                <span class="font-semibold text-blue-600" id="selectedWeight">-</span>
+                                <span class="font-semibold text-blue-600" id="legacySelectedWeight">-</span>
                             </div>
                         </div>
                         <div class="mt-3 p-2 bg-blue-50 rounded text-xs text-blue-700">
@@ -2255,31 +2255,13 @@
                 </div>
 
                 <!-- 分隔线 -->
-                <div class="flex items-center gap-4">
+                <div class="hidden flex items-center gap-4">
                     <div class="flex-1 h-px bg-gray-300"></div>
                     <span class="text-gray-400 font-medium">或手动填写</span>
                     <div class="flex-1 h-px bg-gray-300"></div>
                 </div>
 
-                <!-- 自动信息卡片 -->
-                <div class="grid grid-cols-4 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
-                    <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">工单号</div>
-                        <div class="font-semibold text-gray-900">WO-2026-0318-001</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">班次</div>
-                        <div class="font-semibold text-blue-600">今日白班</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">当前时间</div>
-                        <div class="font-semibold text-gray-900" id="currentTime">20:38</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">操作员</div>
-                        <div class="font-semibold text-gray-900">张师傅</div>
-                    </div>
-                </div>
+                
 
                 <!-- 钢管标识信息 -->
                 <div class="bg-white rounded-xl border border-gray-200 p-5">
@@ -2288,6 +2270,67 @@
                         钢管标识信息 <span class="text-red-500">*</span>
                         <span class="text-xs font-normal text-gray-400 ml-auto">自动编号会递增，也可手动修改</span>
                     </h4>
+                    <div class="mb-4 space-y-3">
+                        <button id="codeListSelectorArea" onclick="openCodeListModal()" class="w-full rounded-xl border-2 border-dashed border-blue-300 bg-blue-50 hover:bg-blue-100 px-4 py-4 text-left transition-colors">
+                            <div class="flex items-center justify-between gap-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-11 h-11 rounded-xl bg-white text-blue-600 flex items-center justify-center shadow-sm">
+                                        <i class="fas fa-clipboard-list text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-gray-900">码单选择</div>
+                                        <div class="text-sm text-gray-500">从已导入码单中搜索并带入钢管标识信息</div>
+                                    </div>
+                                </div>
+                                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white text-blue-600 text-sm font-medium border border-blue-200">
+                                    <i class="fas fa-search"></i>
+                                    选择钢管
+                                </span>
+                            </div>
+                        </button>
+
+                        <div id="selectedCodeInfo" class="hidden p-4 bg-green-50 rounded-xl border border-green-200">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-check-circle text-green-600 text-lg"></i>
+                                    <span class="font-bold text-gray-900">已选择码单钢管</span>
+                                </div>
+                                <button onclick="clearSelectedCode()" class="text-sm text-red-500 hover:text-red-700 flex items-center gap-1 px-2 py-1 rounded hover:bg-red-50">
+                                    <i class="fas fa-times"></i> 清除选择
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 text-sm">
+                                <div class="bg-white p-2 rounded">
+                                    <span class="text-gray-500 text-xs block">管号</span>
+                                    <span class="font-mono font-semibold text-gray-900" id="selectedPipeNo">-</span>
+                                </div>
+                                <div class="bg-white p-2 rounded">
+                                    <span class="text-gray-500 text-xs block">捆号</span>
+                                    <span class="font-semibold text-gray-900" id="selectedBundleNo">-</span>
+                                </div>
+                                <div class="bg-white p-2 rounded">
+                                    <span class="text-gray-500 text-xs block">炉号</span>
+                                    <span class="font-semibold text-gray-900" id="selectedFurnaceNo">-</span>
+                                </div>
+                                <div class="bg-white p-2 rounded">
+                                    <span class="text-gray-500 text-xs block">批号</span>
+                                    <span class="font-semibold text-gray-900" id="selectedBatchNo">-</span>
+                                </div>
+                                <div class="bg-white p-2 rounded">
+                                    <span class="text-gray-500 text-xs block">长度</span>
+                                    <span class="font-semibold text-blue-600" id="selectedLength">-</span>
+                                </div>
+                                <div class="bg-white p-2 rounded">
+                                    <span class="text-gray-500 text-xs block">重量</span>
+                                    <span class="font-semibold text-blue-600" id="selectedWeight">-</span>
+                                </div>
+                            </div>
+                            <div class="mt-3 p-2 bg-white rounded text-xs text-blue-700 border border-blue-100">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                以上信息将自动填充到下方表单中
+                            </div>
+                        </div>
+                    </div>
                     <div class="grid grid-cols-3 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">自编号 <span class="text-xs text-gray-400">(自动+1)</span></label>
@@ -2314,32 +2357,22 @@
                             <input type="text" id="entryBatchNo" placeholder="输入批号"
                                    class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
-                        <div class="flex items-end">
-                            <button onclick="copyLastRecord()" class="w-full py-3 rounded-xl border-2 border-dashed border-blue-300 text-blue-600 hover:bg-blue-50 font-medium transition-colors flex items-center justify-center gap-2">
-                                <i class="fas fa-copy"></i>
-                                复制上一支信息
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 规格参数 -->
-                <div class="bg-white rounded-xl border border-gray-200 p-5">
-                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <i class="fas fa-ruler-combined text-blue-600"></i>
-                        规格参数
-                    </h4>
-                    <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">长度 (mm) <span class="text-red-500">*</span></label>
                             <input type="number" id="entryLength" placeholder="11500-12000" min="11500" max="12000" step="1"
                                    class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
-                            <p class="text-xs text-gray-400 mt-1">标准范围: 11500mm - 12000mm</p>
+                            
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">重量 (kg)</label>
                             <input type="number" id="entryWeight" placeholder="自动计算或手动输入" step="0.1"
                                    class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                        </div>
+                        <div class="flex items-end">
+                            <button onclick="copyLastRecord()" class="w-full py-3 rounded-xl border-2 border-dashed border-blue-300 text-blue-600 hover:bg-blue-50 font-medium transition-colors flex items-center justify-center gap-2">
+                                <i class="fas fa-copy"></i>
+                                复制上一支信息
+                            </button>
                         </div>
                     </div>
                 </div>
