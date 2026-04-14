@@ -349,9 +349,8 @@
                                class="search-input w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-base outline-none transition-all"
                                onkeyup="handleSearch(this.value)">
                     </div>
-                    <button id="sampleAddButton" class="hidden" style="display: none !important;" aria-hidden="true" tabindex="-1">
-                        <i class="fas fa-plus-circle"></i>
-                        <span>抽检录入</span>
+                    <button id="toggleRootDetailBtn" type="button" onclick="toggleRootDetailColumns()" class="px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-gray-700 font-semibold whitespace-nowrap hover:border-blue-400 hover:text-blue-600 transition-colors">
+                        折叠钢管详情
                     </button>
                 </div>
                 <div class="flex gap-2 overflow-x-auto pb-1 lg:pb-0 w-full lg:w-auto">
@@ -421,11 +420,12 @@
                     <tr>
                         <th class="px-4 py-4 text-left w-12"><input type="checkbox" class="custom-checkbox" id="selectAllRoot" onclick="toggleSelectAll()"></th>
                         <th class="px-4 py-4 text-left"><div class="flex items-center gap-2"><span>自编号</span><i class="fas fa-sort text-gray-400"></i></div></th>
-                        <th class="px-4 py-4 text-left"><div class="flex flex-col"><span>捆号</span><span class="text-xs text-gray-400 font-normal normal-case">管号</span></div></th>
-                        <th class="px-4 py-4 text-left"><div class="flex flex-col"><span>炉号</span><span class="text-xs text-gray-400 font-normal normal-case">批号</span></div></th>
-                        <th class="px-4 py-4 text-center"><div class="flex flex-col items-center"><span>规格</span><span class="text-xs text-gray-400 font-normal normal-case">长度/重量</span></div></th>
+                        <th class="root-detail-col px-4 py-4 text-left"><div class="flex flex-col"><span>捆号</span><span class="text-xs text-gray-400 font-normal normal-case">管号</span></div></th>
+                        <th class="root-detail-col px-4 py-4 text-left"><div class="flex flex-col"><span>炉号</span><span class="text-xs text-gray-400 font-normal normal-case">批号</span></div></th>
+                        <th class="root-detail-col px-4 py-4 text-center"><div class="flex flex-col items-center"><span>规格</span><span class="text-xs text-gray-400 font-normal normal-case">长度/重量</span></div></th>
                         <th class="px-4 py-4 text-center">钢管外观</th>
                         <th class="px-4 py-4 text-center">坡口检查</th>
+                        <th class="px-4 py-4 text-center">清洁度</th>
                         <th class="px-4 py-4 text-center">湿度</th>
                         <th class="px-4 py-4 text-center">间隔时间</th>
                         <th class="px-4 py-4 text-center">评价</th>
@@ -440,19 +440,19 @@
                     <tr class="group" data-id="0032" data-shift="today_day" data-result="pass">
                         <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                         <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">0032</div></td>
-                        <td class="px-4 py-4">
+                        <td class="root-detail-col px-4 py-4">
                             <div class="flex flex-col gap-1">
                                 <div class="text-sm font-semibold text-gray-900">96#</div>
                                 <div class="font-mono text-xs text-gray-500">6508741</div>
                             </div>
                         </td>
-                        <td class="px-4 py-4">
+                        <td class="root-detail-col px-4 py-4">
                             <div class="flex flex-col gap-1">
                                 <div class="text-sm font-medium text-gray-900">15303842</div>
                                 <div class="text-xs text-gray-500">71399</div>
                             </div>
                         </td>
-                        <td class="px-4 py-4 text-center">
+                        <td class="root-detail-col px-4 py-4 text-center">
                             <div class="flex flex-col gap-1">
                                 <div class="text-sm font-semibold text-gray-900">11856<span class="text-xs text-gray-500 font-normal">mm</span></div>
                                 <div class="text-xs text-gray-500">573.5kg</div>
@@ -460,8 +460,9 @@
                         </td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></td>
+                        <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>Sa2.5</span></td>
                         <td class="px-4 py-4 text-center text-sm font-medium text-gray-900">45%</td>
-                        <td class="px-4 py-4 text-center text-sm font-medium text-gray-900">18min</td>
+                        <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-circle-check"></i>合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200"><i class="fas fa-rotate"></i>已完成</span></td>
                         <td class="px-4 py-4 text-center">
@@ -486,19 +487,19 @@
                     <tr class="group" data-id="0031" data-shift="today_day" data-result="pass">
                         <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                         <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">0031</div></td>
-                        <td class="px-4 py-4">
+                        <td class="root-detail-col px-4 py-4">
                             <div class="flex flex-col gap-1">
                                 <div class="text-sm font-semibold text-gray-900">96#</div>
                                 <div class="font-mono text-xs text-gray-500">6508739</div>
                             </div>
                         </td>
-                        <td class="px-4 py-4">
+                        <td class="root-detail-col px-4 py-4">
                             <div class="flex flex-col gap-1">
                                 <div class="text-sm font-medium text-gray-900">15303842</div>
                                 <div class="text-xs text-gray-500">71399</div>
                             </div>
                         </td>
-                        <td class="px-4 py-4 text-center">
+                        <td class="root-detail-col px-4 py-4 text-center">
                             <div class="flex flex-col gap-1">
                                 <div class="text-sm font-semibold text-gray-900">11920<span class="text-xs text-gray-500 font-normal">mm</span></div>
                                 <div class="text-xs text-gray-500">574.2kg</div>
@@ -506,8 +507,9 @@
                         </td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></td>
+                        <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>Sa2.5</span></td>
                         <td class="px-4 py-4 text-center text-sm font-medium text-gray-900">42%</td>
-                        <td class="px-4 py-4 text-center text-sm font-medium text-gray-900">22min</td>
+                        <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-circle-check"></i>合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200"><i class="fas fa-rotate"></i>已完成</span></td>
                         <td class="px-4 py-4 text-center">
@@ -532,19 +534,19 @@
                     <tr class="group" data-id="0030" data-shift="yesterday_night" data-result="fail">
                         <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                         <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">0030</div></td>
-                        <td class="px-4 py-4">
+                        <td class="root-detail-col px-4 py-4">
                             <div class="flex flex-col gap-1">
                                 <div class="text-sm font-semibold text-gray-900">97#</div>
                                 <div class="font-mono text-xs text-gray-500">6508725</div>
                             </div>
                         </td>
-                        <td class="px-4 py-4">
+                        <td class="root-detail-col px-4 py-4">
                             <div class="flex flex-col gap-1">
                                 <div class="text-sm font-medium text-gray-900">15303842</div>
                                 <div class="text-xs text-gray-500">71400</div>
                             </div>
                         </td>
-                        <td class="px-4 py-4 text-center">
+                        <td class="root-detail-col px-4 py-4 text-center">
                             <div class="flex flex-col gap-1">
                                 <div class="text-sm font-semibold text-gray-900">11780<span class="text-xs text-gray-500 font-normal">mm</span></div>
                                 <div class="text-xs text-gray-500">572.8kg</div>
@@ -552,8 +554,9 @@
                         </td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"><i class="fas fa-times"></i>不合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"><i class="fas fa-times"></i>不合格</span></td>
+                        <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"><i class="fas fa-times"></i>Sa2.5</span></td>
                         <td class="px-4 py-4 text-center text-sm font-medium text-red-600">65%</td>
-                        <td class="px-4 py-4 text-center text-sm font-medium text-red-600">41min</td>
+                        <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"><i class="fas fa-times"></i>不合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"><i class="fas fa-circle-xmark"></i>不合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-200"><i class="fas fa-pause"></i>未完成</span></td>
                         <td class="px-4 py-4 text-center">
@@ -585,7 +588,6 @@
                         <tr>
                             <th class="px-4 py-4 text-left w-12"><input type="checkbox" class="custom-checkbox" id="selectAllSample" onclick="toggleSelectAll()"></th>
                             <th class="px-4 py-4 text-left">自编号</th>
-                            <th class="px-4 py-4 text-center">清洁度</th>
                             <th class="px-4 py-4 text-center">灰尘度检测</th>
                             <th class="px-4 py-4 text-center">表面粗糙度(μm)</th>
                             <th class="px-4 py-4 text-center">盐分检测</th>
@@ -600,7 +602,6 @@
                         <tr class="group" data-id="CJ-0032" data-shift="today_day" data-result="pass">
                             <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                             <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">CJ-0032</div></td>
-                            <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>Sa2.5</span></td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">1级</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">52</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">12mg/m²</td>
@@ -622,7 +623,6 @@
                         <tr class="group" data-id="CJ-0031" data-shift="today_day" data-result="pass">
                             <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                             <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">CJ-0031</div></td>
-                            <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>Sa2.5</span></td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">2级</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">49</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">15mg/m²</td>
@@ -644,7 +644,6 @@
                         <tr class="group" data-id="CJ-0030" data-shift="yesterday_night" data-result="fail">
                             <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                             <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">CJ-0030</div></td>
-                            <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"><i class="fas fa-times"></i>Sa2.5</span></td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">4级</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">31</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">28mg/m²</td>
@@ -769,10 +768,6 @@
                         抽检项目
                     </h4>
                     <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">清洁度</label>
-                            <input id="sampleCleanLevel" type="text" value="Sa2.5" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
-                        </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">灰尘度检测</label>
                             <select id="sampleDustLevel" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
@@ -1435,14 +1430,30 @@
                             </div>
                         </div>
                         <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">清洁度 <span class="text-red-500">*</span></label>
+                            <select id="entryCleanLevel"
+                                    class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                                <option value="Sa1">Sa1</option>
+                                <option value="Sa2">Sa2</option>
+                                <option value="Sa2.5" selected>Sa2.5</option>
+                                <option value="Sa3">Sa3</option>
+                            </select>
+                        </div>
+                        <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">湿度 (%) <span class="text-red-500">*</span></label>
                             <input type="number" id="entryRH" value="45" min="0" max="100"
                                    class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">间隔时间 (min) <span class="text-red-500">*</span></label>
-                            <input type="number" id="entryInterval" value="18" min="0"
-                                   class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                            <label class="block text-sm font-medium text-gray-700 mb-3">间隔时间 <span class="text-red-500">*</span></label>
+                            <div class="flex gap-3">
+                                <button type="button" onclick="setIntervalCheck('pass')" id="btnIntervalPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
+                                    <i class="fas fa-check-circle"></i>合格
+                                </button>
+                                <button type="button" onclick="setIntervalCheck('fail')" id="btnIntervalFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2">
+                                    <i class="fas fa-times-circle"></i>不合格
+                                </button>
+                            </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-3">评价 <span class="text-red-500">*</span></label>
@@ -1629,10 +1640,14 @@
                 <!-- 检验结果 -->
                 <div class="bg-white rounded-xl border border-gray-200 p-5">
                     <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-clipboard-check text-blue-600"></i>检验结果</h4>
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-3 gap-4">
                         <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                             <span class="text-sm text-gray-600">外观检验</span>
                             <span id="detailAppearance" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <span class="text-sm text-gray-600">清洁度</span>
+                            <span id="detailCleanLevel" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>Sa2.5</span>
                         </div>
                         <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                             <span class="text-sm text-gray-600">腐蚀程度</span>
@@ -1951,9 +1966,11 @@
         let currentMainTab = 'material';
         let currentMaterialSubTab = 'root';
         let currentRowFilter = 'all';
+        let isRootDetailCollapsed = true;
         let selectedRows = new Set();
         let currentAppearance = 'pass';
         let currentBevelCheck = 'pass';
+        let currentIntervalCheck = 'pass';
         let currentEvaluation = 'pass';
         let currentEntryRecordIndex = 0;
         let lastRecord = {
@@ -1966,9 +1983,9 @@
         let isBevelExpanded = false; // 兼容旧逻辑
 
         const entryRecordList = [
-            { id: '0032', pipeNo: '6508741', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: '11856', weight: '573.5', humidity: '45', interval: '18', operator: '张师傅', time: '19:35' },
-            { id: '0031', pipeNo: '6508739', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: '11920', weight: '574.2', humidity: '42', interval: '22', operator: '张师傅', time: '18:42' },
-            { id: '0030', pipeNo: '6508725', bundleNo: '97#', furnaceNo: '15303842', batchNo: '71400', length: '11780', weight: '572.8', humidity: '65', interval: '41', operator: '李师傅', time: '03:15' }
+            { id: '0032', pipeNo: '6508741', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: '11856', weight: '573.5', cleanLevel: 'Sa2.5', humidity: '45', interval: 'pass', operator: '张师傅', time: '19:35' },
+            { id: '0031', pipeNo: '6508739', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: '11920', weight: '574.2', cleanLevel: 'Sa2.5', humidity: '42', interval: 'pass', operator: '张师傅', time: '18:42' },
+            { id: '0030', pipeNo: '6508725', bundleNo: '97#', furnaceNo: '15303842', batchNo: '71400', length: '11780', weight: '572.8', cleanLevel: 'Sa2.5', humidity: '65', interval: 'fail', operator: '李师傅', time: '03:15' }
         ];
         const sampleRecordList = [
             { id: 'CJ-0032', cleanLevel: 'Sa2.5', dustLevel: '1级', roughness: '52', salinity: '12mg/m²', result: 'pass', inspector: '王检', time: '20:10', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23dbeafe'/><circle cx='42' cy='46' r='10' fill='%2393c5fd'/><circle cx='86' cy='58' r='8' fill='%2360a5fa'/><circle cx='118' cy='40' r='6' fill='%233b82f6'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 1</text></svg>" },
@@ -2200,6 +2217,7 @@
 
             document.getElementById('material-subtab-root').classList.toggle('hidden', tabId !== 'root');
             document.getElementById('material-subtab-sample').classList.toggle('hidden', tabId !== 'sample');
+            document.getElementById('toggleRootDetailBtn')?.classList.toggle('hidden', tabId !== 'root');
             clearSelection();
             applyMaterialTableFilters();
         }
@@ -2225,6 +2243,22 @@
             }
 
             updateBatchBar();
+        }
+
+        function applyRootDetailColumnState() {
+            document.querySelectorAll('.root-detail-col').forEach(cell => {
+                cell.classList.toggle('hidden', isRootDetailCollapsed);
+            });
+
+            const toggleBtn = document.getElementById('toggleRootDetailBtn');
+            if (toggleBtn) {
+                toggleBtn.textContent = isRootDetailCollapsed ? '展开钢管详情' : '折叠钢管详情';
+            }
+        }
+
+        function toggleRootDetailColumns() {
+            isRootDetailCollapsed = !isRootDetailCollapsed;
+            applyRootDetailColumnState();
         }
 
         // ========== 坡口信息折叠功能 ==========
@@ -2637,6 +2671,7 @@
 
             setAppearance('pass');
             setBevelCheck('pass');
+            setIntervalCheck('pass');
             setEvaluation('pass');
 
             const targetIndex = recordId
@@ -2652,6 +2687,25 @@
         }
 
         function viewDetail(id) {
+            const record = entryRecordList.find(item => item.id === String(id).replace(/^DR-/, '').replace(/^CJ-/, ''));
+            if (record) {
+                document.getElementById('detailIdDisplay').textContent = `GP-${record.id}`;
+                document.getElementById('detailSelfNo').textContent = record.id;
+                document.getElementById('detailPipeNo').textContent = record.pipeNo;
+                document.getElementById('detailShift').textContent = record.time === '03:15' ? '昨日夜班' : '今日白班';
+                document.getElementById('detailBundleNo').textContent = record.bundleNo;
+                document.getElementById('detailFurnaceNo').textContent = record.furnaceNo;
+                document.getElementById('detailBatchNo').textContent = record.batchNo;
+                document.getElementById('detailLength').textContent = record.length;
+                document.getElementById('detailWeight').textContent = record.weight;
+                document.getElementById('detailRH').textContent = `${record.humidity}%`;
+                document.getElementById('detailOperatorIcon').textContent = (record.operator || '张').slice(0, 1);
+                document.getElementById('detailOperator').textContent = record.operator || '当前班组';
+                document.getElementById('detailTime').textContent = record.time || '--:--';
+                document.getElementById('detailDate').textContent = record.time === '03:15' ? '昨天' : '今天';
+                document.getElementById('detailCleanLevel').innerHTML = `<i class="fas fa-check"></i>${record.cleanLevel || 'Sa2.5'}`;
+            }
+
             document.getElementById('detailDrawerOverlay').classList.add('open');
             document.getElementById('detailDrawer').classList.add('open');
             document.body.style.overflow = 'hidden';
@@ -2779,7 +2833,6 @@
                 : entryRecordList.find(item => item.id === String((sampleRecord || sampleRecordList[0]).id).replace('CJ-', '')) || entryRecordList[0];
             const record = sampleRecord || {
                 id: linkedRoot ? `CJ-${linkedRoot.id}` : 'CJ-NEW',
-                cleanLevel: 'Sa2.5',
                 dustLevel: '1级',
                 roughness: '50',
                 salinity: '10mg/m²',
@@ -2799,7 +2852,6 @@
             document.getElementById('sampleBatchNo').value = linkedRoot.batchNo;
             document.getElementById('sampleLength').value = linkedRoot.length;
             document.getElementById('sampleWeight').value = linkedRoot.weight;
-            document.getElementById('sampleCleanLevel').value = record.cleanLevel;
             document.getElementById('sampleDustLevel').value = record.dustLevel;
             document.getElementById('sampleRoughness').value = record.roughness;
             document.getElementById('sampleSalinity').value = record.salinity;
@@ -2807,7 +2859,7 @@
             document.getElementById('samplePhotoInput').value = '';
             setSampleResult(record.result);
 
-            const editableIds = ['sampleCleanLevel', 'sampleDustLevel', 'sampleRoughness', 'sampleSalinity', 'samplePhotoInput'];
+            const editableIds = ['sampleDustLevel', 'sampleRoughness', 'sampleSalinity', 'samplePhotoInput'];
             editableIds.forEach(id => {
                 const el = document.getElementById(id);
                 if (!el) return;
@@ -2855,8 +2907,9 @@
             document.getElementById('entryBatchNo').value = record.batchNo;
             document.getElementById('entryLength').value = record.length;
             document.getElementById('entryWeight').value = record.weight;
+            document.getElementById('entryCleanLevel').value = record.cleanLevel || 'Sa2.5';
             document.getElementById('entryRH').value = record.humidity;
-            document.getElementById('entryInterval').value = record.interval;
+            setIntervalCheck(record.interval || 'pass');
             document.getElementById('entryRecordPosition').textContent = `第 ${index + 1} 支 / 共 ${entryRecordList.length} 支`;
         }
 
@@ -2900,6 +2953,22 @@
             }
         }
 
+        function setIntervalCheck(type) {
+            currentIntervalCheck = type;
+            const btnPass = document.getElementById('btnIntervalPass');
+            const btnFail = document.getElementById('btnIntervalFail');
+
+            if (!btnPass || !btnFail) return;
+
+            if (type === 'pass') {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+        }
+
         function setEvaluation(type) {
             currentEvaluation = type;
             const btnPass = document.getElementById('btnEvaluationPass');
@@ -2921,11 +2990,12 @@
             const furnaceNo = document.getElementById('entryFurnaceNo').value;
             const batchNo = document.getElementById('entryBatchNo').value;
             const length = document.getElementById('entryLength').value;
+            const cleanLevel = document.getElementById('entryCleanLevel').value;
             const humidity = document.getElementById('entryRH').value;
-            const interval = document.getElementById('entryInterval').value;
+            const interval = currentIntervalCheck;
 
-            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !humidity || !interval) {
-                showToast('请填写完整的根检结果：湿度、间隔时间、评价等信息', 'error');
+            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !cleanLevel || !humidity || !interval) {
+                showToast('请填写完整的根检结果：清洁度、湿度、间隔时间、评价等信息', 'error');
                 return;
             }
 
@@ -2950,10 +3020,11 @@
             const furnaceNo = document.getElementById('entryFurnaceNo').value;
             const batchNo = document.getElementById('entryBatchNo').value;
             const length = document.getElementById('entryLength').value;
+            const cleanLevel = document.getElementById('entryCleanLevel').value;
             const humidity = document.getElementById('entryRH').value;
-            const interval = document.getElementById('entryInterval').value;
+            const interval = currentIntervalCheck;
 
-            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !humidity || !interval) {
+            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !cleanLevel || !humidity || !interval) {
                 showToast('请填写完整的根检结果', 'error');
                 return;
             }
@@ -3184,8 +3255,10 @@
             initQualityReuseFrame();
             switchMainTab('material');
             switchMaterialSubTab('root');
+            applyRootDetailColumnState();
             applyMaterialTableFilters();
             setAppearance('pass');
+            setIntervalCheck('pass');
             renderInstrumentTable();
             setCompressedAirResult('pass');
             updateWorkOrderProgress(parseInt(document.getElementById('shiftCountValue')?.textContent || '247', 10));
