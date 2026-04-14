@@ -1016,373 +1016,1115 @@
             <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4 mb-6">
                 <div>
                     <h3 class="text-xl font-bold text-gray-900">质检工艺卡</h3>
-                    <p class="text-sm text-gray-500 mt-1">按工序展示检查项目、检验频次、合格标准、使用设备与检测方法</p>
+                    <p class="text-sm text-gray-500 mt-1">仿照生产工艺卡的交互样式，展示进管工序的质检要求</p>
                 </div>
                 <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3">
                     <div class="text-sm text-blue-700">工艺卡编号</div>
                     <div class="text-lg font-bold text-blue-900 mt-1">ZJK-3LPE-2026-001</div>
                 </div>
             </div>
-            <div class="overflow-auto border border-gray-200 rounded-2xl">
-                <table class="data-table w-full bg-white">
-                    <thead class="sticky-header">
-                        <tr>
-                            <th class="px-4 py-4 text-center w-24" rowspan="2">工序</th>
-                            <th class="px-4 py-4 text-center w-60" rowspan="2">检查项目</th>
-                            <th class="px-4 py-4 text-center" colspan="2">检验频次</th>
-                            <th class="px-4 py-4 text-center min-w-[560px]" rowspan="2">合格标准</th>
-                            <th class="px-4 py-4 text-center min-w-[180px]" rowspan="2">使用设备</th>
-                            <th class="px-4 py-4 text-center min-w-[160px]" rowspan="2">检测方法</th>
-                        </tr>
-                        <tr>
-                            <th class="px-4 py-4 text-center w-28">PQT</th>
-                            <th class="px-4 py-4 text-center w-28">NPT</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="px-4 py-4 text-center font-semibold" rowspan="3">进管</td>
-                            <td class="px-4 py-4 text-gray-700">外观检查</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 whitespace-pre-line text-gray-700">1.目视检查钢管内外表面污染状况及钢管母体缺陷，表面干燥、平整无油脂、油和其他污染物。任何污染物都应清除。
-2.检查并记录钢管信息：制造商、炉号、批号、长度、管号，标识清晰饱满。
-3.除锈时，每个钢管两端戴管帽，防止钢砂进入。
-4.进管结束后，确定钢管数量。
-5.不符合检验标准的钢管及时报告、并标记和隔离（如果必要），有待确认，有缺陷的钢管禁止下管。
-6.有严重质量缺陷的钢管及时提交给客户。</td>
-                            <td class="px-4 py-4 text-center">目测</td>
-                            <td class="px-4 py-4 text-center">API 5L 46th</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">环境湿度及钢管外表面温度的检查</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-center">开始和，1次/4h</td>
-                            <td class="px-4 py-4 text-gray-700">环境湿度≤85%且钢管表面温度高于露点温度 3℃，如果钢管达不到要求需预热。</td>
-                            <td class="px-4 py-4 text-center">露点仪/温湿度表<br>红外测温仪</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">压缩空气</td>
-                            <td class="px-4 py-4 text-center">开始时 1 次</td>
-                            <td class="px-4 py-4 text-center">1次/班</td>
-                            <td class="px-4 py-4 text-gray-700">干燥无湿气、无油污或残留</td>
-                            <td class="px-4 py-4 text-center">滤纸</td>
-                            <td class="px-4 py-4 text-center">ASTM D 4285</td>
-                        </tr>
+            <div class="space-y-5">
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('qualityIngress')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">1.进管</div>
+                            <div class="text-sm text-gray-500 mt-1">点击展开查看外观检查、环境湿度及钢管外表面温度、压缩空气的检验要求</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="qualityIngressStatus">点击展开</span>
+                            <i id="qualityIngressArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="qualityIngressContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 space-y-4">
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">外观检查</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：逐支</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：逐支</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <ol class="list-decimal pl-5 space-y-2 text-sm leading-7 text-gray-700">
+                                            <li>目视检查钢管内外表面污染状况及钢管母体缺陷，表面干燥、平整无油脂、油和其他污染物。任何污染物都应清除。</li>
+                                            <li>检查并记录钢管信息：制造商、炉号、批号、长度、管号，标识清晰饱满。</li>
+                                            <li>除锈时，每个钢管两端戴管帽，防止钢砂进入。</li>
+                                            <li>进管结束后，确定钢管数量。</li>
+                                            <li>不符合检验标准的钢管及时报告，并标记和隔离（如果必需），有待确认，有缺陷的钢管禁止下管。</li>
+                                            <li>有严重质量缺陷的钢管及时提交给客户。</li>
+                                        </ol>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">目测</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">API 5L 46th</div>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <tr>
-                            <td class="px-4 py-4 text-center font-semibold" rowspan="6">除锈</td>
-                            <td class="px-4 py-4 text-gray-700">检查除锈后钢管外表面</td>
-                            <td class="px-4 py-4 text-center">100%</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-gray-700">钢管外表面无焊渣、毛刺、磨料等</td>
-                            <td class="px-4 py-4 text-center">可见光照度计</td>
-                            <td class="px-4 py-4 text-center">目测</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">检查钢管的外表面粗糙度</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-center"></td>
-                            <td class="px-4 py-4 text-gray-700">40-90um</td>
-                            <td class="px-4 py-4 text-center">粗糙度测试仪<br>拓片纸、千分表</td>
-                            <td class="px-4 py-4 text-center">ISO 8503-4</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">清洁度等级</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-center">开始时，1次/4h</td>
-                            <td class="px-4 py-4 text-gray-700">≥Sa 2.5</td>
-                            <td class="px-4 py-4 text-center">ISO 比对板</td>
-                            <td class="px-4 py-4 text-center">ISO 8501-1</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">盐份检测</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-center"></td>
-                            <td class="px-4 py-4 text-gray-700">≤20mg/m²（内控）</td>
-                            <td class="px-4 py-4 text-center">盐分检测仪</td>
-                            <td class="px-4 py-4 text-center">ISO 8502-6</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">灰尘度检测</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-center"></td>
-                            <td class="px-4 py-4 text-gray-700">最大不超过 2 级（内控）</td>
-                            <td class="px-4 py-4 text-center">压敏胶带</td>
-                            <td class="px-4 py-4 text-center">ISO 8502-3</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">涂敷间隔时间</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 whitespace-pre-line text-gray-700">R.H:80-85%：&lt;2 hours      R.H: 70-80%&lt;3 hours
-R.H: &lt;70%：&lt;4 hours
-如钢管有返锈或涂敷间隔时间规定时间应重新除锈（内控）</td>
-                            <td class="px-4 py-4 text-center">/</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
-                        </tr>
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">环境湿度及钢管外表面温度的检查</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：逐支</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：开始和，1次/4h</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">环境湿度≤85%且钢管表面温度高于露点温度 3℃，如果钢管达不到要求需预热。</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">露点仪/温湿度表</div>
+                                        <div class="mt-1 text-sm font-medium text-gray-900">红外测温仪</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013</div>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <tr>
-                            <td class="px-4 py-4 text-center font-semibold" rowspan="8">涂敷</td>
-                            <td class="px-4 py-4 text-gray-700">钢管加热温度</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-center">连续检测，记录 1 次/h</td>
-                            <td class="px-4 py-4 text-gray-700">钢管加热温度区间要求：185~250℃</td>
-                            <td class="px-4 py-4 text-center">红外温度计，测温笔</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">AD 挤出温度</td>
-                            <td class="px-4 py-4 text-center">开始时 1 次</td>
-                            <td class="px-4 py-4 text-center">1 次/h</td>
-                            <td class="px-4 py-4 text-gray-700">185-235℃</td>
-                            <td class="px-4 py-4 text-center">红外温度计</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">PP 挤出温度</td>
-                            <td class="px-4 py-4 text-center">开始时 1 次</td>
-                            <td class="px-4 py-4 text-center">1 次/h</td>
-                            <td class="px-4 py-4 text-gray-700">200-250℃</td>
-                            <td class="px-4 py-4 text-center">红外温度计</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">FBE 厚度检测</td>
-                            <td class="px-4 py-4 text-center">每班开始时 1 次，及生产中断</td>
-                            <td class="px-4 py-4 text-center">每班开始时 1 次，及生产中断</td>
-                            <td class="px-4 py-4 text-gray-700">≥120μm</td>
-                            <td class="px-4 py-4 text-center">涂层测厚仪</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">AD 厚度检测</td>
-                            <td class="px-4 py-4 text-center">每班开始时 1 次，及生产中断</td>
-                            <td class="px-4 py-4 text-center">每班开始时 1 次，及生产中断</td>
-                            <td class="px-4 py-4 text-gray-700">170~250μm</td>
-                            <td class="px-4 py-4 text-center">涂层测厚仪</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">水冷温度</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-gray-700">≤60℃</td>
-                            <td class="px-4 py-4 text-center">红外温度计</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">外观检测</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-gray-700">平滑，辊压密实，无暗泡，无麻点，无皱折，无裂纹。色泽均匀，防腐管端应无翘边</td>
-                            <td class="px-4 py-4 text-center">可见光照度计</td>
-                            <td class="px-4 py-4 text-center">目测</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">涂层总厚度</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-center">开始 1、3、5 根，以后每 10 根检测一次</td>
-                            <td class="px-4 py-4 whitespace-pre-line text-gray-700">φ168.3mm 涂层总厚度：≥2.0mm
-φ323.8mm 涂层总厚度：≥2.2mm</td>
-                            <td class="px-4 py-4 text-center">涂层测厚仪</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
-                        </tr>
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">压缩空气</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：开始时 1 次</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：1次/班</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">干燥无湿气、无油污或残留。</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">滤纸</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">ASTM D 4285</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                        <tr>
-                            <td class="px-4 py-4 text-center font-semibold" rowspan="4">在线检测</td>
-                            <td class="px-4 py-4 text-gray-700">电火花检漏</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-gray-700">25KV,100%覆盖表面</td>
-                            <td class="px-4 py-4 text-center">在线电火花检漏仪</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">预留端检查</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-center">逐根</td>
-                            <td class="px-4 py-4 text-gray-700">预留端长度：≥300mm，FBE 预留 10-30mm，涂层角度&lt;30°，聚丙烯斜切面≥5mm</td>
-                            <td class="px-4 py-4 text-center">铝座角尺，角度尺</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">剩磁检测</td>
-                            <td class="px-4 py-4 text-center">1 次</td>
-                            <td class="px-4 py-4 text-center">1 次/班</td>
-                            <td class="px-4 py-4 text-gray-700">&lt;15 Gauss（内控）</td>
-                            <td class="px-4 py-4 text-center">磁强计</td>
-                            <td class="px-4 py-4 text-center">GB/T 23257-2017</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">剥离强度测试</td>
-                            <td class="px-4 py-4 text-center">1 次</td>
-                            <td class="px-4 py-4 text-center">2 次/班</td>
-                            <td class="px-4 py-4 text-gray-700">50±5℃，≥100N/cm；90±5℃，≥80N/cm</td>
-                            <td class="px-4 py-4 text-center">剥离试验机</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
-                        </tr>
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('qualityDerust')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">2.除锈</div>
+                            <div class="text-sm text-gray-500 mt-1">点击展开查看除锈后的表面状态、粗糙度、清洁度、盐份、灰尘及涂敷间隔时间要求</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="qualityDerustStatus">点击展开</span>
+                            <i id="qualityDerustArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="qualityDerustContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 space-y-4">
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">检查除锈后钢管外表面</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：100%</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：逐支</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">钢管外表面无焊渣、毛刺、磨料等。</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">可见光照度计</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">目测</div>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <tr>
-                            <td class="px-4 py-4 text-center font-semibold" rowspan="3">修补</td>
-                            <td class="px-4 py-4 text-gray-700">目视检查外观</td>
-                            <td class="px-4 py-4 text-center">每处修补点</td>
-                            <td class="px-4 py-4 text-center">每处修补点</td>
-                            <td class="px-4 py-4 text-gray-700">面积不超过 10cm²，每米不超 1 处的漏点或损伤可修补，超出面积和个数量提交业主批准，修复后表面应平整、无皱折、无气泡、无烧焦碳化等现象。</td>
-                            <td class="px-4 py-4 text-center">修补套装</td>
-                            <td class="px-4 py-4 text-center">ISO 21809-1:2018</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">电火花检漏</td>
-                            <td class="px-4 py-4 text-center">每处修补点</td>
-                            <td class="px-4 py-4 text-center">每处修补点</td>
-                            <td class="px-4 py-4 text-gray-700">25KV,100%覆盖表面</td>
-                            <td class="px-4 py-4 text-center">手持电火花检漏仪</td>
-                            <td class="px-4 py-4 text-center">ISO 21809-1:2018</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">厚度检测</td>
-                            <td class="px-4 py-4 text-center">每处修补点</td>
-                            <td class="px-4 py-4 text-center">每处修补点</td>
-                            <td class="px-4 py-4 text-gray-700">不低于最低要求</td>
-                            <td class="px-4 py-4 text-center">涂层测厚仪</td>
-                            <td class="px-4 py-4 text-center">ISO 21809-1:2018</td>
-                        </tr>
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">检查钢管的外表面粗糙度</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：逐支</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：-</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">40-90μm</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">粗糙度测试仪</div>
+                                        <div class="mt-1 text-sm font-medium text-gray-900">拓片纸、千分表</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">ISO 8503-4</div>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <tr>
-                            <td class="px-4 py-4 text-center font-semibold" rowspan="8">离线试验</td>
-                            <td class="px-4 py-4 text-gray-700">连续性</td>
-                            <td class="px-4 py-4 text-center">1 次</td>
-                            <td class="px-4 py-4 text-center">1 次/批</td>
-                            <td class="px-4 py-4 text-gray-700">25KV 无漏点</td>
-                            <td class="px-4 py-4 text-center">手持电火花检漏仪</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">试件冲击强度</td>
-                            <td class="px-4 py-4 text-center">1 次</td>
-                            <td class="px-4 py-4 text-center">1 次/每批 PE</td>
-                            <td class="px-4 py-4 text-gray-700">0±2℃，≥5J/mm；25KV 无漏点</td>
-                            <td class="px-4 py-4 text-center">冲击试验机<br>手持电火花检漏仪</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013<br>附录 H</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">压痕硬度 mm</td>
-                            <td class="px-4 py-4 text-center">1 次</td>
-                            <td class="px-4 py-4 text-center">1 次/每批 PE</td>
-                            <td class="px-4 py-4 text-gray-700">90±5℃，≤0.3mm</td>
-                            <td class="px-4 py-4 text-center">压痕测试仪</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013<br>附录 I</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">断裂伸长率 %</td>
-                            <td class="px-4 py-4 text-center">1 次</td>
-                            <td class="px-4 py-4 text-center">1 次/每批 PE</td>
-                            <td class="px-4 py-4 text-gray-700">23±3℃，≥400%（内控）</td>
-                            <td class="px-4 py-4 text-center">拉伸试验机</td>
-                            <td class="px-4 py-4 text-center">ISO 527-2</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700" rowspan="3">阴极剥离试验 mm</td>
-                            <td class="px-4 py-4 text-center">1 次</td>
-                            <td class="px-4 py-4 text-center">/</td>
-                            <td class="px-4 py-4 text-gray-700">-1.5 V±0.15V at 23±2℃ 28 d ≤7.0mm</td>
-                            <td class="px-4 py-4 text-center" rowspan="3">稳压电源，烘箱</td>
-                            <td class="px-4 py-4 text-center" rowspan="3">DIN 30678-2013<br>附录 C</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-center">1 次</td>
-                            <td class="px-4 py-4 text-center">/</td>
-                            <td class="px-4 py-4 text-gray-700">-1.5 V±0.15V at 90±3℃ 28 d ≤15.0mm</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-center">1 次</td>
-                            <td class="px-4 py-4 text-center">1 次</td>
-                            <td class="px-4 py-4 text-gray-700">-3.5 V±0.15V at 65±3℃ 24 h ≤7.0mm</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">DSC 固化度</td>
-                            <td class="px-4 py-4 text-center">1 次</td>
-                            <td class="px-4 py-4 text-center">1 次/批</td>
-                            <td class="px-4 py-4 text-gray-700">-2.0℃ &lt; ΔTg &lt; 3.0℃</td>
-                            <td class="px-4 py-4 text-center">差式热量扫描仪</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013<br>附录 B</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">涂层电阻率</td>
-                            <td class="px-4 py-4 text-center">1 次</td>
-                            <td class="px-4 py-4 text-center">/</td>
-                            <td class="px-4 py-4 text-gray-700">&gt;10¹⁶ΩM²</td>
-                            <td class="px-4 py-4 text-center">安培表，稳压电源</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013<br>附录 J</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">热老化</td>
-                            <td class="px-4 py-4 text-center">1 次</td>
-                            <td class="px-4 py-4 text-center">/</td>
-                            <td class="px-4 py-4 text-gray-700">IΔMFRI±35%</td>
-                            <td class="px-4 py-4 text-center">烘箱，熔体流动速率仪</td>
-                            <td class="px-4 py-4 text-center">DIN 30678-2013<br>附录 L</td>
-                        </tr>
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">清洁度等级</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：逐支</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：开始时，1次/4h</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">≥Sa 2.5</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">ISO 比对板</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">ISO 8501-1</div>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <tr>
-                            <td class="px-4 py-4 text-center font-semibold" rowspan="3">原材料</td>
-                            <td class="px-4 py-4 text-gray-700">FBE</td>
-                            <td class="px-4 py-4 text-center">1 次</td>
-                            <td class="px-4 py-4 text-center">每班 1 次</td>
-                            <td class="px-4 py-4 text-gray-700">天津瑞远 DR-301B</td>
-                            <td class="px-4 py-4 text-center">/</td>
-                            <td class="px-4 py-4 text-center">CSA Z245.20</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">AD</td>
-                            <td class="px-4 py-4 text-center">1 次</td>
-                            <td class="px-4 py-4 text-center">每班 1 次</td>
-                            <td class="px-4 py-4 text-gray-700">广州鹿山 PR298</td>
-                            <td class="px-4 py-4 text-center">/</td>
-                            <td class="px-4 py-4 text-center">ISO 21809-1:2018</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 text-gray-700">PP</td>
-                            <td class="px-4 py-4 text-center">1 次</td>
-                            <td class="px-4 py-4 text-center">每班 1 次</td>
-                            <td class="px-4 py-4 text-gray-700">广州鹿山 PJ-1</td>
-                            <td class="px-4 py-4 text-center">/</td>
-                            <td class="px-4 py-4 text-center">ISO 21809-1:2018</td>
-                        </tr>
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">盐份检测</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：逐支</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：开始时，1次/4h</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">≤20mg/m²（内控）</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">盐分检测仪</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">ISO 8502-6</div>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <tr>
-                            <td class="px-4 py-4 text-center font-semibold">防腐管标识</td>
-                            <td class="px-4 py-4 text-gray-700">喷标</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-gray-700">单端喷标，距离管端 400-600mm 开始</td>
-                            <td class="px-4 py-4 text-center">手持式喷码机</td>
-                            <td class="px-4 py-4 text-center">/</td>
-                        </tr>
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">灰尘度检测</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：逐支</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：开始时，1次/4h</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">最大不超过 2 级（内控）</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">压敏胶带</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">ISO 8502-3</div>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <tr>
-                            <td class="px-4 py-4 text-center font-semibold">防腐管包装</td>
-                            <td class="px-4 py-4 text-gray-700">防腐管包装保护措施</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 text-center">逐支</td>
-                            <td class="px-4 py-4 whitespace-pre-line text-gray-700">管帽：甲供
-防撞绳：每支 3 道，每道一条，φ20mm；
-吊带：甲供
-打捆：原捆原包打捆。
-其他：
-1.按照合同号进行区分堆放及发货；
-2.需要做 PQT，以及有全程监造；</td>
-                            <td class="px-4 py-4 text-center">/</td>
-                            <td class="px-4 py-4 text-center">/</td>
-                        </tr>
-                    </tbody>
-                </table>
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">涂敷间隔时间</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：逐支</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：逐支</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <div class="text-sm leading-7 text-gray-700">
+                                            <div>R.H:80-85%：&lt;2 hours</div>
+                                            <div>R.H: 70-80%：&lt;3 hours</div>
+                                            <div>R.H.: &lt;70%：&lt;4 hours</div>
+                                            <div>如钢管有返锈或涂敷间隔时间规定时间应重新除锈（内控）</div>
+                                        </div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">/</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('qualityCoating')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">3.涂覆</div>
+                            <div class="text-sm text-gray-500 mt-1">点击展开查看钢管加热、挤出温度、厚度检测及水冷温度的检验要求</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="qualityCoatingStatus">点击展开</span>
+                            <i id="qualityCoatingArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="qualityCoatingContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 space-y-4">
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">钢管加热温度</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：逐支</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：连续检测，记录 1 次/h</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">钢管加热温度区间要求：185~250℃</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">红外温度计，测温笔</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">AD 挤出温度</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：开始时 1 次</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：1次/h</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">185-235℃</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">红外温度计</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">PP 挤出温度</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：开始时 1 次</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：1次/h</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">200-250℃</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">红外温度计</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">FBE 厚度检测</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：每班开始时 1 次，及生产中断</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：每班开始时 1 次，及生产中断</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">≥120μm</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">涂层测厚仪</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">AD 厚度检测</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：每班开始时 1 次，及生产中断</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：每班开始时 1 次，及生产中断</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">170~250μm</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">涂层测厚仪</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">水冷温度</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：逐支</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：逐支</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">≤60℃</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">红外温度计</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('qualityOnline')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">4.在线检测</div>
+                            <div class="text-sm text-gray-500 mt-1">点击展开查看外观、厚度、电火花、预留端、剩磁和剥离强度的在线检测要求</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="qualityOnlineStatus">点击展开</span>
+                            <i id="qualityOnlineArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="qualityOnlineContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 space-y-4">
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">外观检测</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：逐支</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：逐支</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">平滑，辊压密实，无暗泡，无麻点，无皱折，无裂纹。色泽均匀，防腐管端应无翘边。</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">可见光照度计</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">目测</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">涂层总厚度</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：逐支</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：开始 1，3，5 根，以后每 10 根检测一次</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <div class="text-sm leading-7 text-gray-700">
+                                            <div>φ168.3mm 涂层总厚度：≥2.0mm</div>
+                                            <div>φ323.8mm 涂层总厚度：≥2.2mm</div>
+                                        </div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">涂层测厚仪</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">电火花检测</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：逐支</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：逐支</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">25KV,100%覆盖表面</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">在线电火花检测仪</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">预留端检查</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：逐支</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：逐根</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">预留端长度：≥300mm，FBE 预留 10-30mm；涂层角度 &lt;30°；聚丙烯斜切面≥5mm。</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">铝座角尺，角度尺</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">剩磁检测</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：1 次</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：1次/班</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">&lt;15 Gauss（内控）</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">磁强计</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">GB/T 23257-2017</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">剥离强度测试</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：1 次</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：2次/班</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">50±5℃，≥100N/cm；90±5℃，≥80N/cm</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">剥离试验机</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('qualityRepair')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">5.修补</div>
+                            <div class="text-sm text-gray-500 mt-1">点击展开查看修补后的目视、电火花和厚度检测要求</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="qualityRepairStatus">点击展开</span>
+                            <i id="qualityRepairArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="qualityRepairContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 space-y-4">
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">目视检查外观</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：每处修补点</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：每处修补点</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">面积不超过 10cm²，每米不超 1 处的漏点或损伤仍可修补，超出面积个数重提交业主批准；修复后表面应平整、无皱折、无气泡、无烧焦碳化等现象。</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">修补套装</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">ISO 21809-1:2018</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">电火花检漏</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：每处修补点</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：每处修补点</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">25KV,100%覆盖表面</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">手持电火花检测仪</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">ISO 21809-1:2018</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">厚度检测</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：每处修补点</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：每处修补点</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">不低于最低要求。</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">涂层测厚仪</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">ISO 21809-1:2018</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('qualityOffline')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">6.离线试验</div>
+                            <div class="text-sm text-gray-500 mt-1">点击展开查看连续性、冲击、压痕、断裂伸长率、剥离、固化度、电阻率和热老化试验要求</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="qualityOfflineStatus">点击展开</span>
+                            <i id="qualityOfflineArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="qualityOfflineContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 space-y-4">
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_170px_170px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">连续性</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：1 次</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：1次/批</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">25KV 无漏点。</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">手持电火花检测仪</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_170px_170px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">试件冲击强度</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：1 次</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：1次/每批 PE</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">0±2℃，≥5J/mm；25KV 无漏点。</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">冲击试验机</div>
+                                        <div class="mt-1 text-sm font-medium text-gray-900">手持电火花检测仪</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013 附录 H</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_170px_170px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">压痕硬度 mm</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：1 次</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：1次/每批 PE</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">90±5℃，≤0.3mm。</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">压痕测试仪</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013 附录 I</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_170px_170px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">断裂伸长率%</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：1 次</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：1次/每批 PE</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">23±3℃，≥400%（内控）。</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">拉伸试验机</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">ISO 527-2</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_170px_170px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">阴极剥离试验 mm</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：1 次</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：按项目条件执行</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <div class="text-sm leading-7 text-gray-700">
+                                            <div>-1.5 V±0.15V at 23 ±2℃ 28 d ≤7.0mm</div>
+                                            <div>-1.5 V±0.15V at 90±3℃ 28d ≤15.0mm</div>
+                                            <div>-3.5 V±0.15V at 65±3℃ 24 h ≤7.0mm</div>
+                                        </div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">稳压电源，烘箱</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013 附录 C</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_170px_170px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">DSC 固化度</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：1 次</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：1次/批</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">-2.0℃ &lt; ΔTg &lt; 3.0℃</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">差式热量扫描仪</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013 附录 B</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_170px_170px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">涂层电阻率</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：1 次</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：/</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">&gt;10¹⁶ΩM²</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">安培表，稳压电源</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013 附录 J</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_170px_170px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">热老化</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：1 次</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：/</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">|ΔMFR|±35%</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">烘箱，熔体流动速率仪</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">DIN 30678-2013 附录 L</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('qualityMaterial')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">7.原材料</div>
+                            <div class="text-sm text-gray-500 mt-1">点击展开查看 FBE、AD、PP 原材料的检验频次、合格标准和检测方法</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="qualityMaterialStatus">点击展开</span>
+                            <i id="qualityMaterialArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="qualityMaterialContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 space-y-4">
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">FBE</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：1 次</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：每班 1 次</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">天津瑞远 DR-301B</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">/</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">CSA Z245.20</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">AD</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：1 次</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：每班 1 次</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">广州鹿山 PR298</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">/</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">ISO 21809-1:2018</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">PP</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：1 次</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：每班 1 次</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">广州鹿山 PJ-1</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">/</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">ISO 21809-1:2018</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('qualityMarking')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">8.防腐管标识</div>
+                            <div class="text-sm text-gray-500 mt-1">点击展开查看喷标的检验频次、合格标准和设备要求</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="qualityMarkingStatus">点击展开</span>
+                            <i id="qualityMarkingArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="qualityMarkingContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 space-y-4">
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">喷标</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：逐支</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：逐支</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <p class="text-sm leading-7 text-gray-700">单端喷标，距离管端 400-600mm 开始。</p>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">手持式喷码机</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">/</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-2xl overflow-hidden">
+                    <div onclick="toggleProductionSection('qualityPacking')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
+                        <div>
+                            <div class="text-lg font-bold text-gray-900">9.防腐管包装</div>
+                            <div class="text-sm text-gray-500 mt-1">点击展开查看防腐管包装保护措施的检验频次和要求</div>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-500">
+                            <span id="qualityPackingStatus">点击展开</span>
+                            <i id="qualityPackingArrow" class="fas fa-chevron-down bevel-arrow"></i>
+                        </div>
+                    </div>
+                    <div id="qualityPackingContent" class="bevel-content border-t border-gray-100">
+                        <div class="p-5 space-y-4">
+                            <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+                                <div class="grid grid-cols-1 xl:grid-cols-[220px_170px_1fr_160px_160px]">
+                                    <div class="px-5 py-5 bg-gray-50 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-sm font-semibold text-gray-900">防腐管包装保护措施</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">检验频次</div>
+                                        <div class="mt-2 text-sm text-gray-700">PQT：逐支</div>
+                                        <div class="mt-1 text-sm text-gray-700">NPT：逐支</div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500 mb-3">合格标准</div>
+                                        <div class="text-sm leading-7 text-gray-700">
+                                            <div>管帽：甲供</div>
+                                            <div>防撞绳：每支 3 道，每道一条，φ20mm；</div>
+                                            <div>吊带：甲供</div>
+                                            <div>打捆：原捆原包打捆。</div>
+                                            <div>其他：</div>
+                                            <div>1. 按照合同号进行区分堆放及发货；</div>
+                                            <div>2. 需要做 PQT，以及有全程监造；</div>
+                                        </div>
+                                    </div>
+                                    <div class="px-5 py-5 border-b xl:border-b-0 xl:border-r border-gray-200">
+                                        <div class="text-xs text-gray-500">使用设备</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">/</div>
+                                    </div>
+                                    <div class="px-5 py-5">
+                                        <div class="text-xs text-gray-500">检测方法</div>
+                                        <div class="mt-2 text-sm font-medium text-gray-900">/</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
-
     <!-- Footer -->
     <footer id="materialFooter" class="bg-white border-t border-gray-200 px-6 py-3 flex-none">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
