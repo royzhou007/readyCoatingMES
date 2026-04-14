@@ -6,6 +6,7 @@
     <title>钢管录入记录 - MES系统</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap');
 
@@ -150,6 +151,10 @@
         }
         body.material-list-fullscreen #materialFooter {
             box-shadow: 0 -10px 24px rgba(15, 23, 42, 0.06);
+        }
+        .qr-preview-box canvas,
+        .qr-preview-box img {
+            margin: 0 auto;
         }
         .tab-panel {
             display: none;
@@ -478,6 +483,7 @@
                         <td class="px-4 py-4 text-center">
                             <div class="flex items-center justify-center gap-2">
                                 <button onclick="viewDetail('0032')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 transition-colors flex items-center justify-center" title="查看"><i class="fas fa-eye text-sm"></i></button>
+                                <button onclick="openPipePrintModal('0032')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-emerald-50 text-gray-600 hover:text-emerald-600 transition-colors flex items-center justify-center" title="打印标识"><i class="fas fa-print text-sm"></i></button>
                                 <button onclick="deleteRow('0032')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center justify-center" title="删除"><i class="fas fa-trash-alt text-sm"></i></button>
                             </div>
                         </td>
@@ -527,6 +533,7 @@
                         <td class="px-4 py-4 text-center">
                             <div class="flex items-center justify-center gap-2">
                                 <button onclick="viewDetail('0031')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 transition-colors flex items-center justify-center" title="查看"><i class="fas fa-eye text-sm"></i></button>
+                                <button onclick="openPipePrintModal('0031')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-emerald-50 text-gray-600 hover:text-emerald-600 transition-colors flex items-center justify-center" title="打印标识"><i class="fas fa-print text-sm"></i></button>
                                 <button onclick="deleteRow('0031')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center justify-center" title="删除"><i class="fas fa-trash-alt text-sm"></i></button>
                             </div>
                         </td>
@@ -576,6 +583,7 @@
                         <td class="px-4 py-4 text-center">
                             <div class="flex items-center justify-center gap-2">
                                 <button onclick="viewDetail('0030')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 transition-colors flex items-center justify-center" title="查看"><i class="fas fa-eye text-sm"></i></button>
+                                <button onclick="openPipePrintModal('0030')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-emerald-50 text-gray-600 hover:text-emerald-600 transition-colors flex items-center justify-center" title="打印标识"><i class="fas fa-print text-sm"></i></button>
                                 <button onclick="deleteRow('0030')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center justify-center" title="删除"><i class="fas fa-trash-alt text-sm"></i></button>
                             </div>
                         </td>
@@ -3016,6 +3024,74 @@
         </div>
     </div>
 
+    <div id="pipePrintModal" class="modal fixed inset-0 bg-black/50 z-[70] flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl industrial-shadow-lg w-full max-w-3xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                        <i class="fas fa-qrcode text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">钢管标识打印</h3>
+                        <p class="text-sm text-gray-500">预览钢管标识信息和对应二维码</p>
+                    </div>
+                </div>
+                <button onclick="closePipePrintModal()" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="p-6 bg-slate-50">
+                <div id="pipePrintPreview" class="bg-white border border-slate-200 rounded-2xl p-6">
+                    <div class="flex flex-col md:flex-row gap-6 items-stretch">
+                        <div class="flex-1 space-y-4">
+                            <div>
+                                <div class="text-xs font-semibold tracking-[0.2em] text-slate-400 uppercase">MES PIPE TAG</div>
+                                <div id="pipePrintTitle" class="mt-2 text-2xl font-bold text-slate-900">钢管标识</div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 text-sm">
+                                <div class="rounded-xl bg-slate-50 border border-slate-200 p-3">
+                                    <div class="text-slate-400 text-xs">自编号</div>
+                                    <div id="pipePrintId" class="mt-1 font-semibold text-slate-900">-</div>
+                                </div>
+                                <div class="rounded-xl bg-slate-50 border border-slate-200 p-3">
+                                    <div class="text-slate-400 text-xs">管号</div>
+                                    <div id="pipePrintPipeNo" class="mt-1 font-semibold text-slate-900">-</div>
+                                </div>
+                                <div class="rounded-xl bg-slate-50 border border-slate-200 p-3">
+                                    <div class="text-slate-400 text-xs">捆号</div>
+                                    <div id="pipePrintBundleNo" class="mt-1 font-semibold text-slate-900">-</div>
+                                </div>
+                                <div class="rounded-xl bg-slate-50 border border-slate-200 p-3">
+                                    <div class="text-slate-400 text-xs">炉号 / 批号</div>
+                                    <div id="pipePrintFurnaceBatch" class="mt-1 font-semibold text-slate-900">-</div>
+                                </div>
+                                <div class="rounded-xl bg-slate-50 border border-slate-200 p-3 col-span-2">
+                                    <div class="text-slate-400 text-xs">规格</div>
+                                    <div id="pipePrintSpec" class="mt-1 font-semibold text-slate-900">-</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-64 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 flex flex-col items-center justify-center">
+                            <div id="pipePrintQrCode" class="qr-preview-box w-44 h-44 flex items-center justify-center bg-white rounded-xl border border-slate-200 p-2"></div>
+                            <div id="pipePrintQrText" class="mt-3 text-xs text-slate-500 text-center break-all"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 border-t border-gray-200 bg-white flex gap-3">
+                <button onclick="closePipePrintModal()" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:bg-gray-50">
+                    取消
+                </button>
+                <button onclick="confirmPipePrint()" class="flex-1 py-3 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700 industrial-shadow flex items-center justify-center gap-2">
+                    <i class="fas fa-print"></i>
+                    确定打印
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ========== 全局变量 ==========
         let currentShift = 'today_day';
@@ -3034,6 +3110,8 @@
         let isBevelExpanded = false; // 坡口信息展开状态
 
         // 模拟码单数据
+        let currentPipePrintData = null;
+
         let instrumentSelection = [
             { name: '环境温湿度采集仪', model: 'TH-2000', code: 'INS-TH-03', expiry: '2026-12-31' },
             { name: '壁厚激光测量仪', model: 'LT-118A', code: 'INS-LT-12', expiry: '2026-09-30' }
@@ -3707,6 +3785,139 @@ updateBatchBar();
             document.body.style.overflow = '';
         }
 
+        function getPipePrintData(id) {
+            const row = document.querySelector(`#tableBody tr[data-id="${id}"]`);
+            if (!row) return null;
+
+            const cells = row.querySelectorAll('td');
+            const bundleNo = cells[2]?.querySelector('div.text-sm')?.textContent.trim() || '-';
+            const pipeNo = cells[2]?.querySelector('div.font-mono')?.textContent.trim() || '-';
+            const furnaceNo = cells[3]?.querySelector('div.text-sm')?.textContent.trim() || '-';
+            const batchNo = cells[3]?.querySelector('div.text-xs')?.textContent.trim() || '-';
+            const specLength = cells[4]?.querySelector('div.text-sm')?.textContent.replace(/\s+/g, ' ').trim() || '-';
+            const specWeight = cells[4]?.querySelector('div.text-xs')?.textContent.trim() || '-';
+
+            return {
+                id,
+                pipeNo,
+                bundleNo,
+                furnaceNo,
+                batchNo,
+                spec: `${specLength} / ${specWeight}`,
+                qrText: `MES|ID:${id}|PIPE:${pipeNo}|BUNDLE:${bundleNo}|FURNACE:${furnaceNo}|BATCH:${batchNo}|SPEC:${specLength}|WEIGHT:${specWeight}`
+            };
+        }
+
+        function renderPipePrintQr(text) {
+            const container = document.getElementById('pipePrintQrCode');
+            const qrText = document.getElementById('pipePrintQrText');
+            if (!container || !qrText) return;
+
+            container.innerHTML = '';
+            qrText.textContent = text;
+
+            if (typeof QRCode === 'undefined') {
+                container.innerHTML = '<div class="text-sm text-red-500 text-center px-4">二维码库加载失败</div>';
+                return;
+            }
+
+            new QRCode(container, {
+                text,
+                width: 160,
+                height: 160,
+                colorDark: '#0f172a',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.M
+            });
+        }
+
+        function openPipePrintModal(id) {
+            const data = getPipePrintData(id);
+            if (!data) {
+                showToast('未找到可打印的钢管信息', 'error');
+                return;
+            }
+
+            currentPipePrintData = data;
+            document.getElementById('pipePrintId').textContent = data.id;
+            document.getElementById('pipePrintPipeNo').textContent = data.pipeNo;
+            document.getElementById('pipePrintBundleNo').textContent = data.bundleNo;
+            document.getElementById('pipePrintFurnaceBatch').textContent = `${data.furnaceNo} / ${data.batchNo}`;
+            document.getElementById('pipePrintSpec').textContent = data.spec;
+            renderPipePrintQr(data.qrText);
+
+            document.getElementById('pipePrintModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePipePrintModal() {
+            document.getElementById('pipePrintModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function confirmPipePrint() {
+            if (!currentPipePrintData) {
+                showToast('暂无可打印内容', 'error');
+                return;
+            }
+
+            const qrNode = document.querySelector('#pipePrintQrCode canvas, #pipePrintQrCode img');
+            const qrMarkup = qrNode
+                ? (qrNode.tagName === 'CANVAS' ? `<img src="${qrNode.toDataURL('image/png')}" style="width:160px;height:160px;" />` : `<img src="${qrNode.src}" style="width:160px;height:160px;" />`)
+                : '<div style="font-size:12px;color:#64748b;">二维码生成失败</div>';
+
+            const printWindow = window.open('', '_blank', 'width=480,height=640');
+            if (!printWindow) {
+                showToast('打印窗口被浏览器拦截，请允许弹窗', 'error');
+                return;
+            }
+
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="zh-CN">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>钢管标识打印</title>
+                    <style>
+                        body { font-family: Arial, "Microsoft YaHei", sans-serif; padding: 24px; color: #0f172a; }
+                        .sheet { border: 1px solid #cbd5e1; border-radius: 16px; padding: 20px; }
+                        .title { font-size: 22px; font-weight: 700; margin-bottom: 16px; }
+                        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+                        .item { border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px 12px; }
+                        .label { font-size: 12px; color: #64748b; margin-bottom: 4px; }
+                        .value { font-size: 16px; font-weight: 600; word-break: break-all; }
+                        .wide { grid-column: 1 / -1; }
+                        .qr { text-align: center; margin-top: 12px; }
+                        .qr-text { font-size: 12px; color: #64748b; margin-top: 8px; word-break: break-all; }
+                    </style>
+                </head>
+                <body>
+                    <div class="sheet">
+                        <div class="title">钢管标识</div>
+                        <div class="grid">
+                            <div class="item"><div class="label">自编号</div><div class="value">${currentPipePrintData.id}</div></div>
+                            <div class="item"><div class="label">管号</div><div class="value">${currentPipePrintData.pipeNo}</div></div>
+                            <div class="item"><div class="label">捆号</div><div class="value">${currentPipePrintData.bundleNo}</div></div>
+                            <div class="item"><div class="label">炉号 / 批号</div><div class="value">${currentPipePrintData.furnaceNo} / ${currentPipePrintData.batchNo}</div></div>
+                            <div class="item wide"><div class="label">规格</div><div class="value">${currentPipePrintData.spec}</div></div>
+                        </div>
+                        <div class="qr">
+                            ${qrMarkup}
+                            <div class="qr-text">${currentPipePrintData.qrText}</div>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+
+            closePipePrintModal();
+            showToast(`已发送 ${currentPipePrintData.id} 的二维码到打印机`, 'success');
+        }
+
         function submitAddShift() {
             const dateValue = document.getElementById('newShiftDate').value;
             const shiftType = document.getElementById('newShiftType').value;
@@ -4176,6 +4387,7 @@ updateBatchBar();
                 closeAddShiftModal();
                 closeWoDetail();
                 closeCodeListModal();
+                closePipePrintModal();
             }
         });
     </script>
