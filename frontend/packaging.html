@@ -493,7 +493,7 @@
             </div>
         </div>
 
-    <div id="batchBar" class="batch-bar fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 industrial-shadow-lg z-50 flex items-center justify-between">
+    <div id="materialFooter" class="batch-bar fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 industrial-shadow-lg z-50 flex items-center justify-between">
         <div class="flex items-center gap-4">
             <span class="text-sm text-gray-600">已选择 <span id="selectedCount" class="font-bold text-blue-600 text-lg">0</span> 项</span>
                 <button onclick="clearSelection()" class="text-sm text-gray-500 hover:text-gray-700 underline">清除选择</button>
@@ -543,7 +543,6 @@
                 </div>
             </div>
 
-        </div>
         </div>
     </section>
 
@@ -691,42 +690,14 @@
         </div>
     </section>
 
-    <section id="tab-panel-quality" class="tab-panel flex-1 flex-col min-h-0 bg-gray-50 p-6">
-        <div class="bg-white rounded-2xl industrial-shadow p-6 h-full overflow-auto">
-            <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4 mb-6">
-                <div>
-                    <h3 class="text-xl font-bold text-gray-900">质检工艺卡</h3>
-                    <p class="text-sm text-gray-500 mt-1">按工序展示检验项目、检验频次、合格标准与检测方式。</p>
-                </div>
-                <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3">
-                    <div class="text-sm text-blue-700">工艺卡编号</div>
-                    <div class="text-lg font-bold text-blue-900 mt-1">QCP-3LPE-2026-001</div>
-                </div>
-            </div>
-            <div class="overflow-auto border border-gray-200 rounded-2xl">
-                <table class="data-table w-full bg-white">
-                    <thead class="sticky-header">
-                        <tr>
-                            <th class="px-4 py-4 text-center min-w-[120px]">工序</th>
-                            <th class="px-4 py-4 text-center min-w-[220px]">检查项目</th>
-                            <th class="px-4 py-4 text-center min-w-[120px]">检验频次</th>
-                            <th class="px-4 py-4 text-center min-w-[360px]">合格标准</th>
-                            <th class="px-4 py-4 text-center min-w-[160px]">检测方式</th>
-                            <th class="px-4 py-4 text-center min-w-[180px]">标准依据</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td class="px-4 py-4 text-center font-semibold">包装前</td><td class="px-4 py-4 text-gray-700">钢管标识核对</td><td class="px-4 py-4 text-center">逐支</td><td class="px-4 py-4 text-gray-700">自编号、管号、捆号、炉号和批号信息一致。</td><td class="px-4 py-4 text-center">目视 + 记录核对</td><td class="px-4 py-4 text-center">项目技术文件</td></tr>
-                        <tr><td class="px-4 py-4 text-center font-semibold">包装前</td><td class="px-4 py-4 text-gray-700">标签与标识</td><td class="px-4 py-4 text-center">逐支</td><td class="px-4 py-4 text-gray-700">内容正确、位置准确、粘贴或喷印牢固清晰。</td><td class="px-4 py-4 text-center">目视</td><td class="px-4 py-4 text-center">标识规范</td></tr>
-                        <tr><td class="px-4 py-4 text-center font-semibold">包装前</td><td class="px-4 py-4 text-gray-700">管帽与堵头布</td><td class="px-4 py-4 text-center">逐支</td><td class="px-4 py-4 text-gray-700">安装到位、无缺失、无明显松脱。</td><td class="px-4 py-4 text-center">目视</td><td class="px-4 py-4 text-center">作业指导书</td></tr>
-                        <tr><td class="px-4 py-4 text-center font-semibold">包装过程</td><td class="px-4 py-4 text-gray-700">防撞绳</td><td class="px-4 py-4 text-center">逐支</td><td class="px-4 py-4 text-gray-700">3 道 / 支，位置正确，绑扎牢固。</td><td class="px-4 py-4 text-center">目视 + 测量</td><td class="px-4 py-4 text-center">包装要求</td></tr>
-                        <tr><td class="px-4 py-4 text-center font-semibold">包装过程</td><td class="px-4 py-4 text-gray-700">吊带</td><td class="px-4 py-4 text-center">逐支</td><td class="px-4 py-4 text-gray-700">型号匹配、安装牢固，不得划伤钢管。</td><td class="px-4 py-4 text-center">目视</td><td class="px-4 py-4 text-center">包装要求</td></tr>
-                        <tr><td class="px-4 py-4 text-center font-semibold">包装完成</td><td class="px-4 py-4 text-gray-700">唛头</td><td class="px-4 py-4 text-center">逐支</td><td class="px-4 py-4 text-gray-700">内容完整、字迹清晰、方向正确。</td><td class="px-4 py-4 text-center">目视</td><td class="px-4 py-4 text-center">发运规范</td></tr>
-                        <tr><td class="px-4 py-4 text-center font-semibold">包装完成</td><td class="px-4 py-4 text-gray-700">包装质量</td><td class="px-4 py-4 text-center">逐支</td><td class="px-4 py-4 text-gray-700">无松动、无遗漏、无明显损伤，外观整齐。</td><td class="px-4 py-4 text-center">目视</td><td class="px-4 py-4 text-center">质检要求</td></tr>
-                        <tr><td class="px-4 py-4 text-center font-semibold">包装完成</td><td class="px-4 py-4 text-gray-700">新捆号确认</td><td class="px-4 py-4 text-center">逐捆</td><td class="px-4 py-4 text-gray-700">新捆号与系统记录一致，可追溯。</td><td class="px-4 py-4 text-center">记录核对</td><td class="px-4 py-4 text-center">MES 记录要求</td></tr>
-                    </tbody>
-                </table>
-            </div>
+    <section id="tab-panel-quality" class="tab-panel flex-1 flex-col min-h-0 bg-gray-50 p-4 lg:p-6">
+        <div class="h-full rounded-2xl overflow-hidden industrial-shadow bg-white border border-gray-200">
+            <iframe
+                id="qualityReuseFrame"
+                src="./jinguan.html"
+                title="质检工艺卡复用内容"
+                class="w-full h-full border-0 bg-white"
+            ></iframe>
         </div>
     </section>
 
@@ -1470,6 +1441,33 @@
             if (selectAll) selectAll.checked = false;
         }
 
+        function switchMainTab(tabId) {
+            currentMainTab = tabId;
+
+            document.querySelectorAll('.main-tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tabId);
+            });
+
+            const isMaterial = tabId === 'material';
+            const materialFilterBar = document.getElementById('materialFilterBar');
+            const materialMain = document.getElementById('materialMain');
+            const materialFooter = document.getElementById('materialFooter');
+
+            if (materialFilterBar) materialFilterBar.style.display = isMaterial ? '' : 'none';
+            if (materialMain) materialMain.style.display = isMaterial ? '' : 'none';
+            if (materialFooter) materialFooter.style.display = isMaterial ? '' : 'none';
+
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.toggle('active', panel.id === `tab-panel-${tabId}`);
+            });
+
+            if (isMaterial) {
+                switchMaterialSubTab(currentMaterialSubTab);
+            }
+
+            updateBatchBar();
+        }
+
         function switchMaterialSubTab(tabId) {
             currentMaterialSubTab = 'root';
 
@@ -1627,6 +1625,37 @@
             content.classList.toggle('expanded', !isExpanded);
             arrow.classList.toggle('rotated', !isExpanded);
             status.textContent = isExpanded ? '点击展开' : '点击收起';
+        }
+
+        function initQualityReuseFrame() {
+            const iframe = document.getElementById('qualityReuseFrame');
+            if (!iframe || iframe.dataset.bound === 'true') return;
+
+            iframe.dataset.bound = 'true';
+            iframe.addEventListener('load', function() {
+                try {
+                    const doc = iframe.contentDocument;
+                    if (!doc) return;
+
+                    const panel = doc.getElementById('tab-panel-quality');
+                    if (!panel) return;
+
+                    Array.from(doc.body.children).forEach((node) => {
+                        node.style.display = node === panel ? '' : 'none';
+                    });
+
+                    panel.style.display = 'flex';
+                    panel.classList.add('active');
+                    panel.classList.remove('hidden');
+                    panel.style.minHeight = '100vh';
+
+                    doc.body.style.margin = '0';
+                    doc.body.style.background = '#F4F6F8';
+                    doc.body.style.overflow = 'auto';
+                } catch (error) {
+                    console.error('Failed to reuse quality tab from jinguan.html:', error);
+                }
+            });
         }
 
         function toggleBevelInfo() {
@@ -2531,6 +2560,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             renderShiftFilterOptions();
             renderWorkOrderShiftStats();
+            initQualityReuseFrame();
             switchMainTab('material');
             switchMaterialSubTab('root');
             applyRootDetailColumnState();
