@@ -2545,6 +2545,10 @@
                 <button onclick="closeEntryDrawer()" class="px-8 py-3 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition-colors">
                     取消
                 </button>
+                <button id="switchToEditBtn" onclick="switchViewToEdit()" class="hidden px-8 py-3 rounded-xl bg-amber-100 text-amber-700 font-semibold hover:bg-amber-200 transition-colors flex items-center gap-2">
+                    <i class="fas fa-pen"></i>
+                    切换编辑
+                </button>
                 <div class="flex-1"></div>
                 <button onclick="saveAndContinue()" class="px-8 py-3 rounded-xl bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 transition-colors flex items-center gap-2">
                     <i class="fas fa-save"></i>
@@ -3564,6 +3568,7 @@ updateBatchBar();
             editingRowMeta = recordMeta;
 
             const isEdit = mode === 'edit';
+            const isView = mode === 'view';
             const iconBox = document.getElementById('entryDrawerIconBox');
             const icon = document.getElementById('entryDrawerIcon');
             const title = document.querySelector('#entryDrawer .border-b h3');
@@ -3571,32 +3576,68 @@ updateBatchBar();
             const copyBtn = document.querySelector('#entryDrawer [onclick="copyLastRecord()"]');
             const continueBtn = document.querySelector('#entryDrawer [onclick="saveAndContinue()"]');
             const submitBtn = document.querySelector('#entryDrawer [onclick="submitEntry()"]');
+            const clearBtn = document.querySelector('#entryDrawer [onclick="clearEntryIdentityInfo()"]');
+            const switchBtn = document.getElementById('switchToEditBtn');
 
             if (iconBox) {
-                iconBox.className = `w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-lg ${isEdit ? 'bg-amber-600' : 'bg-green-600'}`;
+                iconBox.className = `w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-lg ${isEdit ? 'bg-amber-600' : isView ? 'bg-blue-600' : 'bg-green-600'}`;
             }
             if (icon) {
-                icon.className = `fas ${isEdit ? 'fa-pen' : 'fa-plus'}`;
+                icon.className = `fas ${isEdit ? 'fa-pen' : isView ? 'fa-eye' : 'fa-plus'}`;
             }
             if (title) {
-                title.textContent = isEdit ? '钢管信息编辑' : '钢管进管录入';
+                title.textContent = isEdit ? '钢管信息编辑' : isView ? '钢管信息查看' : '钢管进管录入';
             }
             if (timeText) {
-                timeText.className = `font-semibold ${isEdit ? 'text-amber-700' : 'text-green-700'}`;
+                timeText.className = `font-semibold ${isEdit ? 'text-amber-700' : isView ? 'text-blue-700' : 'text-green-700'}`;
                 timeText.textContent = recordMeta?.time || getCurrentTimeString();
             }
             if (copyBtn) {
-                copyBtn.classList.toggle('hidden', isEdit);
+                copyBtn.classList.toggle('hidden', isEdit || isView);
             }
             if (continueBtn) {
-                continueBtn.classList.toggle('hidden', isEdit);
+                continueBtn.classList.toggle('hidden', isEdit || isView);
+            }
+            if (clearBtn) {
+                clearBtn.classList.toggle('hidden', isView);
+            }
+            if (switchBtn) {
+                switchBtn.classList.toggle('hidden', !isView);
             }
             if (submitBtn) {
+                submitBtn.classList.toggle('hidden', isView);
                 submitBtn.className = `px-8 py-3 rounded-xl text-white font-semibold transition-colors flex items-center gap-2 shadow-lg ${isEdit ? 'bg-amber-600 hover:bg-amber-700' : 'bg-green-600 hover:bg-green-700'}`;
                 submitBtn.innerHTML = isEdit
                     ? '<i class="fas fa-pen-to-square"></i><span>保存修改</span>'
                     : '<i class="fas fa-check"></i><span>保存录入</span>';
             }
+
+            setEntryFormReadonly(isView);
+        }
+
+        function setEntryFormReadonly(readonly) {
+            const fields = document.querySelectorAll('#entryDrawer input, #entryDrawer select, #entryDrawer textarea');
+            fields.forEach(field => {
+                field.disabled = readonly;
+                field.readOnly = readonly;
+                field.classList.toggle('bg-gray-100', readonly);
+                field.classList.toggle('cursor-not-allowed', readonly);
+            });
+
+            [
+                'btnPass', 'btnFail',
+                'btnCorrosionA', 'btnCorrosionB', 'btnCorrosionC', 'btnCorrosionD',
+                'btnBevelPass', 'btnBevelFail',
+                'codeListSelectorArea'
+            ].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (readonly) {
+                    el.classList.add('pointer-events-none', 'opacity-70');
+                } else {
+                    el.classList.remove('pointer-events-none', 'opacity-70');
+                }
+            });
         }
 
         function resetEntryDrawerForm() {
@@ -3778,6 +3819,28 @@ updateBatchBar();
             document.getElementById('entryDrawerOverlay').classList.add('open');
             document.getElementById('entryDrawer').classList.add('open');
             document.body.style.overflow = 'hidden';
+        }
+
+        function viewDetail(id) {
+            const row = document.querySelector(`#tableBody tr[data-id="${id}"]`);
+            const rowData = getRowData(row);
+            if (!rowData) {
+                showToast('未找到可查看的钢管记录', 'error');
+                return;
+            }
+
+            resetEntryDrawerForm();
+            editingRowId = id;
+            setEntryDrawerMode('view', rowData);
+            fillEntryForm(rowData);
+            document.getElementById('entryDrawerOverlay').classList.add('open');
+            document.getElementById('entryDrawer').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function switchViewToEdit() {
+            if (!editingRowId) return;
+            openEditDrawer(editingRowId);
         }
 
         function submitEntry() {
@@ -4002,8 +4065,19 @@ updateBatchBar();
         }
 
         function viewDetail(id) {
-            document.getElementById('detailDrawerOverlay').classList.add('open');
-            document.getElementById('detailDrawer').classList.add('open');
+            const row = document.querySelector(`#tableBody tr[data-id="${id}"]`);
+            const rowData = getRowData(row);
+            if (!rowData) {
+                showToast('未找到可查看的钢管记录', 'error');
+                return;
+            }
+
+            resetEntryDrawerForm();
+            editingRowId = id;
+            setEntryDrawerMode('view', rowData);
+            fillEntryForm(rowData);
+            document.getElementById('entryDrawerOverlay').classList.add('open');
+            document.getElementById('entryDrawer').classList.add('open');
             document.body.style.overflow = 'hidden';
         }
 
