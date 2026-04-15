@@ -331,6 +331,9 @@
     </main>
 
     <script>
+      const pageParams = new URLSearchParams(window.location.search);
+      const workOrderTarget = pageParams.get("target") || "jinguan";
+
       const workOrders = [
         {
           id: "WO-2026-0318-001",
@@ -609,8 +612,25 @@
         renderList();
       }
 
+      function getWorkOrderTargetPage() {
+        if (workOrderTarget === "coating") {
+          return "./coating.html";
+        }
+
+        if (workOrderTarget === "packaging") {
+          return "./packaging.html";
+        }
+
+        if (workOrderTarget === "derust") {
+          return "./derust.html";
+        }
+
+        return "./jinguan.html";
+      }
+
       function openWorkOrder(id) {
-        window.location.href = `./jinguan.html?workOrder=${encodeURIComponent(id)}`;
+        const targetPage = getWorkOrderTargetPage();
+        window.location.href = `${targetPage}?workOrder=${encodeURIComponent(id)}`;
       }
 
       chips.forEach((chip) => {

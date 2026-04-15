@@ -233,6 +233,7 @@
 
           <div
             class="blue-card industrial-shadow-lg relative flex items-center gap-6 overflow-hidden rounded-2xl p-6"
+            onclick="goToCoatingWorkOrders()"
           >
             <div
               class="flex h-24 w-24 flex-shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600"
@@ -253,6 +254,7 @@
 
           <div
             class="blue-card industrial-shadow-lg relative flex items-center gap-6 overflow-hidden rounded-2xl p-6"
+            onclick="goToPackagingWorkOrders()"
           >
             <div
               class="flex h-24 w-24 flex-shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600"
@@ -589,11 +591,11 @@
 
     <script>
       function goToJinguanWorkOrders() {
-        window.location.href = "./jinguan-workorders.html";
+        window.location.href = "./workorders.html?target=jinguan";
       }
 
       function goToDerustWorkOrders() {
-        window.location.href = "./derust-workorders.html";
+        window.location.href = "./workorders.html?target=derust";
       }
 
       function goToWaipenshaEquipment() {
@@ -609,6 +611,14 @@
 
       function goToFeedingWorkOrders() {
         window.location.href = "./workorders.html";
+      }
+
+      function goToCoatingWorkOrders() {
+        window.location.href = "./workorders.html?target=coating";
+      }
+
+      function goToPackagingWorkOrders() {
+        window.location.href = "./workorders.html?target=packaging";
       }
 
       function goToBarePipeReceiptCreate() {
