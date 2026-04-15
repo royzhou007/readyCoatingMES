@@ -2193,8 +2193,8 @@
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-green-50 to-emerald-50">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center text-white shadow-lg">
-                    <i class="fas fa-plus"></i>
+                <div id="entryDrawerIconBox" class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center text-white shadow-lg">
+                    <i id="entryDrawerIcon" class="fas fa-plus"></i>
                 </div>
                 <div>
                     <h3 class="text-lg font-bold text-gray-900">钢管进管录入</h3>
@@ -3111,6 +3111,9 @@
 
         // 模拟码单数据
         let currentPipePrintData = null;
+        let entryDrawerMode = 'create';
+        let editingRowId = null;
+        let editingRowMeta = null;
 
         let instrumentSelection = [
             { name: '环境温湿度采集仪', model: 'TH-2000', code: 'INS-TH-03', expiry: '2026-12-31' },
@@ -3326,6 +3329,7 @@ updateBatchBar();
             isMaterialListFullscreen = !isMaterialListFullscreen;
             document.body.classList.toggle('material-list-fullscreen', isMaterialListFullscreen);
             updateMaterialListFullscreenButton();
+            ensureEditButtons();
         }
 
         // ========== 坡口信息折叠功能 ==========
@@ -3550,6 +3554,261 @@ updateBatchBar();
         }
 
         // 监听坡口数值输入变化
+        function getCurrentTimeString() {
+            const now = new Date();
+            return String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+        }
+
+        function setEntryDrawerMode(mode, recordMeta = null) {
+            entryDrawerMode = mode;
+            editingRowMeta = recordMeta;
+
+            const isEdit = mode === 'edit';
+            const iconBox = document.getElementById('entryDrawerIconBox');
+            const icon = document.getElementById('entryDrawerIcon');
+            const title = document.querySelector('#entryDrawer .border-b h3');
+            const timeText = document.getElementById('entryDrawerCurrentTime');
+            const copyBtn = document.querySelector('#entryDrawer [onclick="copyLastRecord()"]');
+            const continueBtn = document.querySelector('#entryDrawer [onclick="saveAndContinue()"]');
+            const submitBtn = document.querySelector('#entryDrawer [onclick="submitEntry()"]');
+
+            if (iconBox) {
+                iconBox.className = `w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-lg ${isEdit ? 'bg-amber-600' : 'bg-green-600'}`;
+            }
+            if (icon) {
+                icon.className = `fas ${isEdit ? 'fa-pen' : 'fa-plus'}`;
+            }
+            if (title) {
+                title.textContent = isEdit ? '钢管信息编辑' : '钢管进管录入';
+            }
+            if (timeText) {
+                timeText.className = `font-semibold ${isEdit ? 'text-amber-700' : 'text-green-700'}`;
+                timeText.textContent = recordMeta?.time || getCurrentTimeString();
+            }
+            if (copyBtn) {
+                copyBtn.classList.toggle('hidden', isEdit);
+            }
+            if (continueBtn) {
+                continueBtn.classList.toggle('hidden', isEdit);
+            }
+            if (submitBtn) {
+                submitBtn.className = `px-8 py-3 rounded-xl text-white font-semibold transition-colors flex items-center gap-2 shadow-lg ${isEdit ? 'bg-amber-600 hover:bg-amber-700' : 'bg-green-600 hover:bg-green-700'}`;
+                submitBtn.innerHTML = isEdit
+                    ? '<i class="fas fa-pen-to-square"></i><span>保存修改</span>'
+                    : '<i class="fas fa-check"></i><span>保存录入</span>';
+            }
+        }
+
+        function resetEntryDrawerForm() {
+            document.getElementById('entryId').value = String(nextId).padStart(4, '0');
+            document.getElementById('entryPipeNo').value = '';
+            document.getElementById('entryBundleNo').value = '';
+            document.getElementById('entryFurnaceNo').value = '';
+            document.getElementById('entryBatchNo').value = '';
+            document.getElementById('entryLength').value = '';
+            document.getElementById('entryWeight').value = '';
+            document.getElementById('entryTDelta').value = '14.8';
+            document.getElementById('entryRH').value = '45';
+            document.getElementById('entryTemp').value = '120';
+
+            setAppearance('pass');
+            setCorrosionLevel('B');
+            setBevelAppearance('pass');
+
+            isBevelExpanded = false;
+            document.getElementById('bevelContent').classList.remove('expanded');
+            document.getElementById('bevelArrow').classList.remove('rotated');
+            document.getElementById('bevelStatusText').textContent = '(点击展开填写)';
+            document.getElementById('bevelSummary').style.display = 'none';
+            document.getElementById('bevelAngle').value = '';
+            document.getElementById('bevelVerticality').value = '';
+            document.getElementById('bevelBluntEdge').value = '';
+            document.getElementById('codeListSelectorArea').classList.remove('hidden');
+            document.getElementById('selectedCodeInfo').classList.add('hidden');
+            selectedCodeItem = null;
+            editingRowId = null;
+        }
+
+        function getRowData(row) {
+            if (!row) return null;
+
+            const cells = row.querySelectorAll('td');
+            const metrics = cells[7]?.querySelectorAll('span.font-medium') || [];
+
+            return {
+                id: row.dataset.id || cells[1]?.textContent.trim() || '',
+                pipeNo: cells[2]?.querySelector('div.font-mono')?.textContent.trim() || '',
+                bundleNo: cells[2]?.querySelector('div.text-sm')?.textContent.trim() || '',
+                furnaceNo: cells[3]?.querySelector('div.text-sm')?.textContent.trim() || '',
+                batchNo: cells[3]?.querySelector('div.text-xs')?.textContent.trim() || '',
+                length: parseFloat(cells[4]?.querySelector('div.text-sm')?.textContent) || '',
+                weight: parseFloat(cells[4]?.querySelector('div.text-xs')?.textContent) || '',
+                appearance: (cells[5]?.textContent || '').includes('不') ? 'fail' : 'pass',
+                corrosion: cells[6]?.textContent.trim() || 'B',
+                tDelta: parseFloat(metrics[0]?.textContent) || '',
+                rh: parseFloat(metrics[1]?.textContent) || '',
+                temp: parseFloat(metrics[2]?.textContent) || '',
+                time: cells[8]?.querySelector('div.text-sm')?.textContent.trim() || getCurrentTimeString(),
+                timeLabel: cells[8]?.querySelector('div.text-xs')?.textContent.trim() || '今天',
+                inspectorInitial: cells[9]?.querySelector('div.w-8')?.textContent.trim() || '张',
+                inspectorName: cells[9]?.querySelector('span.text-xs')?.textContent.trim() || '张师傅'
+            };
+        }
+
+        function fillEntryForm(data) {
+            if (!data) return;
+            document.getElementById('entryId').value = data.id || '';
+            document.getElementById('entryPipeNo').value = data.pipeNo || '';
+            document.getElementById('entryBundleNo').value = data.bundleNo || '';
+            document.getElementById('entryFurnaceNo').value = data.furnaceNo || '';
+            document.getElementById('entryBatchNo').value = data.batchNo || '';
+            document.getElementById('entryLength').value = data.length || '';
+            document.getElementById('entryWeight').value = data.weight || '';
+            document.getElementById('entryTDelta').value = data.tDelta || '';
+            document.getElementById('entryRH').value = data.rh || '';
+            document.getElementById('entryTemp').value = data.temp || '';
+            setAppearance(data.appearance || 'pass');
+            setCorrosionLevel(data.corrosion || 'B');
+        }
+
+        function collectEntryFormData() {
+            return {
+                id: document.getElementById('entryId').value.trim(),
+                pipeNo: document.getElementById('entryPipeNo').value.trim(),
+                bundleNo: document.getElementById('entryBundleNo').value.trim(),
+                furnaceNo: document.getElementById('entryFurnaceNo').value.trim(),
+                batchNo: document.getElementById('entryBatchNo').value.trim(),
+                length: document.getElementById('entryLength').value.trim(),
+                weight: document.getElementById('entryWeight').value.trim(),
+                tDelta: document.getElementById('entryTDelta').value.trim(),
+                rh: document.getElementById('entryRH').value.trim(),
+                temp: document.getElementById('entryTemp').value.trim(),
+                appearance: currentAppearance,
+                corrosion: document.getElementById('entryCorrosion').value || 'B'
+            };
+        }
+
+        function updateRowWithEntryData(row, formData) {
+            if (!row) return;
+
+            const appearanceHtml = formData.appearance === 'fail'
+                ? '<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"><i class="fas fa-times"></i>不合格</span>'
+                : '<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span>';
+            const corrosionClassMap = {
+                A: 'corrosion-good',
+                B: 'corrosion-light',
+                C: 'corrosion-medium',
+                D: 'corrosion-heavy'
+            };
+            const meta = editingRowMeta || {};
+
+            row.dataset.id = formData.id;
+            row.children[1].innerHTML = `<div class="font-bold text-gray-900 font-mono text-base">${formData.id}</div>`;
+            row.children[2].innerHTML = `<div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">${formData.bundleNo}</div><div class="font-mono text-xs text-gray-500">${formData.pipeNo}</div></div>`;
+            row.children[3].innerHTML = `<div class="flex flex-col gap-1"><div class="text-sm font-medium text-gray-900">${formData.furnaceNo}</div><div class="text-xs text-gray-500">${formData.batchNo}</div></div>`;
+            row.children[4].innerHTML = `<div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">${formData.length}<span class="text-xs text-gray-500 font-normal">mm</span></div><div class="text-xs text-gray-500">${formData.weight || '-'}kg</div></div>`;
+            row.children[5].innerHTML = appearanceHtml;
+            row.children[6].innerHTML = `<span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium ${corrosionClassMap[formData.corrosion] || 'corrosion-light'}">${formData.corrosion}</span>`;
+            row.children[7].innerHTML = `<div class="flex flex-col gap-0.5 text-xs text-gray-600"><div class="flex justify-center gap-1"><span class="text-gray-400">TΔ:</span><span class="font-medium">${formData.tDelta}℃</span></div><div class="flex justify-center gap-1"><span class="text-gray-400">RH:</span><span class="font-medium">${formData.rh}%</span></div><div class="flex justify-center gap-1"><span class="text-gray-400">温度:</span><span class="font-medium">${formData.temp}℃</span></div></div>`;
+            row.children[8].innerHTML = `<div class="text-sm font-medium text-gray-900">${meta.time || getCurrentTimeString()}</div><div class="text-xs text-gray-500">${meta.timeLabel || '今天'}</div>`;
+            row.children[9].innerHTML = `<div class="flex flex-col items-center gap-1"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">${meta.inspectorInitial || '张'}</div><span class="text-xs text-gray-600">${meta.inspectorName || '张师傅'}</span></div>`;
+
+            const actionButtons = row.children[10]?.querySelectorAll('button') || [];
+            actionButtons.forEach(button => {
+                const icon = button.querySelector('i');
+                if (icon?.classList.contains('fa-eye')) {
+                    button.setAttribute('onclick', `viewDetail('${formData.id}')`);
+                }
+                if (icon?.classList.contains('fa-pen')) {
+                    button.setAttribute('onclick', `openEditDrawer('${formData.id}')`);
+                }
+                if (icon?.classList.contains('fa-print')) {
+                    button.setAttribute('onclick', `openPipePrintModal('${formData.id}')`);
+                }
+                if (icon?.classList.contains('fa-trash-alt')) {
+                    button.setAttribute('onclick', `deleteRow('${formData.id}')`);
+                }
+            });
+        }
+
+        function ensureEditButtons() {
+            document.querySelectorAll('#tableBody tr[data-id]').forEach(row => {
+                const actionWrap = row.querySelector('td:last-child > div');
+                if (!actionWrap || actionWrap.querySelector('.edit-row-btn')) return;
+
+                const id = row.dataset.id;
+                const editButton = document.createElement('button');
+                editButton.className = 'edit-row-btn w-9 h-9 rounded-lg bg-gray-50 hover:bg-amber-50 text-gray-600 hover:text-amber-600 transition-colors flex items-center justify-center';
+                editButton.title = '编辑';
+                editButton.setAttribute('onclick', `openEditDrawer('${id}')`);
+                editButton.innerHTML = '<i class="fas fa-pen text-sm"></i>';
+
+                const printButton = actionWrap.querySelector('button:nth-child(2)');
+                if (printButton) {
+                    actionWrap.insertBefore(editButton, printButton);
+                } else {
+                    actionWrap.appendChild(editButton);
+                }
+            });
+        }
+
+        function openEntryDrawer() {
+            document.getElementById('entryDrawerOverlay').classList.add('open');
+            document.getElementById('entryDrawer').classList.add('open');
+            document.body.style.overflow = 'hidden';
+
+            const timeStr = getCurrentTimeString();
+            document.getElementById('currentTime').textContent = timeStr;
+            resetEntryDrawerForm();
+            setEntryDrawerMode('create');
+        }
+
+        function openEditDrawer(id) {
+            const row = document.querySelector(`#tableBody tr[data-id="${id}"]`);
+            const rowData = getRowData(row);
+            if (!rowData) {
+                showToast('未找到可编辑的钢管记录', 'error');
+                return;
+            }
+
+            resetEntryDrawerForm();
+            editingRowId = id;
+            setEntryDrawerMode('edit', rowData);
+            fillEntryForm(rowData);
+            document.getElementById('entryDrawerOverlay').classList.add('open');
+            document.getElementById('entryDrawer').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function submitEntry() {
+            const formData = collectEntryFormData();
+            const { pipeNo, bundleNo, furnaceNo, batchNo, length } = formData;
+
+            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length) {
+                showToast('请填写必填项: 管号、捆号、炉号、批号、长度', 'error');
+                return;
+            }
+
+            lastRecord = { bundleNo, furnaceNo, batchNo };
+
+            if (entryDrawerMode === 'edit' && editingRowId) {
+                const row = document.querySelector(`#tableBody tr[data-id="${editingRowId}"]`);
+                updateRowWithEntryData(row, formData);
+                ensureEditButtons();
+                showToast(`钢管 ${formData.id} 修改成功`, 'success');
+                closeEntryDrawer();
+                return;
+            }
+
+            nextId++;
+            showToast('钢管录入成功！', 'success');
+            closeEntryDrawer();
+
+            const shiftCount = document.getElementById('shiftCountValue');
+            const currentCount = parseInt(shiftCount.textContent, 10) + 1;
+            updateWorkOrderProgress(currentCount);
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const bevelInputs = ['bevelAngle', 'bevelVerticality', 'bevelBluntEdge'];
             bevelInputs.forEach(id => {
@@ -3708,8 +3967,7 @@ updateBatchBar();
             document.body.style.overflow = 'hidden';
 
             // 更新当前时间
-            const now = new Date();
-            const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+            const timeStr = getCurrentTimeString();
             document.getElementById('currentTime').textContent = timeStr;
             document.getElementById('entryDrawerCurrentTime').textContent = timeStr;
 
@@ -4332,6 +4590,35 @@ updateBatchBar();
         }
 
         // Toast通知
+        function submitEntry() {
+            const formData = collectEntryFormData();
+            const { pipeNo, bundleNo, furnaceNo, batchNo, length } = formData;
+
+            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length) {
+                showToast('请填写必填项: 管号、捆号、炉号、批号、长度', 'error');
+                return;
+            }
+
+            lastRecord = { bundleNo, furnaceNo, batchNo };
+
+            if (entryDrawerMode === 'edit' && editingRowId) {
+                const row = document.querySelector(`#tableBody tr[data-id="${editingRowId}"]`);
+                updateRowWithEntryData(row, formData);
+                ensureEditButtons();
+                showToast(`钢管 ${formData.id} 修改成功`, 'success');
+                closeEntryDrawer();
+                return;
+            }
+
+            nextId++;
+            showToast('钢管录入成功！', 'success');
+            closeEntryDrawer();
+
+            const shiftCount = document.getElementById('shiftCountValue');
+            const currentCount = parseInt(shiftCount.textContent, 10) + 1;
+            updateWorkOrderProgress(currentCount);
+        }
+
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
@@ -4379,6 +4666,13 @@ updateBatchBar();
         });
 
         // ESC键关闭
+        document.addEventListener('DOMContentLoaded', function() {
+            ensureEditButtons();
+            const timeStr = getCurrentTimeString();
+            document.getElementById('currentTime').textContent = timeStr;
+            document.getElementById('entryDrawerCurrentTime').textContent = timeStr;
+        });
+
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeDetailDrawer();
