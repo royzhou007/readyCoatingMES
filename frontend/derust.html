@@ -214,7 +214,7 @@
                     </div>
                     <div>
                         <h1 class="text-xl font-bold text-gray-900 tracking-tight">除锈作业记录</h1>
-                        <p class="text-xs text-gray-500">产线A-03 | 当前工单 245 支 | 当前班次 <span class="font-semibold text-blue-600">今日白班</span></p>
+                        <p class="text-xs text-gray-500">当前登录用户: <span class="font-semibold text-blue-600">张师傅</span></p>
                     </div>
                 </div>
             </div>
@@ -1291,7 +1291,7 @@
                 </div>
                 <div>
                     <h3 class="text-lg font-bold text-gray-900">钢管除锈录入</h3>
-                    <p class="text-sm text-gray-500">当前班次: <span class="font-semibold text-green-700">今日白班</span> (08:00-20:00)</p>
+                    <p class="text-sm text-gray-500">当前时间: <span id="entryDrawerCurrentTime" class="font-semibold text-green-700">20:38</span></p>
                 </div>
             </div>
             <div class="flex items-center gap-2">
@@ -1305,25 +1305,7 @@
         <div class="flex-1 overflow-y-auto p-6">
             <div class="max-w-4xl mx-auto space-y-6">
 
-                <!-- 自动信息卡片 -->
-                <div class="grid grid-cols-4 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
-                    <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">工单号</div>
-                        <div class="font-semibold text-gray-900">WO-2026-0318-001</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">班次</div>
-                        <div class="font-semibold text-blue-600">今日白班</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">当前时间</div>
-                        <div class="font-semibold text-gray-900" id="currentTime">20:38</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">操作员</div>
-                        <div class="font-semibold text-gray-900">张师傅</div>
-                    </div>
-                </div>
+                
 
                 <div class="bg-white rounded-xl border border-blue-200 p-4">
                     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -1431,13 +1413,21 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">清洁度 <span class="text-red-500">*</span></label>
-                            <select id="entryCleanLevel"
-                                    class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
-                                <option value="Sa1">Sa1</option>
-                                <option value="Sa2">Sa2</option>
-                                <option value="Sa2.5" selected>Sa2.5</option>
-                                <option value="Sa3">Sa3</option>
-                            </select>
+                            <input type="hidden" id="entryCleanLevel" value="Sa2.5">
+                            <div class="grid grid-cols-4 gap-3">
+                                <button type="button" onclick="setCleanLevel('Sa1')" id="btnCleanSa1" class="py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
+                                    Sa1
+                                </button>
+                                <button type="button" onclick="setCleanLevel('Sa2')" id="btnCleanSa2" class="py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
+                                    Sa2
+                                </button>
+                                <button type="button" onclick="setCleanLevel('Sa2.5')" id="btnCleanSa25" class="py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2">
+                                    Sa2.5
+                                </button>
+                                <button type="button" onclick="setCleanLevel('Sa3')" id="btnCleanSa3" class="py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
+                                    Sa3
+                                </button>
+                            </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">湿度 (%) <span class="text-red-500">*</span></label>
@@ -2671,6 +2661,7 @@
 
             setAppearance('pass');
             setBevelCheck('pass');
+            setCleanLevel('Sa2.5');
             setIntervalCheck('pass');
             setEvaluation('pass');
 
@@ -2907,7 +2898,7 @@
             document.getElementById('entryBatchNo').value = record.batchNo;
             document.getElementById('entryLength').value = record.length;
             document.getElementById('entryWeight').value = record.weight;
-            document.getElementById('entryCleanLevel').value = record.cleanLevel || 'Sa2.5';
+            setCleanLevel(record.cleanLevel || 'Sa2.5');
             document.getElementById('entryRH').value = record.humidity;
             setIntervalCheck(record.interval || 'pass');
             document.getElementById('entryRecordPosition').textContent = `第 ${index + 1} 支 / 共 ${entryRecordList.length} 支`;
@@ -2951,6 +2942,28 @@
                 btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
                 btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
             }
+        }
+
+        function setCleanLevel(level) {
+            const input = document.getElementById('entryCleanLevel');
+            if (input) {
+                input.value = level;
+            }
+
+            const activeClass = 'py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            const idleClass = 'py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+            const mapping = [
+                ['btnCleanSa1', 'Sa1'],
+                ['btnCleanSa2', 'Sa2'],
+                ['btnCleanSa25', 'Sa2.5'],
+                ['btnCleanSa3', 'Sa3']
+            ];
+
+            mapping.forEach(([id, value]) => {
+                const btn = document.getElementById(id);
+                if (!btn) return;
+                btn.className = value === level ? activeClass : idleClass;
+            });
         }
 
         function setIntervalCheck(type) {
