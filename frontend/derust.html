@@ -501,7 +501,6 @@
                             <div class="flex items-center justify-center gap-2">
                                 <button onclick="openEntryDrawer('0032')" class="w-9 h-9 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 transition-colors flex items-center justify-center" title="录入"><i class="fas fa-pen-to-square text-sm"></i></button>
                                 <button onclick="openSampleDrawer('create', '0032')" class="w-9 h-9 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-600 transition-colors flex items-center justify-center" title="去抽检"><i class="fas fa-vials text-sm"></i></button>
-                                <button onclick="viewDetail('0032')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 transition-colors flex items-center justify-center" title="查看"><i class="fas fa-eye text-sm"></i></button>
                                 <button onclick="deleteRow('0032')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center justify-center" title="删除"><i class="fas fa-trash-alt text-sm"></i></button>
                             </div>
                         </td>
@@ -548,7 +547,6 @@
                             <div class="flex items-center justify-center gap-2">
                                 <button onclick="openEntryDrawer('0031')" class="w-9 h-9 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 transition-colors flex items-center justify-center" title="录入"><i class="fas fa-pen-to-square text-sm"></i></button>
                                 <button onclick="openSampleDrawer('create', '0031')" class="w-9 h-9 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-600 transition-colors flex items-center justify-center" title="去抽检"><i class="fas fa-vials text-sm"></i></button>
-                                <button onclick="viewDetail('0031')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 transition-colors flex items-center justify-center" title="查看"><i class="fas fa-eye text-sm"></i></button>
                                 <button onclick="deleteRow('0031')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center justify-center" title="删除"><i class="fas fa-trash-alt text-sm"></i></button>
                             </div>
                         </td>
@@ -595,7 +593,6 @@
                             <div class="flex items-center justify-center gap-2">
                                 <button onclick="openEntryDrawer('0030')" class="w-9 h-9 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 transition-colors flex items-center justify-center" title="录入"><i class="fas fa-pen-to-square text-sm"></i></button>
                                 <button onclick="openSampleDrawer('create', '0030')" class="w-9 h-9 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-600 transition-colors flex items-center justify-center" title="去抽检"><i class="fas fa-vials text-sm"></i></button>
-                                <button onclick="viewDetail('0030')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 transition-colors flex items-center justify-center" title="查看"><i class="fas fa-eye text-sm"></i></button>
                                 <button onclick="deleteRow('0030')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center justify-center" title="删除"><i class="fas fa-trash-alt text-sm"></i></button>
                             </div>
                         </td>
@@ -1569,146 +1566,6 @@
                         确认选择
                     </button>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 查看详情抽屉（2/3宽度） -->
-    <div id="detailDrawerOverlay" class="drawer-overlay fixed inset-0 bg-black/50 z-50" onclick="closeDetailDrawer()"></div>
-    <div id="detailDrawer" class="drawer fixed top-0 right-0 h-full drawer-two-thirds bg-white z-50 shadow-2xl flex flex-col">
-        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">
-                    <i class="fas fa-file-alt"></i>
-                </div>
-                <div>
-                    <h3 class="text-lg font-bold text-gray-900">钢管详情</h3>
-                    <p class="text-sm text-gray-500" id="detailIdDisplay">GP-0032</p>
-                </div>
-            </div>
-            <button onclick="closeDetailDrawer()" class="w-10 h-10 rounded-lg bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-gray-600 transition-colors">
-                <i class="fas fa-times text-lg"></i>
-            </button>
-        </div>
-
-        <div class="flex-1 overflow-y-auto p-6">
-            <div class="max-w-4xl mx-auto space-y-6">
-                <!-- 基本信息 -->
-                <div class="bg-white rounded-xl border border-gray-200 p-5">
-                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-info-circle text-blue-600"></i>基本信息</h4>
-                    <div class="grid grid-cols-3 gap-4">
-                        <div class="p-3 bg-gray-50 rounded-lg">
-                            <div class="text-xs text-gray-500 mb-1">自编号</div>
-                            <div class="font-mono font-bold text-lg text-gray-900" id="detailSelfNo">0032</div>
-                        </div>
-                        <div class="p-3 bg-gray-50 rounded-lg">
-                            <div class="text-xs text-gray-500 mb-1">管号</div>
-                            <div class="font-mono text-gray-900" id="detailPipeNo">6508741</div>
-                        </div>
-                        <div class="p-3 bg-gray-50 rounded-lg">
-                            <div class="text-xs text-gray-500 mb-1">所属班次</div>
-                            <div class="text-blue-600 font-semibold" id="detailShift">今日白班</div>
-                        </div>
-                        <div class="p-3 bg-gray-50 rounded-lg">
-                            <div class="text-xs text-gray-500 mb-1">捆号</div>
-                            <div class="font-semibold text-gray-900" id="detailBundleNo">96#</div>
-                        </div>
-                        <div class="p-3 bg-gray-50 rounded-lg">
-                            <div class="text-xs text-gray-500 mb-1">炉号</div>
-                            <div class="font-semibold text-gray-900" id="detailFurnaceNo">15303842</div>
-                        </div>
-                        <div class="p-3 bg-gray-50 rounded-lg">
-                            <div class="text-xs text-gray-500 mb-1">批号</div>
-                            <div class="text-gray-900" id="detailBatchNo">71399</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 规格信息 -->
-                <div class="bg-white rounded-xl border border-gray-200 p-5">
-                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-ruler-combined text-blue-600"></i>规格信息</h4>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="p-4 bg-blue-50 rounded-xl border border-blue-200 text-center">
-                            <div class="text-3xl font-bold text-blue-700" id="detailLength">11856</div>
-                            <div class="text-sm text-blue-600 mt-1">长度 (mm)</div>
-                        </div>
-                        <div class="p-4 bg-green-50 rounded-xl border border-green-200 text-center">
-                            <div class="text-3xl font-bold text-green-700" id="detailWeight">573.5</div>
-                            <div class="text-sm text-green-600 mt-1">重量 (kg)</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 检验结果 -->
-                <div class="bg-white rounded-xl border border-gray-200 p-5">
-                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-clipboard-check text-blue-600"></i>检验结果</h4>
-                    <div class="grid grid-cols-3 gap-4">
-                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                            <span class="text-sm text-gray-600">外观检验</span>
-                            <span id="detailAppearance" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span>
-                        </div>
-                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                            <span class="text-sm text-gray-600">清洁度</span>
-                            <span id="detailCleanLevel" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>Sa2.5</span>
-                        </div>
-                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                            <span class="text-sm text-gray-600">腐蚀程度</span>
-                            <span id="detailCorrosion" class="inline-flex items-center px-2 py-1 rounded text-xs font-medium corrosion-light">轻微</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 仪器读数 -->
-                <div class="bg-white rounded-xl border border-gray-200 p-5">
-                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-thermometer-half text-blue-600"></i>仪器读数</h4>
-                    <div class="grid grid-cols-3 gap-4">
-                        <div class="text-center p-4 bg-gray-50 rounded-xl">
-                            <div class="text-xl font-bold text-gray-900" id="detailTDelta">14.8℃</div>
-                            <div class="text-xs text-gray-500 mt-1">T△ 温差</div>
-                        </div>
-                        <div class="text-center p-4 bg-gray-50 rounded-xl">
-                            <div class="text-xl font-bold text-gray-900" id="detailRH">45%</div>
-                            <div class="text-xs text-gray-500 mt-1">RH 湿度</div>
-                        </div>
-                        <div class="text-center p-4 bg-gray-50 rounded-xl">
-                            <div class="text-xl font-bold text-gray-900" id="detailTemp">120℃</div>
-                            <div class="text-xs text-gray-500 mt-1">预热温度</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 录入信息 -->
-                <div class="bg-white rounded-xl border border-gray-200 p-5">
-                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-user-clock text-blue-600"></i>录入信息</h4>
-                    <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg" id="detailOperatorIcon">张</div>
-                        <div class="flex-1">
-                            <div class="font-semibold text-gray-900" id="detailOperator">张师傅</div>
-                            <div class="text-sm text-gray-500">质检员 | 工号: OP-2023-045</div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mt-4">
-                        <div class="p-3 bg-gray-50 rounded-xl text-center">
-                            <div class="text-sm font-semibold text-gray-900" id="detailTime">19:35</div>
-                            <div class="text-xs text-gray-500">录入时间</div>
-                        </div>
-                        <div class="p-3 bg-gray-50 rounded-xl text-center">
-                            <div class="text-sm font-semibold text-gray-900" id="detailDate">今天</div>
-                            <div class="text-xs text-gray-500">录入日期</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="border-t border-gray-200 px-6 py-4 bg-gray-50">
-            <div class="max-w-4xl mx-auto flex gap-3">
-                <button onclick="printDetail()" class="flex-1 py-3 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 flex items-center justify-center gap-2">
-                    <i class="fas fa-print"></i>打印标签
-                </button>
-                <button onclick="closeDetailDrawer()" class="flex-1 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700">
-                    关闭
-                </button>
             </div>
         </div>
     </div>
@@ -2720,42 +2577,6 @@
             document.body.style.overflow = '';
         }
 
-        function viewDetail(id) {
-            const record = entryRecordList.find(item => item.id === String(id).replace(/^DR-/, '').replace(/^CJ-/, ''));
-            if (record) {
-                document.getElementById('detailIdDisplay').textContent = `GP-${record.id}`;
-                document.getElementById('detailSelfNo').textContent = record.id;
-                document.getElementById('detailPipeNo').textContent = record.pipeNo;
-                document.getElementById('detailShift').textContent = record.time === '03:15' ? '昨日夜班' : '今日白班';
-                document.getElementById('detailBundleNo').textContent = record.bundleNo;
-                document.getElementById('detailFurnaceNo').textContent = record.furnaceNo;
-                document.getElementById('detailBatchNo').textContent = record.batchNo;
-                document.getElementById('detailLength').textContent = record.length;
-                document.getElementById('detailWeight').textContent = record.weight;
-                document.getElementById('detailRH').textContent = `${record.humidity}%`;
-                document.getElementById('detailOperatorIcon').textContent = (record.operator || '张').slice(0, 1);
-                document.getElementById('detailOperator').textContent = record.operator || '当前班组';
-                document.getElementById('detailTime').textContent = record.time || '--:--';
-                document.getElementById('detailDate').textContent = record.time === '03:15' ? '昨天' : '今天';
-                document.getElementById('detailCleanLevel').innerHTML = `<i class="fas fa-check"></i>${record.cleanLevel || 'Sa2.5'}`;
-            }
-
-            document.getElementById('detailDrawerOverlay').classList.add('open');
-            document.getElementById('detailDrawer').classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeDetailDrawer() {
-            document.getElementById('detailDrawerOverlay').classList.remove('open');
-            document.getElementById('detailDrawer').classList.remove('open');
-            document.body.style.overflow = '';
-        }
-
-        function openFilter() {
-            document.getElementById('filterModal').classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-
         function closeFilter() {
             document.getElementById('filterModal').classList.remove('open');
             document.body.style.overflow = '';
@@ -3329,7 +3150,6 @@
         // ESC键关闭
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                closeDetailDrawer();
                 closeEntryDrawer();
                 closeFilter();
                 closeAddShiftModal();
