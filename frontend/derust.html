@@ -609,7 +609,7 @@
                             <th class="px-4 py-4 text-left">自编号</th>
                             <th class="px-4 py-4 text-center">灰尘度检测</th>
                             <th class="px-4 py-4 text-center">表面粗糙度(μm)</th>
-                            <th class="px-4 py-4 text-center">盐分检测</th>
+                            <th class="px-4 py-4 text-center">盐分检测 (mg/m²)</th>
                             <th class="px-4 py-4 text-center">检验结果</th>
                             <th class="px-4 py-4 text-center">灰尘度照片</th>
                             <th class="px-4 py-4 text-center">操作时间</th>
@@ -777,25 +777,35 @@
                         抽检项目
                     </h4>
                     <div class="grid grid-cols-2 gap-4">
+
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">灰尘度检测</label>
-                            <select id="sampleDustLevel" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
-                                <option>1级</option>
-                                <option>2级</option>
-                                <option>3级</option>
-                                <option>4级</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">表面粗糙度 (μm)</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">表面粗糙度 (μm) <span class="text-red-500">*</span></label>
                             <input id="sampleRoughness" type="number" min="0" step="1" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">盐分检测</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">盐分检测 (mg/m²) <span class="text-red-500">*</span></label>
                             <input id="sampleSalinity" type="text" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
-                        <div class="lg:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-3">检验结果</label>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">灰尘度检测 <span class="text-red-500">*</span></label>
+                            <input type="hidden" id="sampleDustLevel" value="1级">
+                            <div class="grid grid-cols-4 gap-3">
+                                <button type="button" onclick="setSampleDustLevel('1级')" id="btnSampleDust1" class="py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2">
+                                    1级
+                                </button>
+                                <button type="button" onclick="setSampleDustLevel('2级')" id="btnSampleDust2" class="py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
+                                    2级
+                                </button>
+                                <button type="button" onclick="setSampleDustLevel('3级')" id="btnSampleDust3" class="py-3 rounded-xl border-2 border-red-200 text-red-600 font-semibold hover:bg-red-50 hover:text-red-700 hover:border-red-300 transition-all flex items-center justify-center gap-2">
+                                    3级
+                                </button>
+                                <button type="button" onclick="setSampleDustLevel('4级')" id="btnSampleDust4" class="py-3 rounded-xl border-2 border-red-200 text-red-600 font-semibold hover:bg-red-50 hover:text-red-700 hover:border-red-300 transition-all flex items-center justify-center gap-2">
+                                    4级
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">检验结果 <span class="text-red-500">*</span></label>
                             <div class="flex gap-3">
                                 <button type="button" onclick="setSampleResult('pass')" id="sampleResultPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
                                     <i class="fas fa-check-circle"></i>合格
@@ -2678,6 +2688,35 @@
             }
         }
 
+        function setSampleDustLevel(level) {
+            const input = document.getElementById('sampleDustLevel');
+            if (input) {
+                input.value = level;
+            }
+
+            const activePassClass = 'py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            const idlePassClass = 'py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+            const activeWarnClass = 'py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            const idleWarnClass = 'py-3 rounded-xl border-2 border-red-200 text-red-600 font-semibold hover:bg-red-50 hover:text-red-700 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            const mapping = [
+                ['btnSampleDust1', '1级'],
+                ['btnSampleDust2', '2级'],
+                ['btnSampleDust3', '3级'],
+                ['btnSampleDust4', '4级']
+            ];
+
+            mapping.forEach(([id, value]) => {
+                const btn = document.getElementById(id);
+                if (!btn) return;
+                const isWarnLevel = value === '3级' || value === '4级';
+                if (value === level) {
+                    btn.className = isWarnLevel ? activeWarnClass : activePassClass;
+                } else {
+                    btn.className = isWarnLevel ? idleWarnClass : idlePassClass;
+                }
+            });
+        }
+
         function openSampleDrawer(mode = 'create', recordId = null) {
             currentSampleDrawerMode = mode;
             const isView = mode === 'view';
@@ -2707,19 +2746,27 @@
             document.getElementById('sampleBatchNo').value = linkedRoot.batchNo;
             document.getElementById('sampleLength').value = linkedRoot.length;
             document.getElementById('sampleWeight').value = linkedRoot.weight;
-            document.getElementById('sampleDustLevel').value = record.dustLevel;
+            setSampleDustLevel(record.dustLevel || '1级');
             document.getElementById('sampleRoughness').value = record.roughness;
             document.getElementById('sampleSalinity').value = record.salinity;
             document.getElementById('samplePhotoPreview').src = record.photo;
             document.getElementById('samplePhotoInput').value = '';
             setSampleResult(record.result);
 
-            const editableIds = ['sampleDustLevel', 'sampleRoughness', 'sampleSalinity', 'samplePhotoInput'];
+            const editableIds = ['sampleRoughness', 'sampleSalinity', 'samplePhotoInput'];
             editableIds.forEach(id => {
                 const el = document.getElementById(id);
                 if (!el) return;
                 el.disabled = isView;
                 el.classList.toggle('bg-gray-50', isView);
+            });
+
+            ['btnSampleDust1', 'btnSampleDust2', 'btnSampleDust3', 'btnSampleDust4'].forEach(id => {
+                const btn = document.getElementById(id);
+                if (!btn) return;
+                btn.disabled = isView;
+                btn.classList.toggle('opacity-60', isView);
+                btn.classList.toggle('cursor-not-allowed', isView);
             });
 
             document.getElementById('samplePhotoReadonly').classList.toggle('hidden', !isView);
