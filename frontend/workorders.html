@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
@@ -40,7 +40,11 @@
 
       .hero-panel {
         background:
-          radial-gradient(circle at top right, rgba(96, 165, 250, 0.28), transparent 28%),
+          radial-gradient(
+            circle at top right,
+            rgba(96, 165, 250, 0.28),
+            transparent 28%
+          ),
           linear-gradient(135deg, #0f172a 0%, #1d4ed8 55%, #2563eb 100%);
       }
 
@@ -217,7 +221,9 @@
     </header>
 
     <section class="px-6 pt-5 pb-4 flex-none">
-      <div class="hero-panel rounded-3xl industrial-shadow-lg text-white p-6 md:p-7">
+      <div
+        class="hero-panel rounded-3xl industrial-shadow-lg text-white p-6 md:p-7"
+      >
         <div class="flex flex-col xl:flex-row xl:items-end gap-5">
           <div class="flex-1">
             <div
@@ -230,7 +236,7 @@
               当前待处理与执行中的工单一览
             </h2>
             <p class="text-blue-100 mt-3 text-sm md:text-base max-w-3xl">
-              展示工单编号、状态、客户、项目、计划数量、已完成数量，以及交期、规格、产线与优先级等关键信息。
+              展示工单编号、状态、客户、项目、计划数量、已完成数量，以及交期、规格与优先级等关键信息。
             </p>
           </div>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3 xl:min-w-[520px]">
@@ -240,7 +246,9 @@
             </div>
             <div class="metric-card rounded-2xl p-4">
               <div class="text-blue-100 text-xs">生产中</div>
-              <div class="text-3xl font-extrabold mt-2" id="metricProducing">0</div>
+              <div class="text-3xl font-extrabold mt-2" id="metricProducing">
+                0
+              </div>
             </div>
             <div class="metric-card rounded-2xl p-4">
               <div class="text-blue-100 text-xs">今日应完成</div>
@@ -248,7 +256,9 @@
             </div>
             <div class="metric-card rounded-2xl p-4">
               <div class="text-blue-100 text-xs">累计完成</div>
-              <div class="text-3xl font-extrabold mt-2" id="metricCompleted">0</div>
+              <div class="text-3xl font-extrabold mt-2" id="metricCompleted">
+                0
+              </div>
             </div>
           </div>
         </div>
@@ -257,7 +267,9 @@
 
     <section class="px-6 pb-4 flex-none">
       <div class="bg-white rounded-2xl industrial-shadow p-4 md:p-5">
-        <div class="flex flex-col xl:flex-row xl:items-center gap-4 justify-between">
+        <div
+          class="flex flex-col xl:flex-row xl:items-center gap-4 justify-between"
+        >
           <div class="flex flex-col md:flex-row gap-3 md:items-center flex-1">
             <div class="relative flex-1 max-w-2xl">
               <i
@@ -271,23 +283,39 @@
               />
             </div>
             <div class="flex gap-2 overflow-x-auto">
-              <button class="chip active px-4 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold whitespace-nowrap" data-filter="all">
+              <button
+                class="chip active px-4 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold whitespace-nowrap"
+                data-filter="all"
+              >
                 全部工单
               </button>
-              <button class="chip px-4 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold whitespace-nowrap" data-filter="in-progress">
+              <button
+                class="chip px-4 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold whitespace-nowrap"
+                data-filter="in-progress"
+              >
                 生产中
               </button>
-              <button class="chip px-4 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold whitespace-nowrap" data-filter="pending">
+              <button
+                class="chip px-4 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold whitespace-nowrap"
+                data-filter="pending"
+              >
                 待开工
               </button>
-              <button class="chip px-4 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold whitespace-nowrap" data-filter="urgent">
+              <button
+                class="chip px-4 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-semibold whitespace-nowrap"
+                data-filter="urgent"
+              >
                 紧急工单
               </button>
             </div>
           </div>
           <div class="text-sm text-gray-500 flex items-center gap-2">
             <i class="fas fa-layer-group text-blue-600"></i>
-            <span>当前显示 <span id="visibleCount" class="font-bold text-gray-900">0</span> 个工单</span>
+            <span
+              >当前显示
+              <span id="visibleCount" class="font-bold text-gray-900">0</span>
+              个工单</span
+            >
           </div>
         </div>
       </div>
@@ -295,7 +323,10 @@
 
     <main class="flex-1 min-h-0 px-6 pb-6">
       <div class="h-full overflow-y-auto">
-        <div id="workOrderList" class="grid grid-cols-1 2xl:grid-cols-2 gap-4"></div>
+        <div
+          id="workOrderList"
+          class="grid grid-cols-1 2xl:grid-cols-2 gap-4"
+        ></div>
       </div>
     </main>
 
@@ -317,7 +348,7 @@
           antiCorrosionType: "3PE",
           shift: "今日白班",
           todayTarget: 68,
-          remark: "当前重点工单，需优先保障进管节拍"
+          remark: "当前重点工单，需优先保障进管节拍",
         },
         {
           id: "WO-2026-0320-004",
@@ -335,7 +366,7 @@
           antiCorrosionType: "3PP",
           shift: "明日白班",
           todayTarget: 0,
-          remark: "等待原料批次确认后放行"
+          remark: "等待原料批次确认后放行",
         },
         {
           id: "WO-2026-0322-002",
@@ -353,7 +384,7 @@
           antiCorrosionType: "3PE",
           shift: "今日夜班",
           todayTarget: 42,
-          remark: "上一批次外观抽检待质量复核"
+          remark: "上一批次外观抽检待质量复核",
         },
         {
           id: "WO-2026-0326-006",
@@ -371,7 +402,7 @@
           antiCorrosionType: "3PP",
           shift: "当前班次",
           todayTarget: 35,
-          remark: "客户现场停工待料，需优先完成"
+          remark: "客户现场停工待料，需优先完成",
         },
         {
           id: "WO-2026-0328-003",
@@ -389,7 +420,7 @@
           antiCorrosionType: "3PE",
           shift: "今日白班",
           todayTarget: 88,
-          remark: "计划与除锈工序并行推进"
+          remark: "计划与除锈工序并行推进",
         },
         {
           id: "WO-2026-0329-005",
@@ -407,8 +438,8 @@
           antiCorrosionType: "3PP",
           shift: "后续排产",
           todayTarget: 0,
-          remark: "已完成来料确认，等待切换规格"
-        }
+          remark: "已完成来料确认，等待切换规格",
+        },
       ];
 
       const listEl = document.getElementById("workOrderList");
@@ -417,14 +448,25 @@
       let activeFilter = "all";
 
       function getProgress(order) {
-        return Math.max(0, Math.min(100, Math.round((order.completed / order.quantity) * 100)));
+        return Math.max(
+          0,
+          Math.min(100, Math.round((order.completed / order.quantity) * 100)),
+        );
       }
 
       function renderMetrics() {
         const total = workOrders.length;
-        const producing = workOrders.filter((item) => item.status === "in-progress").length;
-        const today = workOrders.reduce((sum, item) => sum + item.todayTarget, 0);
-        const completed = workOrders.reduce((sum, item) => sum + item.completed, 0);
+        const producing = workOrders.filter(
+          (item) => item.status === "in-progress",
+        ).length;
+        const today = workOrders.reduce(
+          (sum, item) => sum + item.todayTarget,
+          0,
+        );
+        const completed = workOrders.reduce(
+          (sum, item) => sum + item.completed,
+          0,
+        );
 
         document.getElementById("metricTotal").textContent = total;
         document.getElementById("metricProducing").textContent = producing;
@@ -446,7 +488,7 @@
           order.project,
           order.spec,
           order.material,
-          order.line
+          order.line,
         ]
           .join(" ")
           .toLowerCase();
@@ -456,7 +498,7 @@
       function renderList() {
         const keyword = searchInput.value.trim();
         const visibleOrders = workOrders.filter(
-          (order) => matchesFilter(order) && matchesSearch(order, keyword)
+          (order) => matchesFilter(order) && matchesSearch(order, keyword),
         );
 
         listEl.innerHTML = visibleOrders
@@ -493,10 +535,7 @@
                             <i class="fas fa-ruler-combined text-gray-400"></i>
                             <span class="truncate">规格：<span class="font-semibold text-gray-900">${order.spec}</span></span>
                           </div>
-                          <div class="flex items-center gap-2 min-w-0">
-                            <i class="fas fa-cubes text-gray-400"></i>
-                            <span class="truncate">材质：<span class="font-semibold text-gray-900">${order.material}</span></span>
-                          </div>
+
                           <div class="flex items-center gap-2 min-w-0">
                             <i class="fas fa-shield-halved text-gray-400"></i>
                             <span class="truncate">防腐类型：<span class="font-semibold text-gray-900">${order.antiCorrosionType || "3PE"}</span></span>
@@ -505,24 +544,34 @@
                       </div>
                     </div>
                     <div class="shrink-0 bg-slate-900 text-white rounded-2xl px-4 py-3 min-w-[170px]">
-                      <div class="text-xs text-slate-300">交付倒计时</div>
+                      <div class="text-xs text-slate-300">计划开始</div>
                       <div class="text-lg font-extrabold mt-1">${order.dueDate}</div>
-                      <div class="text-xs text-slate-300 mt-1">${order.shift} · ${order.line} 产线</div>
+                      <div class="text-xs text-slate-300">计划结束</div>
+                      <div class="text-lg font-extrabold mt-1">${order.dueDate}</div>
+
                     </div>
                   </div>
 
-                  <div class="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-3">
+                  <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
                     <div class="bg-slate-50 rounded-2xl px-4 py-3">
                       <div class="text-xs text-gray-500">生产数量</div>
                       <div class="text-2xl font-extrabold text-gray-900 mt-1">${order.quantity}</div>
                     </div>
                     <div class="bg-blue-50 rounded-2xl px-4 py-3">
-                      <div class="text-xs text-blue-700">当前已完成</div>
+                      <div class="text-xs text-blue-700">进管已完成</div>
                       <div class="text-2xl font-extrabold text-blue-700 mt-1">${order.completed}</div>
                     </div>
                     <div class="bg-slate-50 rounded-2xl px-4 py-3">
-                      <div class="text-xs text-gray-500">今日目标</div>
+                      <div class="text-xs text-gray-500">除锈已完成</div>
                       <div class="text-base font-bold text-gray-900 mt-2">${order.todayTarget} 支</div>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl px-4 py-3">
+                      <div class="text-xs text-gray-500">涂覆已完成</div>
+                      <div class="text-base font-bold text-gray-900 mt-2">${order.coatingCompleted ?? Math.max(order.completed - 12, 0)} 支</div>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl px-4 py-3">
+                      <div class="text-xs text-gray-500">终检包装已完成</div>
+                      <div class="text-base font-bold text-gray-900 mt-2">${order.finalPackCompleted ?? Math.max(order.completed - 24, 0)} 支</div>
                     </div>
                     <div class="bg-slate-50 rounded-2xl px-4 py-3">
                       <div class="text-xs text-gray-500">备注</div>
@@ -548,7 +597,8 @@
           })
           .join("");
 
-        document.getElementById("visibleCount").textContent = visibleOrders.length;
+        document.getElementById("visibleCount").textContent =
+          visibleOrders.length;
       }
 
       function setFilter(filter) {
