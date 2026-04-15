@@ -758,16 +758,9 @@
 
         <div class="flex-1 overflow-y-auto p-6">
             <div class="max-w-4xl mx-auto space-y-6">
-                <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
-                    <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">工单号</div>
-                        <div class="font-semibold text-gray-900">WO-2026-0318-001</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">抽检单号</div>
-                        <div class="font-semibold text-blue-600" id="sampleEntryIdDisplay">CJ-0032</div>
-                    </div>
-                </div>
+                
+                        
+                    
 
                 <div class="bg-white rounded-xl border border-gray-200 p-5">
                     <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
@@ -1310,7 +1303,7 @@
                 </div>
                 <div>
                     <h3 class="text-lg font-bold text-gray-900">钢管涂覆录入</h3>
-                    <p class="text-sm text-gray-500">当前班次: <span class="font-semibold text-green-700">今日白班</span> (08:00-20:00)</p>
+                    <p class="text-sm text-gray-500">当前时间:  08:32</p>
                 </div>
             </div>
             <div class="flex items-center gap-2">
@@ -1325,24 +1318,7 @@
             <div class="max-w-4xl mx-auto space-y-6">
 
                 <!-- 自动信息卡片 -->
-                <div class="grid grid-cols-4 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
-                    <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">工单号</div>
-                        <div class="font-semibold text-gray-900">WO-2026-0318-001</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">班次</div>
-                        <div class="font-semibold text-blue-600">今日白班</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">当前时间</div>
-                        <div class="font-semibold text-gray-900" id="currentTime">20:38</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">操作员</div>
-                        <div class="font-semibold text-gray-900">张师傅</div>
-                    </div>
-                </div>
+                
 
                 <div class="bg-white rounded-xl border border-blue-200 p-4">
                     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -3026,7 +3002,7 @@
             document.getElementById('sampleDrawerTitle').textContent = isCreate ? '抽检录入' : mode === 'edit' ? '抽检修改' : '抽检详情';
             document.getElementById('sampleDrawerSubtitle').textContent = isCreate ? `已从根检钢管 ${linkedRoot.id} 带入标识信息` : `当前记录: ${record.id} | 质检员 ${record.inspector} | ${record.time}`;
             document.getElementById('sampleEntryId').value = isCreate ? `CJ-${linkedRoot.id}` : record.id;
-            document.getElementById('sampleEntryIdDisplay').textContent = isCreate ? `CJ-${linkedRoot.id}` : record.id;
+            
             document.getElementById('samplePipeNo').value = linkedRoot.pipeNo;
             document.getElementById('sampleBundleNo').value = linkedRoot.bundleNo;
             document.getElementById('sampleFurnaceNo').value = linkedRoot.furnaceNo;
