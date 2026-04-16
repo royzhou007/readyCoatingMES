@@ -263,12 +263,20 @@
                 销售单物料会自动填充到下表，请补充应收数量
               </p>
             </div>
-            <div class="text-sm text-slate-500">
-              共
-              <span id="materialCountHeader" class="font-bold text-blue-600"
-                >0</span
-              >
-              项
+            <div class="ml-auto flex items-center gap-4 text-sm text-slate-500">
+              <div>
+                共
+                <span id="materialCountHeader" class="font-bold text-blue-600"
+                  >0</span
+                >
+                项
+              </div>
+              <div>
+                应收总数
+                <span id="materialExpectedTotal" class="font-bold text-blue-600"
+                  >0</span
+                >
+              </div>
             </div>
             <button
               type="button"
@@ -565,16 +573,24 @@
               </div>
             </td>
             <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">
-              <button type="button" class="px-4 py-2 rounded-xl bg-red-50 text-red-600 font-semibold hover:bg-red-100" onclick="removeMaterial(${index})">删除</button>
+              <button type="button" class="w-10 h-10 inline-flex items-center justify-center rounded-xl bg-red-50 text-red-600 hover:bg-red-100" onclick="removeMaterial(${index})" title="删除">
+                <i class="fas fa-trash"></i>
+              </button>
             </td>
           </tr>
         `,
           )
           .join("");
+        const expectedTotal = currentMaterials.reduce(
+          (sum, item) => sum + (Number(item.expectedQty) || 0),
+          0,
+        );
         document.getElementById("materialCount").textContent =
           currentMaterials.length;
         document.getElementById("materialCountHeader").textContent =
           currentMaterials.length;
+        document.getElementById("materialExpectedTotal").textContent =
+          expectedTotal;
       }
 
       function updateQty(index, value) {
