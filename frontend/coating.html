@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -15,7 +15,7 @@
         .industrial-shadow { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04); }
         .industrial-shadow-lg { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 8px 24px rgba(0, 0, 0, 0.06); }
 
-        /* 抽屉宽度为屏幕2/3 */
+        /* 鎶藉眽瀹藉害涓哄睆骞?/3 */
         .drawer-two-thirds {
             width: 66.666vw;
             max-width: 66.666vw;
@@ -171,7 +171,7 @@
             display: none;
         }
 
-        /* 码单选择弹窗样式 */
+        /* 鐮佸崟閫夋嫨寮圭獥鏍峰紡 */
         .code-list-item {
             transition: all 0.2s ease;
             cursor: pointer;
@@ -198,7 +198,7 @@
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
         }
 
-        /* 坡口信息折叠动画 */
+        /* 鍧″彛淇℃伅鎶樺彔鍔ㄧ敾 */
         .bevel-content {
             max-height: 0;
             overflow: hidden;
@@ -306,7 +306,7 @@
                         </div>
                         <div class="px-1 text-center xl:border-r border-gray-200">
                             <div class="text-sm text-gray-500 mb-2">剩余时间</div>
-                            <div class="text-lg font-bold text-blue-600 leading-tight">2天 4小时</div>
+                            <div class="text-lg font-bold text-blue-600 leading-tight">2天4小时</div>
                         </div>
                         <div class="px-1 text-center">
                             <div class="flex items-baseline justify-center gap-3 mb-2">
@@ -435,7 +435,7 @@
                 </button>
                 <button class="material-subtab-btn flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-gray-200 bg-white text-sm font-semibold whitespace-nowrap" data-subtab="material-info" onclick="switchMaterialSubTab('material-info')">
                     <i class="fas fa-box-open"></i>
-                    <span>原材料信息</span>
+                    <span>鍘熸潗鏂欎俊鎭?/span>
                 </button>
             </div>
         </div>
@@ -469,19 +469,25 @@
                         <th class="px-4 py-4 text-center">
                             <div class="flex flex-col items-center gap-1">
                                 <span>留端长度</span>
-                                <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 normal-case">≥300mm</span>
+                                <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 normal-case">鈮?00mm</span>
                             </div>
                         </th>
                         <th class="px-4 py-4 text-center">
                             <div class="flex flex-col items-center gap-1">
                                 <span>涂层坡口角度</span>
-                                <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 normal-case">≤30°</span>
+                                <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 normal-case">鈮?0掳</span>
                             </div>
                         </th>
                         <th class="px-4 py-4 text-center">
                             <div class="flex flex-col items-center gap-1">
                                 <span>FBE预留</span>
-                                <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 normal-case">≥300mm</span>
+                                <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 normal-case">鈮?00mm</span>
+                            </div>
+                        </th>
+                        <th class="px-4 py-4 text-center">
+                            <div class="flex flex-col items-center gap-1">
+                                <span>&#x5269;&#x78C1;&#x68C0;&#x6D4B;</span>
+                                <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 normal-case">&lt;15 Gauss</span>
                             </div>
                         </th>
                         <th class="px-4 py-4 text-center">留端处理</th>
@@ -505,11 +511,12 @@
                         <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">S</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">N</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div></div></td>
                         <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">S</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">N</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-xs"></i></span></div></div></td>
                         <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">S</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">N</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div></div></td>
+                        <td class="px-4 py-4 text-center"><span class="text-sm font-semibold text-gray-900">8 <span class="text-xs font-normal text-gray-500">Gauss</span></span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-sm"></i></span></td>
                         <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs font-medium text-gray-700"><div>Max: 426 μm</div><div>Min: 401 μm</div></div></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-sm"></i></span></td>
-                        <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">19:35</div><div class="text-xs text-gray-500">今天</div></td>
-                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">张</div><span class="text-xs text-gray-600">张师傅</span></div></td>
+                        <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">19:35</div><div class="text-xs text-gray-500">浠婂ぉ</div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">寮?/div><span class="text-xs text-gray-600">寮犲笀鍌?/span></div></td>
                         <td class="px-4 py-4 text-center"><div class="flex items-center justify-center gap-2"><button onclick="openEntryDrawer('0032')" class="w-9 h-9 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 transition-colors flex items-center justify-center" title="录入"><i class="fas fa-pen-to-square text-sm"></i></button><button onclick="openSampleDrawer('create', '0032')" class="w-9 h-9 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-600 transition-colors flex items-center justify-center" title="去抽检"><i class="fas fa-vials text-sm"></i></button><button onclick="viewDetail('0032')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 transition-colors flex items-center justify-center" title="查看"><i class="fas fa-eye text-sm"></i></button><button onclick="deleteRow('0032')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center justify-center" title="删除"><i class="fas fa-trash-alt text-sm"></i></button></div></td>
                     </tr>
                     <tr class="group" data-id="0031" data-shift="today_day" data-result="pass">
@@ -524,11 +531,12 @@
                         <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">S</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">N</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-xs"></i></span></div></div></td>
                         <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">S</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">N</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div></div></td>
                         <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">S</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">N</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div></div></td>
+                        <td class="px-4 py-4 text-center"><span class="text-sm font-semibold text-gray-900">11 <span class="text-xs font-normal text-gray-500">Gauss</span></span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-sm"></i></span></td>
                         <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs font-medium text-gray-700"><div>Max: 416 μm</div><div>Min: 388 μm</div></div></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-sm"></i></span></td>
-                        <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">18:42</div><div class="text-xs text-gray-500">今天</div></td>
-                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">张</div><span class="text-xs text-gray-600">张师傅</span></div></td>
+                        <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">18:42</div><div class="text-xs text-gray-500">浠婂ぉ</div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">寮?/div><span class="text-xs text-gray-600">寮犲笀鍌?/span></div></td>
                         <td class="px-4 py-4 text-center"><div class="flex items-center justify-center gap-2"><button onclick="openEntryDrawer('0031')" class="w-9 h-9 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 transition-colors flex items-center justify-center" title="录入"><i class="fas fa-pen-to-square text-sm"></i></button><button onclick="openSampleDrawer('create', '0031')" class="w-9 h-9 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-600 transition-colors flex items-center justify-center" title="去抽检"><i class="fas fa-vials text-sm"></i></button><button onclick="viewDetail('0031')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 transition-colors flex items-center justify-center" title="查看"><i class="fas fa-eye text-sm"></i></button><button onclick="deleteRow('0031')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center justify-center" title="删除"><i class="fas fa-trash-alt text-sm"></i></button></div></td>
                     </tr>
                     <tr class="group" data-id="0030" data-shift="yesterday_night" data-result="fail">
@@ -543,11 +551,12 @@
                         <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">S</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">N</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div></div></td>
                         <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">S</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">N</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-xs"></i></span></div></div></td>
                         <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs"><div class="flex items-center gap-2"><span class="text-gray-500">S</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-xs"></i></span></div><div class="flex items-center gap-2"><span class="text-gray-500">N</span><span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-xs"></i></span></div></div></td>
+                        <td class="px-4 py-4 text-center"><span class="text-sm font-semibold text-red-600">18 <span class="text-xs font-normal text-gray-500">Gauss</span></span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-sm"></i></span></td>
                         <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs font-medium text-gray-700"><div>Max: 392 μm</div><div>Min: 352 μm</div></div></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-red-100 text-red-700"><i class="fas fa-times text-sm"></i></span></td>
                         <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">03:15</div><div class="text-xs text-gray-500">昨天</div></td>
-                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1"><div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold text-sm">李</div><span class="text-xs text-gray-600">李师傅</span></div></td>
+                        <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1"><div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold text-sm">鏉?/div><span class="text-xs text-gray-600">鏉庡笀鍌?/span></div></td>
                         <td class="px-4 py-4 text-center"><div class="flex items-center justify-center gap-2"><button onclick="openEntryDrawer('0030')" class="w-9 h-9 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 transition-colors flex items-center justify-center" title="录入"><i class="fas fa-pen-to-square text-sm"></i></button><button onclick="openSampleDrawer('create', '0030')" class="w-9 h-9 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-600 transition-colors flex items-center justify-center" title="去抽检"><i class="fas fa-vials text-sm"></i></button><button onclick="viewDetail('0030')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 transition-colors flex items-center justify-center" title="查看"><i class="fas fa-eye text-sm"></i></button><button onclick="deleteRow('0030')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center justify-center" title="删除"><i class="fas fa-trash-alt text-sm"></i></button></div></td>
                     </tr>
                 </tbody>
@@ -559,14 +568,14 @@
                     <thead class="sticky-header">
                         <tr>
                             <th class="px-4 py-4 text-left w-12"><input type="checkbox" class="custom-checkbox" id="selectAllSample" onclick="toggleSelectAll()"></th>
-                            <th class="px-4 py-4 text-left">自编号</th>
-                            <th class="px-4 py-4 text-center">剥离温度1</th>
-                            <th class="px-4 py-4 text-center">剥离强度1</th>
-                            <th class="px-4 py-4 text-center">剥离温度2</th>
-                            <th class="px-4 py-4 text-center">剥离强度2</th>
-                            <th class="px-4 py-4 text-center">操作时间</th>
-                            <th class="px-4 py-4 text-center">质检员</th>
-                            <th class="px-4 py-4 text-center">操作</th>
+                            <th class="px-4 py-4 text-left">鑷紪鍙?/th>
+                            <th class="px-4 py-4 text-center">鍓ョ娓╁害1</th>
+                            <th class="px-4 py-4 text-center">鍓ョ寮哄害1</th>
+                            <th class="px-4 py-4 text-center">鍓ョ娓╁害2</th>
+                            <th class="px-4 py-4 text-center">鍓ョ寮哄害2</th>
+                            <th class="px-4 py-4 text-center">鎿嶄綔鏃堕棿</th>
+                            <th class="px-4 py-4 text-center">璐ㄦ鍛?/th>
+                            <th class="px-4 py-4 text-center">鎿嶄綔</th>
                         </tr>
                     </thead>
                     <tbody id="sampleTableBody">
@@ -577,8 +586,8 @@
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">38.5 N/cm</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">201℃</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">39.2 N/cm</td>
-                            <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">20:10</div><div class="text-xs text-gray-500">今天</div></td>
-                            <td class="px-4 py-4 text-center"><span class="text-sm text-gray-700">王检</span></td>
+                            <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">20:10</div><div class="text-xs text-gray-500">浠婂ぉ</div></td>
+                            <td class="px-4 py-4 text-center"><span class="text-sm text-gray-700">鐜嬫</span></td>
                             <td class="px-4 py-4 text-center">
                                 <div class="flex items-center justify-center gap-2">
                                     <button onclick="openSampleDrawer('edit', 'CJ-0032')" class="w-9 h-9 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-600 transition-colors flex items-center justify-center" title="修改"><i class="fas fa-pen text-sm"></i></button>
@@ -594,8 +603,8 @@
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">37.8 N/cm</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">199℃</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">38.6 N/cm</td>
-                            <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">18:55</div><div class="text-xs text-gray-500">今天</div></td>
-                            <td class="px-4 py-4 text-center"><span class="text-sm text-gray-700">王检</span></td>
+                            <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">18:55</div><div class="text-xs text-gray-500">浠婂ぉ</div></td>
+                            <td class="px-4 py-4 text-center"><span class="text-sm text-gray-700">鐜嬫</span></td>
                             <td class="px-4 py-4 text-center">
                                 <div class="flex items-center justify-center gap-2">
                                     <button onclick="openSampleDrawer('edit', 'CJ-0031')" class="w-9 h-9 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-600 transition-colors flex items-center justify-center" title="修改"><i class="fas fa-pen text-sm"></i></button>
@@ -735,7 +744,7 @@
 
     <div id="photoModal" class="modal fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-6" onclick="closePhotoModal()">
         <div class="modal-content max-w-5xl w-full flex items-center justify-center">
-            <img id="photoModalImage" src="" alt="灰尘度照片预览" class="max-h-[85vh] max-w-full rounded-2xl border-4 border-white shadow-2xl" />
+            <img id="photoModalImage" src="" alt="照片预览" class="max-h-[85vh] max-w-full rounded-2xl border-4 border-white shadow-2xl" />
         </div>
     </div>
 
@@ -748,7 +757,7 @@
                 </div>
                 <div>
                     <h3 class="text-lg font-bold text-gray-900" id="sampleDrawerTitle">抽检录入</h3>
-                    <p class="text-sm text-gray-500" id="sampleDrawerSubtitle">当前班次: 今日白班 (08:00-20:00)</p>
+                    <p class="text-sm text-gray-500" id="sampleDrawerSubtitle">当前班次：今日白班 (08:00-20:00)</p>
                 </div>
             </div>
             <button onclick="closeSampleDrawer()" class="w-10 h-10 rounded-lg bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-gray-600 transition-colors">
@@ -774,7 +783,7 @@
                             <input id="sampleEntryId" type="text" readonly class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl font-mono outline-none">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">管号</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">绠″彿</label>
                             <input id="samplePipeNo" type="text" readonly class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl font-mono outline-none">
                         </div>
                         <div>
@@ -807,7 +816,7 @@
                     </h4>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">剥离温度一 (℃) <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">剥离温度1 (℃) <span class="text-red-500">*</span></label>
                             <input id="sampleTemp1" type="number" min="0" step="0.1" value="198" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
                         <div>
@@ -815,7 +824,7 @@
                             <input id="sampleStrength1" type="number" min="0" step="0.1" value="38.5" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">剥离温度二 (℃) <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">剥离温度2 (℃) <span class="text-red-500">*</span></label>
                             <input id="sampleTemp2" type="number" min="0" step="0.1" value="201" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
                         <div>
@@ -850,12 +859,12 @@
             <div class="bg-white rounded-2xl industrial-shadow p-6 flex flex-col min-h-0">
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
                     <div>
-                        <h3 class="text-xl font-bold text-gray-900">仪器列表</h3>
-                        <p class="text-sm text-gray-500 mt-1">从企业仪器台账中选择当前工单实际使用的仪器</p>
+                        <h3 class="text-xl font-bold text-gray-900">浠櫒鍒楄〃</h3>
+                        <p class="text-sm text-gray-500 mt-1">浠庝紒涓氫华鍣ㄥ彴璐︿腑閫夋嫨褰撳墠宸ュ崟瀹為檯浣跨敤鐨勪华鍣?/p>
                     </div>
                     <button onclick="openInstrumentLedgerModal()" class="action-btn flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 industrial-shadow whitespace-nowrap">
                         <i class="fas fa-plus"></i>
-                        <span>新增</span>
+                        <span>鏂板</span>
                     </button>
                 </div>
 
@@ -863,12 +872,12 @@
                     <table class="data-table w-full bg-white">
                         <thead class="sticky-header">
                             <tr>
-                                <th class="px-4 py-4 text-center w-20">序号</th>
-                                <th class="px-4 py-4 text-left">仪器名称</th>
+                                <th class="px-4 py-4 text-center w-20">搴忓彿</th>
+                                <th class="px-4 py-4 text-left">浠櫒鍚嶇О</th>
                                 <th class="px-4 py-4 text-left">型号规格</th>
-                                <th class="px-4 py-4 text-left">仪器编号</th>
-                                <th class="px-4 py-4 text-left">仪器有效期</th>
-                                <th class="px-4 py-4 text-center w-32">操作</th>
+                                <th class="px-4 py-4 text-left">浠櫒缂栧彿</th>
+                                <th class="px-4 py-4 text-left">浠櫒鏈夋晥鏈?/th>
+                                <th class="px-4 py-4 text-center w-32">鎿嶄綔</th>
                             </tr>
                         </thead>
                         <tbody id="instrumentTableBody"></tbody>
@@ -877,7 +886,7 @@
                         <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                             <i class="fas fa-microchip text-3xl text-gray-400"></i>
                         </div>
-                        <h3 class="text-base font-semibold text-gray-900 mb-2">还没有关联除锈设备</h3>
+                        <h3 class="text-base font-semibold text-gray-900 mb-2">杩樻病鏈夊叧鑱旈櫎閿堣澶?/h3>
                         <p class="text-sm text-gray-500">点击右上角“新增”，从企业台账中选择当前工单要关联的设备与仪器。</p>
                     </div>
                 </div>
@@ -891,11 +900,11 @@
         <div class="bg-white rounded-2xl industrial-shadow p-6 h-full overflow-auto">
             <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4 mb-6">
                 <div>
-                    <div class="text-sm text-gray-500">工艺卡名称</div>
-                    <h3 class="text-2xl font-bold text-gray-900 mt-1">钢管除锈工艺卡</h3>
+                    <div class="text-sm text-gray-500">宸ヨ壓鍗″悕绉?/div>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1">閽㈢闄ら攬宸ヨ壓鍗?/h3>
                 </div>
                 <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3">
-                    <div class="text-sm text-blue-700">工艺卡编号</div>
+                    <div class="text-sm text-blue-700">宸ヨ壓鍗＄紪鍙?/div>
                     <div class="text-lg font-bold text-blue-900 mt-1">GYK-3LPE-2026-001</div>
                 </div>
             </div>
@@ -903,8 +912,8 @@
                 <div class="border border-gray-200 rounded-2xl overflow-hidden">
                     <div onclick="toggleProductionSection('productionSpec')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
                         <div>
-                            <div class="text-lg font-bold text-gray-900">1. 钢管规格及防腐要求</div>
-                            <div class="text-sm text-gray-500 mt-1">展示当前工艺卡的规格参数与防腐执行要求</div>
+                            <div class="text-lg font-bold text-gray-900">1. 閽㈢瑙勬牸鍙婇槻鑵愯姹?/div>
+                            <div class="text-sm text-gray-500 mt-1">灞曠ず褰撳墠宸ヨ壓鍗＄殑瑙勬牸鍙傛暟涓庨槻鑵愭墽琛岃姹?/div>
                         </div>
                         <div class="flex items-center gap-3 text-sm text-gray-500">
                             <span id="productionSpecStatus">点击展开</span>
@@ -913,21 +922,21 @@
                     </div>
                     <div id="productionSpecContent" class="bevel-content border-t border-gray-100">
                         <div class="p-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                            <div><label class="block text-sm font-medium text-gray-700 mb-2">钢管规格(数值，单位mm)</label><input type="number" value="1219" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
-                            <div><label class="block text-sm font-medium text-gray-700 mb-2">生产米数(数值，单位m)</label><input type="number" value="16320" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
-                            <div><label class="block text-sm font-medium text-gray-700 mb-2">防腐类型</label><select class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"><option selected>3LPE</option><option>3LPP</option></select></div>
-                            <div><label class="block text-sm font-medium text-gray-700 mb-2">执行标准</label><input type="text" value="GB/T 23257-2017" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">閽㈢瑙勬牸(鏁板€硷紝鍗曚綅mm)</label><input type="number" value="1219" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">鐢熶骇绫虫暟(鏁板€硷紝鍗曚綅m)</label><input type="number" value="16320" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">闃茶厫绫诲瀷</label><select class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"><option selected>3LPE</option><option>3LPP</option></select></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">鎵ц鏍囧噯</label><input type="text" value="GB/T 23257-2017" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
                             <div><label class="block text-sm font-medium text-gray-700 mb-2">FBE厚度(数值，单位μm)</label><input type="number" value="220" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
                             <div><label class="block text-sm font-medium text-gray-700 mb-2">AD厚度(数值，单位μm)</label><input type="number" value="180" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
-                            <div><label class="block text-sm font-medium text-gray-700 mb-2">PE总厚度(数值，单位mm)</label><input type="number" step="0.01" value="3.00" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">PE鎬诲帤搴?鏁板€硷紝鍗曚綅mm)</label><input type="number" step="0.01" value="3.00" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all"></div>
                         </div>
                     </div>
                 </div>
                 <div class="border border-gray-200 rounded-2xl overflow-hidden">
                     <div onclick="toggleProductionSection('productionConsume')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
                         <div>
-                            <div class="text-lg font-bold text-gray-900">2. 防腐材料理论消耗量</div>
-                            <div class="text-sm text-gray-500 mt-1">根据工艺卡要求展示原材料单耗和理论总量</div>
+                            <div class="text-lg font-bold text-gray-900">2. 闃茶厫鏉愭枡鐞嗚娑堣€楅噺</div>
+                            <div class="text-sm text-gray-500 mt-1">鏍规嵁宸ヨ壓鍗¤姹傚睍绀哄師鏉愭枡鍗曡€楀拰鐞嗚鎬婚噺</div>
                         </div>
                         <div class="flex items-center gap-3 text-sm text-gray-500">
                             <span id="productionConsumeStatus">点击展开</span>
@@ -937,13 +946,13 @@
                     <div id="productionConsumeContent" class="bevel-content border-t border-gray-100">
                         <div class="p-5 overflow-auto">
                             <table class="data-table w-full bg-white rounded-xl overflow-hidden">
-                                <thead><tr><th class="px-4 py-4 text-center w-20">序号</th><th class="px-4 py-4 text-left">原材料</th><th class="px-4 py-4 text-center">单耗(kg/m2)</th><th class="px-4 py-4 text-center">总量(kg)</th><th class="px-4 py-4 text-left">备注</th></tr></thead>
+                                <thead><tr><th class="px-4 py-4 text-center w-20">搴忓彿</th><th class="px-4 py-4 text-left">鍘熸潗鏂?/th><th class="px-4 py-4 text-center">鍗曡€?kg/m2)</th><th class="px-4 py-4 text-center">鎬婚噺(kg)</th><th class="px-4 py-4 text-left">澶囨敞</th></tr></thead>
                                 <tbody>
-                                    <tr><td class="px-4 py-4 text-center">1</td><td class="px-4 py-4">钢砂（Steel grit）</td><td class="px-4 py-4 text-center">0.12</td><td class="px-4 py-4 text-center">1954</td><td class="px-4 py-4">湖北浠水</td></tr>
-                                    <tr><td class="px-4 py-4 text-center">2</td><td class="px-4 py-4">钢丸（Steel shot）</td><td class="px-4 py-4 text-center">0.12</td><td class="px-4 py-4 text-center">1954</td><td class="px-4 py-4">湖北浠水</td></tr>
-                                    <tr><td class="px-4 py-4 text-center">3</td><td class="px-4 py-4">环氧粉末（FBE）</td><td class="px-4 py-4 text-center">0.42</td><td class="px-4 py-4 text-center">3258</td><td class="px-4 py-4">天津瑞远DR-301A</td></tr>
-                                    <tr><td class="px-4 py-4 text-center">4</td><td class="px-4 py-4">胶粘剂（AD）</td><td class="px-4 py-4 text-center">0.25</td><td class="px-4 py-4 text-center">2280</td><td class="px-4 py-4">广州鹿山L-5R</td></tr>
-                                    <tr><td class="px-4 py-4 text-center">5</td><td class="px-4 py-4">聚乙烯（PE）</td><td class="px-4 py-4 text-center">3.3</td><td class="px-4 py-4 text-center">45600</td><td class="px-4 py-4">威海幅员FY-JK-02BK</td></tr>
+                                    <tr><td class="px-4 py-4 text-center">1</td><td class="px-4 py-4">閽㈢爞锛圫teel grit锛?/td><td class="px-4 py-4 text-center">0.12</td><td class="px-4 py-4 text-center">1954</td><td class="px-4 py-4">婀栧寳娴犳按</td></tr>
+                                    <tr><td class="px-4 py-4 text-center">2</td><td class="px-4 py-4">閽父锛圫teel shot锛?/td><td class="px-4 py-4 text-center">0.12</td><td class="px-4 py-4 text-center">1954</td><td class="px-4 py-4">婀栧寳娴犳按</td></tr>
+                                    <tr><td class="px-4 py-4 text-center">3</td><td class="px-4 py-4">鐜哀绮夋湯锛團BE锛?/td><td class="px-4 py-4 text-center">0.42</td><td class="px-4 py-4 text-center">3258</td><td class="px-4 py-4">澶╂触鐟炶繙DR-301A</td></tr>
+                                    <tr><td class="px-4 py-4 text-center">4</td><td class="px-4 py-4">鑳剁矘鍓傦紙AD锛?/td><td class="px-4 py-4 text-center">0.25</td><td class="px-4 py-4 text-center">2280</td><td class="px-4 py-4">骞垮窞楣垮北L-5R</td></tr>
+                                    <tr><td class="px-4 py-4 text-center">5</td><td class="px-4 py-4">鑱氫箼鐑紙PE锛?/td><td class="px-4 py-4 text-center">3.3</td><td class="px-4 py-4 text-center">45600</td><td class="px-4 py-4">濞佹捣骞呭憳FY-JK-02BK</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -952,8 +961,8 @@
                 <div class="border border-gray-200 rounded-2xl overflow-hidden">
                     <div onclick="toggleProductionSection('productionProject')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
                         <div>
-                            <div class="text-lg font-bold text-gray-900">3. 项目要求</div>
-                            <div class="text-sm text-gray-500 mt-1">按项目技术文件展示检测项目与标准要求</div>
+                            <div class="text-lg font-bold text-gray-900">3. 椤圭洰瑕佹眰</div>
+                            <div class="text-sm text-gray-500 mt-1">鎸夐」鐩妧鏈枃浠跺睍绀烘娴嬮」鐩笌鏍囧噯瑕佹眰</div>
                         </div>
                         <div class="flex items-center gap-3 text-sm text-gray-500">
                             <span id="productionProjectStatus">点击展开</span>
@@ -965,52 +974,52 @@
                             <table class="data-table w-full bg-white rounded-xl overflow-hidden">
                                 <thead>
                                     <tr>
-                                        <th class="px-4 py-4 text-center w-24">序号</th>
-                                        <th class="px-4 py-4 text-center w-48">检测项目</th>
-                                        <th class="px-4 py-4 text-left">标准要求</th>
+                                        <th class="px-4 py-4 text-center w-24">搴忓彿</th>
+                                        <th class="px-4 py-4 text-center w-48">妫€娴嬮」鐩?/th>
+                                        <th class="px-4 py-4 text-left">鏍囧噯瑕佹眰</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td class="px-4 py-4 text-center font-medium">1</td>
-                                        <td class="px-4 py-4 text-center font-medium">预留端</td>
+                                        <td class="px-4 py-4 text-center font-medium">棰勭暀绔?/td>
                                         <td class="px-4 py-4">
                                             <div class="flex flex-wrap gap-x-10 gap-y-2 text-gray-700">
-                                                <span>预留端：<span class="font-semibold text-gray-900">100-125</span> mm</span>
-                                                <span>FBE：<span class="font-semibold text-gray-900">≥10</span> mm</span>
+                                                <span>棰勭暀绔細<span class="font-semibold text-gray-900">100-125</span> mm</span>
+                                                <span>FBE锛?span class="font-semibold text-gray-900">鈮?0</span> mm</span>
                                             </div>
-                                            <div class="mt-2 text-gray-700">涂层坡口角度：<span class="font-semibold text-gray-900">≤30°</span></div>
+                                            <div class="mt-2 text-gray-700">娑傚眰鍧″彛瑙掑害锛?span class="font-semibold text-gray-900">鈮?0掳</span></div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="px-4 py-4 text-center font-medium">2</td>
-                                        <td class="px-4 py-4 text-center font-medium">坡口</td>
-                                        <td class="px-4 py-4 text-gray-700">根据来料</td>
+                                        <td class="px-4 py-4 text-center font-medium">鍧″彛</td>
+                                        <td class="px-4 py-4 text-gray-700">鏍规嵁鏉ユ枡</td>
                                     </tr>
                                     <tr>
                                         <td class="px-4 py-4 text-center font-medium" rowspan="5">3</td>
-                                        <td class="px-4 py-4 text-center font-medium" rowspan="5">包装</td>
+                                        <td class="px-4 py-4 text-center font-medium" rowspan="5">鍖呰</td>
                                         <td class="px-4 py-4 !p-0">
                                             <table class="w-full border-collapse">
                                                 <tbody>
                                                     <tr class="border-b border-gray-200">
-                                                        <td class="px-4 py-4 w-56 text-gray-700 font-medium border-r border-gray-200">防撞绳</td>
+                                                        <td class="px-4 py-4 w-56 text-gray-700 font-medium border-r border-gray-200">闃叉挒缁?/td>
                                                         <td class="px-4 py-4 text-gray-700">3 道/支，直径 20mm</td>
                                                     </tr>
                                                     <tr class="border-b border-gray-200">
-                                                        <td class="px-4 py-4 text-gray-700 font-medium border-r border-gray-200">管帽</td>
-                                                        <td class="px-4 py-4 text-gray-700">根据来料</td>
+                                                        <td class="px-4 py-4 text-gray-700 font-medium border-r border-gray-200">绠″附</td>
+                                                        <td class="px-4 py-4 text-gray-700">鏍规嵁鏉ユ枡</td>
                                                     </tr>
                                                     <tr class="border-b border-gray-200">
-                                                        <td class="px-4 py-4 text-gray-700 font-medium border-r border-gray-200">打捆</td>
-                                                        <td class="px-4 py-4 text-gray-700">不需要。</td>
+                                                        <td class="px-4 py-4 text-gray-700 font-medium border-r border-gray-200">鎵撴崋</td>
+                                                        <td class="px-4 py-4 text-gray-700">涓嶉渶瑕併€?/td>
                                                     </tr>
                                                     <tr class="border-b border-gray-200">
-                                                        <td class="px-4 py-4 text-gray-700 font-medium border-r border-gray-200">吊带</td>
-                                                        <td class="px-4 py-4 text-gray-700">根据来料</td>
+                                                        <td class="px-4 py-4 text-gray-700 font-medium border-r border-gray-200">鍚婂甫</td>
+                                                        <td class="px-4 py-4 text-gray-700">鏍规嵁鏉ユ枡</td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="px-4 py-4 text-gray-700 font-medium border-r border-gray-200">其他</td>
+                                                        <td class="px-4 py-4 text-gray-700 font-medium border-r border-gray-200">鍏朵粬</td>
                                                         <td class="px-4 py-4 text-gray-700"></td>
                                                     </tr>
                                                 </tbody>
@@ -1023,28 +1032,28 @@
                                     <tr></tr>
                                     <tr>
                                         <td class="px-4 py-4 text-center font-medium">4</td>
-                                        <td class="px-4 py-4 text-center font-medium">技术文件</td>
-                                        <td class="px-4 py-4 text-gray-700">技术文件.pdf</td>
+                                        <td class="px-4 py-4 text-center font-medium">鎶€鏈枃浠?/td>
+                                        <td class="px-4 py-4 text-gray-700">鎶€鏈枃浠?pdf</td>
                                     </tr>
                                     <tr>
                                         <td class="px-4 py-4 text-center font-medium">5</td>
-                                        <td class="px-4 py-4 text-center font-medium">标识</td>
+                                        <td class="px-4 py-4 text-center font-medium">鏍囪瘑</td>
                                         <td class="px-4 py-4 text-gray-700">Marking.jpg</td>
                                     </tr>
                                     <tr>
                                         <td class="px-4 py-4 text-center font-medium">6</td>
-                                        <td class="px-4 py-4 text-center font-medium">工艺评定</td>
-                                        <td class="px-4 py-4 text-gray-700">需要</td>
+                                        <td class="px-4 py-4 text-center font-medium">宸ヨ壓璇勫畾</td>
+                                        <td class="px-4 py-4 text-gray-700">闇€瑕?/td>
                                     </tr>
                                     <tr>
                                         <td class="px-4 py-4 text-center font-medium">7</td>
-                                        <td class="px-4 py-4 text-center font-medium">试验管</td>
-                                        <td class="px-4 py-4 text-gray-700">有试验管</td>
+                                        <td class="px-4 py-4 text-center font-medium">璇曢獙绠?/td>
+                                        <td class="px-4 py-4 text-gray-700">鏈夎瘯楠岀</td>
                                     </tr>
                                     <tr>
                                         <td class="px-4 py-4 text-center font-medium">8</td>
-                                        <td class="px-4 py-4 text-center font-medium">监制</td>
-                                        <td class="px-4 py-4 text-gray-700">有</td>
+                                        <td class="px-4 py-4 text-center font-medium">鐩戝埗</td>
+                                        <td class="px-4 py-4 text-gray-700">鏈?/td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1054,8 +1063,8 @@
                 <div class="border border-gray-200 rounded-2xl overflow-hidden">
                     <div onclick="toggleProductionSection('productionEquipment')" class="cursor-pointer px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors select-none">
                         <div>
-                            <div class="text-lg font-bold text-gray-900">4. 外防腐线设备参数设定</div>
-                            <div class="text-sm text-gray-500 mt-1">展示外防腐线各区域设备的参数设定要求</div>
+                            <div class="text-lg font-bold text-gray-900">4. 澶栭槻鑵愮嚎璁惧鍙傛暟璁惧畾</div>
+                            <div class="text-sm text-gray-500 mt-1">灞曠ず澶栭槻鑵愮嚎鍚勫尯鍩熻澶囩殑鍙傛暟璁惧畾瑕佹眰</div>
                         </div>
                         <div class="flex items-center gap-3 text-sm text-gray-500">
                             <span id="productionEquipmentStatus">点击展开</span>
@@ -1067,112 +1076,112 @@
                             <table class="data-table w-full bg-white rounded-xl overflow-hidden">
                                 <thead>
                                     <tr>
-                                        <th class="px-4 py-4 text-center w-20">序号</th>
-                                        <th class="px-4 py-4 text-center w-36">区域名称</th>
-                                        <th class="px-4 py-4 text-center w-44">参数名称</th>
-                                        <th class="px-4 py-4 text-center w-32">参数要求</th>
-                                        <th class="px-4 py-4 text-center w-44">参数名称</th>
-                                        <th class="px-4 py-4 text-center w-32">参数要求</th>
+                                        <th class="px-4 py-4 text-center w-20">搴忓彿</th>
+                                        <th class="px-4 py-4 text-center w-36">鍖哄煙鍚嶇О</th>
+                                        <th class="px-4 py-4 text-center w-44">鍙傛暟鍚嶇О</th>
+                                        <th class="px-4 py-4 text-center w-32">鍙傛暟瑕佹眰</th>
+                                        <th class="px-4 py-4 text-center w-44">鍙傛暟鍚嶇О</th>
+                                        <th class="px-4 py-4 text-center w-32">鍙傛暟瑕佹眰</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td class="px-4 py-4 text-center font-medium" rowspan="4">1</td>
-                                        <td class="px-4 py-4 text-center font-medium" rowspan="4">抛丸除锈区</td>
-                                        <td class="px-4 py-4 text-gray-700">传送线速度</td>
+                                        <td class="px-4 py-4 text-center font-medium" rowspan="4">鎶涗父闄ら攬鍖?/td>
+                                        <td class="px-4 py-4 text-gray-700">浼犻€佺嚎閫熷害</td>
                                         <td class="px-4 py-4 text-center text-gray-700">1-2</td>
-                                        <td class="px-4 py-4 text-gray-700">传送线螺距（mm）</td>
+                                        <td class="px-4 py-4 text-gray-700">浼犻€佺嚎铻鸿窛锛坢m锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">170-190</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-4 py-4 text-gray-700">频率（HZ）</td>
+                                        <td class="px-4 py-4 text-gray-700">棰戠巼锛圚Z锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">15-23</td>
                                         <td class="px-4 py-4 text-center text-gray-400">/</td>
                                         <td class="px-4 py-4 text-center text-gray-400">/</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-4 py-4 text-gray-700">抛丸电机电流（A）</td>
+                                        <td class="px-4 py-4 text-gray-700">鎶涗父鐢垫満鐢垫祦锛圓锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">70-75</td>
-                                        <td class="px-4 py-4 text-gray-700">除锈等级</td>
-                                        <td class="px-4 py-4 text-center text-gray-700">≥Sa2.5</td>
+                                        <td class="px-4 py-4 text-gray-700">闄ら攬绛夌骇</td>
+                                        <td class="px-4 py-4 text-center text-gray-700">鈮a2.5</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-4 py-4 text-gray-700">锚纹深度（um）</td>
+                                        <td class="px-4 py-4 text-gray-700">閿氱汗娣卞害锛坲m锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">40-90</td>
-                                        <td class="px-4 py-4 text-gray-700">丸、砂配比</td>
+                                        <td class="px-4 py-4 text-gray-700">涓搞€佺爞閰嶆瘮</td>
                                         <td class="px-4 py-4 text-center text-gray-700">4:1</td>
                                     </tr>
 
                                     <tr>
                                         <td class="px-4 py-4 text-center font-medium" rowspan="12">2</td>
-                                        <td class="px-4 py-4 text-center font-medium" rowspan="12">涂敷区</td>
-                                        <td class="px-4 py-4 text-gray-700">传送线速度</td>
+                                        <td class="px-4 py-4 text-center font-medium" rowspan="12">娑傛暦鍖?/td>
+                                        <td class="px-4 py-4 text-gray-700">浼犻€佺嚎閫熷害</td>
                                         <td class="px-4 py-4 text-center text-gray-700">1-2</td>
-                                        <td class="px-4 py-4 text-gray-700">传送线螺距（mm）</td>
+                                        <td class="px-4 py-4 text-gray-700">浼犻€佺嚎铻鸿窛锛坢m锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">170-190</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-4 py-4 text-gray-700">频率（HZ）</td>
+                                        <td class="px-4 py-4 text-gray-700">棰戠巼锛圚Z锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">22-32</td>
                                         <td class="px-4 py-4 text-center text-gray-400">/</td>
                                         <td class="px-4 py-4 text-center text-gray-400">/</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-4 py-4 text-gray-700">加热温度（℃）</td>
+                                        <td class="px-4 py-4 text-gray-700">鍔犵儹娓╁害锛堚剝锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">185-230</td>
-                                        <td class="px-4 py-4 text-gray-700">直流电压（V）</td>
+                                        <td class="px-4 py-4 text-gray-700">鐩存祦鐢靛帇锛圴锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">500-600</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-4 py-4 text-gray-700">加热功率（KW）</td>
+                                        <td class="px-4 py-4 text-gray-700">鍔犵儹鍔熺巼锛圞W锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">550-650</td>
                                         <td class="px-4 py-4 text-center text-gray-400">/</td>
                                         <td class="px-4 py-4 text-center text-gray-400">/</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-4 py-4 text-gray-700">喷枪数量（支）</td>
+                                        <td class="px-4 py-4 text-gray-700">鍠锋灙鏁伴噺锛堟敮锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">3-6</td>
-                                        <td class="px-4 py-4 text-gray-700">静电电压（Kv）</td>
+                                        <td class="px-4 py-4 text-gray-700">闈欑數鐢靛帇锛圞v锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">90-100</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-4 py-4 text-gray-700">喷枪与管距离（mm）</td>
+                                        <td class="px-4 py-4 text-gray-700">鍠锋灙涓庣璺濈锛坢m锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">90-110</td>
-                                        <td class="px-4 py-4 text-gray-700">喷枪压力（Mpa）</td>
+                                        <td class="px-4 py-4 text-gray-700">鍠锋灙鍘嬪姏锛圡pa锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">0.01-0.5</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-4 py-4 text-gray-700">75AD胶粘剂挤出机主机转速（HZ）</td>
+                                        <td class="px-4 py-4 text-gray-700">75AD鑳剁矘鍓傛尋鍑烘満涓绘満杞€燂紙HZ锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">14-19</td>
-                                        <td class="px-4 py-4 text-gray-700">物料风干温度（℃）</td>
+                                        <td class="px-4 py-4 text-gray-700">鐗╂枡椋庡共娓╁害锛堚剝锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">60-80</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-4 py-4 text-gray-700">75AD胶粘剂挤出机电流（A）</td>
+                                        <td class="px-4 py-4 text-gray-700">75AD鑳剁矘鍓傛尋鍑烘満鐢垫祦锛圓锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">45-65</td>
-                                        <td class="px-4 py-4 text-gray-700">物料加热温度（℃）</td>
+                                        <td class="px-4 py-4 text-gray-700">鐗╂枡鍔犵儹娓╁害锛堚剝锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">200-230</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-4 py-4 text-gray-700">75AD胶粘剂口膜宽度（mm）</td>
+                                        <td class="px-4 py-4 text-gray-700">75AD鑳剁矘鍓傚彛鑶滃搴︼紙mm锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">400</td>
                                         <td class="px-4 py-4 text-center text-gray-400">/</td>
                                         <td class="px-4 py-4 text-center text-gray-400">/</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-4 py-4 text-gray-700">150/180挤塑机主机螺杆转速（r/min）</td>
+                                        <td class="px-4 py-4 text-gray-700">150/180鎸ゅ鏈轰富鏈鸿灪鏉嗚浆閫燂紙r/min锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">20-30</td>
-                                        <td class="px-4 py-4 text-gray-700">物料风干温度（℃）</td>
+                                        <td class="px-4 py-4 text-gray-700">鐗╂枡椋庡共娓╁害锛堚剝锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">50-80</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-4 py-4 text-gray-700">150/180挤塑机主机电流（A）</td>
+                                        <td class="px-4 py-4 text-gray-700">150/180鎸ゅ鏈轰富鏈虹數娴侊紙A锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">450-550</td>
-                                        <td class="px-4 py-4 text-gray-700">物料加热温度（℃）</td>
+                                        <td class="px-4 py-4 text-gray-700">鐗╂枡鍔犵儹娓╁害锛堚剝锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">200-250</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-4 py-4 text-gray-700">口膜宽度（mm）</td>
+                                        <td class="px-4 py-4 text-gray-700">鍙ｈ啘瀹藉害锛坢m锛?/td>
                                         <td class="px-4 py-4 text-center text-gray-700">800 / 1000</td>
                                         <td class="px-4 py-4 text-center text-gray-400">/</td>
                                         <td class="px-4 py-4 text-center text-gray-400">/</td>
@@ -1180,56 +1189,56 @@
                                 </tbody>
                             </table>
                             <div class="mt-4 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-800">
-                                备注：设备运行参数根据现场实际情况调整。
+                                澶囨敞锛氳澶囪繍琛屽弬鏁版牴鎹幇鍦哄疄闄呮儏鍐佃皟鏁淬€?
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="border border-gray-200 rounded-2xl overflow-hidden bg-white">
                     <div class="px-5 py-4">
-                        <div class="text-lg font-bold text-gray-900">5. 其他要求</div>
-                        <div class="text-sm text-gray-500 mt-1">其他的技术要求和实验要求，详见 ITP 和 MPS。</div>
+                        <div class="text-lg font-bold text-gray-900">5. 鍏朵粬瑕佹眰</div>
+                        <div class="text-sm text-gray-500 mt-1">鍏朵粬鐨勬妧鏈姹傚拰瀹為獙瑕佹眰锛岃瑙?ITP 鍜?MPS銆?/div>
                     </div>
                 </div>
             </div>
             <div class="hidden">
             <div class="flex items-start justify-between gap-4 mb-6">
                 <div>
-                    <h3 class="text-xl font-bold text-gray-900">除锈作业要点</h3>
-                    <p class="text-sm text-gray-500 mt-1">围绕当前工单展示关键除锈参数、节拍与执行要求</p>
+                    <h3 class="text-xl font-bold text-gray-900">闄ら攬浣滀笟瑕佺偣</h3>
+                    <p class="text-sm text-gray-500 mt-1">鍥寸粫褰撳墠宸ュ崟灞曠ず鍏抽敭闄ら攬鍙傛暟銆佽妭鎷嶄笌鎵ц瑕佹眰</p>
                 </div>
-                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">版本 V2.3</span>
+                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">鐗堟湰 V2.3</span>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
                 <div class="rounded-xl border border-gray-200 p-4 bg-gray-50">
-                    <div class="text-xs text-gray-500">目标产量</div>
+                    <div class="text-xs text-gray-500">鐩爣浜ч噺</div>
                     <div class="text-2xl font-bold text-gray-900 mt-2">245 支</div>
                 </div>
                 <div class="rounded-xl border border-gray-200 p-4 bg-gray-50">
-                    <div class="text-xs text-gray-500">当前完成</div>
+                    <div class="text-xs text-gray-500">褰撳墠瀹屾垚</div>
                     <div class="text-2xl font-bold text-blue-600 mt-2">191 支</div>
                 </div>
                 <div class="rounded-xl border border-gray-200 p-4 bg-gray-50">
-                    <div class="text-xs text-gray-500">当前节拍</div>
+                    <div class="text-xs text-gray-500">褰撳墠鑺傛媿</div>
                     <div class="text-2xl font-bold text-green-600 mt-2">3.2 分/支</div>
                 </div>
             </div>
             <div class="space-y-4">
                 <div class="border border-gray-200 rounded-xl p-5">
-                    <div class="font-semibold text-gray-900">1. 除锈前确认</div>
-                    <div class="text-sm text-gray-600 mt-2">核对炉号、批号、捆号与工单一致；确认钢管表面状态、返锈情况和待处理缺陷。</div>
+                    <div class="font-semibold text-gray-900">1. 闄ら攬鍓嶇‘璁?/div>
+                    <div class="text-sm text-gray-600 mt-2">鏍稿鐐夊彿銆佹壒鍙枫€佹崋鍙蜂笌宸ュ崟涓€鑷达紱纭閽㈢琛ㄩ潰鐘舵€併€佽繑閿堟儏鍐靛拰寰呭鐞嗙己闄枫€?/div>
                 </div>
                 <div class="border border-gray-200 rounded-xl p-5">
-                    <div class="font-semibold text-gray-900">2. 过程参数</div>
-                    <div class="text-sm text-gray-600 mt-2">按工艺要求控制抛丸速度、钢丸配比、环境温湿度，并实时核对表面粗糙度与灰尘度。</div>
+                    <div class="font-semibold text-gray-900">2. 杩囩▼鍙傛暟</div>
+                    <div class="text-sm text-gray-600 mt-2">鎸夊伐鑹鸿姹傛帶鍒舵姏涓搁€熷害銆侀挗涓搁厤姣斻€佺幆澧冩俯婀垮害锛屽苟瀹炴椂鏍稿琛ㄩ潰绮楃硻搴︿笌鐏板皹搴︺€?/div>
                 </div>
                 <div class="border border-gray-200 rounded-xl p-5">
-                    <div class="font-semibold text-gray-900">3. 关键操作</div>
-                    <div class="text-sm text-gray-600 mt-2">逐支确认除锈等级、表面清洁度和返锈情况；异常管应立即隔离并提交复检。</div>
+                    <div class="font-semibold text-gray-900">3. 鍏抽敭鎿嶄綔</div>
+                    <div class="text-sm text-gray-600 mt-2">閫愭敮纭闄ら攬绛夌骇銆佽〃闈㈡竻娲佸害鍜岃繑閿堟儏鍐碉紱寮傚父绠″簲绔嬪嵆闅旂骞舵彁浜ゅ妫€銆?/div>
                 </div>
                 <div class="border border-gray-200 rounded-xl p-5">
-                    <div class="font-semibold text-gray-900">4. 交接要求</div>
-                    <div class="text-sm text-gray-600 mt-2">班次切换前完成返工件、待复检件和抽检记录确认，确保除锈记录与现场状态一致。</div>
+                    <div class="font-semibold text-gray-900">4. 浜ゆ帴瑕佹眰</div>
+                    <div class="text-sm text-gray-600 mt-2">班次切换前请完成返修件、待复检件和抽检记录确认，确保涂覆记录与现场状态一致。</div>
                 </div>
             </div>
         </div>
@@ -1240,7 +1249,7 @@
             <iframe
                 id="qualityReuseFrame"
                 src="./jinguan.html"
-                title="质检工艺卡复用内容"
+                title="璐ㄦ宸ヨ壓鍗″鐢ㄥ唴瀹?
                 class="w-full h-full border-0 bg-white"
             ></iframe>
         </div>
@@ -1250,7 +1259,7 @@
     <footer id="materialFooter" class="bg-white border-t border-gray-200 px-6 py-3 flex-none">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="text-sm text-gray-600">
-                显示 <span class="font-semibold text-gray-900" id="showingCount">1-3</span> 条，共 <span class="font-semibold text-gray-900" id="totalCount">156</span> 条记录
+                鏄剧ず <span class="font-semibold text-gray-900" id="showingCount">1-3</span> 鏉★紝鍏?<span class="font-semibold text-gray-900" id="totalCount">156</span> 鏉¤褰?
                 <span class="ml-2 text-xs text-gray-400">(当前班次: <span id="currentShiftName">今日白班</span>)</span>
             </div>
             <div class="flex items-center gap-2">
@@ -1263,14 +1272,14 @@
                 <button onclick="changePage('next')" class="page-btn w-10 h-10 rounded-lg border-2 border-gray-200 flex items-center justify-center text-gray-600"><i class="fas fa-chevron-right"></i></button>
             </div>
             <div class="flex items-center gap-2">
-                <span class="text-sm text-gray-600">每页</span>
+                <span class="text-sm text-gray-600">姣忛〉</span>
                 <select id="pageSize" class="px-3 py-1.5 bg-gray-50 border-2 border-gray-200 rounded-lg text-sm font-medium outline-none focus:border-blue-500" onchange="changePageSize()">
                     <option>10</option>
                     <option selected>20</option>
                     <option>50</option>
                     <option>100</option>
                 </select>
-                <span class="text-sm text-gray-600">条</span>
+                <span class="text-sm text-gray-600">鏉?/span>
             </div>
         </div>
     </footer>
@@ -1278,7 +1287,7 @@
     <!-- Toast Container -->
     <div id="toastContainer" class="fixed top-20 right-6 z-50 space-y-2"></div>
 
-    <!-- 涂覆录入抽屉 - 宽度2/3屏幕 -->
+    <!-- 娑傝褰曞叆鎶藉眽 - 瀹藉害2/3灞忓箷 -->
     <div id="entryDrawerOverlay" class="drawer-overlay fixed inset-0 bg-black/50 z-50" onclick="closeEntryDrawer()"></div>
     <div id="entryDrawer" class="drawer fixed top-0 right-0 h-full drawer-two-thirds bg-white z-50 shadow-2xl flex flex-col">
         <!-- Header -->
@@ -1288,8 +1297,8 @@
                     <i class="fas fa-plus"></i>
                 </div>
                 <div>
-                    <h3 class="text-lg font-bold text-gray-900">钢管涂覆录入</h3>
-                    <p class="text-sm text-gray-500">当前时间:  08:32</p>
+                    <h3 class="text-lg font-bold text-gray-900">涂覆根检录入</h3>
+                    <p class="text-sm text-gray-500">褰撳墠鏃堕棿: <span id="currentTime">08:32</span></p>
                 </div>
             </div>
             <div class="flex items-center gap-2">
@@ -1303,7 +1312,7 @@
         <div class="flex-1 overflow-y-auto p-6">
             <div class="max-w-4xl mx-auto space-y-6">
 
-                <!-- 自动信息卡片 -->
+                <!-- 鑷姩淇℃伅鍗＄墖 -->
                 
 
                 <div class="bg-white rounded-xl border border-blue-200 p-4">
@@ -1328,7 +1337,7 @@
                     </div>
                 </div>
 
-                <!-- 钢管标识信息 -->
+                <!-- 閽㈢鏍囪瘑淇℃伅 -->
                 <div class="bg-white rounded-xl border border-gray-200 p-5">
                     <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
                         <i class="fas fa-barcode text-blue-600"></i>
@@ -1343,7 +1352,7 @@
                                    class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl font-mono font-semibold text-gray-900 outline-none">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">管号</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">绠″彿</label>
                             <input type="text" id="entryPipeNo" value="6508741"
                                    readonly
                                    class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl font-mono outline-none">
@@ -1381,7 +1390,7 @@
                     </div>
                 </div>
 
-                <!-- 检验结果 -->
+                <!-- 妫€楠岀粨鏋?-->
                 <div class="bg-white rounded-xl border border-gray-200 p-5">
                     <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
                         <i class="fas fa-clipboard-check text-blue-600"></i>
@@ -1411,7 +1420,7 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-3">漏点检验 <span class="text-red-500">*</span><span class="ml-2 inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">合格标准：25KV</span></label>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">漏点检验<span class="text-red-500">*</span><span class="ml-2 inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">合格标准：25KV</span></label>
                             <div class="flex gap-3">
                                 <button type="button" onclick="setLeakTest('pass')" id="btnLeakPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
                                     <i class="fas fa-check-circle"></i>合格
@@ -1513,6 +1522,13 @@
                                 </div>
                             </div>
                         </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">&#x5269;&#x78C1;&#x68C0;&#x6D4B; <span class="text-red-500">*</span><span class="ml-2 inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">&#x5408;&#x683C;&#x6807;&#x51C6;&#xFF1A;&lt;15 Gauss</span></label>
+                            <div class="relative">
+                                <input type="number" id="entryResidualMagnetism" min="0" step="0.1" placeholder="&#x8F93;&#x5165;&#x5269;&#x78C1;&#x68C0;&#x6D4B;&#x503C;" class="w-full px-4 py-3 pr-20 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-400 font-medium">Gauss</span>
+                            </div>
+                        </div>
                         <div class="col-span-2 rounded-2xl border-2 border-blue-100 bg-blue-50/50 p-4">
                             <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between mb-4">
                                 <div>
@@ -1580,7 +1596,7 @@
         </div>
     </div>
 
-    <!-- 码单选择弹窗（新增） -->
+    <!-- 鐮佸崟閫夋嫨寮圭獥锛堟柊澧烇級 -->
     <div id="codeListModal" class="modal fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
         <div class="modal-content bg-white rounded-2xl industrial-shadow-lg w-full max-w-4xl max-h-[90vh] flex flex-col">
             <!-- Header -->
@@ -1590,8 +1606,8 @@
                         <i class="fas fa-list-ol text-xl"></i>
                     </div>
                     <div>
-                        <h3 class="text-lg font-bold">选择码单钢管</h3>
-                        <p class="text-sm text-blue-100">从预置码单中选择钢管信息自动填充</p>
+                        <h3 class="text-lg font-bold">閫夋嫨鐮佸崟閽㈢</h3>
+                        <p class="text-sm text-blue-100">浠庨缃爜鍗曚腑閫夋嫨閽㈢淇℃伅鑷姩濉厖</p>
                     </div>
                 </div>
                 <button onclick="closeCodeListModal()" class="w-8 h-8 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-colors">
@@ -1629,7 +1645,7 @@
                         </tr>
                     </thead>
                     <tbody id="codeListTableBody">
-                        <!-- 动态生成 -->
+                        <!-- 鍔ㄦ€佺敓鎴?-->
                     </tbody>
                 </table>
                 
@@ -1661,7 +1677,7 @@
         </div>
     </div>
 
-    <!-- 查看详情抽屉（2/3宽度） -->
+    <!-- 鏌ョ湅璇︽儏鎶藉眽锛?/3瀹藉害锛?-->
     <div id="detailDrawerOverlay" class="drawer-overlay fixed inset-0 bg-black/50 z-50" onclick="closeDetailDrawer()"></div>
     <div id="detailDrawer" class="drawer fixed top-0 right-0 h-full drawer-two-thirds bg-white z-50 shadow-2xl flex flex-col">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
@@ -1681,28 +1697,28 @@
 
         <div class="flex-1 overflow-y-auto p-6">
             <div class="max-w-4xl mx-auto space-y-6">
-                <!-- 基本信息 -->
+                <!-- 鍩烘湰淇℃伅 -->
                 <div class="bg-white rounded-xl border border-gray-200 p-5">
-                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-info-circle text-blue-600"></i>基本信息</h4>
+                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-info-circle text-blue-600"></i>鍩烘湰淇℃伅</h4>
                     <div class="grid grid-cols-3 gap-4">
                         <div class="p-3 bg-gray-50 rounded-lg">
-                            <div class="text-xs text-gray-500 mb-1">自编号</div>
+                            <div class="text-xs text-gray-500 mb-1">鑷紪鍙?/div>
                             <div class="font-mono font-bold text-lg text-gray-900" id="detailSelfNo">0032</div>
                         </div>
                         <div class="p-3 bg-gray-50 rounded-lg">
-                            <div class="text-xs text-gray-500 mb-1">管号</div>
+                            <div class="text-xs text-gray-500 mb-1">绠″彿</div>
                             <div class="font-mono text-gray-900" id="detailPipeNo">6508741</div>
                         </div>
                         <div class="p-3 bg-gray-50 rounded-lg">
-                            <div class="text-xs text-gray-500 mb-1">所属班次</div>
-                            <div class="text-blue-600 font-semibold" id="detailShift">今日白班</div>
+                            <div class="text-xs text-gray-500 mb-1">鎵€灞炵彮娆?/div>
+                            <div class="text-blue-600 font-semibold" id="detailShift">浠婃棩鐧界彮</div>
                         </div>
                         <div class="p-3 bg-gray-50 rounded-lg">
-                            <div class="text-xs text-gray-500 mb-1">捆号</div>
+                            <div class="text-xs text-gray-500 mb-1">鎹嗗彿</div>
                             <div class="font-semibold text-gray-900" id="detailBundleNo">96#</div>
                         </div>
                         <div class="p-3 bg-gray-50 rounded-lg">
-                            <div class="text-xs text-gray-500 mb-1">炉号</div>
+                            <div class="text-xs text-gray-500 mb-1">鐐夊彿</div>
                             <div class="font-semibold text-gray-900" id="detailFurnaceNo">15303842</div>
                         </div>
                         <div class="p-3 bg-gray-50 rounded-lg">
@@ -1712,67 +1728,67 @@
                     </div>
                 </div>
 
-                <!-- 规格信息 -->
+                <!-- 瑙勬牸淇℃伅 -->
                 <div class="bg-white rounded-xl border border-gray-200 p-5">
-                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-ruler-combined text-blue-600"></i>规格信息</h4>
+                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-ruler-combined text-blue-600"></i>瑙勬牸淇℃伅</h4>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="p-4 bg-blue-50 rounded-xl border border-blue-200 text-center">
                             <div class="text-3xl font-bold text-blue-700" id="detailLength">11856</div>
-                            <div class="text-sm text-blue-600 mt-1">长度 (mm)</div>
+                            <div class="text-sm text-blue-600 mt-1">闀垮害 (mm)</div>
                         </div>
                         <div class="p-4 bg-green-50 rounded-xl border border-green-200 text-center">
                             <div class="text-3xl font-bold text-green-700" id="detailWeight">573.5</div>
-                            <div class="text-sm text-green-600 mt-1">重量 (kg)</div>
+                            <div class="text-sm text-green-600 mt-1">閲嶉噺 (kg)</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 检验结果 -->
+                <!-- 妫€楠岀粨鏋?-->
                 <div class="bg-white rounded-xl border border-gray-200 p-5">
-                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-clipboard-check text-blue-600"></i>检验结果</h4>
+                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-clipboard-check text-blue-600"></i>妫€楠岀粨鏋?/h4>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                            <span class="text-sm text-gray-600">冷却温度</span>
+                            <span class="text-sm text-gray-600">鍐峰嵈娓╁害</span>
                             <span id="detailCoolingTemp" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span>
                         </div>
                         <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                            <span class="text-sm text-gray-600">涂层外观</span>
+                            <span class="text-sm text-gray-600">娑傚眰澶栬</span>
                             <span id="detailCoatingAppearance" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span>
                         </div>
                         <div class="col-span-2 flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                            <span class="text-sm text-gray-600">漏点检验</span>
+                            <span class="text-sm text-gray-600">婕忕偣妫€楠?/span>
                             <span id="detailLeakTest" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- 仪器读数 -->
+                <!-- 浠櫒璇绘暟 -->
                 <div class="bg-white rounded-xl border border-gray-200 p-5">
-                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-thermometer-half text-blue-600"></i>仪器读数</h4>
+                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-thermometer-half text-blue-600"></i>浠櫒璇绘暟</h4>
                     <div class="grid grid-cols-3 gap-4">
                         <div class="text-center p-4 bg-gray-50 rounded-xl">
                             <div class="text-xl font-bold text-gray-900" id="detailTDelta">14.8℃</div>
-                            <div class="text-xs text-gray-500 mt-1">T△ 温差</div>
+                            <div class="text-xs text-gray-500 mt-1">T鈻?娓╁樊</div>
                         </div>
                         <div class="text-center p-4 bg-gray-50 rounded-xl">
                             <div class="text-xl font-bold text-gray-900" id="detailRH">45%</div>
-                            <div class="text-xs text-gray-500 mt-1">RH 湿度</div>
+                            <div class="text-xs text-gray-500 mt-1">RH 婀垮害</div>
                         </div>
                         <div class="text-center p-4 bg-gray-50 rounded-xl">
                             <div class="text-xl font-bold text-gray-900" id="detailTemp">120℃</div>
-                            <div class="text-xs text-gray-500 mt-1">预热温度</div>
+                            <div class="text-xs text-gray-500 mt-1">棰勭儹娓╁害</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 录入信息 -->
+                <!-- 褰曞叆淇℃伅 -->
                 <div class="bg-white rounded-xl border border-gray-200 p-5">
                     <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fas fa-user-clock text-blue-600"></i>录入信息</h4>
                     <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg" id="detailOperatorIcon">张</div>
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg" id="detailOperatorIcon">寮?/div>
                         <div class="flex-1">
-                            <div class="font-semibold text-gray-900" id="detailOperator">张师傅</div>
-                            <div class="text-sm text-gray-500">质检员 | 工号: OP-2023-045</div>
+                            <div class="font-semibold text-gray-900" id="detailOperator">寮犲笀鍌?/div>
+                            <div class="text-sm text-gray-500">璐ㄦ鍛?| 宸ュ彿: OP-2023-045</div>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4 mt-4">
@@ -1781,7 +1797,7 @@
                             <div class="text-xs text-gray-500">录入时间</div>
                         </div>
                         <div class="p-3 bg-gray-50 rounded-xl text-center">
-                            <div class="text-sm font-semibold text-gray-900" id="detailDate">今天</div>
+                            <div class="text-sm font-semibold text-gray-900" id="detailDate">浠婂ぉ</div>
                             <div class="text-xs text-gray-500">录入日期</div>
                         </div>
                     </div>
@@ -1801,7 +1817,7 @@
         </div>
     </div>
 
-    <!-- 高级筛选弹窗 -->
+    <!-- 楂樼骇绛涢€夊脊绐?-->
     <div id="filterModal" class="modal fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
         <div class="modal-content bg-white rounded-2xl industrial-shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
@@ -1810,8 +1826,8 @@
                         <i class="fas fa-filter text-lg"></i>
                     </div>
                     <div>
-                        <h3 class="text-lg font-bold text-gray-900">高级筛选</h3>
-                        <p class="text-sm text-gray-500">设置筛选条件查找记录</p>
+                        <h3 class="text-lg font-bold text-gray-900">楂樼骇绛涢€?/h3>
+                        <p class="text-sm text-gray-500">璁剧疆绛涢€夋潯浠舵煡鎵捐褰?/p>
                     </div>
                 </div>
                 <button onclick="closeFilter()" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
@@ -1820,46 +1836,46 @@
             </div>
 
             <div class="p-6 space-y-6">
-                <!-- 班次筛选 -->
+                <!-- 鐝绛涢€?-->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-3">班次</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-3">鐝</label>
                     <div id="filterShiftOptions" class="flex flex-wrap gap-2"></div>
                 </div>
 
-                <!-- 编号筛选 -->
+                <!-- 缂栧彿绛涢€?-->
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">捆号</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">鎹嗗彿</label>
                         <input type="text" placeholder="如: 96#" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">炉号</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">鐐夊彿</label>
                         <input type="text" placeholder="输入炉号..." class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                     </div>
                 </div>
 
-                <!-- 质检员 -->
+                <!-- 璐ㄦ鍛?-->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">质检员</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">璐ㄦ鍛?/label>
                     <div class="flex gap-2">
-                        <button class="filter-opt active flex-1 py-2 px-4 rounded-lg border-2 border-blue-500 bg-blue-50 text-blue-700 font-medium text-sm" onclick="setFilterOpt(this)">全部</button>
-                        <button class="filter-opt flex-1 py-2 px-4 rounded-lg border-2 border-gray-200 text-gray-600 font-medium text-sm hover:border-blue-300" onclick="setFilterOpt(this)">张师傅</button>
-                        <button class="filter-opt flex-1 py-2 px-4 rounded-lg border-2 border-gray-200 text-gray-600 font-medium text-sm hover:border-blue-300" onclick="setFilterOpt(this)">李师傅</button>
-                        <button class="filter-opt flex-1 py-2 px-4 rounded-lg border-2 border-gray-200 text-gray-600 font-medium text-sm hover:border-blue-300" onclick="setFilterOpt(this)">王师傅</button>
+                        <button class="filter-opt active flex-1 py-2 px-4 rounded-lg border-2 border-blue-500 bg-blue-50 text-blue-700 font-medium text-sm" onclick="setFilterOpt(this)">鍏ㄩ儴</button>
+                        <button class="filter-opt flex-1 py-2 px-4 rounded-lg border-2 border-gray-200 text-gray-600 font-medium text-sm hover:border-blue-300" onclick="setFilterOpt(this)">寮犲笀鍌?/button>
+                        <button class="filter-opt flex-1 py-2 px-4 rounded-lg border-2 border-gray-200 text-gray-600 font-medium text-sm hover:border-blue-300" onclick="setFilterOpt(this)">鏉庡笀鍌?/button>
+                        <button class="filter-opt flex-1 py-2 px-4 rounded-lg border-2 border-gray-200 text-gray-600 font-medium text-sm hover:border-blue-300" onclick="setFilterOpt(this)">鐜嬪笀鍌?/button>
                     </div>
                 </div>
 
-                <!-- 外观检验 -->
+                <!-- 澶栬妫€楠?-->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">外观检验</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">澶栬妫€楠?/label>
                     <div class="flex gap-2">
-                        <button class="filter-opt active flex-1 py-2 px-4 rounded-lg border-2 border-blue-500 bg-blue-50 text-blue-700 font-medium text-sm" onclick="setFilterOpt(this)">全部</button>
+                        <button class="filter-opt active flex-1 py-2 px-4 rounded-lg border-2 border-blue-500 bg-blue-50 text-blue-700 font-medium text-sm" onclick="setFilterOpt(this)">鍏ㄩ儴</button>
                         <button class="filter-opt flex-1 py-2 px-4 rounded-lg border-2 border-green-200 text-green-700 bg-green-50 font-medium text-sm hover:border-green-400" onclick="setFilterOpt(this)">合格</button>
                         <button class="filter-opt flex-1 py-2 px-4 rounded-lg border-2 border-red-200 text-red-700 bg-red-50 font-medium text-sm hover:border-red-400" onclick="setFilterOpt(this)">不合格</button>
                     </div>
                 </div>
 
-                <!-- 时间范围 -->
+                <!-- 鏃堕棿鑼冨洿 -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">录入时间范围</label>
                     <div class="grid grid-cols-2 gap-3">
@@ -1877,10 +1893,10 @@
 
             <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 rounded-b-2xl flex gap-3">
                 <button onclick="resetFilter()" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 flex items-center justify-center gap-2">
-                    <i class="fas fa-undo"></i>重置
+                    <i class="fas fa-undo"></i>閲嶇疆
                 </button>
                 <button onclick="applyFilter()" class="flex-1 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 industrial-shadow flex items-center justify-center gap-2">
-                    <i class="fas fa-check"></i>应用筛选
+                    <i class="fas fa-check"></i>搴旂敤绛涢€?
                 </button>
             </div>
         </div>
@@ -1895,7 +1911,7 @@
                     </div>
                     <div>
                         <h3 class="text-lg font-bold text-gray-900">新增班次</h3>
-                        <p class="text-sm text-gray-500">输入日期并选择白班或晚班</p>
+                        <p class="text-sm text-gray-500">输入日期并选择白班或夜班</p>
                     </div>
                 </div>
                 <button onclick="closeAddShiftModal()" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
@@ -1912,7 +1928,7 @@
                     <label for="newShiftType" class="block text-sm font-medium text-gray-700 mb-2">班次类型</label>
                     <select id="newShiftType" class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-base outline-none transition-all form-input">
                         <option value="day">白班</option>
-                        <option value="night">晚班</option>
+                        <option value="night">夜班</option>
                     </select>
                 </div>
             </div>
@@ -1928,7 +1944,7 @@
         </div>
     </div>
 
-    <!-- 工单详情弹窗 -->
+    <!-- 宸ュ崟璇︽儏寮圭獥 -->
     <div id="woDetailModal" class="modal fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
         <div class="modal-content bg-white rounded-2xl industrial-shadow-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
             <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
@@ -1937,7 +1953,7 @@
                         <i class="fas fa-clipboard-list text-lg"></i>
                     </div>
                     <div>
-                        <h3 class="text-lg font-bold text-gray-900">工单详情</h3>
+                        <h3 class="text-lg font-bold text-gray-900">宸ュ崟璇︽儏</h3>
                         <p class="text-sm text-gray-500">WO-2026-0318-001</p>
                     </div>
                 </div>
@@ -1947,42 +1963,42 @@
             </div>
 
             <div class="p-6 space-y-6">
-                <!-- 状态横幅 -->
+                <!-- 鐘舵€佹í骞?-->
                 <div class="flex items-center gap-3 p-4 bg-blue-50 rounded-xl border border-blue-200">
                     <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
                         <i class="fas fa-play-circle text-xl"></i>
                     </div>
                     <div class="flex-1">
-                        <div class="font-semibold text-blue-900">生产中</div>
-                        <div class="text-sm text-blue-700">工单正在进行，预计按时完成</div>
+                        <div class="font-semibold text-blue-900">鐢熶骇涓?/div>
+                        <div class="text-sm text-blue-700">宸ュ崟姝ｅ湪杩涜锛岄璁℃寜鏃跺畬鎴?/div>
                     </div>
                     <div class="text-right">
                         <div class="text-2xl font-bold text-blue-600">78%</div>
-                        <div class="text-xs text-blue-600">完成度</div>
+                        <div class="text-xs text-blue-600">瀹屾垚搴?/div>
                     </div>
                 </div>
 
-                <!-- 班次统计 -->
+                <!-- 鐝缁熻 -->
                 <div class="border-t border-gray-200 pt-6">
-                    <h4 class="font-semibold text-gray-900 mb-4">班次生产统计</h4>
+                    <h4 class="font-semibold text-gray-900 mb-4">鐝鐢熶骇缁熻</h4>
                     <div id="workOrderShiftStats" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
                 </div>
 
-                <!-- 总体进度 -->
+                <!-- 鎬讳綋杩涘害 -->
                 <div class="border-t border-gray-200 pt-6">
-                    <h4 class="font-semibold text-gray-900 mb-4">总体进度</h4>
+                    <h4 class="font-semibold text-gray-900 mb-4">鎬讳綋杩涘害</h4>
                     <div class="grid grid-cols-3 gap-4 mb-4">
                         <div class="text-center p-4 bg-blue-50 rounded-xl">
                             <div class="text-2xl font-bold text-blue-600">316</div>
-                            <div class="text-xs text-gray-600 mt-1">计划产量</div>
+                            <div class="text-xs text-gray-600 mt-1">璁″垝浜ч噺</div>
                         </div>
                         <div class="text-center p-4 bg-green-50 rounded-xl">
                             <div class="text-2xl font-bold text-green-600">245</div>
-                            <div class="text-xs text-gray-600 mt-1">已完成</div>
+                            <div class="text-xs text-gray-600 mt-1">宸插畬鎴?/div>
                         </div>
                         <div class="text-center p-4 bg-yellow-50 rounded-xl">
                             <div class="text-2xl font-bold text-yellow-600">71</div>
-                            <div class="text-xs text-gray-600 mt-1">剩余</div>
+                            <div class="text-xs text-gray-600 mt-1">鍓╀綑</div>
                         </div>
                     </div>
                     <div class="progress-bar w-full h-3">
@@ -2006,8 +2022,8 @@
         <div class="modal-content bg-white rounded-2xl industrial-shadow-lg w-full max-w-5xl max-h-[90vh] overflow-hidden">
             <div class="bg-blue-600 px-6 py-4 text-white flex items-center justify-between">
                 <div>
-                    <h3 class="text-lg font-bold">企业仪器台账</h3>
-                    <p class="text-sm text-blue-100 mt-1">选择一个仪器加入当前工单除锈设备列表</p>
+                    <h3 class="text-lg font-bold">浼佷笟浠櫒鍙拌处</h3>
+                    <p class="text-sm text-blue-100 mt-1">閫夋嫨涓€涓华鍣ㄥ姞鍏ュ綋鍓嶅伐鍗曢櫎閿堣澶囧垪琛?/p>
                 </div>
                 <button onclick="closeInstrumentLedgerModal()" class="w-8 h-8 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-colors">
                     <i class="fas fa-times"></i>
@@ -2025,11 +2041,11 @@
                 <table class="data-table w-full bg-white">
                     <thead class="sticky-header">
                         <tr>
-                            <th class="px-4 py-4 text-left">仪器名称</th>
+                            <th class="px-4 py-4 text-left">浠櫒鍚嶇О</th>
                             <th class="px-4 py-4 text-left">型号规格</th>
-                            <th class="px-4 py-4 text-left">仪器编号</th>
-                            <th class="px-4 py-4 text-left">仪器有效期</th>
-                            <th class="px-4 py-4 text-center w-28">选择</th>
+                            <th class="px-4 py-4 text-left">浠櫒缂栧彿</th>
+                            <th class="px-4 py-4 text-left">浠櫒鏈夋晥鏈?/th>
+                            <th class="px-4 py-4 text-center w-28">閫夋嫨</th>
                         </tr>
                     </thead>
                     <tbody id="instrumentLedgerTableBody"></tbody>
@@ -2038,7 +2054,7 @@
                     <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                         <i class="fas fa-search text-2xl text-gray-400"></i>
                     </div>
-                    <p class="text-sm text-gray-500">没有匹配的仪器台账记录</p>
+                    <p class="text-sm text-gray-500">娌℃湁鍖归厤鐨勪华鍣ㄥ彴璐﹁褰?/p>
                 </div>
             </div>
 
@@ -2051,7 +2067,7 @@
     </div>
 
     <script>
-        // ========== 全局变量 ==========
+        // ========== 鍏ㄥ眬鍙橀噺 ==========
         let currentShift = 'today_day';
         let currentMainTab = 'material';
         let currentMaterialSubTab = 'root';
@@ -2079,36 +2095,36 @@
             furnaceNo: '15303842',
             batchNo: '71399'
         };
-        let nextId = 33; // 下一个自编号
-        let selectedCodeItem = null; // 当前选中的码单项
-        let isBevelExpanded = false; // 兼容旧逻辑
+        let nextId = 33; // 涓嬩竴涓嚜缂栧彿
+        let selectedCodeItem = null; // 褰撳墠閫変腑鐨勭爜鍗曢」
+        let isBevelExpanded = false; // 鍏煎鏃ч€昏緫
 
         const entryRecordList = [
-            { id: '0032', pipeNo: '6508741', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: '11856', weight: '573.5', humidity: '45', interval: '18', thicknesses: [418, 423, 426, 409, 401, 414, 420, 424, 411, 416], operator: '张师傅', time: '19:35' },
-            { id: '0031', pipeNo: '6508739', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: '11920', weight: '574.2', humidity: '42', interval: '22', thicknesses: [388, 401, 409, 416, 395, 402, 410, 397, 404, 392], operator: '张师傅', time: '18:42' },
-            { id: '0030', pipeNo: '6508725', bundleNo: '97#', furnaceNo: '15303842', batchNo: '71400', length: '11780', weight: '572.8', humidity: '65', interval: '41', thicknesses: [352, 368, 379, 385, 392, 361, 374, 388], operator: '李师傅', time: '03:15' }
+            { id: '0032', pipeNo: '6508741', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: '11856', weight: '573.5', residualMagnetism: '8', humidity: '45', interval: '18', thicknesses: [418, 423, 426, 409, 401, 414, 420, 424, 411, 416, 419, 422], operator: '\u5f20\u5e08\u5085', time: '19:35' },
+            { id: '0031', pipeNo: '6508739', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: '11920', weight: '574.2', residualMagnetism: '11', humidity: '42', interval: '22', thicknesses: [388, 401, 409, 416, 395, 402, 410, 397, 404, 392, 408, 411], operator: '\u5f20\u5e08\u5085', time: '18:42' },
+            { id: '0030', pipeNo: '6508725', bundleNo: '97#', furnaceNo: '15303842', batchNo: '71400', length: '11780', weight: '572.8', residualMagnetism: '18', humidity: '65', interval: '41', thicknesses: [352, 368, 379, 385, 392, 361, 374, 388, 357, 364, 371, 380], operator: '\u674e\u5e08\u5085', time: '03:15' }
         ];
         const sampleRecordList = [
-            { id: 'CJ-0032', temp1: '198', strength1: '38.5', temp2: '201', strength2: '39.2', inspector: '王检', time: '20:10', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23dbeafe'/><circle cx='42' cy='46' r='10' fill='%2393c5fd'/><circle cx='86' cy='58' r='8' fill='%2360a5fa'/><circle cx='118' cy='40' r='6' fill='%233b82f6'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 1</text></svg>" },
-            { id: 'CJ-0031', temp1: '194', strength1: '37.8', temp2: '199', strength2: '38.6', inspector: '王检', time: '18:55', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23e0f2fe'/><circle cx='38' cy='48' r='8' fill='%2394a3b8'/><circle cx='74' cy='60' r='7' fill='%2360a5fa'/><circle cx='110' cy='44' r='8' fill='%233b82f6'/><circle cx='126' cy='70' r='5' fill='%2394a3b8'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 2</text></svg>" },
+            { id: 'CJ-0032', temp1: '198', strength1: '38.5', temp2: '201', strength2: '39.2', inspector: '鐜嬫', time: '20:10', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23dbeafe'/><circle cx='42' cy='46' r='10' fill='%2393c5fd'/><circle cx='86' cy='58' r='8' fill='%2360a5fa'/><circle cx='118' cy='40' r='6' fill='%233b82f6'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 1</text></svg>" },
+            { id: 'CJ-0031', temp1: '194', strength1: '37.8', temp2: '199', strength2: '38.6', inspector: '鐜嬫', time: '18:55', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23e0f2fe'/><circle cx='38' cy='48' r='8' fill='%2394a3b8'/><circle cx='74' cy='60' r='7' fill='%2360a5fa'/><circle cx='110' cy='44' r='8' fill='%233b82f6'/><circle cx='126' cy='70' r='5' fill='%2394a3b8'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 2</text></svg>" },
             { id: 'CJ-0030', temp1: '186', strength1: '32.4', temp2: '191', strength2: '31.7', inspector: '赵检', time: '03:40', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23fee2e2'/><circle cx='32' cy='40' r='9' fill='%23ef4444'/><circle cx='56' cy='54' r='7' fill='%23b91c1c'/><circle cx='84' cy='42' r='9' fill='%23ef4444'/><circle cx='114' cy='58' r='8' fill='%23b91c1c'/><circle cx='132' cy='40' r='7' fill='%23ef4444'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%237f1d1d'>Dust 4</text></svg>" }
         ];
         let currentSampleDrawerMode = 'create';
 
-        // 模拟码单数据
+        // 妯℃嫙鐮佸崟鏁版嵁
         let instrumentSelection = [
-            { name: '环境温湿度采集仪', model: 'TH-2000', code: 'INS-TH-03', expiry: '2026-12-31' },
-            { name: '壁厚激光测量仪', model: 'LT-118A', code: 'INS-LT-12', expiry: '2026-09-30' }
+            { name: '鐜娓╂箍搴﹂噰闆嗕华', model: 'TH-2000', code: 'INS-TH-03', expiry: '2026-12-31' },
+            { name: '澹佸帤婵€鍏夋祴閲忎华', model: 'LT-118A', code: 'INS-LT-12', expiry: '2026-09-30' }
         ];
         let compressedAirResult = 'pass';
 
         const instrumentLedgerData = [
-            { name: '环境温湿度采集仪', model: 'TH-2000', code: 'INS-TH-03', expiry: '2026-12-31' },
-            { name: '壁厚激光测量仪', model: 'LT-118A', code: 'INS-LT-12', expiry: '2026-09-30' },
-            { name: '端口测温枪', model: 'TEMP-7 Pro', code: 'INS-TEMP-07', expiry: '2026-07-15' },
-            { name: '露点检测仪', model: 'DP-860', code: 'INS-DP-05', expiry: '2027-01-20' },
-            { name: '表面盐分测试仪', model: 'SALT-320', code: 'INS-SALT-02', expiry: '2026-11-08' },
-            { name: '光照度计', model: 'LX-500', code: 'INS-LUX-09', expiry: '2026-10-18' }
+            { name: '\u73af\u5883\u6e29\u6e7f\u5ea6\u91c7\u96c6\u4eea', model: 'TH-2000', code: 'INS-TH-03', expiry: '2026-12-31' },
+            { name: '\u58c1\u539a\u6fc0\u5149\u6d4b\u91cf\u4eea', model: 'LT-118A', code: 'INS-LT-12', expiry: '2026-09-30' },
+            { name: '\u7aef\u53e3\u6d4b\u6e29\u67aa', model: 'TEMP-7 Pro', code: 'INS-TEMP-07', expiry: '2026-07-15' },
+            { name: '\u9732\u70b9\u68c0\u6d4b\u4eea', model: 'DP-860', code: 'INS-DP-05', expiry: '2027-01-20' },
+            { name: '\u8868\u9762\u76d0\u5206\u6d4b\u8bd5\u4eea', model: 'SALT-320', code: 'INS-SALT-02', expiry: '2026-11-08' },
+            { name: '\u5149\u7167\u5ea6\u8ba1', model: 'LX-500', code: 'INS-LUX-09', expiry: '2026-10-18' }
         ];
 
         const codeListData = [
@@ -2141,7 +2157,7 @@
         }
 
         function getShiftTypeLabel(type) {
-            return type === 'night' ? '晚班' : '白班';
+            return type === 'night' ? '鏅氱彮' : '鐧界彮';
         }
 
         function getShiftTimeRange(type) {
@@ -2387,7 +2403,7 @@
 
             if (isMaterialListFullscreen) {
                 btn.className = 'flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-blue-200 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm whitespace-nowrap transition-all';
-                text.textContent = '退出全屏';
+                text.textContent = '\u9000\u51fa\u5168\u5c4f';
             } else {
                 btn.className = 'flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-gray-200 bg-white hover:bg-gray-50 text-gray-700 font-semibold text-sm whitespace-nowrap transition-all';
                 text.textContent = '全屏展示';
@@ -2401,7 +2417,7 @@
             updateMaterialListFullscreenButton();
         }
 
-        // ========== 坡口信息折叠功能 ==========
+        // ========== 鍧″彛淇℃伅鎶樺彔鍔熻兘 ==========
         function renderInstrumentTable() {
             const tbody = document.getElementById('instrumentTableBody');
             const emptyState = document.getElementById('instrumentEmptyState');
@@ -2429,7 +2445,7 @@
                     <td class="px-4 py-4 text-gray-600">${item.expiry}</td>
                     <td class="px-4 py-4 text-center">
                         <button onclick="removeInstrument('${item.code}')" class="px-3 py-1.5 rounded-lg bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition-colors">
-                            移除
+                            绉婚櫎
                         </button>
                     </td>
                 `;
@@ -2472,7 +2488,7 @@
                     <td class="px-4 py-4 text-gray-600">${item.expiry}</td>
                     <td class="px-4 py-4 text-center">
                         <button ${exists ? 'disabled' : ''} onclick="addInstrumentFromLedger('${item.code}')" class="px-3 py-1.5 rounded-lg border ${exists ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed' : 'border-blue-200 bg-blue-50 text-blue-600 hover:bg-blue-100'} transition-colors">
-                            ${exists ? '已添加' : '选择'}
+                            ${exists ? '\u5df2\u6dfb\u52a0' : '\u9009\u62e9'}
                         </button>
                     </td>
                 `;
@@ -2502,20 +2518,20 @@
             if (!item) return;
 
             if (instrumentSelection.some(entry => entry.code === code)) {
-                showToast('该仪器已在列表中', 'info');
+                showToast('璇ヤ华鍣ㄥ凡鍦ㄥ垪琛ㄤ腑', 'info');
                 return;
             }
 
             instrumentSelection.push(item);
             renderInstrumentTable();
             renderInstrumentLedger(instrumentLedgerData);
-            showToast('仪器已加入当前列表', 'success');
+            showToast('\u4eea\u5668\u5df2\u52a0\u5165\u5f53\u524d\u5217\u8868', 'success');
         }
 
         function removeInstrument(code) {
             instrumentSelection = instrumentSelection.filter(item => item.code !== code);
             renderInstrumentTable();
-            showToast('仪器已移除', 'success');
+            showToast('\u4eea\u5668\u5df2\u79fb\u9664', 'success');
         }
 
         function setCompressedAirResult(type) {
@@ -2539,11 +2555,11 @@
             const salinity = document.getElementById('instrumentSalinity')?.value.trim() || '';
 
             if (!abrasiveConductivity || !illuminance || !salinity) {
-                showToast('请完整填写仪器读数', 'error');
+                showToast('\u8bf7\u5b8c\u6574\u586b\u5199\u4eea\u5668\u8bfb\u6570', 'error');
                 return;
             }
 
-            showToast(`仪器读数已保存，压缩空气${compressedAirResult === 'pass' ? '合格' : '不合格'}`, 'success');
+            showToast(`\u4eea\u5668\u8bfb\u6570\u5df2\u4fdd\u5b58\uff0c\u538b\u7f29\u7a7a\u6c14${compressedAirResult === 'pass' ? '\u5408\u683c' : '\u4e0d\u5408\u683c'}`, 'success');
         }
 
         function updateWorkOrderProgress(recordedCount) {
@@ -2613,7 +2629,7 @@
                 content.classList.add('expanded');
                 arrow.classList.add('rotated');
                 statusText.textContent = '(点击折叠)';
-                // 初始化坡口外观按钮状态
+                // 鍒濆鍖栧潯鍙ｅ瑙傛寜閽姸鎬?
                 setBevelAppearance(bevelAppearance);
             } else {
                 content.classList.remove('expanded');
@@ -2646,14 +2662,14 @@
             
             if (angle || verticality || bluntEdge) {
                 summary.style.display = 'inline';
-                summary.textContent = '已填写';
+                summary.textContent = '\u5df2\u586b\u5199';
                 summary.className = 'text-xs text-green-600 px-2 py-1 bg-green-100 rounded-full';
             } else {
                 summary.style.display = 'none';
             }
         }
 
-        // 监听坡口数值输入变化
+        // 鐩戝惉鍧″彛鏁板€艰緭鍏ュ彉鍖?
         document.addEventListener('DOMContentLoaded', function() {
             const bevelInputs = ['bevelAngle', 'bevelVerticality', 'bevelBluntEdge'];
             bevelInputs.forEach(id => {
@@ -2664,7 +2680,7 @@
             });
         });
 
-        // ========== 码单选择弹窗相关函数 ==========
+        // ========== 鐮佸崟閫夋嫨寮圭獥鐩稿叧鍑芥暟 ==========
         function openCodeListModal() {
             document.getElementById('codeListModal').classList.add('open');
             renderCodeList(codeListData);
@@ -2706,7 +2722,7 @@
                     <td class="px-4 py-3 text-center text-sm text-gray-700">${item.weight.toFixed(1)}</td>
                     <td class="px-4 py-3 text-center">
                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                            待录入
+                            寰呭綍鍏?
                         </span>
                     </td>
                 `;
@@ -2732,12 +2748,12 @@
         }
 
         function selectCodeItem(item, rowElement) {
-            // 移除其他选中状态
+            // 绉婚櫎鍏朵粬閫変腑鐘舵€?
             document.querySelectorAll('.code-list-item').forEach(el => {
                 el.classList.remove('selected');
             });
             
-            // 添加当前选中状态
+            // 娣诲姞褰撳墠閫変腑鐘舵€?
             rowElement.classList.add('selected');
             selectedCodeItem = item;
             document.getElementById('codeListSelectedCount').textContent = '1';
@@ -2745,11 +2761,11 @@
 
         function confirmCodeSelection() {
             if (!selectedCodeItem) {
-                showToast('请先选择一支钢管', 'error');
+                showToast('\u8bf7\u5148\u9009\u62e9\u4e00\u652f\u94a2\u7ba1', 'error');
                 return;
             }
             
-            // 回填数据到录入表单
+            // 鍥炲～鏁版嵁鍒板綍鍏ヨ〃鍗?
             document.getElementById('entryPipeNo').value = selectedCodeItem.pipeNo;
             document.getElementById('entryBundleNo').value = selectedCodeItem.bundleNo;
             document.getElementById('entryFurnaceNo').value = selectedCodeItem.furnaceNo;
@@ -2757,7 +2773,7 @@
             document.getElementById('entryLength').value = selectedCodeItem.length;
             document.getElementById('entryWeight').value = selectedCodeItem.weight;
             
-            // 显示已选择的信息卡片
+            // 鏄剧ず宸查€夋嫨鐨勪俊鎭崱鐗?
             document.getElementById('selectedPipeNo').textContent = selectedCodeItem.pipeNo;
             document.getElementById('selectedBundleNo').textContent = selectedCodeItem.bundleNo;
             document.getElementById('selectedFurnaceNo').textContent = selectedCodeItem.furnaceNo;
@@ -2769,9 +2785,9 @@
             document.getElementById('selectedCodeInfo').classList.remove('hidden');
             
             closeCodeListModal();
-            showToast('码单信息已填充', 'success');
+            showToast('\u7801\u5355\u4fe1\u606f\u5df2\u586b\u5165', 'success');
             
-            // 高亮显示已填充的字段
+            // 楂樹寒鏄剧ず宸插～鍏呯殑瀛楁
             const fields = ['entryPipeNo', 'entryBundleNo', 'entryFurnaceNo', 'entryBatchNo', 'entryLength', 'entryWeight'];
             fields.forEach(id => {
                 const el = document.getElementById(id);
@@ -2786,7 +2802,7 @@
             document.getElementById('codeListSelectorArea').classList.remove('hidden');
             document.getElementById('selectedCodeInfo').classList.add('hidden');
             
-            // 清空相关字段
+            // 娓呯┖鐩稿叧瀛楁
             document.getElementById('entryPipeNo').value = '';
             document.getElementById('entryBundleNo').value = '';
             document.getElementById('entryFurnaceNo').value = '';
@@ -2795,16 +2811,16 @@
             document.getElementById('entryWeight').value = '';
             
             selectedCodeItem = null;
-            showToast('已清除码单选择', 'info');
+            showToast('宸叉竻闄ょ爜鍗曢€夋嫨', 'info');
         }
 
-        // ========== 抽屉控制 ==========
+        // ========== 鎶藉眽鎺у埗 ==========
         function openEntryDrawer(recordId = null) {
             document.getElementById('entryDrawerOverlay').classList.add('open');
             document.getElementById('entryDrawer').classList.add('open');
             document.body.style.overflow = 'hidden';
 
-            // 更新当前时间
+            // 鏇存柊褰撳墠鏃堕棿
             const now = new Date();
             const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
             document.getElementById('currentTime').textContent = timeStr;
@@ -2882,13 +2898,13 @@
             const shiftType = document.getElementById('newShiftType').value;
 
             if (!dateValue) {
-                showToast('请选择班次日期', 'error');
+                showToast('璇烽€夋嫨鐝鏃ユ湡', 'error');
                 return;
             }
 
             const shiftId = buildShiftId(dateValue, shiftType);
             if (shiftData[shiftId]) {
-                showToast('该日期班次已存在，请勿重复新增', 'error');
+                showToast('\u8be5\u65e5\u671f\u73ed\u6b21\u5df2\u5b58\u5728\uff0c\u8bf7\u52ff\u91cd\u590d\u65b0\u589e', 'error');
                 return;
             }
 
@@ -2919,7 +2935,7 @@
             renderWorkOrderShiftStats();
             closeAddShiftModal();
             switchShift(shiftId);
-            showToast(`已新增班次: ${shift.name}`, 'success');
+            showToast('\u5df2\u65b0\u589e\u73ed\u6b21 ' + shift.name, 'success');
         }
 
         function viewWorkOrderDetail() {
@@ -2980,13 +2996,15 @@
                 temp1Result: 'pass',
                 temp2: '201',
                 temp2Result: 'pass',
-                inspector: '当前班组',
-                time: '待保存',
+                inspector: '褰撳墠鐝粍',
+                time: '\u5f85\u4fdd\u5b58',
                 photo: sampleRecordList[0].photo
             };
 
             document.getElementById('sampleDrawerTitle').textContent = isCreate ? '抽检录入' : mode === 'edit' ? '抽检修改' : '抽检详情';
-            document.getElementById('sampleDrawerSubtitle').textContent = isCreate ? `已从根检钢管 ${linkedRoot.id} 带入标识信息` : `当前记录: ${record.id} | 质检员 ${record.inspector} | ${record.time}`;
+            document.getElementById('sampleDrawerSubtitle').textContent = isCreate
+                ? '\u5df2\u4ece\u6839\u68c0\u94a2\u7ba1 ' + linkedRoot.id + ' \u5e26\u5165\u6807\u8bc6\u4fe1\u606f'
+                : '\u5f53\u524d\u8bb0\u5f55: ' + record.id + ' | \u8d28\u68c0\u5458 ' + record.inspector + ' | ' + record.time;
             document.getElementById('sampleEntryId').value = isCreate ? `CJ-${linkedRoot.id}` : record.id;
             
             document.getElementById('samplePipeNo').value = linkedRoot.pipeNo;
@@ -3022,7 +3040,7 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
         }
 
         function saveSampleEntry() {
-            showToast(currentSampleDrawerMode === 'create' ? '抽检记录已创建' : '抽检记录已更新', 'success');
+            showToast(currentSampleDrawerMode === 'create' ? '\u62bd\u68c0\u8bb0\u5f55\u5df2\u521b\u5efa' : '\u62bd\u68c0\u8bb0\u5f55\u5df2\u66f4\u65b0', 'success');
             closeSampleDrawer();
         }
 
@@ -3043,21 +3061,22 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             document.getElementById('entryBatchNo').value = record.batchNo;
             document.getElementById('entryLength').value = record.length;
             document.getElementById('entryWeight').value = record.weight;
+            document.getElementById('entryResidualMagnetism').value = record.residualMagnetism || ''; 
             currentThicknessValues = Array.isArray(record.thicknesses) ? [...record.thicknesses] : [];
             currentThicknessEditing = false;
             setThicknessCount(12);
-            document.getElementById('entryRecordPosition').textContent = `第 ${index + 1} 支 / 共 ${entryRecordList.length} 支`;
+            document.getElementById('entryRecordPosition').textContent = '\u7b2c ' + (index + 1) + ' \u652f / \u5171 ' + entryRecordList.length + ' \u652f';
         }
 
         function navigateEntryRecord(offset) {
             const nextIndex = currentEntryRecordIndex + offset;
             if (nextIndex < 0 || nextIndex >= entryRecordList.length) {
-                showToast(offset < 0 ? '已经是第一支钢管' : '已经是最后一支钢管', 'info');
+                showToast(offset < 0 ? '\u5df2\u7ecf\u662f\u7b2c\u4e00\u652f\u94a2\u7ba1' : '\u5df2\u7ecf\u662f\u6700\u540e\u4e00\u652f\u94a2\u7ba1', 'info');
                 return;
             }
 
             populateEntryRecord(nextIndex);
-            showToast(offset < 0 ? '已切换到上一支钢管' : '已切换到下一支钢管', 'success');
+            showToast(offset < 0 ? '\u5df2\u5207\u6362\u5230\u4e0a\u4e00\u652f\u94a2\u7ba1' : '\u5df2\u5207\u6362\u5230\u4e0b\u4e00\u652f\u94a2\u7ba1', 'success');
         }
 
         function renderThicknessInputs() {
@@ -3069,13 +3088,11 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
                 const value = currentThicknessValues[i] ?? '';
                 const card = document.createElement('div');
                 card.className = 'rounded-xl border border-gray-200 bg-white p-3';
-                card.innerHTML = `
-                    <label class="block text-xs font-semibold text-gray-500 mb-2">点位 P${i + 1}</label>
-                    <div class="relative">
-                        <input type="number" min="0" step="1" value="${value}" data-index="${i}" ${currentThicknessEditing ? '' : 'disabled'} class="thickness-input w-full px-3 py-2.5 pr-12 border border-gray-200 rounded-lg outline-none text-sm font-semibold text-gray-900 ${currentThicknessEditing ? 'bg-gray-50 focus:border-blue-500' : 'bg-gray-100 text-gray-600 cursor-not-allowed'}" oninput="updateThicknessValue(this)">
-                        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">μm</span>
-                    </div>
-                `;
+                card.innerHTML = '<label class="block text-xs font-semibold text-gray-500 mb-2">P' + (i + 1) + '</label>' +
+                    '<div class="relative">' +
+                    '<input type="number" min="0" step="1" value="' + value + '" data-index="' + i + '" ' + (currentThicknessEditing ? '' : 'disabled') + ' class="thickness-input w-full px-3 py-2.5 pr-12 border border-gray-200 rounded-lg outline-none text-sm font-semibold text-gray-900 ' + (currentThicknessEditing ? 'bg-gray-50 focus:border-blue-500' : 'bg-gray-100 text-gray-600 cursor-not-allowed') + '" oninput="updateThicknessValue(this)">' +
+                    '<span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">\u03bcm</span>' +
+                    '</div>';
                 grid.appendChild(card);
             }
 
@@ -3149,9 +3166,9 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             const min = Math.min(...values);
             const avg = Math.round(values.reduce((sum, value) => sum + value, 0) / values.length);
 
-            maxNode.textContent = `${max} μm`;
-            minNode.textContent = `${min} μm`;
-            avgNode.textContent = `${avg} μm`;
+            maxNode.textContent = max + ' \u03bcm';
+            minNode.textContent = min + ' \u03bcm';
+            avgNode.textContent = avg + ' \u03bcm';
         }
 
         function saveThicknessSection() {
@@ -3160,8 +3177,9 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
                 .map(value => Number(value))
                 .filter(value => !Number.isNaN(value) && value > 0);
 
+
             if (thicknessValues.length !== currentThicknessCount) {
-                showToast(`请完成 ${currentThicknessCount} 个厚度点位的录入`, 'error');
+                showToast('\u8bf7\u5b8c\u6210 ' + currentThicknessCount + ' \u4e2a\u539a\u5ea6\u70b9\u4f4d\u7684\u5f55\u5165', 'error');
                 return;
             }
 
@@ -3172,10 +3190,10 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
 
             currentThicknessEditing = false;
             renderThicknessInputs();
-            showToast('涂层厚度已单独保存', 'success');
+            showToast('\u6d82\u5c42\u539a\u5ea6\u5df2\u5355\u72ec\u4fdd\u5b58', 'success');
         }
 
-        // ========== 外观选择 ==========
+        // ========== 澶栬閫夋嫨 ==========
         function setAppearance(type) {
             currentAppearance = type;
             const btnPass = document.getElementById('btnPass');
@@ -3330,38 +3348,48 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             }
         }
 
-        // ========== 保存录入 ==========
+        // ========== 淇濆瓨褰曞叆 ==========
         function submitEntry() {
             const pipeNo = document.getElementById('entryPipeNo').value;
             const bundleNo = document.getElementById('entryBundleNo').value;
             const furnaceNo = document.getElementById('entryFurnaceNo').value;
             const batchNo = document.getElementById('entryBatchNo').value;
             const length = document.getElementById('entryLength').value;
+            const residualMagnetism = document.getElementById('entryResidualMagnetism').value.trim();
             const thicknessValues = currentThicknessValues
                 .slice(0, currentThicknessCount)
                 .map(value => Number(value))
                 .filter(value => !Number.isNaN(value) && value > 0);
 
-            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length) {
-                showToast('请填写完整的根检结果', 'error');
+            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !residualMagnetism) {
+                showToast('\u8bf7\u586b\u5199\u5b8c\u6574\u7684\u6839\u68c0\u7ed3\u679c', 'error');
+                return;
+            }
+
+            if (Number.isNaN(Number(residualMagnetism)) || Number(residualMagnetism) >= 15) {
+                showToast('\u5269\u78c1\u68c0\u6d4b\u5fc5\u987b\u586b\u5199\u4e14\u9700\u5c0f\u4e8e15 Gauss', 'error');
                 return;
             }
 
             if (thicknessValues.length !== currentThicknessCount) {
-                showToast(`请完成 ${currentThicknessCount} 个厚度点位的录入`, 'error');
+                showToast('\u8bf7\u5b8c\u6210 ' + currentThicknessCount + ' \u4e2a\u539a\u5ea6\u70b9\u4f4d\u7684\u5f55\u5165', 'error');
                 return;
             }
 
-            // 保存为上一记录
+            // 淇濆瓨涓轰笂涓€璁板綍
+            const record = entryRecordList[currentEntryRecordIndex];
+            if (record) {
+                record.residualMagnetism = residualMagnetism;
+            }
             lastRecord = { bundleNo, furnaceNo, batchNo };
 
-            // 自编号+1
+            // 鑷紪鍙?1
             nextId++;
 
-            showToast('涂覆记录提交成功！', 'success');
+            showToast('\u6d82\u8986\u8bb0\u5f55\u63d0\u4ea4\u6210\u529f', 'success');
             closeEntryDrawer();
 
-            // 更新本班数量
+            // 鏇存柊鏈彮鏁伴噺
             const shiftCount = document.getElementById('shiftCountValue');
             const currentCount = parseInt(shiftCount.textContent, 10) + 1;
             updateWorkOrderProgress(currentCount);
@@ -3373,36 +3401,46 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             const furnaceNo = document.getElementById('entryFurnaceNo').value;
             const batchNo = document.getElementById('entryBatchNo').value;
             const length = document.getElementById('entryLength').value;
+            const residualMagnetism = document.getElementById('entryResidualMagnetism').value.trim();
             const thicknessValues = currentThicknessValues
                 .slice(0, currentThicknessCount)
                 .map(value => Number(value))
                 .filter(value => !Number.isNaN(value) && value > 0);
 
-            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length) {
-                showToast('请填写完整的根检结果', 'error');
+            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !residualMagnetism) {
+                showToast('\u8bf7\u586b\u5199\u5b8c\u6574\u7684\u6839\u68c0\u7ed3\u679c', 'error');
+                return;
+            }
+
+            if (Number.isNaN(Number(residualMagnetism)) || Number(residualMagnetism) >= 15) {
+                showToast('\u5269\u78c1\u68c0\u6d4b\u5fc5\u987b\u586b\u5199\u4e14\u9700\u5c0f\u4e8e15 Gauss', 'error');
                 return;
             }
 
             if (thicknessValues.length !== currentThicknessCount) {
-                showToast(`请完成 ${currentThicknessCount} 个厚度点位的录入`, 'error');
+                showToast('\u8bf7\u5b8c\u6210 ' + currentThicknessCount + ' \u4e2a\u539a\u5ea6\u70b9\u4f4d\u7684\u5f55\u5165', 'error');
                 return;
             }
 
-            // 保存为上一记录
+            // 淇濆瓨涓轰笂涓€璁板綍
+            const record = entryRecordList[currentEntryRecordIndex];
+            if (record) {
+                record.residualMagnetism = residualMagnetism;
+            }
             lastRecord = { bundleNo, furnaceNo, batchNo };
 
             nextId++;
 
-            // 更新本班数量
+            // 鏇存柊鏈彮鏁伴噺
             const shiftCount = document.getElementById('shiftCountValue');
             const currentCount = parseInt(shiftCount.textContent, 10) + 1;
             updateWorkOrderProgress(currentCount);
 
-            showToast('保存成功，请继续录入下一支', 'success');
+            showToast('\u4fdd\u5b58\u6210\u529f\uff0c\u8bf7\u7ee7\u7eed\u5f55\u5165\u4e0b\u4e00\u652f', 'success');
             navigateEntryRecord(1);
         }
 
-        // ========== 班次切换 ==========
+        // ========== 鐝鍒囨崲 ==========
         function switchShift(shiftId) {
             if (shiftId === currentShift) return;
 
@@ -3411,9 +3449,9 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
 
             document.querySelectorAll('.shift-btn').forEach(btn => {
                 const isActive = btn.dataset.shift === shiftId;
-                btn.className = isActive 
-                    ? `shift-btn active flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-blue-600 text-white border-blue-600 ring-4 ring-blue-100`
-                    : `shift-btn flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-white text-gray-700 border-gray-200 hover:border-blue-400`;
+                btn.className = isActive
+                    ? 'shift-btn active flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-blue-600 text-white border-blue-600 ring-4 ring-blue-100'
+                    : 'shift-btn flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-white text-gray-700 border-gray-200 hover:border-blue-400';
 
                 const badge = btn.querySelector('span');
                 if (badge) {
@@ -3426,11 +3464,11 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             document.getElementById('currentShiftName').textContent = shift.name;
             document.getElementById('totalCount').textContent = shift.count;
             applyMaterialTableFilters();
-            showToast(`已切换到: ${shift.name}`, 'info');
+            showToast('\u5df2\u5207\u6362\u5230: ' + shift.name, 'info');
             clearSelection();
         }
 
-        // ========== 筛选功能 ==========
+        // ========== 绛涢€夊姛鑳?==========
         function setFilterOpt(btn) {
             const parent = btn.parentElement;
             parent.querySelectorAll('.filter-opt').forEach(b => {
@@ -3455,16 +3493,16 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
 
         function applyFilter() {
             closeFilter();
-            showToast('筛选条件已应用', 'success');
+            showToast('绛涢€夋潯浠跺凡搴旂敤', 'success');
         }
 
-        // ========== 表格操作 ==========
+        // ========== 琛ㄦ牸鎿嶄綔 ==========
         function setFilter(event, type) {
             document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
             event.target.closest('.filter-chip').classList.add('active');
             currentRowFilter = type;
             applyMaterialTableFilters();
-            showToast(`已切换到: ${event.target.closest('.filter-chip').textContent.trim()}`, 'info');
+            showToast('\u5df2\u5207\u6362\u5230: ' + event.target.closest('.filter-chip').textContent.trim(), 'info');
         }
 
         function handleSearch(value) {
@@ -3522,24 +3560,24 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             updateBatchBar();
         }
 
-        // ========== 批量操作 ==========
+        // ========== 鎵归噺鎿嶄綔 ==========
         function batchPrint() {
-            showToast(`正在打印 ${selectedRows.size} 个标签...`, 'info');
+            showToast('\u6b63\u5728\u6253\u5370 ' + selectedRows.size + ' \u4e2a\u6807\u7b7e...', 'info');
         }
 
         function batchExport() {
-            showToast(`已导出 ${selectedRows.size} 条记录到Excel`, 'success');
+            showToast('\u5df2\u5bfc\u51fa ' + selectedRows.size + ' \u6761\u8bb0\u5f55\u5230 Excel', 'success');
         }
 
         function batchDelete() {
-            if (confirm(`确定要删除选中的 ${selectedRows.size} 条记录吗？此操作不可恢复。`)) {
-                showToast(`${selectedRows.size} 条记录已删除`, 'success');
+            if (confirm(`\u786e\u5b9a\u8981\u5220\u9664\u9009\u4e2d\u7684 ${selectedRows.size} \u6761\u8bb0\u5f55\u5417\uff1f\u6b64\u64cd\u4f5c\u4e0d\u53ef\u6062\u590d\u3002`)) {
+                showToast(selectedRows.size + ' \u6761\u8bb0\u5f55\u5df2\u5220\u9664', 'success');
                 clearSelection();
             }
         }
 
         function deleteRow(id) {
-            if (confirm(`确定要删除记录 ${id} 吗？此操作不可恢复。`)) {
+            if (confirm(`\u786e\u5b9a\u8981\u5220\u9664\u8bb0\u5f55 ${id} \u5417\uff1f\u6b64\u64cd\u4f5c\u4e0d\u53ef\u6062\u590d\u3002`)) {
                 const row = document.querySelector(`tr[data-id="${id}"]`);
                 if (row) {
                     row.style.transition = 'all 0.3s ease';
@@ -3547,13 +3585,13 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
                     row.style.transform = 'translateX(-20px)';
                     setTimeout(() => {
                         row.remove();
-                        showToast(`记录 ${id} 已删除`, 'success');
+                        showToast(`\u8bb0\u5f55 ${id} \u5df2\u5220\u9664`, 'success');
                     }, 300);
                 }
             }
         }
 
-        // ========== 其他功能 ==========
+        // ========== 鍏朵粬鍔熻兘 ==========
         function exportData() {
             showToast('正在导出数据...', 'info');
         }
@@ -3567,19 +3605,19 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
         }
 
         function changePage(page) {
-            showToast(page === 'prev' || page === 'next' ? '翻页功能' : `跳转到第 ${page} 页`, 'info');
+            showToast(page === 'prev' || page === 'next' ? '\u7ffb\u9875\u529f\u80fd' : '\u8df3\u8f6c\u5230\u7b2c ' + page + ' \u9875', 'info');
         }
 
         function changePageSize() {
             const size = document.getElementById('pageSize').value;
-            showToast(`每页显示 ${size} 条`, 'info');
+            showToast('\u6bcf\u9875\u663e\u793a ' + size + ' \u6761', 'info');
         }
 
         function sortTable(column) {
-            showToast(`按 ${column} 排序`, 'info');
+            showToast('\u6309 ' + column + ' \u6392\u5e8f', 'info');
         }
 
-        // Toast通知
+        // Toast閫氱煡
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
@@ -3595,7 +3633,7 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
                 'info': 'fa-info-circle'
             };
 
-            toast.className = `toast ${colors[type] || colors.info} text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 min-w-[200px]`;
+            toast.className = 'toast ' + (colors[type] || colors.info) + ' text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 min-w-[200px]';
             toast.innerHTML = `<i class="fas ${icons[type] || icons.info} text-white"></i><span>${message}</span>`;
 
             container.appendChild(toast);
@@ -3607,7 +3645,7 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             }, 3000);
         }
 
-        // 初始化
+        // 鍒濆鍖?
         document.addEventListener('DOMContentLoaded', function() {
             renderShiftFilterOptions();
             renderWorkOrderShiftStats();
@@ -3622,13 +3660,13 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             setCompressedAirResult('pass');
             updateWorkOrderProgress(parseInt(document.getElementById('shiftCountValue')?.textContent || '247', 10));
 
-            // 更新当前时间
+            // 鏇存柊褰撳墠鏃堕棿
             const now = new Date();
             const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
             document.getElementById('currentTime').textContent = timeStr;
         });
 
-        // ESC键关闭
+        // ESC閿叧闂?
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeDetailDrawer();
