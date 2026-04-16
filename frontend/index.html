@@ -405,7 +405,7 @@
         <div class="grid auto-rows-fr grid-cols-4 gap-4">
           <div
             class="blue-card industrial-shadow flex items-center gap-5 rounded-2xl p-6"
-            onclick="goToBarePipeReceiptCreate()"
+            onclick="goToBarePipeReceipts()"
           >
             <div
               class="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
@@ -414,9 +414,11 @@
             </div>
             <div class="min-w-0 flex-1">
               <h3 class="mb-2 truncate text-xl font-bold text-gray-900">
-                裸管入库
+                甲供物料入库
               </h3>
-              <p class="truncate text-base text-gray-500">维护甲供管入库情况</p>
+              <p class="truncate text-base text-gray-500">
+                跟踪甲供物料入库情况
+              </p>
             </div>
             <i
               class="fas fa-chevron-right flex-shrink-0 text-xl text-blue-300"
@@ -621,8 +623,8 @@
         window.location.href = "./workorders.html?target=packaging";
       }
 
-      function goToBarePipeReceiptCreate() {
-        window.location.href = "./bare-pipe-receipt-create.html";
+      function goToBarePipeReceipts() {
+        window.location.href = "./bare-pipe-receipts.html";
       }
 
       function goToFinishedProductReceiptList() {
