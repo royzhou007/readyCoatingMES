@@ -2553,11 +2553,11 @@
             const salinity = document.getElementById('instrumentSalinity')?.value.trim() || '';
 
             if (!abrasiveConductivity || !illuminance || !salinity) {
-                showToast('????????????', 'error');
+                showToast('请完整填写仪器读数', 'error');
                 return;
             }
 
-            showToast(`???????????????${compressedAirResult === 'pass' ? '??' : '???'}`, 'success');
+            showToast(`仪器读数已保存，压缩空气${compressedAirResult === 'pass' ? '合格' : '不合格'}`, 'success');
         }
 
         function updateWorkOrderProgress(recordedCount) {
