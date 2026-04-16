@@ -807,34 +807,20 @@
                     </h4>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">温度1</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">剥离温度一 (℃) <span class="text-red-500">*</span></label>
                             <input id="sampleTemp1" type="number" min="0" step="0.1" value="198" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-3">检验结果</label>
-                            <div class="flex gap-3">
-                                <button type="button" onclick="setSampleResult1('pass')" id="sampleResult1Pass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
-                                    <i class="fas fa-check-circle"></i>合格
-                                </button>
-                                <button type="button" onclick="setSampleResult1('fail')" id="sampleResult1Fail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2">
-                                    <i class="fas fa-times-circle"></i>不合格
-                                </button>
-                            </div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">剥离强度1 (N/cm) <span class="text-red-500">*</span></label>
+                            <input id="sampleStrength1" type="number" min="0" step="0.1" value="38.5" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">温度2</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">剥离温度二 (℃) <span class="text-red-500">*</span></label>
                             <input id="sampleTemp2" type="number" min="0" step="0.1" value="201" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-3">检验结果</label>
-                            <div class="flex gap-3">
-                                <button type="button" onclick="setSampleResult2('pass')" id="sampleResult2Pass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
-                                    <i class="fas fa-check-circle"></i>合格
-                                </button>
-                                <button type="button" onclick="setSampleResult2('fail')" id="sampleResult2Fail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2">
-                                    <i class="fas fa-times-circle"></i>不合格
-                                </button>
-                            </div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">剥离强度2 (N/cm) <span class="text-red-500">*</span></label>
+                            <input id="sampleStrength2" type="number" min="0" step="0.1" value="39.2" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
                     </div>
                 </div>
@@ -2103,9 +2089,9 @@
             { id: '0030', pipeNo: '6508725', bundleNo: '97#', furnaceNo: '15303842', batchNo: '71400', length: '11780', weight: '572.8', humidity: '65', interval: '41', thicknesses: [352, 368, 379, 385, 392, 361, 374, 388], operator: '李师傅', time: '03:15' }
         ];
         const sampleRecordList = [
-            { id: 'CJ-0032', temp1: '198', temp1Result: 'pass', temp2: '201', temp2Result: 'pass', inspector: '王检', time: '20:10', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23dbeafe'/><circle cx='42' cy='46' r='10' fill='%2393c5fd'/><circle cx='86' cy='58' r='8' fill='%2360a5fa'/><circle cx='118' cy='40' r='6' fill='%233b82f6'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 1</text></svg>" },
-            { id: 'CJ-0031', temp1: '194', temp1Result: 'pass', temp2: '199', temp2Result: 'pass', inspector: '王检', time: '18:55', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23e0f2fe'/><circle cx='38' cy='48' r='8' fill='%2394a3b8'/><circle cx='74' cy='60' r='7' fill='%2360a5fa'/><circle cx='110' cy='44' r='8' fill='%233b82f6'/><circle cx='126' cy='70' r='5' fill='%2394a3b8'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 2</text></svg>" },
-            { id: 'CJ-0030', temp1: '186', temp1Result: 'fail', temp2: '191', temp2Result: 'fail', inspector: '赵检', time: '03:40', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23fee2e2'/><circle cx='32' cy='40' r='9' fill='%23ef4444'/><circle cx='56' cy='54' r='7' fill='%23b91c1c'/><circle cx='84' cy='42' r='9' fill='%23ef4444'/><circle cx='114' cy='58' r='8' fill='%23b91c1c'/><circle cx='132' cy='40' r='7' fill='%23ef4444'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%237f1d1d'>Dust 4</text></svg>" }
+            { id: 'CJ-0032', temp1: '198', strength1: '38.5', temp2: '201', strength2: '39.2', inspector: '王检', time: '20:10', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23dbeafe'/><circle cx='42' cy='46' r='10' fill='%2393c5fd'/><circle cx='86' cy='58' r='8' fill='%2360a5fa'/><circle cx='118' cy='40' r='6' fill='%233b82f6'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 1</text></svg>" },
+            { id: 'CJ-0031', temp1: '194', strength1: '37.8', temp2: '199', strength2: '38.6', inspector: '王检', time: '18:55', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23e0f2fe'/><circle cx='38' cy='48' r='8' fill='%2394a3b8'/><circle cx='74' cy='60' r='7' fill='%2360a5fa'/><circle cx='110' cy='44' r='8' fill='%233b82f6'/><circle cx='126' cy='70' r='5' fill='%2394a3b8'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 2</text></svg>" },
+            { id: 'CJ-0030', temp1: '186', strength1: '32.4', temp2: '191', strength2: '31.7', inspector: '赵检', time: '03:40', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23fee2e2'/><circle cx='32' cy='40' r='9' fill='%23ef4444'/><circle cx='56' cy='54' r='7' fill='%23b91c1c'/><circle cx='84' cy='42' r='9' fill='%23ef4444'/><circle cx='114' cy='58' r='8' fill='%23b91c1c'/><circle cx='132' cy='40' r='7' fill='%23ef4444'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%237f1d1d'>Dust 4</text></svg>" }
         ];
         let currentSampleDrawerMode = 'create';
 
@@ -3010,11 +2996,11 @@
             document.getElementById('sampleLength').value = linkedRoot.length;
             document.getElementById('sampleWeight').value = linkedRoot.weight;
             document.getElementById('sampleTemp1').value = record.temp1 ?? '198';
+            document.getElementById('sampleStrength1').value = record.strength1 ?? '38.5';
             document.getElementById('sampleTemp2').value = record.temp2 ?? '201';
-            setSampleResult1(record.temp1Result ?? 'pass');
-            setSampleResult2(record.temp2Result ?? 'pass');
+            document.getElementById('sampleStrength2').value = record.strength2 ?? '39.2';
 
-            const editableIds = ['sampleTemp1', 'sampleTemp2'];
+            const editableIds = ['sampleTemp1', 'sampleStrength1', 'sampleTemp2', 'sampleStrength2'];
             editableIds.forEach(id => {
                 const el = document.getElementById(id);
                 if (!el) return;
@@ -3024,12 +3010,7 @@
 
             document.getElementById('sampleDrawerSaveBtn').classList.toggle('hidden', isView);
             document.getElementById('sampleDrawerPrintBtn').classList.toggle('hidden', isCreate);
-            document.getElementById('sampleResult1Pass').disabled = isView;
-            document.getElementById('sampleResult1Fail').disabled = isView;
-            document.getElementById('sampleResult2Pass').disabled = isView;
-            document.getElementById('sampleResult2Fail').disabled = isView;
-
-            document.getElementById('sampleDrawerOverlay').classList.add('open');
+document.getElementById('sampleDrawerOverlay').classList.add('open');
             document.getElementById('sampleDrawer').classList.add('open');
             document.body.style.overflow = 'hidden';
         }
