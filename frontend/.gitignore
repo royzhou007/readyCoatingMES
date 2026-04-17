@@ -1,2 +1,8 @@
-node_modules
-dist
+node_modules/
+dist/
+.vercel/
+.DS_Store
+*.log
+.tmp-*.js
+_coating_script_tmp.js
+.derust-check.js
