@@ -613,6 +613,10 @@
       }
 
       function getWorkOrderTargetPage() {
+        if (workOrderTarget === "feeding") {
+          return "./production-feeding.html";
+        }
+
         if (workOrderTarget === "coating") {
           return "./coating.html";
         }
