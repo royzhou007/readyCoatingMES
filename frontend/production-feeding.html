@@ -963,12 +963,13 @@
       >
         <div class="flex items-center gap-3">
           <div
+            id="entryDrawerIcon"
             class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center text-white shadow-lg"
           >
-            <i class="fas fa-plus"></i>
+            <i id="entryDrawerIconSymbol" class="fas fa-plus"></i>
           </div>
           <div>
-            <h3 class="text-lg font-bold text-gray-900">物料投料详情</h3>
+            <h3 id="entryDrawerTitle" class="text-lg font-bold text-gray-900">物料投料详情</h3>
             <p class="text-sm text-gray-500">
               当前班次:
               <span class="font-semibold text-green-700">今日白班</span>
@@ -1084,7 +1085,7 @@
             class="px-8 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors flex items-center gap-2 shadow-lg"
           >
             <i class="fas fa-check"></i>
-            保存投料
+            <span id="entryDrawerSubmitText">保存投料</span>
           </button>
         </div>
       </div>
@@ -1776,6 +1777,7 @@
       let selectedRows = new Set();
       let nextId = 33; // 下一个自编号
       let selectedCodeItem = null; // 当前选中的码单项
+      let editingFeedRowId = null; // 当前正在编辑的投料记录
       const currentOperatorName = "张师傅";
       // 模拟码单数据
       let instrumentSelection = [
@@ -2653,6 +2655,7 @@
         document.getElementById("entryDrawerOverlay").classList.remove("open");
         document.getElementById("entryDrawer").classList.remove("open");
         document.body.style.overflow = "";
+        editingFeedRowId = null;
       }
 
       function viewDetail(id) {
@@ -3156,6 +3159,74 @@
         ).padStart(2, "0")}`;
       }
 
+      function getFeedRowRecord(id) {
+        const row = document.querySelector(`#tableBody tr[data-id="${id}"]`);
+        if (!row) return null;
+        return {
+          id: row.dataset.id || id,
+          shift: row.dataset.shift || currentShift,
+          material: row.dataset.material || "",
+          materialCode: row.dataset.materialCode || "",
+          brand: row.dataset.brand || "",
+          spec: row.dataset.spec || "",
+          type: row.dataset.type || "",
+          batch: row.dataset.batch || "",
+          quantity: row.dataset.quantity || "",
+          time: row.dataset.time || "",
+          operator: row.dataset.operator || currentOperatorName,
+        };
+      }
+
+      function setEntryDrawerMode(mode) {
+        const isEdit = mode === "edit";
+        const icon = document.getElementById("entryDrawerIcon");
+        const iconSymbol = document.getElementById("entryDrawerIconSymbol");
+        const title = document.getElementById("entryDrawerTitle");
+        const submitText = document.getElementById("entryDrawerSubmitText");
+
+        icon?.classList.toggle("bg-green-600", !isEdit);
+        icon?.classList.toggle("bg-amber-500", isEdit);
+        if (iconSymbol) iconSymbol.className = `fas ${isEdit ? "fa-pen-to-square" : "fa-plus"}`;
+        if (title) title.textContent = isEdit ? "编辑投料记录" : "物料投料详情";
+        if (submitText) submitText.textContent = isEdit ? "保存修改" : "保存投料";
+      }
+
+      function fillEntryDrawer(record) {
+        document.getElementById("entryMaterialName").textContent = record.material || "点击选择物料";
+        document.getElementById("entryMaterialCode").textContent = record.materialCode || "物料编号自动带入";
+        document.getElementById("entryMaterialBrand").value = record.brand || "";
+        document.getElementById("entryMaterialSpec").value = record.spec || "";
+        document.getElementById("entryQuantity").value = record.quantity || "";
+        document.getElementById("entryBatch").value = record.batch || "";
+        document.getElementById("entryFeedTimeReadonly").textContent = record.time || getCurrentTimeText();
+        document.getElementById("entryFeedOperatorReadonly").textContent = record.operator || currentOperatorName;
+        selectedCodeItem = {
+          name: record.material,
+          code: record.materialCode,
+          brand: record.brand,
+          spec: record.spec,
+          type: record.type,
+        };
+      }
+
+      function renderFeedActionButtons(id) {
+        return `
+          <button onclick="viewDetail('${id}')" class="h-12 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-100 transition-colors flex items-center justify-center gap-1.5 font-semibold text-sm whitespace-nowrap" title="查看"><i class="fas fa-eye text-sm"></i><span>查看</span></button>
+          <button onclick="openEditDrawer('${id}')" class="h-12 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-100 transition-colors flex items-center justify-center gap-1.5 font-semibold text-sm whitespace-nowrap" title="修改"><i class="fas fa-pen-to-square text-sm"></i><span>修改</span></button>
+          <button onclick="deleteRow('${id}')" class="h-12 px-3 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 border border-red-100 transition-colors flex items-center justify-center gap-1.5 font-semibold text-sm whitespace-nowrap" title="删除"><i class="fas fa-trash-alt text-sm"></i><span>删除</span></button>
+        `;
+      }
+
+      function ensureFeedActionButtons() {
+        document.querySelectorAll("#tableBody tr[data-id]").forEach((row) => {
+          const actionWrap = row.querySelector("td:last-child > div");
+          if (!actionWrap) return;
+          const id = row.dataset.id;
+          actionWrap.className = "relative flex items-center justify-center gap-2 min-w-[260px]";
+          actionWrap.innerHTML = renderFeedActionButtons(id);
+        });
+      }
+
       function createFeedRow(record) {
         const operatorInitial = record.operator.charAt(0);
         const avatarClass = record.operator.includes("李")
@@ -3177,9 +3248,8 @@
               </div>
             </td>
             <td class="px-4 py-4 text-center">
-              <div class="flex items-center justify-center gap-2">
-                <button onclick="viewDetail('${record.id}')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 transition-colors flex items-center justify-center" title="查看"><i class="fas fa-eye text-sm"></i></button>
-                <button onclick="deleteRow('${record.id}')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center justify-center" title="删除"><i class="fas fa-trash-alt text-sm"></i></button>
+              <div class="relative flex items-center justify-center gap-2 min-w-[260px]">
+                ${renderFeedActionButtons(record.id)}
               </div>
             </td>
           </tr>
@@ -3188,6 +3258,8 @@
 
       function openEntryDrawer() {
         const currentTime = getCurrentTimeText();
+        editingFeedRowId = null;
+        setEntryDrawerMode("create");
         document.getElementById("entryDrawerOverlay").classList.add("open");
         document.getElementById("entryDrawer").classList.add("open");
         document.body.style.overflow = "hidden";
@@ -3202,6 +3274,21 @@
         document.getElementById("entryFeedTimeReadonly").textContent = currentTime;
         document.getElementById("entryFeedOperatorReadonly").textContent = currentOperatorName;
         selectedCodeItem = null;
+      }
+
+      function openEditDrawer(id) {
+        const record = getFeedRowRecord(id);
+        if (!record) {
+          showToast("未找到要修改的投料记录", "error");
+          return;
+        }
+
+        editingFeedRowId = id;
+        setEntryDrawerMode("edit");
+        fillEntryDrawer(record);
+        document.getElementById("entryDrawerOverlay").classList.add("open");
+        document.getElementById("entryDrawer").classList.add("open");
+        document.body.style.overflow = "hidden";
       }
 
       function viewDetail(id) {
@@ -3221,20 +3308,23 @@
 
       function submitEntry() {
         const material = document.getElementById("entryMaterialName").textContent;
-        const materialCode = document.getElementById("entryMaterialCode").textContent;
+        const materialCodeText = document.getElementById("entryMaterialCode").textContent;
+        const materialCode = materialCodeText === "物料编号自动带入" ? "" : materialCodeText;
         const brand = document.getElementById("entryMaterialBrand").value;
         const spec = document.getElementById("entryMaterialSpec").value;
         const quantity = document.getElementById("entryQuantity").value;
         const batch = document.getElementById("entryBatch").value.trim();
         const time = document.getElementById("entryFeedTimeReadonly").textContent;
+        const operator = document.getElementById("entryFeedOperatorReadonly").textContent;
 
         if (!selectedCodeItem || material === "点击选择物料" || !quantity || !batch) {
           showToast("请先选择物料，并填写投料数量和批号", "error");
           return;
         }
 
+        const editingRecord = editingFeedRowId ? getFeedRowRecord(editingFeedRowId) : null;
         const record = {
-          id: String(nextId).padStart(4, "0"),
+          id: editingRecord?.id || String(nextId).padStart(4, "0"),
           material,
           materialCode,
           brand,
@@ -3243,11 +3333,21 @@
           batch,
           quantity: Number(quantity).toFixed(1).replace(/\.0$/, ""),
           time,
-          operator: currentOperatorName,
-          shift: currentShift,
+          operator,
+          shift: editingRecord?.shift || currentShift,
         };
 
         const tbody = document.getElementById("tableBody");
+        if (editingRecord) {
+          const row = document.querySelector(`#tableBody tr[data-id="${editingRecord.id}"]`);
+          if (row) {
+            row.outerHTML = createFeedRow(record);
+            showToast("投料记录已修改", "success");
+            closeEntryDrawer();
+            return;
+          }
+        }
+
         tbody.insertAdjacentHTML("afterbegin", createFeedRow(record));
         nextId += 1;
 
@@ -3289,6 +3389,7 @@
         renderWorkOrderShiftStats();
         switchShift("today_day");
         switchMainTab("material");
+        ensureFeedActionButtons();
         setCompressedAirResult("pass");
         updateWorkOrderProgress(
           parseInt(
