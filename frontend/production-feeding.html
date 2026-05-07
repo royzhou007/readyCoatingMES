@@ -659,16 +659,16 @@
                 />
               </th>
               <th class="px-4 py-4 text-left">物料名称</th>
+              <th class="px-4 py-4 text-left">规格型号</th>
               <th class="px-4 py-4 text-left">类型</th>
               <th class="px-4 py-4 text-center">投料数量</th>
-              <th class="px-4 py-4 text-center">批号</th>
               <th class="px-4 py-4 text-center">投料时间</th>
               <th class="px-4 py-4 text-center">投料人</th>
               <th class="px-4 py-4 text-center">操作</th>
             </tr>
           </thead>
           <tbody id="tableBody">
-            <tr class="group" data-id="0032" data-shift="today_day" data-material="FBE粉末" data-type="涂覆原料" data-batch="FBE-2026-0316" data-quantity="320" data-time="19:35" data-operator="张师傅">
+            <tr class="group" data-id="0032" data-shift="today_day" data-material="FBE粉末" data-material-code="MAT-FBE-001" data-brand="AkzoNobel" data-spec="环氧粉末 / 25kg" data-type="涂覆原料" data-quantity="320" data-time="19:35" data-operator="张师傅">
               <td class="px-4 py-4">
                 <input
                   type="checkbox"
@@ -680,12 +680,14 @@
                 <div class="text-sm font-semibold text-gray-900">FBE粉末</div>
               </td>
               <td class="px-4 py-4">
+                <div class="text-sm text-gray-700">环氧粉末 / 25kg</div>
+              </td>
+              <td class="px-4 py-4">
                 <div class="text-sm text-gray-700">涂覆原料</div>
               </td>
               <td class="px-4 py-4 text-center">
                 <div class="text-sm font-semibold text-gray-900">320<span class="text-xs text-gray-500 font-normal ml-1">kg</span></div>
               </td>
-              <td class="px-4 py-4 text-center"><div class="text-sm text-gray-700">FBE-2026-0316</div></td>
               <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">19:35</div></td>
               <td class="px-4 py-4 text-center">
                 <div class="flex flex-col items-center gap-1">
@@ -716,7 +718,7 @@
                 </div>
               </td>
             </tr>
-            <tr class="group" data-id="0031" data-shift="today_day" data-material="AD胶黏剂" data-type="辅料" data-batch="AD-2026-0315" data-quantity="185" data-time="18:42" data-operator="张师傅">
+            <tr class="group" data-id="0031" data-shift="today_day" data-material="AD胶黏剂" data-material-code="MAT-AD-002" data-brand="Dow" data-spec="热熔胶 / 20kg" data-type="辅料" data-quantity="185" data-time="18:42" data-operator="张师傅">
               <td class="px-4 py-4">
                 <input
                   type="checkbox"
@@ -728,12 +730,14 @@
                 <div class="text-sm font-semibold text-gray-900">AD胶黏剂</div>
               </td>
               <td class="px-4 py-4">
+                <div class="text-sm text-gray-700">热熔胶 / 20kg</div>
+              </td>
+              <td class="px-4 py-4">
                 <div class="text-sm text-gray-700">辅料</div>
               </td>
               <td class="px-4 py-4 text-center">
                 <div class="text-sm font-semibold text-gray-900">185<span class="text-xs text-gray-500 font-normal ml-1">kg</span></div>
               </td>
-              <td class="px-4 py-4 text-center"><div class="text-sm text-gray-700">AD-2026-0315</div></td>
               <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">18:42</div></td>
               <td class="px-4 py-4 text-center">
                 <div class="flex flex-col items-center gap-1">
@@ -764,7 +768,7 @@
                 </div>
               </td>
             </tr>
-            <tr class="group" data-id="0030" data-shift="yesterday_night" data-material="PE/PP颗粒料" data-type="包装原料" data-batch="PP-2026-0314" data-quantity="420" data-time="03:15" data-operator="李师傅">
+            <tr class="group" data-id="0030" data-shift="yesterday_night" data-material="PE/PP颗粒料" data-material-code="MAT-PE-003" data-brand="Sinopec" data-spec="PP-HM / 25kg" data-type="包装原料" data-quantity="420" data-time="03:15" data-operator="李师傅">
               <td class="px-4 py-4">
                 <input
                   type="checkbox"
@@ -776,12 +780,14 @@
                 <div class="text-sm font-semibold text-gray-900">PE/PP颗粒料</div>
               </td>
               <td class="px-4 py-4">
+                <div class="text-sm text-gray-700">PP-HM / 25kg</div>
+              </td>
+              <td class="px-4 py-4">
                 <div class="text-sm text-gray-700">包装原料</div>
               </td>
               <td class="px-4 py-4 text-center">
                 <div class="text-sm font-semibold text-gray-900">420<span class="text-xs text-gray-500 font-normal ml-1">kg</span></div>
               </td>
-              <td class="px-4 py-4 text-center"><div class="text-sm text-gray-700">PP-2026-0314</div></td>
               <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">03:15</div></td>
               <td class="px-4 py-4 text-center">
                 <div class="flex flex-col items-center gap-1">
@@ -999,6 +1005,7 @@
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">选择物料 <span class="text-red-500">*</span></label>
                 <button
+                  id="entryMaterialSelector"
                   type="button"
                   onclick="openCodeListModal()"
                   class="w-full px-4 py-3 bg-white border-2 border-dashed border-blue-300 rounded-xl text-left hover:bg-blue-50 hover:border-blue-400 transition-colors flex items-center justify-between"
@@ -1047,15 +1054,6 @@
                 <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">kg</span>
               </div>
             </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">批号 <span class="text-red-500">*</span></label>
-              <input
-                type="text"
-                id="entryBatch"
-                placeholder="输入投料批号"
-                class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"
-              />
-            </div>
             <div class="grid grid-cols-2 gap-4">
               <div class="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
                 <div class="text-xs text-gray-500 mb-1">自动记录时间</div>
@@ -1077,10 +1075,11 @@
             onclick="closeEntryDrawer()"
             class="px-8 py-3 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition-colors"
           >
-            取消
+            <span id="entryDrawerCancelText">取消</span>
           </button>
           <div class="flex-1"></div>
           <button
+            id="entryDrawerSubmitButton"
             onclick="submitEntry()"
             class="px-8 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors flex items-center gap-2 shadow-lg"
           >
@@ -1301,10 +1300,6 @@
               <div class="p-4 bg-gray-50 rounded-xl">
                 <div class="text-xs text-gray-500 mb-1">所属班次</div>
                 <div class="font-semibold text-gray-900" id="detailShift">今日白班</div>
-              </div>
-              <div class="p-4 bg-gray-50 rounded-xl col-span-2">
-                <div class="text-xs text-gray-500 mb-1">批号</div>
-                <div class="font-semibold text-gray-900" id="detailBatch">FBE-2026-0316</div>
               </div>
             </div>
           </div>
@@ -1778,6 +1773,7 @@
       let nextId = 33; // 下一个自编号
       let selectedCodeItem = null; // 当前选中的码单项
       let editingFeedRowId = null; // 当前正在编辑的投料记录
+      let entryDrawerMode = "create"; // create | edit | view
       const currentOperatorName = "张师傅";
       // 模拟码单数据
       let instrumentSelection = [
@@ -2486,6 +2482,7 @@
 
       // ========== 码单选择弹窗相关函数 ==========
       function openCodeListModal() {
+        if (entryDrawerMode === "view") return;
         document.getElementById("codeListModal").classList.add("open");
         renderCodeList(materialMasterData);
         document.getElementById("codeListSelectedCount").textContent = selectedCodeItem
@@ -2656,6 +2653,7 @@
         document.getElementById("entryDrawer").classList.remove("open");
         document.body.style.overflow = "";
         editingFeedRowId = null;
+        entryDrawerMode = "create";
       }
 
       function viewDetail(id) {
@@ -3170,7 +3168,6 @@
           brand: row.dataset.brand || "",
           spec: row.dataset.spec || "",
           type: row.dataset.type || "",
-          batch: row.dataset.batch || "",
           quantity: row.dataset.quantity || "",
           time: row.dataset.time || "",
           operator: row.dataset.operator || currentOperatorName,
@@ -3178,17 +3175,35 @@
       }
 
       function setEntryDrawerMode(mode) {
+        entryDrawerMode = mode;
         const isEdit = mode === "edit";
+        const isView = mode === "view";
         const icon = document.getElementById("entryDrawerIcon");
         const iconSymbol = document.getElementById("entryDrawerIconSymbol");
         const title = document.getElementById("entryDrawerTitle");
         const submitText = document.getElementById("entryDrawerSubmitText");
+        const submitButton = document.getElementById("entryDrawerSubmitButton");
+        const cancelText = document.getElementById("entryDrawerCancelText");
+        const selector = document.getElementById("entryMaterialSelector");
+        const quantityInput = document.getElementById("entryQuantity");
 
-        icon?.classList.toggle("bg-green-600", !isEdit);
-        icon?.classList.toggle("bg-amber-500", isEdit);
-        if (iconSymbol) iconSymbol.className = `fas ${isEdit ? "fa-pen-to-square" : "fa-plus"}`;
-        if (title) title.textContent = isEdit ? "编辑投料记录" : "物料投料详情";
+        icon?.classList.remove("bg-green-600", "bg-amber-500", "bg-blue-600");
+        icon?.classList.add(isView ? "bg-blue-600" : isEdit ? "bg-amber-500" : "bg-green-600");
+        if (iconSymbol) iconSymbol.className = `fas ${isView ? "fa-eye" : isEdit ? "fa-pen-to-square" : "fa-plus"}`;
+        if (title) title.textContent = isView ? "查看投料记录" : isEdit ? "编辑投料记录" : "物料投料详情";
         if (submitText) submitText.textContent = isEdit ? "保存修改" : "保存投料";
+        submitButton?.classList.toggle("hidden", isView);
+        if (cancelText) cancelText.textContent = isView ? "关闭" : "取消";
+
+        selector.disabled = isView;
+        selector.classList.toggle("cursor-not-allowed", isView);
+        selector.classList.toggle("opacity-75", isView);
+        selector.classList.toggle("hover:bg-blue-50", !isView);
+        selector.classList.toggle("hover:border-blue-400", !isView);
+        quantityInput.readOnly = isView;
+        quantityInput.classList.toggle("bg-gray-50", isView);
+        quantityInput.classList.toggle("text-gray-700", isView);
+        quantityInput.classList.toggle("focus:border-blue-500", !isView);
       }
 
       function fillEntryDrawer(record) {
@@ -3197,7 +3212,6 @@
         document.getElementById("entryMaterialBrand").value = record.brand || "";
         document.getElementById("entryMaterialSpec").value = record.spec || "";
         document.getElementById("entryQuantity").value = record.quantity || "";
-        document.getElementById("entryBatch").value = record.batch || "";
         document.getElementById("entryFeedTimeReadonly").textContent = record.time || getCurrentTimeText();
         document.getElementById("entryFeedOperatorReadonly").textContent = record.operator || currentOperatorName;
         selectedCodeItem = {
@@ -3234,12 +3248,12 @@
           : "bg-blue-100 text-blue-600";
 
         return `
-          <tr class="group" data-id="${record.id}" data-shift="${record.shift}" data-material="${record.material}" data-type="${record.type}" data-batch="${record.batch}" data-material-code="${record.materialCode}" data-brand="${record.brand}" data-spec="${record.spec}" data-quantity="${record.quantity}" data-time="${record.time}" data-operator="${record.operator}">
+          <tr class="group" data-id="${record.id}" data-shift="${record.shift}" data-material="${record.material}" data-type="${record.type}" data-material-code="${record.materialCode}" data-brand="${record.brand}" data-spec="${record.spec}" data-quantity="${record.quantity}" data-time="${record.time}" data-operator="${record.operator}">
             <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)" /></td>
             <td class="px-4 py-4"><div class="text-sm font-semibold text-gray-900">${record.material}</div></td>
+            <td class="px-4 py-4"><div class="text-sm text-gray-700">${record.spec || "-"}</div></td>
             <td class="px-4 py-4"><div class="text-sm text-gray-700">${record.type}</div></td>
             <td class="px-4 py-4 text-center"><div class="text-sm font-semibold text-gray-900">${record.quantity}<span class="text-xs text-gray-500 font-normal ml-1">kg</span></div></td>
-            <td class="px-4 py-4 text-center"><div class="text-sm text-gray-700">${record.batch}</div></td>
             <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">${record.time}</div></td>
             <td class="px-4 py-4 text-center">
               <div class="flex flex-col items-center gap-1">
@@ -3268,7 +3282,6 @@
         document.getElementById("entryMaterialBrand").value = "";
         document.getElementById("entryMaterialSpec").value = "";
         document.getElementById("entryQuantity").value = "";
-        document.getElementById("entryBatch").value = "";
         const headerTime = document.getElementById("currentTime");
         if (headerTime) headerTime.textContent = currentTime;
         document.getElementById("entryFeedTimeReadonly").textContent = currentTime;
@@ -3292,33 +3305,30 @@
       }
 
       function viewDetail(id) {
-        const row = document.querySelector(`#tableBody tr[data-id="${id}"]`);
-        if (!row) return;
-        document.getElementById("detailMaterial").textContent = row.dataset.material || "-";
-        document.getElementById("detailQuantity").textContent = row.dataset.quantity || "-";
-        document.getElementById("detailBatch").textContent = row.dataset.batch || "-";
-        document.getElementById("detailTime").textContent = row.dataset.time || "-";
-        document.getElementById("detailOperator").textContent = row.dataset.operator || "-";
-        document.getElementById("detailShift").textContent =
-          shiftData[row.dataset.shift]?.name || "今日白班";
-        document.getElementById("detailDrawerOverlay").classList.add("open");
-        document.getElementById("detailDrawer").classList.add("open");
+        const record = getFeedRowRecord(id);
+        if (!record) return;
+
+        editingFeedRowId = null;
+        setEntryDrawerMode("view");
+        fillEntryDrawer(record);
+        document.getElementById("entryDrawerOverlay").classList.add("open");
+        document.getElementById("entryDrawer").classList.add("open");
         document.body.style.overflow = "hidden";
       }
 
       function submitEntry() {
+        if (entryDrawerMode === "view") return;
         const material = document.getElementById("entryMaterialName").textContent;
         const materialCodeText = document.getElementById("entryMaterialCode").textContent;
         const materialCode = materialCodeText === "物料编号自动带入" ? "" : materialCodeText;
         const brand = document.getElementById("entryMaterialBrand").value;
         const spec = document.getElementById("entryMaterialSpec").value;
         const quantity = document.getElementById("entryQuantity").value;
-        const batch = document.getElementById("entryBatch").value.trim();
         const time = document.getElementById("entryFeedTimeReadonly").textContent;
         const operator = document.getElementById("entryFeedOperatorReadonly").textContent;
 
-        if (!selectedCodeItem || material === "点击选择物料" || !quantity || !batch) {
-          showToast("请先选择物料，并填写投料数量和批号", "error");
+        if (!selectedCodeItem || material === "点击选择物料" || !quantity) {
+          showToast("请先选择物料，并填写投料数量", "error");
           return;
         }
 
@@ -3330,7 +3340,6 @@
           brand,
           type: selectedCodeItem.type,
           spec,
-          batch,
           quantity: Number(quantity).toFixed(1).replace(/\.0$/, ""),
           time,
           operator,

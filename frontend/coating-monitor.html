@@ -16,6 +16,7 @@
         .summary-chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 9999px; padding: 6px 12px; font-size: 0.75rem; font-weight: 600; }
         .summary-saved { background: #DCFCE7; color: #166534; border: 1px solid #86EFAC; }
         .summary-pending { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
+        .summary-maintenance { background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5; }
         .data-table { width: 100%; border-collapse: separate; border-spacing: 0; }
         .data-table th { background: #F8FAFC; color: #475569; font-size: 0.8125rem; font-weight: 600; padding: 14px 12px; text-align: center; border-bottom: 1px solid #E2E8F0; }
         .data-table td { background: white; padding: 14px 12px; border-bottom: 1px solid #E2E8F0; font-size: 0.95rem; }
@@ -59,7 +60,7 @@
 </head>
 <body class="min-h-screen bg-slate-50 pb-24">
     <header class="bg-white industrial-shadow sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-4">
                     <button onclick="history.back()" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
@@ -83,7 +84,7 @@
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <main class="w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         <div class="wo-card rounded-2xl p-5 industrial-shadow relative overflow-hidden">
             <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -mr-10 -mt-10 opacity-50"></div>
             <div class="relative flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -239,7 +240,7 @@
     </div>
 
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 industrial-shadow-lg z-30">
-        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div class="w-full flex items-center justify-between gap-4">
             <div class="text-sm text-gray-600">
                 <span class="font-semibold text-gray-900">今日白班</span>
                 <span class="mx-2">|</span>
@@ -311,12 +312,56 @@
             });
         }
 
+        function renderTable() {
+            const tbody = document.getElementById('monitorTableBody');
+            tbody.innerHTML = '';
+            slots.forEach((slot) => {
+                const record = records[slot.id];
+                const saved = Boolean(record);
+                const maintenance = Boolean(record?.maintenance);
+                const chipClass = maintenance ? 'summary-maintenance' : saved ? 'summary-saved' : 'summary-pending';
+                const chipText = maintenance ? '维修' : saved ? '已保存' : '待录入';
+                const actionLabel = saved ? '修改' : '填写';
+                const actionIcon = saved ? 'fa-edit' : 'fa-pen';
+                const actions = saved
+                    ? `<button onclick="openEntryDrawer('${slot.id}')" class="action-btn btn-secondary"><i class="fas ${actionIcon}"></i>${actionLabel}</button>`
+                    : `<div class="flex items-center justify-center gap-2">
+                        <button onclick="openEntryDrawer('${slot.id}')" class="action-btn btn-primary"><i class="fas ${actionIcon}"></i>${actionLabel}</button>
+                        <button onclick="markMaintenance('${slot.id}')" class="action-btn btn-secondary"><i class="fas fa-screwdriver-wrench"></i>维修</button>
+                    </div>`;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="time-slot">${slot.label}</td>
+                    <td class="text-center">${record?.time || '--:--'}</td>
+                    <td class="text-center">${record?.operator || '-'}</td>
+                    <td class="text-center"><span class="summary-chip ${chipClass}">${chipText}</span></td>
+                    <td class="text-center">${actions}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function markMaintenance(slotId) {
+            if (!confirm('确认将该时段设置为维修吗？设置后本时段运行数据无需填写。')) {
+                return;
+            }
+
+            records[slotId] = {
+                maintenance: true,
+                time: formatTime(new Date()),
+                operator: currentUser.name
+            };
+            renderTable();
+            updateStats();
+            showToast('该时段已标记为维修', 'success');
+        }
+
         function openEntryDrawer(slotId) {
             currentSlotId = slotId;
             const slot = slots.find(item => item.id === slotId);
             const record = records[slotId] || {};
             document.getElementById('drawerSlotLabel').textContent = slot.label;
-            document.getElementById('drawerTime').textContent = record.time || formatTime(new Date());
+            document.getElementById('drawerTime').textContent = record.maintenance ? formatTime(new Date()) : record.time || formatTime(new Date());
             document.getElementById('drawerOperator').textContent = currentUser.name;
             document.getElementById('conveyorSpeed').value = record.conveyorSpeed || '';
             document.getElementById('conveyorHz').value = record.conveyorHz || '';

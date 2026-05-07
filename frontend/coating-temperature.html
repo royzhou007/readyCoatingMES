@@ -265,6 +265,7 @@
         .status-pending { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
         .status-saved { background: #DCFCE7; color: #166534; border: 1px solid #86EFAC; }
         .status-editing { background: #DBEAFE; color: #1E40AF; border: 1px solid #93C5FD; }
+        .status-maintenance { background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5; }
 
         .toast {
             animation: slideIn 0.3s ease;
@@ -306,7 +307,7 @@
 </head>
 <body class="min-h-screen bg-gray-50 pb-24">
     <header class="bg-white industrial-shadow sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-4">
                     <button onclick="history.back()" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
@@ -330,7 +331,7 @@
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <main class="w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         <div class="wo-card rounded-xl p-5 industrial-shadow relative overflow-hidden">
             <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -mr-10 -mt-10 opacity-50"></div>
             <div class="relative flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -409,7 +410,7 @@
     </main>
 
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 industrial-shadow-lg z-30">
-        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div class="w-full flex items-center justify-between gap-4">
             <div class="text-sm text-gray-600">
                 <span class="font-semibold text-gray-900">今日白班</span>
                 <span class="mx-2">|</span>
@@ -672,6 +673,228 @@
         }
 
         function fillRowData(index, data) {
+            const row = document.getElementById(`row-${index}`);
+            row.querySelector('.heat-input').value = data.heat || '';
+            row.querySelector('.fbe-input').value = data.fbe || '';
+            row.querySelector('.ad-input').value = data.ad || '';
+            row.querySelector('.pepp-input').value = data.pepp || '';
+
+            const timeDisplay = document.getElementById(`time-${index}`);
+            timeDisplay.style.display = 'inline-flex';
+            timeDisplay.querySelector('span').textContent = data.time || '-';
+            document.getElementById(`time-empty-${index}`).style.display = 'none';
+
+            const operatorDisplay = document.getElementById(`operator-${index}`);
+            operatorDisplay.style.display = 'inline-flex';
+            operatorDisplay.querySelector('span').textContent = data.operator || '-';
+            document.getElementById(`operator-empty-${index}`).style.display = 'none';
+        }
+
+        function setRowPending(index) {
+            const row = document.getElementById(`row-${index}`);
+            row.dataset.status = 'empty';
+            row.classList.remove('editing', 'saved', 'maintenance');
+            const timeDisplay = document.getElementById(`time-${index}`);
+            const operatorDisplay = document.getElementById(`operator-${index}`);
+            document.getElementById(`time-empty-${index}`).style.display = 'flex';
+            document.getElementById(`operator-empty-${index}`).style.display = 'flex';
+            timeDisplay.style.display = 'none';
+            operatorDisplay.style.display = 'none';
+            row.querySelector('.heat-input').value = '';
+            row.querySelector('.fbe-input').value = '';
+            row.querySelector('.ad-input').value = '';
+            row.querySelector('.pepp-input').value = '';
+            row.querySelectorAll('input').forEach(input => input.disabled = true);
+            document.getElementById(`status-${index}`).className = 'status-badge status-pending';
+            document.getElementById(`status-${index}`).innerHTML = '<i class="fas fa-circle text-xs"></i> 待录入';
+            document.getElementById(`actions-${index}`).innerHTML = `
+                <button onclick="startEdit(${index})" class="action-btn btn-primary">
+                    <i class="fas fa-edit"></i>录入
+                </button>
+                <button onclick="markMaintenance(${index})" class="action-btn btn-secondary">
+                    <i class="fas fa-screwdriver-wrench"></i>维修
+                </button>
+            `;
+        }
+
+        function startEdit(index) {
+            if (editingRow !== null && editingRow !== index) {
+                if (!confirm('当前有其他时段正在编辑，是否放弃该时段修改？')) {
+                    return;
+                }
+                cancelEdit(editingRow);
+            }
+
+            editingRow = index;
+            const row = document.getElementById(`row-${index}`);
+            row.dataset.status = 'editing';
+            row.classList.remove('saved', 'maintenance');
+            row.classList.add('editing');
+
+            row.querySelector('.heat-input').disabled = false;
+            row.querySelector('.fbe-input').disabled = false;
+            row.querySelector('.ad-input').disabled = false;
+            row.querySelector('.pepp-input').disabled = false;
+
+            const timeDisplay = document.getElementById(`time-${index}`);
+            const timeEmpty = document.getElementById(`time-empty-${index}`);
+            timeDisplay.style.display = 'inline-flex';
+            timeDisplay.className = 'auto-field';
+            timeDisplay.innerHTML = `<i class="fas fa-clock text-xs"></i><span>${formatDateTime(new Date())}</span>`;
+            timeEmpty.style.display = 'none';
+
+            const operatorDisplay = document.getElementById(`operator-${index}`);
+            const operatorEmpty = document.getElementById(`operator-empty-${index}`);
+            operatorDisplay.style.display = 'inline-flex';
+            operatorDisplay.className = 'auto-field';
+            operatorDisplay.innerHTML = `<i class="fas fa-user text-xs"></i><span>${currentUser.name}</span>`;
+            operatorEmpty.style.display = 'none';
+
+            document.getElementById(`status-${index}`).className = 'status-badge status-editing';
+            document.getElementById(`status-${index}`).innerHTML = '<i class="fas fa-circle text-xs"></i> 录入中';
+
+            document.getElementById(`actions-${index}`).innerHTML = `
+                <button onclick="saveRow(${index})" class="action-btn btn-success">
+                    <i class="fas fa-check"></i>保存
+                </button>
+                <button onclick="cancelEdit(${index})" class="action-btn btn-secondary">
+                    <i class="fas fa-times"></i>取消
+                </button>
+            `;
+
+            row.querySelector('.heat-input').focus();
+            updateStats();
+        }
+
+        function markMaintenance(index) {
+            if (editingRow !== null && editingRow !== index) {
+                if (!confirm('有其他时段正在编辑，是否放弃修改并标记维修？')) {
+                    return;
+                }
+                cancelEdit(editingRow);
+            }
+
+            if (!confirm('确认将该时段设置为维修吗？设置后本行运行数据无需填写。')) {
+                return;
+            }
+
+            records[index] = {
+                maintenance: true,
+                time: formatDateTime(new Date()),
+                operator: currentUser.name
+            };
+            setRowMaintenance(index);
+            editingRow = null;
+            updateStats();
+            showToast('该时段已标记为维修', 'success');
+        }
+
+        function saveRow(index) {
+            const row = document.getElementById(`row-${index}`);
+            const heat = row.querySelector('.heat-input').value.trim();
+            const fbe = row.querySelector('.fbe-input').value.trim();
+            const ad = row.querySelector('.ad-input').value.trim();
+            const pepp = row.querySelector('.pepp-input').value.trim();
+
+            if (!heat || !fbe || !ad || !pepp) {
+                showToast('请填写完整的4项温度数据', 'error');
+                return;
+            }
+
+            records[index] = {
+                heat,
+                fbe,
+                ad,
+                pepp,
+                time: document.getElementById(`time-${index}`).querySelector('span').textContent,
+                operator: currentUser.name
+            };
+            setRowSaved(index);
+            editingRow = null;
+            updateStats();
+            showToast('时段温度记录已保存', 'success');
+        }
+
+        function setRowSaved(index) {
+            const row = document.getElementById(`row-${index}`);
+            row.dataset.status = 'saved';
+            row.classList.remove('editing', 'maintenance');
+            row.classList.add('saved');
+            row.querySelectorAll('input').forEach(input => input.disabled = true);
+
+            const timeDisplay = document.getElementById(`time-${index}`);
+            timeDisplay.className = 'readonly-field bg-blue-50 text-blue-700 border-blue-200';
+            timeDisplay.style.display = 'inline-flex';
+            timeDisplay.innerHTML = `<i class="fas fa-check-circle text-xs text-green-600 mr-1"></i><span>${records[index].time}</span>`;
+
+            const operatorDisplay = document.getElementById(`operator-${index}`);
+            operatorDisplay.className = 'readonly-field bg-blue-50 text-blue-700 border-blue-200';
+            operatorDisplay.style.display = 'inline-flex';
+            operatorDisplay.innerHTML = `<i class="fas fa-user-check text-xs text-green-600 mr-1"></i><span>${records[index].operator}</span>`;
+
+            document.getElementById(`time-empty-${index}`).style.display = 'none';
+            document.getElementById(`operator-empty-${index}`).style.display = 'none';
+            document.getElementById(`status-${index}`).className = 'status-badge status-saved';
+            document.getElementById(`status-${index}`).innerHTML = '<i class="fas fa-check-circle text-xs"></i> 已保存';
+            document.getElementById(`actions-${index}`).innerHTML = `
+                <button onclick="startEdit(${index})" class="action-btn btn-secondary">
+                    <i class="fas fa-edit"></i>修改
+                </button>
+            `;
+        }
+
+        function setRowMaintenance(index) {
+            const row = document.getElementById(`row-${index}`);
+            row.dataset.status = 'saved';
+            row.classList.remove('editing');
+            row.classList.add('saved', 'maintenance');
+            row.querySelector('.heat-input').value = '';
+            row.querySelector('.fbe-input').value = '';
+            row.querySelector('.ad-input').value = '';
+            row.querySelector('.pepp-input').value = '';
+            row.querySelectorAll('input').forEach(input => input.disabled = true);
+
+            const timeDisplay = document.getElementById(`time-${index}`);
+            timeDisplay.className = 'readonly-field bg-red-50 text-red-700 border-red-200';
+            timeDisplay.style.display = 'inline-flex';
+            timeDisplay.innerHTML = `<i class="fas fa-screwdriver-wrench text-xs text-red-600 mr-1"></i><span>${records[index].time}</span>`;
+
+            const operatorDisplay = document.getElementById(`operator-${index}`);
+            operatorDisplay.className = 'readonly-field bg-red-50 text-red-700 border-red-200';
+            operatorDisplay.style.display = 'inline-flex';
+            operatorDisplay.innerHTML = `<i class="fas fa-user-check text-xs text-red-600 mr-1"></i><span>${records[index].operator}</span>`;
+
+            document.getElementById(`time-empty-${index}`).style.display = 'none';
+            document.getElementById(`operator-empty-${index}`).style.display = 'none';
+            document.getElementById(`status-${index}`).className = 'status-badge status-maintenance';
+            document.getElementById(`status-${index}`).innerHTML = '<i class="fas fa-screwdriver-wrench text-xs"></i> 维修';
+            document.getElementById(`actions-${index}`).innerHTML = `
+                <button onclick="startEdit(${index})" class="action-btn btn-secondary">
+                    <i class="fas fa-edit"></i>修改
+                </button>
+            `;
+        }
+
+        function cancelEdit(index) {
+            if (records[index]) {
+                if (records[index].maintenance) {
+                    setRowMaintenance(index);
+                } else {
+                    fillRowData(index, records[index]);
+                    setRowSaved(index);
+                }
+            } else {
+                setRowPending(index);
+            }
+            editingRow = null;
+            updateStats();
+        }
+
+        function fillRowData(index, data) {
+            if (data.maintenance) {
+                setRowMaintenance(index);
+                return;
+            }
             const row = document.getElementById(`row-${index}`);
             row.querySelector('.heat-input').value = data.heat || '';
             row.querySelector('.fbe-input').value = data.fbe || '';
