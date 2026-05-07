@@ -1484,6 +1484,7 @@
             document.getElementById('toggleRootDetailBtn')?.classList.remove('hidden');
             clearSelection();
             applyMaterialTableFilters();
+            setTimeout(applyPadActionBars, 0);
         }
 
         function applyRootDetailColumnState() {
@@ -2556,6 +2557,49 @@
             }, 3000);
         }
 
+        // ========== PAD友好操作栏 ==========
+        function renderPadButton(label, icon, colorClass, onClick) {
+            return `<button onclick="${onClick}" class="h-12 px-3 rounded-xl ${colorClass} border transition-colors flex items-center justify-center gap-1.5 font-semibold text-sm whitespace-nowrap" title="${label}"><i class="fas ${icon} text-sm"></i><span>${label}</span></button>`;
+        }
+
+        function renderPadMoreMenu(id) {
+            return `
+                <button onclick="togglePadMoreMenu(event)" class="h-12 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 transition-colors flex items-center justify-center gap-1.5 font-semibold text-sm whitespace-nowrap" title="更多"><i class="fas fa-ellipsis text-sm"></i><span>更多</span></button>
+                <div class="pad-more-menu hidden absolute right-0 top-14 z-30 w-36 rounded-xl border border-gray-200 bg-white shadow-xl p-2">
+                    <button onclick="deleteRow('${id}')" class="w-full h-12 px-3 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 transition-colors flex items-center justify-center gap-2 font-semibold text-sm">
+                        <i class="fas fa-trash-alt text-sm"></i><span>删除</span>
+                    </button>
+                </div>
+            `;
+        }
+
+        function applyPadActionBars() {
+            document.querySelectorAll('#rootTableBody tr[data-id]').forEach(row => {
+                const id = row.dataset.id;
+                const actionWrap = row.querySelector('td:last-child > div');
+                if (!actionWrap) return;
+                actionWrap.className = 'relative flex items-center justify-center gap-2 min-w-[260px]';
+                actionWrap.innerHTML = `
+                    ${renderPadButton('查看', 'fa-eye', 'bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-100', `viewDetail('${id}')`)}
+                    ${renderPadButton('修改', 'fa-pen-to-square', 'bg-amber-50 hover:bg-amber-100 text-amber-700 border-amber-100', `openEntryDrawer('${id}')`)}
+                    ${renderPadMoreMenu(id)}
+                `;
+            });
+        }
+
+        function closePadMoreMenus() {
+            document.querySelectorAll('.pad-more-menu').forEach(menu => menu.classList.add('hidden'));
+        }
+
+        function togglePadMoreMenu(event) {
+            event.stopPropagation();
+            const menu = event.currentTarget.closest('td')?.querySelector('.pad-more-menu');
+            if (!menu) return;
+            const shouldOpen = menu.classList.contains('hidden');
+            closePadMoreMenus();
+            menu.classList.toggle('hidden', !shouldOpen);
+        }
+
         // 鍒濆鍖?
         document.addEventListener('DOMContentLoaded', function() {
             renderShiftFilterOptions();
@@ -2569,6 +2613,7 @@
             renderInstrumentTable();
             setCompressedAirResult('pass');
             updateWorkOrderProgress(parseInt(document.getElementById('shiftCountValue')?.textContent || '247', 10));
+            applyPadActionBars();
 
             // 鏇存柊褰撳墠鏃堕棿
             const now = new Date();
@@ -2579,6 +2624,7 @@
         // ESC閿叧闂?
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
+                closePadMoreMenus();
                 closeDetailDrawer();
                 closeEntryDrawer();
                 closeFilter();
@@ -2586,6 +2632,16 @@
                 closeWoDetail();
                 closeCodeListModal();
             }
+        });
+
+        document.addEventListener('click', function() {
+            closePadMoreMenus();
+        });
+
+        window.addEventListener('load', function() {
+            applyPadActionBars();
+            setTimeout(applyPadActionBars, 100);
+            setTimeout(applyPadActionBars, 500);
         });
     </script>
 </body>
