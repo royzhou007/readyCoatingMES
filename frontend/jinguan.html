@@ -3210,6 +3210,7 @@
                         </div>
                         <div class="w-full md:w-64 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 flex flex-col items-center justify-center">
                             <div id="pipePrintQrCode" class="qr-preview-box w-44 h-44 flex items-center justify-center bg-white rounded-xl border border-slate-200 p-2"></div>
+                            <div id="pipePrintQrId" class="mt-2 font-mono text-2xl font-black tracking-wider text-slate-900">-</div>
                             <div id="pipePrintQrText" class="mt-3 text-xs text-slate-500 text-center break-all"></div>
                         </div>
                     </div>
@@ -4321,6 +4322,7 @@ updateBatchBar();
 
             currentPipePrintData = data;
             document.getElementById('pipePrintId').textContent = data.id;
+            document.getElementById('pipePrintQrId').textContent = data.id;
             document.getElementById('pipePrintPipeNo').textContent = data.pipeNo;
             document.getElementById('pipePrintBundleNo').textContent = data.bundleNo;
             document.getElementById('pipePrintFurnaceBatch').textContent = `${data.furnaceNo} / ${data.batchNo}`;
@@ -4369,6 +4371,7 @@ updateBatchBar();
                         .value { font-size: 16px; font-weight: 600; word-break: break-all; }
                         .wide { grid-column: 1 / -1; }
                         .qr { text-align: center; margin-top: 12px; }
+                        .qr-id { margin-top: 6px; font-family: "Courier New", monospace; font-size: 28px; font-weight: 800; letter-spacing: 2px; color: #0f172a; }
                         .qr-text { font-size: 12px; color: #64748b; margin-top: 8px; word-break: break-all; }
                     </style>
                 </head>
@@ -4384,6 +4387,7 @@ updateBatchBar();
                         </div>
                         <div class="qr">
                             ${qrMarkup}
+                            <div class="qr-id">${currentPipePrintData.id}</div>
                             <div class="qr-text">${currentPipePrintData.qrText}</div>
                         </div>
                     </div>
