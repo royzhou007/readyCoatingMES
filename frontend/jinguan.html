@@ -163,6 +163,18 @@
         .tab-panel.active {
             display: flex;
         }
+        .material-subtab-btn {
+            transition: all 0.2s ease;
+        }
+        .material-subtab-btn.active {
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            color: white;
+            border-color: #2563EB;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18);
+        }
+        .material-subtab-panel.hidden {
+            display: none;
+        }
 
         /* 码单选择弹窗样式 */
         .code-list-item {
@@ -367,10 +379,10 @@
                 <div class="flex gap-2 overflow-x-auto pb-1 lg:pb-0 w-full lg:w-auto">
                     <button onclick="setFilter(event, 'all')" class="filter-chip active px-4 py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold whitespace-nowrap">全部记录</button>
                     <button onclick="setFilter(event, 'pass')" class="filter-chip px-4 py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold whitespace-nowrap flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-green-500"></span>外观合格
+                        <span class="w-2 h-2 rounded-full bg-green-500"></span>检验合格
                     </button>
                     <button onclick="setFilter(event, 'fail')" class="filter-chip px-4 py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold whitespace-nowrap flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-red-500"></span>外观不合格
+                        <span class="w-2 h-2 rounded-full bg-red-500"></span>检验不合格
                     </button>
                 </div>
             </div>
@@ -412,6 +424,16 @@
                 <button id="materialFullscreenBtn" type="button" onclick="toggleMaterialListFullscreen()" class="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-gray-200 bg-white hover:bg-gray-50 text-gray-700 font-semibold text-sm whitespace-nowrap transition-all">
                     <i class="fas fa-expand-arrows-alt"></i>
                     <span id="materialFullscreenBtnText">全屏展示</span>
+                </button>
+            </div>
+            <div class="flex items-center gap-3 overflow-x-auto pt-2 border-t border-gray-100">
+                <button class="material-subtab-btn active flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-blue-200 bg-blue-50 text-sm font-semibold whitespace-nowrap" data-subtab="root" onclick="switchMaterialSubTab('root')">
+                    <i class="fas fa-list-ul"></i>
+                    <span>根检记录</span>
+                </button>
+                <button class="material-subtab-btn flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-gray-200 bg-white text-sm font-semibold whitespace-nowrap" data-subtab="sample" onclick="switchMaterialSubTab('sample')">
+                    <i class="fas fa-vials"></i>
+                    <span>抽检记录</span>
                 </button>
             </div>
         </div>
@@ -612,6 +634,92 @@
             </div>
         </div>
     </main>
+
+    <div id="sampleDrawerOverlay" class="drawer-overlay fixed inset-0 bg-black/50 z-50" onclick="closeSampleDrawer()"></div>
+    <div id="sampleDrawer" class="drawer fixed top-0 right-0 h-full drawer-two-thirds bg-white z-50 shadow-2xl flex flex-col">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-sky-50 to-blue-50">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-vials"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900" id="sampleDrawerTitle">抽检录入</h3>
+                    <p class="text-sm text-gray-500" id="sampleDrawerSubtitle">当前班次: 今日白班 (08:00-20:00)</p>
+                </div>
+            </div>
+            <button onclick="closeSampleDrawer()" class="w-10 h-10 rounded-lg bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-gray-600 transition-colors">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="max-w-4xl mx-auto space-y-6">
+                <div class="bg-white rounded-xl border border-gray-200 p-5">
+                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-barcode text-blue-600"></i>
+                        钢管标识信息
+                        <span class="text-xs font-normal text-gray-400 ml-auto">从根检记录带入，仅查看不可修改</span>
+                    </h4>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">自编号</label><input id="sampleEntryId" type="text" readonly class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl font-mono outline-none"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">管号</label><input id="samplePipeNo" type="text" readonly class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl font-mono outline-none"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">捆号</label><input id="sampleBundleNo" type="text" readonly class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">炉号</label><input id="sampleFurnaceNo" type="text" readonly class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">批号</label><input id="sampleBatchNo" type="text" readonly class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">规格</label><input id="sampleSpec" type="text" readonly class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none"></div>
+                    </div>
+                </div>
+
+                <div id="sampleResultCard" class="hidden bg-white rounded-xl border border-gray-200 p-5">
+                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-clipboard-check text-blue-600"></i>
+                        抽检结果
+                    </h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">外观检验 <span class="text-red-500">*</span></label>
+                            <input type="hidden" id="sampleAppearance" value="pass">
+                            <div class="flex gap-3">
+                                <button type="button" onclick="setSampleAppearance('pass')" id="sampleAppearancePass" class="flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2"><i class="fas fa-check-circle"></i>合格</button>
+                                <button type="button" onclick="setSampleAppearance('fail')" id="sampleAppearanceFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2"><i class="fas fa-times-circle"></i>不合格</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">腐蚀程度 <span class="text-red-500">*</span></label>
+                            <input type="hidden" id="sampleCorrosion" value="B">
+                            <div class="grid grid-cols-4 gap-2">
+                                <button type="button" onclick="setSampleCorrosionLevel('A')" id="btnSampleCorrosionA" class="py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold text-sm hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center">A</button>
+                                <button type="button" onclick="setSampleCorrosionLevel('B')" id="btnSampleCorrosionB" class="py-3 rounded-xl border-2 border-blue-500 bg-blue-500 text-white font-semibold text-sm shadow-sm flex items-center justify-center">B</button>
+                                <button type="button" onclick="setSampleCorrosionLevel('C')" id="btnSampleCorrosionC" class="py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold text-sm hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 transition-all flex items-center justify-center">C</button>
+                                <button type="button" onclick="setSampleCorrosionLevel('D')" id="btnSampleCorrosionD" class="py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold text-sm hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center">D</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-5">
+                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-thermometer-half text-blue-600"></i>
+                        仪器读数
+                    </h4>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">T△ 温差 (℃) <span class="text-red-500">*</span></label><input type="number" id="sampleTDelta" step="0.1" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">RH 湿度 (%) <span class="text-red-500">*</span></label><input type="number" id="sampleRH" min="0" max="100" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">预热温度 (℃)</label><input type="number" id="sampleTemp" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-200 px-6 py-4 bg-gray-50">
+            <div class="max-w-4xl mx-auto flex gap-3">
+                <button onclick="closeSampleDrawer()" class="px-8 py-3 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition-colors">取消</button>
+                <div class="flex-1"></div>
+                <button id="sampleDrawerPrintBtn" onclick="printDetail()" class="px-8 py-3 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition-colors flex items-center gap-2"><i class="fas fa-print"></i>打印</button>
+                <button id="sampleDrawerSaveBtn" onclick="saveSampleEntry()" class="px-8 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-lg"><i class="fas fa-save"></i>保存</button>
+            </div>
+        </div>
+    </div>
 
     <section id="tab-panel-instrument" class="tab-panel flex-1 flex-col min-h-0 bg-gray-50 p-6">
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 h-full">
@@ -2441,6 +2549,18 @@
                                 </button>
                             </div>
                         </div>
+                        <div class="lg:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-3">检验结果 <span class="text-red-500">*</span></label>
+                            <input type="hidden" id="entryInspectionResult" value="pass">
+                            <div class="flex gap-3">
+                                <button type="button" onclick="setInspectionResult('pass')" id="btnInspectionPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
+                                    <i class="fas fa-check-circle"></i>合格
+                                </button>
+                                <button type="button" onclick="setInspectionResult('fail')" id="btnInspectionFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2">
+                                    <i class="fas fa-times-circle"></i>不合格
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -3114,6 +3234,7 @@
         let currentMainTab = 'material';
         let selectedRows = new Set();
         let currentAppearance = 'pass';
+        let currentInspectionResult = 'pass';
         let bevelAppearance = 'pass'; // 坡口外观状态
         let isMaterialListFullscreen = false;
         let lastRecord = {
@@ -3345,7 +3466,7 @@ updateBatchBar();
             isMaterialListFullscreen = !isMaterialListFullscreen;
             document.body.classList.toggle('material-list-fullscreen', isMaterialListFullscreen);
             updateMaterialListFullscreenButton();
-            ensureEditButtons();
+            ensureRootActionButtons();
         }
 
         // ========== 坡口信息折叠功能 ==========
@@ -3639,6 +3760,7 @@ updateBatchBar();
             [
                 'btnPass', 'btnFail',
                 'btnCorrosionA', 'btnCorrosionB', 'btnCorrosionC', 'btnCorrosionD',
+                'btnInspectionPass', 'btnInspectionFail',
                 'btnBevelPass', 'btnBevelFail',
                 'codeListSelectorArea'
             ].forEach(id => {
@@ -3666,6 +3788,7 @@ updateBatchBar();
 
             setAppearance('pass');
             setCorrosionLevel('');
+            setInspectionResult('pass');
             setBevelAppearance('pass');
 
             isBevelExpanded = false;
@@ -3686,7 +3809,11 @@ updateBatchBar();
             if (!row) return null;
 
             const cells = row.querySelectorAll('td');
-            const metrics = cells[7]?.querySelectorAll('span.font-medium') || [];
+            const hasRootResultCell = !!row.querySelector('.root-result-cell');
+            const metricsCellIndex = hasRootResultCell ? 8 : 7;
+            const timeCellIndex = hasRootResultCell ? 9 : 8;
+            const inspectorCellIndex = hasRootResultCell ? 10 : 9;
+            const metrics = cells[metricsCellIndex]?.querySelectorAll('span.font-medium') || [];
 
             return {
                 id: row.dataset.id || cells[1]?.textContent.trim() || '',
@@ -3698,13 +3825,14 @@ updateBatchBar();
                 weight: parseFloat(cells[4]?.querySelector('div.text-xs')?.textContent) || '',
                 appearance: (cells[5]?.textContent || '').includes('不') ? 'fail' : 'pass',
                 corrosion: cells[6]?.textContent.trim() || 'B',
+                inspectionResult: row.dataset.result || ((row.querySelector('.root-result-cell')?.textContent || '').includes('不') ? 'fail' : 'pass'),
                 tDelta: parseFloat(metrics[0]?.textContent) || '',
                 rh: parseFloat(metrics[1]?.textContent) || '',
                 temp: parseFloat(metrics[2]?.textContent) || '',
-                time: cells[8]?.querySelector('div.text-sm')?.textContent.trim() || getCurrentTimeString(),
-                timeLabel: cells[8]?.querySelector('div.text-xs')?.textContent.trim() || '今天',
-                inspectorInitial: cells[9]?.querySelector('div.w-8')?.textContent.trim() || '张',
-                inspectorName: cells[9]?.querySelector('span.text-xs')?.textContent.trim() || '张师傅'
+                time: cells[timeCellIndex]?.querySelector('div.text-sm')?.textContent.trim() || getCurrentTimeString(),
+                timeLabel: cells[timeCellIndex]?.querySelector('div.text-xs')?.textContent.trim() || '今天',
+                inspectorInitial: cells[inspectorCellIndex]?.querySelector('div.w-8')?.textContent.trim() || '张',
+                inspectorName: cells[inspectorCellIndex]?.querySelector('span.text-xs')?.textContent.trim() || '张师傅'
             };
         }
 
@@ -3722,6 +3850,7 @@ updateBatchBar();
             document.getElementById('entryTemp').value = data.temp || '';
             setAppearance(data.appearance || 'pass');
             setCorrosionLevel(data.corrosion || 'B');
+            setInspectionResult(data.inspectionResult || data.appearance || 'pass');
         }
 
         function collectEntryFormData() {
@@ -3737,7 +3866,8 @@ updateBatchBar();
                 rh: document.getElementById('entryRH').value.trim(),
                 temp: document.getElementById('entryTemp').value.trim(),
                 appearance: currentAppearance,
-                corrosion: document.getElementById('entryCorrosion').value.trim()
+                corrosion: document.getElementById('entryCorrosion').value.trim(),
+                inspectionResult: document.getElementById('entryInspectionResult')?.value.trim() || currentInspectionResult
             };
         }
 
@@ -3756,17 +3886,25 @@ updateBatchBar();
             const meta = editingRowMeta || {};
 
             row.dataset.id = formData.id;
+            row.dataset.result = formData.inspectionResult || 'pass';
             row.children[1].innerHTML = `<div class="font-bold text-gray-900 font-mono text-base">${formData.id}</div>`;
             row.children[2].innerHTML = `<div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">${formData.bundleNo}</div><div class="font-mono text-xs text-gray-500">${formData.pipeNo}</div></div>`;
             row.children[3].innerHTML = `<div class="flex flex-col gap-1"><div class="text-sm font-medium text-gray-900">${formData.furnaceNo}</div><div class="text-xs text-gray-500">${formData.batchNo}</div></div>`;
             row.children[4].innerHTML = `<div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">${formData.length}<span class="text-xs text-gray-500 font-normal">mm</span></div><div class="text-xs text-gray-500">${formData.weight || '-'}kg</div></div>`;
             row.children[5].innerHTML = appearanceHtml;
             row.children[6].innerHTML = `<span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium ${corrosionClassMap[formData.corrosion] || 'corrosion-light'}">${formData.corrosion}</span>`;
-            row.children[7].innerHTML = `<div class="flex flex-col gap-0.5 text-xs text-gray-600"><div class="flex justify-center gap-1"><span class="text-gray-400">TΔ:</span><span class="font-medium">${formData.tDelta}℃</span></div><div class="flex justify-center gap-1"><span class="text-gray-400">RH:</span><span class="font-medium">${formData.rh}%</span></div><div class="flex justify-center gap-1"><span class="text-gray-400">温度:</span><span class="font-medium">${formData.temp}℃</span></div></div>`;
-            row.children[8].innerHTML = `<div class="text-sm font-medium text-gray-900">${meta.time || getCurrentTimeString()}</div><div class="text-xs text-gray-500">${meta.timeLabel || '今天'}</div>`;
-            row.children[9].innerHTML = `<div class="flex flex-col items-center gap-1"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">${meta.inspectorInitial || '张'}</div><span class="text-xs text-gray-600">${meta.inspectorName || '张师傅'}</span></div>`;
+            const resultCell = row.querySelector('.root-result-cell');
+            if (resultCell) resultCell.innerHTML = getResultBadge(formData.inspectionResult || 'pass');
+            const hasRootResultCell = !!resultCell;
+            const metricsCellIndex = hasRootResultCell ? 8 : 7;
+            const timeCellIndex = hasRootResultCell ? 9 : 8;
+            const inspectorCellIndex = hasRootResultCell ? 10 : 9;
+            const actionCellIndex = hasRootResultCell ? 11 : 10;
+            row.children[metricsCellIndex].innerHTML = `<div class="flex flex-col gap-0.5 text-xs text-gray-600"><div class="flex justify-center gap-1"><span class="text-gray-400">TΔ:</span><span class="font-medium">${formData.tDelta}℃</span></div><div class="flex justify-center gap-1"><span class="text-gray-400">RH:</span><span class="font-medium">${formData.rh}%</span></div><div class="flex justify-center gap-1"><span class="text-gray-400">温度:</span><span class="font-medium">${formData.temp}℃</span></div></div>`;
+            row.children[timeCellIndex].innerHTML = `<div class="text-sm font-medium text-gray-900">${meta.time || getCurrentTimeString()}</div><div class="text-xs text-gray-500">${meta.timeLabel || '今天'}</div>`;
+            row.children[inspectorCellIndex].innerHTML = `<div class="flex flex-col items-center gap-1"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">${meta.inspectorInitial || '张'}</div><span class="text-xs text-gray-600">${meta.inspectorName || '张师傅'}</span></div>`;
 
-            const actionButtons = row.children[10]?.querySelectorAll('button') || [];
+            const actionButtons = row.children[actionCellIndex]?.querySelectorAll('button') || [];
             actionButtons.forEach(button => {
                 const icon = button.querySelector('i');
                 if (icon?.classList.contains('fa-eye')) {
@@ -3785,7 +3923,7 @@ updateBatchBar();
         }
 
         function ensureEditButtons() {
-            document.querySelectorAll('#tableBody tr[data-id]').forEach(row => {
+            getRootTableBody()?.querySelectorAll('tr[data-id]').forEach(row => {
                 const actionWrap = row.querySelector('td:last-child > div');
                 if (!actionWrap || actionWrap.querySelector('.edit-row-btn')) return;
 
@@ -3817,7 +3955,7 @@ updateBatchBar();
         }
 
         function openEditDrawer(id) {
-            const row = document.querySelector(`#tableBody tr[data-id="${id}"]`);
+            const row = getRootTableBody()?.querySelector(`tr[data-id="${id}"]`);
             const rowData = getRowData(row);
             if (!rowData) {
                 showToast('未找到可编辑的钢管记录', 'error');
@@ -3834,7 +3972,7 @@ updateBatchBar();
         }
 
         function viewDetail(id) {
-            const row = document.querySelector(`#tableBody tr[data-id="${id}"]`);
+            const row = getRootTableBody()?.querySelector(`tr[data-id="${id}"]`);
             const rowData = getRowData(row);
             if (!rowData) {
                 showToast('未找到可查看的钢管记录', 'error');
@@ -3866,9 +4004,9 @@ updateBatchBar();
             lastRecord = { bundleNo, furnaceNo, batchNo };
 
             if (entryDrawerMode === 'edit' && editingRowId) {
-                const row = document.querySelector(`#tableBody tr[data-id="${editingRowId}"]`);
+                const row = getRootTableBody()?.querySelector(`tr[data-id="${editingRowId}"]`);
                 updateRowWithEntryData(row, formData);
-                ensureEditButtons();
+                ensureRootActionButtons();
                 showToast(`钢管 ${formData.id} 修改成功`, 'success');
                 closeEntryDrawer();
                 return;
@@ -4076,7 +4214,7 @@ updateBatchBar();
         }
 
         function viewDetail(id) {
-            const row = document.querySelector(`#tableBody tr[data-id="${id}"]`);
+            const row = getRootTableBody()?.querySelector(`tr[data-id="${id}"]`);
             const rowData = getRowData(row);
             if (!rowData) {
                 showToast('未找到可查看的钢管记录', 'error');
@@ -4129,7 +4267,7 @@ updateBatchBar();
         }
 
         function getPipePrintData(id) {
-            const row = document.querySelector(`#tableBody tr[data-id="${id}"]`);
+            const row = getRootTableBody()?.querySelector(`tr[data-id="${id}"]`);
             if (!row) return null;
 
             const cells = row.querySelectorAll('td');
@@ -4346,6 +4484,24 @@ updateBatchBar();
             } else {
                 btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
                 btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+        }
+
+        function setInspectionResult(type) {
+            currentInspectionResult = type;
+            const input = document.getElementById('entryInspectionResult');
+            const passBtn = document.getElementById('btnInspectionPass');
+            const failBtn = document.getElementById('btnInspectionFail');
+
+            if (input) input.value = type;
+            if (!passBtn || !failBtn) return;
+
+            if (type === 'pass') {
+                passBtn.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                failBtn.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                passBtn.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                failBtn.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
             }
         }
 
@@ -4702,9 +4858,9 @@ updateBatchBar();
             lastRecord = { bundleNo, furnaceNo, batchNo };
 
             if (entryDrawerMode === 'edit' && editingRowId) {
-                const row = document.querySelector(`#tableBody tr[data-id="${editingRowId}"]`);
+                const row = getRootTableBody()?.querySelector(`tr[data-id="${editingRowId}"]`);
                 updateRowWithEntryData(row, formData);
-                ensureEditButtons();
+                ensureRootActionButtons();
                 showToast(`钢管 ${formData.id} 修改成功`, 'success');
                 closeEntryDrawer();
                 return;
@@ -4786,8 +4942,430 @@ updateBatchBar();
             }, 3000);
         }
 
+        // ========== 根检 / 抽检记录切换与抽检抽屉 ==========
+        let currentMaterialSubTab = 'root';
+        let currentRowFilter = 'all';
+        let currentSampleDrawerMode = 'create';
+        const sampleRecordList = [
+            { id: 'CJ-0032', rootId: '0032', appearance: 'pass', corrosion: 'B', tDelta: '14.8', rh: '45', temp: '120', result: 'pass', inspector: '王检', time: '20:10', timeLabel: '今天' },
+            { id: 'CJ-0031', rootId: '0031', appearance: 'pass', corrosion: 'A', tDelta: '14.6', rh: '42', temp: '118', result: 'pass', inspector: '王检', time: '18:55', timeLabel: '今天' },
+            { id: 'CJ-0030', rootId: '0030', appearance: 'fail', corrosion: 'D', tDelta: '15.2', rh: '65', temp: '135', result: 'fail', inspector: '赵检', time: '03:40', timeLabel: '昨天' }
+        ];
+
+        function getRootTableBody() {
+            return document.getElementById('rootTableBody') || document.getElementById('tableBody');
+        }
+
+        function getActiveTableBody() {
+            return currentMaterialSubTab === 'sample'
+                ? document.getElementById('sampleTableBody')
+                : getRootTableBody();
+        }
+
+        function getActiveSelectAll() {
+            return currentMaterialSubTab === 'sample'
+                ? document.getElementById('selectAllSample')
+                : document.getElementById('selectAllRoot') || document.getElementById('selectAll');
+        }
+
+        function getRootRecordById(id) {
+            const row = getRootTableBody()?.querySelector(`tr[data-id="${id}"]`);
+            return getRowData(row);
+        }
+
+        function getCorrosionClass(level) {
+            return { A: 'corrosion-none', B: 'corrosion-light', C: 'corrosion-medium', D: 'corrosion-severe' }[level] || 'corrosion-light';
+        }
+
+        function getResultBadge(result) {
+            return result === 'fail'
+                ? '<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"><i class="fas fa-circle-xmark"></i>不合格</span>'
+                : '<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-circle-check"></i>合格</span>';
+        }
+
+        function ensureMaterialSubtabPanels() {
+            const rootTable = document.querySelector('#materialMain table.data-table');
+            if (!rootTable || document.getElementById('material-subtab-root')) return;
+
+            const rootSection = document.createElement('section');
+            rootSection.id = 'material-subtab-root';
+            rootSection.className = 'material-subtab-panel';
+            rootTable.parentNode.insertBefore(rootSection, rootTable);
+            rootSection.appendChild(rootTable);
+
+            const oldSelectAll = document.getElementById('selectAll');
+            if (oldSelectAll) oldSelectAll.id = 'selectAllRoot';
+            const oldTbody = document.getElementById('tableBody');
+            if (oldTbody) oldTbody.id = 'rootTableBody';
+
+            const sampleSection = document.createElement('section');
+            sampleSection.id = 'material-subtab-sample';
+            sampleSection.className = 'material-subtab-panel hidden';
+            sampleSection.innerHTML = `
+                <table class="data-table w-full bg-white">
+                    <thead class="sticky-header">
+                        <tr>
+                            <th class="px-4 py-4 text-left w-12"><input type="checkbox" class="custom-checkbox" id="selectAllSample" onclick="toggleSelectAll()"></th>
+                            <th class="px-4 py-4 text-left">自编号</th>
+                            <th class="px-4 py-4 text-left"><div class="flex flex-col"><span>捆号</span><span class="text-xs text-gray-400 font-normal normal-case">管号</span></div></th>
+                            <th class="px-4 py-4 text-left"><div class="flex flex-col"><span>炉号</span><span class="text-xs text-gray-400 font-normal normal-case">批号</span></div></th>
+                            <th class="px-4 py-4 text-center"><div class="flex flex-col items-center"><span>T△ 温差</span><span class="text-xs text-gray-400 font-normal normal-case">℃</span></div></th>
+                            <th class="px-4 py-4 text-center"><div class="flex flex-col items-center"><span>RH 湿度</span><span class="text-xs text-gray-400 font-normal normal-case">%</span></div></th>
+                            <th class="px-4 py-4 text-center"><div class="flex flex-col items-center"><span>预热温度</span><span class="text-xs text-gray-400 font-normal normal-case">℃</span></div></th>
+                            <th class="px-4 py-4 text-center">操作时间</th>
+                            <th class="px-4 py-4 text-center">质检员</th>
+                            <th class="px-4 py-4 text-center">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sampleTableBody"></tbody>
+                </table>
+            `;
+            rootSection.parentNode.insertBefore(sampleSection, rootSection.nextSibling);
+        }
+
+        function hideRootInstrumentReadingColumn() {
+            const rootTable = document.querySelector('#material-subtab-root table') || document.querySelector('#materialMain table.data-table');
+            if (!rootTable) return;
+            const headers = Array.from(rootTable.querySelectorAll('thead th'));
+            const instrumentIndex = headers.findIndex(cell => cell.textContent.includes('仪器读数'));
+            const targetIndex = instrumentIndex >= 0 ? instrumentIndex : 7;
+            rootTable.querySelectorAll('tr').forEach(row => {
+                const cell = row.children[targetIndex];
+                if (cell) cell.classList.add('hidden');
+            });
+        }
+
+        function ensureRootInspectionResultColumn() {
+            const rootTable = document.querySelector('#material-subtab-root table') || document.querySelector('#materialMain table.data-table');
+            const tbody = getRootTableBody();
+            if (!rootTable || !tbody || rootTable.querySelector('.root-result-header')) return;
+
+            const headerRow = rootTable.querySelector('thead tr');
+            const headerCell = document.createElement('th');
+            headerCell.className = 'root-result-header px-4 py-4 text-center';
+            headerCell.textContent = '检验结果';
+            headerRow.insertBefore(headerCell, headerRow.children[7]);
+
+            tbody.querySelectorAll('tr[data-id]').forEach(row => {
+                const result = row.dataset.result || (row.children[5]?.textContent.includes('不合格') ? 'fail' : 'pass');
+                row.dataset.result = result;
+                const cell = document.createElement('td');
+                cell.className = 'root-result-cell px-4 py-4 text-center';
+                cell.innerHTML = getResultBadge(result);
+                row.insertBefore(cell, row.children[7]);
+            });
+        }
+
+        function hideEntryInstrumentReadingCard() {
+            document.querySelectorAll('#entryDrawer h4').forEach(title => {
+                if (title.textContent.includes('仪器读数')) {
+                    title.closest('.bg-white')?.classList.add('hidden');
+                }
+            });
+        }
+
+        function renderSampleTable() {
+            const tbody = document.getElementById('sampleTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            sampleRecordList.forEach(record => {
+                const root = getRootRecordById(record.rootId) || {};
+                const tr = document.createElement('tr');
+                tr.className = 'group';
+                tr.dataset.id = record.id;
+                tr.dataset.shift = root.shift || document.querySelector(`#rootTableBody tr[data-id="${record.rootId}"]`)?.dataset.shift || 'today_day';
+                tr.dataset.result = record.result;
+                tr.innerHTML = `
+                    <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
+                    <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">${record.id}</div></td>
+                    <td class="px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">${root.bundleNo || '-'}</div><div class="font-mono text-xs text-gray-500">${root.pipeNo || '-'}</div></div></td>
+                    <td class="px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-medium text-gray-900">${root.furnaceNo || '-'}</div><div class="text-xs text-gray-500">${root.batchNo || '-'}</div></div></td>
+                    <td class="px-4 py-4 text-center text-sm font-semibold ${record.result === 'fail' ? 'text-red-600' : 'text-gray-900'}">${record.tDelta}</td>
+                    <td class="px-4 py-4 text-center text-sm font-semibold ${record.result === 'fail' ? 'text-red-600' : 'text-gray-900'}">${record.rh}</td>
+                    <td class="px-4 py-4 text-center text-sm font-semibold ${record.result === 'fail' ? 'text-red-600' : 'text-gray-900'}">${record.temp}</td>
+                    <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">${record.time}</div><div class="text-xs text-gray-500">${record.timeLabel}</div></td>
+                    <td class="px-4 py-4 text-center"><span class="text-sm text-gray-700">${record.inspector}</span></td>
+                    <td class="px-4 py-4 text-center">
+                        <div class="relative flex items-center justify-center gap-2 min-w-[230px]">
+                            <button onclick="openSampleDrawer('view', '${record.id}')" class="h-12 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-100 transition-colors flex items-center justify-center gap-1.5 font-semibold text-sm whitespace-nowrap" title="查看"><i class="fas fa-eye text-sm"></i><span>查看</span></button>
+                            <button onclick="openSampleDrawer('edit', '${record.id}')" class="h-12 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-100 transition-colors flex items-center justify-center gap-1.5 font-semibold text-sm whitespace-nowrap" title="编辑"><i class="fas fa-pen-to-square text-sm"></i><span>编辑</span></button>
+                            <button onclick="toggleSampleMoreMenu(event, '${record.id}')" class="h-12 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 transition-colors flex items-center justify-center gap-1.5 font-semibold text-sm whitespace-nowrap" title="更多"><i class="fas fa-ellipsis text-sm"></i><span>更多</span></button>
+                            <div class="sample-more-menu hidden absolute right-0 top-14 z-30 w-36 rounded-xl border border-gray-200 bg-white shadow-xl p-2">
+                                <button onclick="deleteRow('${record.id}')" class="w-full h-12 px-3 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 transition-colors flex items-center justify-center gap-2 font-semibold text-sm">
+                                    <i class="fas fa-trash-alt text-sm"></i><span>删除</span>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function ensureRootActionButtons() {
+            getRootTableBody()?.querySelectorAll('tr[data-id]').forEach(row => {
+                const id = row.dataset.id;
+                const actionWrap = row.querySelector('td:last-child > div');
+                if (!actionWrap) return;
+                row.dataset.result = row.querySelector('.root-result-cell')?.textContent.includes('不合格')
+                    ? 'fail'
+                    : (row.dataset.result || (row.children[5]?.textContent.includes('不合格') ? 'fail' : 'pass'));
+                actionWrap.className = 'relative flex items-center justify-center gap-2 min-w-[430px]';
+                actionWrap.innerHTML = `
+                    <button onclick="viewDetail('${id}')" class="h-12 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-100 transition-colors flex items-center justify-center gap-1.5 font-semibold text-sm whitespace-nowrap" title="查看"><i class="fas fa-eye text-sm"></i><span>查看</span></button>
+                    <button onclick="openEditDrawer('${id}')" class="edit-row-btn h-12 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-100 transition-colors flex items-center justify-center gap-1.5 font-semibold text-sm whitespace-nowrap" title="修改"><i class="fas fa-pen-to-square text-sm"></i><span>修改</span></button>
+                    <button onclick="openSampleDrawer('create', '${id}')" class="h-12 px-3 rounded-xl bg-cyan-50 hover:bg-cyan-100 text-cyan-700 border border-cyan-100 transition-colors flex items-center justify-center gap-1.5 font-semibold text-sm whitespace-nowrap" title="抽检"><i class="fas fa-vials text-sm"></i><span>抽检</span></button>
+                    <button onclick="openPipePrintModal('${id}')" class="h-12 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-100 transition-colors flex items-center justify-center gap-1.5 font-semibold text-sm whitespace-nowrap" title="打印"><i class="fas fa-print text-sm"></i><span>打印</span></button>
+                    <button onclick="toggleRootMoreMenu(event, '${id}')" class="h-12 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 transition-colors flex items-center justify-center gap-1.5 font-semibold text-sm whitespace-nowrap" title="更多"><i class="fas fa-ellipsis text-sm"></i><span>更多</span></button>
+                    <div class="root-more-menu hidden absolute right-0 top-14 z-30 w-36 rounded-xl border border-gray-200 bg-white shadow-xl p-2">
+                        <button onclick="deleteRow('${id}')" class="w-full h-12 px-3 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 transition-colors flex items-center justify-center gap-2 font-semibold text-sm">
+                            <i class="fas fa-trash-alt text-sm"></i><span>删除</span>
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        function closeRootMoreMenus() {
+            document.querySelectorAll('.root-more-menu').forEach(menu => menu.classList.add('hidden'));
+        }
+
+        function closeSampleMoreMenus() {
+            document.querySelectorAll('.sample-more-menu').forEach(menu => menu.classList.add('hidden'));
+        }
+
+        function closeAllMoreMenus() {
+            closeRootMoreMenus();
+            closeSampleMoreMenus();
+        }
+
+        function toggleRootMoreMenu(event, id) {
+            event.stopPropagation();
+            const actionWrap = event.currentTarget.closest('td')?.querySelector('div');
+            const menu = actionWrap?.querySelector('.root-more-menu');
+            if (!menu) return;
+            const shouldOpen = menu.classList.contains('hidden');
+            closeAllMoreMenus();
+            menu.classList.toggle('hidden', !shouldOpen);
+        }
+
+        function toggleSampleMoreMenu(event, id) {
+            event.stopPropagation();
+            const actionWrap = event.currentTarget.closest('td')?.querySelector('div');
+            const menu = actionWrap?.querySelector('.sample-more-menu');
+            if (!menu) return;
+            const shouldOpen = menu.classList.contains('hidden');
+            closeAllMoreMenus();
+            menu.classList.toggle('hidden', !shouldOpen);
+        }
+
+        function applyMaterialTableFilters() {
+            const tbody = getActiveTableBody();
+            if (!tbody) return;
+
+            const keyword = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            let totalCount = 0;
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const matchesShift = row.dataset.shift === currentShift;
+                const matchesSearch = !keyword || row.textContent.toLowerCase().includes(keyword);
+                const matchesFilter = currentRowFilter === 'all' || row.dataset.result === currentRowFilter;
+                if (matchesShift) totalCount++;
+                row.style.display = matchesShift && matchesSearch && matchesFilter ? '' : 'none';
+                if (row.style.display !== 'none') visibleCount++;
+            });
+
+            document.getElementById('currentShiftName').textContent = shiftData[currentShift]?.name || '';
+            document.getElementById('totalCount').textContent = totalCount;
+            document.getElementById('showingCount').textContent = visibleCount > 0 ? `1-${visibleCount}` : '0';
+            document.getElementById('emptyState')?.classList.toggle('hidden', visibleCount > 0);
+
+            const selectAll = getActiveSelectAll();
+            if (selectAll) selectAll.checked = false;
+        }
+
+        function switchMaterialSubTab(tabId) {
+            currentMaterialSubTab = tabId;
+            document.querySelectorAll('.material-subtab-btn').forEach(btn => {
+                const isActive = btn.dataset.subtab === tabId;
+                btn.classList.toggle('active', isActive);
+                btn.classList.toggle('border-blue-200', isActive);
+                btn.classList.toggle('bg-blue-50', isActive);
+                btn.classList.toggle('border-gray-200', !isActive);
+                btn.classList.toggle('bg-white', !isActive);
+            });
+            document.getElementById('material-subtab-root')?.classList.toggle('hidden', tabId !== 'root');
+            document.getElementById('material-subtab-sample')?.classList.toggle('hidden', tabId !== 'sample');
+            clearSelection();
+            applyMaterialTableFilters();
+        }
+
+        function setFilter(event, type) {
+            currentRowFilter = type;
+            document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
+            event.target.closest('.filter-chip').classList.add('active');
+            applyMaterialTableFilters();
+            showToast(`已切换到: ${event.target.closest('.filter-chip').textContent.trim()}`, 'info');
+        }
+
+        function handleSearch() {
+            applyMaterialTableFilters();
+        }
+
+        function switchShift(shiftId) {
+            currentShift = shiftId;
+            const shift = shiftData[shiftId];
+            document.querySelectorAll('.shift-btn').forEach(btn => {
+                const isActive = btn.dataset.shift === shiftId;
+                btn.className = isActive
+                    ? 'shift-btn active flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-blue-600 text-white border-blue-600 ring-4 ring-blue-100'
+                    : 'shift-btn flex items-center px-4 py-2.5 rounded-xl border-2 font-semibold text-sm whitespace-nowrap transition-all bg-white text-gray-700 border-gray-200 hover:border-blue-400';
+                const badge = btn.querySelector('span');
+                if (badge) {
+                    badge.className = isActive ? 'ml-2 text-xs py-0.5 px-1.5 rounded-full bg-white/20' : 'ml-2 text-xs py-0.5 px-1.5 rounded-full bg-gray-100 text-gray-600';
+                }
+            });
+            applyMaterialTableFilters();
+            showToast(`已切换到: ${shift?.name || shiftId}`, 'info');
+            clearSelection();
+        }
+
+        function toggleSelectAll() {
+            const selectAll = getActiveSelectAll();
+            const tbody = getActiveTableBody();
+            if (!selectAll || !tbody) return;
+            const visibleRows = tbody.querySelectorAll('tr:not([style*="display: none"])');
+
+            visibleRows.forEach(row => {
+                const checkbox = row.querySelector('.row-checkbox');
+                const id = row.getAttribute('data-id');
+                if (!checkbox) return;
+                checkbox.checked = selectAll.checked;
+                if (selectAll.checked) {
+                    selectedRows.add(id);
+                    row.classList.add('selected');
+                } else {
+                    selectedRows.delete(id);
+                    row.classList.remove('selected');
+                }
+            });
+            updateBatchBar();
+        }
+
+        function clearSelection() {
+            selectedRows.clear();
+            document.querySelectorAll('.row-checkbox').forEach(cb => {
+                cb.checked = false;
+                cb.closest('tr')?.classList.remove('selected');
+            });
+            document.getElementById('selectAllRoot') && (document.getElementById('selectAllRoot').checked = false);
+            document.getElementById('selectAllSample') && (document.getElementById('selectAllSample').checked = false);
+            updateBatchBar();
+        }
+
+        function setSampleAppearance(type) {
+            document.getElementById('sampleAppearance').value = type;
+            const passBtn = document.getElementById('sampleAppearancePass');
+            const failBtn = document.getElementById('sampleAppearanceFail');
+            passBtn.className = type === 'pass'
+                ? 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2'
+                : 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+            failBtn.className = type === 'fail'
+                ? 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2'
+                : 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+        }
+
+        function setSampleCorrosionLevel(level) {
+            document.getElementById('sampleCorrosion').value = level;
+            const styles = {
+                A: ['border-green-500 bg-green-500 text-white', 'hover:bg-green-50 hover:text-green-600 hover:border-green-300'],
+                B: ['border-blue-500 bg-blue-500 text-white', 'hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300'],
+                C: ['border-amber-500 bg-amber-500 text-white', 'hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300'],
+                D: ['border-red-500 bg-red-500 text-white', 'hover:bg-red-50 hover:text-red-600 hover:border-red-300']
+            };
+            ['A', 'B', 'C', 'D'].forEach(key => {
+                const btn = document.getElementById(`btnSampleCorrosion${key}`);
+                if (!btn) return;
+                btn.className = key === level
+                    ? `py-3 rounded-xl border-2 ${styles[key][0]} font-semibold text-sm shadow-sm flex items-center justify-center`
+                    : `py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold text-sm ${styles[key][1]} transition-all flex items-center justify-center`;
+            });
+        }
+
+        function openSampleDrawer(mode = 'create', recordId = null) {
+            currentSampleDrawerMode = mode;
+            const isCreate = mode === 'create';
+            const isView = mode === 'view';
+            const record = isCreate ? null : sampleRecordList.find(item => item.id === recordId);
+            const rootId = isCreate ? String(recordId) : (record?.rootId || String(recordId).replace('CJ-', ''));
+            const root = getRootRecordById(rootId) || getRowData(getRootTableBody()?.querySelector('tr[data-id]')) || {};
+            const values = record || {
+                id: `CJ-${root.id || rootId}`,
+                rootId,
+                appearance: root.appearance || 'pass',
+                corrosion: root.corrosion || 'B',
+                tDelta: root.tDelta || '14.8',
+                rh: root.rh || '45',
+                temp: root.temp || '120',
+                result: root.appearance || 'pass',
+                time: '待保存'
+            };
+
+            document.getElementById('sampleDrawerTitle').textContent = isCreate ? '抽检录入' : mode === 'edit' ? '抽检修改' : '抽检详情';
+            document.getElementById('sampleDrawerSubtitle').textContent = isCreate ? `已从根检钢管 ${root.id || rootId} 带入标识信息` : `当前时间: ${values.time}`;
+            document.getElementById('sampleEntryId').value = values.id;
+            document.getElementById('samplePipeNo').value = root.pipeNo || '';
+            document.getElementById('sampleBundleNo').value = root.bundleNo || '';
+            document.getElementById('sampleFurnaceNo').value = root.furnaceNo || '';
+            document.getElementById('sampleBatchNo').value = root.batchNo || '';
+            document.getElementById('sampleSpec').value = `${root.length || '-'}mm / ${root.weight || '-'}kg`;
+            setSampleAppearance(values.appearance || 'pass');
+            setSampleCorrosionLevel(values.corrosion || 'B');
+            document.getElementById('sampleTDelta').value = values.tDelta || '';
+            document.getElementById('sampleRH').value = values.rh || '';
+            document.getElementById('sampleTemp').value = values.temp || '';
+
+            ['sampleTDelta', 'sampleRH', 'sampleTemp'].forEach(id => {
+                const el = document.getElementById(id);
+                el.disabled = isView;
+                el.classList.toggle('bg-gray-50', isView);
+            });
+            ['sampleAppearancePass', 'sampleAppearanceFail', 'btnSampleCorrosionA', 'btnSampleCorrosionB', 'btnSampleCorrosionC', 'btnSampleCorrosionD'].forEach(id => {
+                const btn = document.getElementById(id);
+                if (!btn) return;
+                btn.disabled = isView;
+                btn.classList.toggle('opacity-60', isView);
+                btn.classList.toggle('cursor-not-allowed', isView);
+            });
+            document.getElementById('sampleDrawerSaveBtn').classList.toggle('hidden', isView);
+            document.getElementById('sampleDrawerPrintBtn').classList.toggle('hidden', isCreate);
+            document.getElementById('sampleDrawerOverlay').classList.add('open');
+            document.getElementById('sampleDrawer').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSampleDrawer() {
+            document.getElementById('sampleDrawerOverlay').classList.remove('open');
+            document.getElementById('sampleDrawer').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function saveSampleEntry() {
+            showToast(currentSampleDrawerMode === 'create' ? '抽检记录已创建' : '抽检记录已更新', 'success');
+            closeSampleDrawer();
+        }
+
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
+            ensureMaterialSubtabPanels();
+            hideRootInstrumentReadingColumn();
+            ensureRootInspectionResultColumn();
+            hideEntryInstrumentReadingCard();
+            renderSampleTable();
+            ensureRootActionButtons();
             renderShiftFilterOptions();
             renderWorkOrderShiftStats();
             switchShift('today_day');
@@ -4807,7 +5385,7 @@ updateBatchBar();
 
         // ESC键关闭
         document.addEventListener('DOMContentLoaded', function() {
-            ensureEditButtons();
+            ensureRootActionButtons();
             const timeStr = getCurrentTimeString();
             document.getElementById('currentTime').textContent = timeStr;
             document.getElementById('entryDrawerCurrentTime').textContent = timeStr;
@@ -4815,6 +5393,7 @@ updateBatchBar();
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
+                closeAllMoreMenus();
                 closeDetailDrawer();
                 closeEntryDrawer();
                 closeFilter();
@@ -4822,7 +5401,12 @@ updateBatchBar();
                 closeWoDetail();
                 closeCodeListModal();
                 closePipePrintModal();
+                closeSampleDrawer();
             }
+        });
+
+        document.addEventListener('click', function() {
+            closeAllMoreMenus();
         });
     </script>
 </body>
