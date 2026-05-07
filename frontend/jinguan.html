@@ -375,6 +375,10 @@
                         <i class="fas fa-plus-circle"></i>
                         <span>进管</span>
                     </button>
+                    <button onclick="openReentryDrawer()" class="action-btn flex items-center justify-center gap-2 px-5 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold industrial-shadow-lg whitespace-nowrap">
+                        <i class="fas fa-rotate-left"></i>
+                        <span>重新进管</span>
+                    </button>
                 </div>
                 <div class="flex gap-2 overflow-x-auto pb-1 lg:pb-0 w-full lg:w-auto">
                     <button onclick="setFilter(event, 'all')" class="filter-chip active px-4 py-2 rounded-lg border-2 border-gray-200 text-sm font-semibold whitespace-nowrap">全部记录</button>
@@ -2420,13 +2424,13 @@
                                         <i class="fas fa-clipboard-list text-lg"></i>
                                     </div>
                                     <div>
-                                        <div class="font-semibold text-gray-900">码单选择</div>
-                                        <div class="text-sm text-gray-500">从已导入码单中搜索并带入钢管标识信息</div>
+                                        <div id="entrySelectorTitle" class="font-semibold text-gray-900">码单选择</div>
+                                        <div id="entrySelectorDesc" class="text-sm text-gray-500">从已导入码单中搜索并带入钢管标识信息</div>
                                     </div>
                                 </div>
                                 <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white text-blue-600 text-sm font-medium border border-blue-200">
                                     <i class="fas fa-search"></i>
-                                    选择钢管
+                                    <span id="entrySelectorActionText">选择钢管</span>
                                 </span>
                             </div>
                         </button>
@@ -2692,8 +2696,8 @@
                         <i class="fas fa-list-ol text-xl"></i>
                     </div>
                     <div>
-                        <h3 class="text-lg font-bold">选择码单钢管</h3>
-                        <p class="text-sm text-blue-100">从预置码单中选择钢管信息自动填充</p>
+                        <h3 id="codeListModalTitle" class="text-lg font-bold">选择码单钢管</h3>
+                        <p id="codeListModalDesc" class="text-sm text-blue-100">从预置码单中选择钢管信息自动填充</p>
                     </div>
                 </div>
                 <button onclick="closeCodeListModal()" class="w-8 h-8 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-colors">
@@ -2764,6 +2768,72 @@
     </div>
 
     <!-- 查看详情抽屉（2/3宽度） -->
+    <div id="nonconformingModal" class="modal fixed inset-0 bg-black/50 z-[70] flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl industrial-shadow-lg w-full max-w-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-red-600 to-rose-600 px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3 text-white">
+                    <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-triangle-exclamation text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold">不合格品登记</h3>
+                        <p class="text-sm text-red-100">确认登记后，该钢管会进入不合格品列表</p>
+                    </div>
+                </div>
+                <button onclick="closeNonconformingModal()" class="w-8 h-8 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-2 gap-3 text-sm">
+                    <div class="rounded-xl bg-red-50 border border-red-100 p-3">
+                        <div class="text-red-500 text-xs">自编号</div>
+                        <div id="nonconformingIdText" class="mt-1 font-mono font-bold text-gray-900">-</div>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 border border-gray-200 p-3">
+                        <div class="text-gray-500 text-xs">管号</div>
+                        <div id="nonconformingPipeText" class="mt-1 font-mono font-semibold text-gray-900">-</div>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 border border-gray-200 p-3">
+                        <div class="text-gray-500 text-xs">捆号</div>
+                        <div id="nonconformingBundleText" class="mt-1 font-semibold text-gray-900">-</div>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 border border-gray-200 p-3">
+                        <div class="text-gray-500 text-xs">炉号 / 批号</div>
+                        <div id="nonconformingFurnaceBatchText" class="mt-1 font-semibold text-gray-900">-</div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">不合格原因 <span class="text-red-500">*</span></label>
+                    <select id="nonconformingReason" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-red-500">
+                        <option value="检验结果不合格">检验结果不合格</option>
+                        <option value="外观不合格">外观不合格</option>
+                        <option value="腐蚀程度异常">腐蚀程度异常</option>
+                        <option value="仪器读数异常">仪器读数异常</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">备注</label>
+                    <textarea id="nonconformingRemark" rows="3" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-red-500 resize-none" placeholder="可补充问题描述"></textarea>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex gap-3">
+                <button onclick="closeNonconformingModal()" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:bg-gray-100">
+                    取消
+                </button>
+                <button onclick="confirmNonconformingRegistration()" class="flex-1 py-3 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 industrial-shadow flex items-center justify-center gap-2">
+                    <i class="fas fa-check"></i>
+                    确认登记并保存
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="detailDrawerOverlay" class="drawer-overlay fixed inset-0 bg-black/50 z-50" onclick="closeDetailDrawer()"></div>
     <div id="detailDrawer" class="drawer fixed top-0 right-0 h-full drawer-two-thirds bg-white z-50 shadow-2xl flex flex-col">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
@@ -3245,6 +3315,11 @@
         };
         let nextId = 33; // 下一个自编号
         let selectedCodeItem = null; // 当前选中的码单项
+        let entrySelectionMode = 'code';
+        let pendingNonconformingFormData = null;
+        const nonconformingItems = [
+            { id: '0030', pipeNo: '6508740', bundleNo: '97#', furnaceNo: '15303842', batchNo: '71399', length: 11780, weight: 571.2, reason: '检验结果不合格', remark: '', status: '待重新进管', registeredAt: '03:40', registeredBy: '张师傅' }
+        ];
         let isBevelExpanded = false; // 坡口信息展开状态
 
         // 模拟码单数据
@@ -3944,7 +4019,8 @@ updateBatchBar();
             });
         }
 
-        function openEntryDrawer() {
+        function openEntryDrawer(mode = 'normal') {
+            entrySelectionMode = mode === 'reentry' ? 'nonconforming' : 'code';
             document.getElementById('entryDrawerOverlay').classList.add('open');
             document.getElementById('entryDrawer').classList.add('open');
             document.body.style.overflow = 'hidden';
@@ -4033,9 +4109,31 @@ updateBatchBar();
         });
 
         // ========== 码单选择弹窗相关函数 ==========
+        function getCodeSelectionSource() {
+            return entrySelectionMode === 'nonconforming' ? nonconformingItems : codeListData;
+        }
+
+        function updateEntrySelectionCopy() {
+            const isNonconforming = entrySelectionMode === 'nonconforming';
+            const selectorTitle = document.getElementById('entrySelectorTitle');
+            const selectorDesc = document.getElementById('entrySelectorDesc');
+            const selectorAction = document.getElementById('entrySelectorActionText');
+            const modalTitle = document.getElementById('codeListModalTitle');
+            const modalDesc = document.getElementById('codeListModalDesc');
+            const search = document.getElementById('codeListSearch');
+
+            if (selectorTitle) selectorTitle.textContent = isNonconforming ? '不合格品选择' : '码单选择';
+            if (selectorDesc) selectorDesc.textContent = isNonconforming ? '从不合格品列表中选择钢管，重新带入进管信息' : '从已导入码单中搜索并带入钢管标识信息';
+            if (selectorAction) selectorAction.textContent = isNonconforming ? '选择不合格品' : '选择钢管';
+            if (modalTitle) modalTitle.textContent = isNonconforming ? '选择不合格品钢管' : '选择码单钢管';
+            if (modalDesc) modalDesc.textContent = isNonconforming ? '从已登记的不合格品中选择并重新进管' : '从预置码单中选择钢管信息自动填充';
+            if (search) search.placeholder = isNonconforming ? '搜索自编号、管号、捆号、炉号、批号...' : '搜索管号、捆号、炉号、批号...';
+        }
+
         function openCodeListModal() {
+            updateEntrySelectionCopy();
             document.getElementById('codeListModal').classList.add('open');
-            renderCodeList(codeListData);
+            renderCodeList(getCodeSelectionSource());
             document.getElementById('codeListSearch').focus();
         }
 
@@ -4048,6 +4146,7 @@ updateBatchBar();
         function renderCodeList(data) {
             const tbody = document.getElementById('codeListTableBody');
             const emptyState = document.getElementById('codeListEmpty');
+            const isNonconforming = entrySelectionMode === 'nonconforming';
             
             tbody.innerHTML = '';
             
@@ -4066,15 +4165,15 @@ updateBatchBar();
                 tr.onclick = () => selectCodeItem(item, tr);
                 
                 tr.innerHTML = `
-                    <td class="px-4 py-3 font-mono text-sm text-gray-900">${item.pipeNo}</td>
+                    <td class="px-4 py-3 font-mono text-sm text-gray-900">${isNonconforming ? `<div class="font-bold text-red-700">${item.id}</div><div class="text-xs text-gray-500">${item.pipeNo}</div>` : item.pipeNo}</td>
                     <td class="px-4 py-3 text-sm text-gray-700">${item.bundleNo}</td>
                     <td class="px-4 py-3 text-sm text-gray-700">${item.furnaceNo}</td>
                     <td class="px-4 py-3 text-sm text-gray-700">${item.batchNo}</td>
                     <td class="px-4 py-3 text-center text-sm text-gray-900 font-medium">${item.length}</td>
-                    <td class="px-4 py-3 text-center text-sm text-gray-700">${item.weight.toFixed(1)}</td>
+                    <td class="px-4 py-3 text-center text-sm text-gray-700">${Number(item.weight).toFixed(1)}</td>
                     <td class="px-4 py-3 text-center">
-                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                            待录入
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${isNonconforming ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600'}">
+                            ${isNonconforming ? (item.status || '待重新进管') : '待录入'}
                         </span>
                     </td>
                 `;
@@ -4085,11 +4184,12 @@ updateBatchBar();
 
         function searchCodeList(keyword) {
             if (!keyword) {
-                renderCodeList(codeListData);
+                renderCodeList(getCodeSelectionSource());
                 return;
             }
             
-            const filtered = codeListData.filter(item => 
+            const filtered = getCodeSelectionSource().filter(item => 
+                String(item.id || '').includes(keyword) ||
                 item.pipeNo.includes(keyword) ||
                 item.bundleNo.includes(keyword) ||
                 item.furnaceNo.includes(keyword) ||
@@ -4124,10 +4224,17 @@ updateBatchBar();
             document.getElementById('entryBatchNo').value = selectedCodeItem.batchNo;
             document.getElementById('entryLength').value = selectedCodeItem.length;
             document.getElementById('entryWeight').value = selectedCodeItem.weight;
+            if (entrySelectionMode === 'nonconforming') {
+                document.getElementById('entryId').value = selectedCodeItem.id;
+                setInspectionResult('pass');
+                showToast('不合格品信息已带入，请重新进管保存', 'success');
+            }
             
             // 显示已选择的信息卡片
             closeCodeListModal();
-            showToast('码单信息已填充', 'success');
+            if (entrySelectionMode !== 'nonconforming') {
+                showToast('码单信息已填充', 'success');
+            }
             
             // 高亮显示已填充的字段
             const fields = ['entryPipeNo', 'entryBundleNo', 'entryFurnaceNo', 'entryBatchNo', 'entryLength', 'entryWeight'];
@@ -4174,7 +4281,8 @@ updateBatchBar();
         }
 
         // ========== 抽屉控制 ==========
-        function openEntryDrawer() {
+        function openEntryDrawer(mode = 'normal') {
+            entrySelectionMode = mode === 'reentry' ? 'nonconforming' : 'code';
             document.getElementById('entryDrawerOverlay').classList.add('open');
             document.getElementById('entryDrawer').classList.add('open');
             document.body.style.overflow = 'hidden';
@@ -4206,6 +4314,16 @@ updateBatchBar();
             document.getElementById('codeListSelectorArea').classList.remove('hidden');
             document.getElementById('selectedCodeInfo').classList.add('hidden');
             selectedCodeItem = null;
+            setInspectionResult('pass');
+            setEntryDrawerMode('create');
+            updateEntrySelectionCopy();
+            if (entrySelectionMode === 'nonconforming') {
+                setTimeout(openCodeListModal, 0);
+            }
+        }
+
+        function openReentryDrawer() {
+            openEntryDrawer('reentry');
         }
 
         function closeEntryDrawer() {
@@ -4591,6 +4709,116 @@ updateBatchBar();
             updateWorkOrderProgress(currentCount);
         }
 
+        function isNonconformingRegistered(id) {
+            return nonconformingItems.some(item => item.id === id);
+        }
+
+        function getNonconformingPayload(formData) {
+            return {
+                id: formData.id,
+                pipeNo: formData.pipeNo,
+                bundleNo: formData.bundleNo,
+                furnaceNo: formData.furnaceNo,
+                batchNo: formData.batchNo,
+                length: Number(formData.length) || 0,
+                weight: Number(formData.weight) || 0,
+                reason: document.getElementById('nonconformingReason')?.value || '检验结果不合格',
+                remark: document.getElementById('nonconformingRemark')?.value.trim() || '',
+                status: '待重新进管',
+                registeredAt: getCurrentTimeString(),
+                registeredBy: '张师傅'
+            };
+        }
+
+        function openNonconformingModal(formData) {
+            pendingNonconformingFormData = formData;
+            document.getElementById('nonconformingIdText').textContent = formData.id || '-';
+            document.getElementById('nonconformingPipeText').textContent = formData.pipeNo || '-';
+            document.getElementById('nonconformingBundleText').textContent = formData.bundleNo || '-';
+            document.getElementById('nonconformingFurnaceBatchText').textContent = `${formData.furnaceNo || '-'} / ${formData.batchNo || '-'}`;
+            document.getElementById('nonconformingReason').value = '检验结果不合格';
+            document.getElementById('nonconformingRemark').value = '';
+            document.getElementById('nonconformingModal').classList.add('open');
+        }
+
+        function closeNonconformingModal() {
+            document.getElementById('nonconformingModal').classList.remove('open');
+            pendingNonconformingFormData = null;
+        }
+
+        function registerNonconformingItem(formData) {
+            if (isNonconformingRegistered(formData.id)) return false;
+            nonconformingItems.unshift(getNonconformingPayload(formData));
+            return true;
+        }
+
+        function markRootRowNonconforming(id) {
+            const row = getRootTableBody()?.querySelector(`tr[data-id="${id}"]`);
+            if (!row) return;
+            row.dataset.nonconforming = 'true';
+            row.classList.add('bg-red-50');
+        }
+
+        function clearRootRowNonconforming(id) {
+            const row = getRootTableBody()?.querySelector(`tr[data-id="${id}"]`);
+            if (!row) return;
+            row.dataset.nonconforming = 'false';
+            row.classList.remove('bg-red-50');
+        }
+
+        function performEntrySave(formData, successMessage = '') {
+            const { bundleNo, furnaceNo, batchNo } = formData;
+            lastRecord = { bundleNo, furnaceNo, batchNo };
+
+            if (entryDrawerMode === 'edit' && editingRowId) {
+                const row = getRootTableBody()?.querySelector(`tr[data-id="${editingRowId}"]`);
+                updateRowWithEntryData(row, formData);
+                ensureRootActionButtons();
+                if (formData.inspectionResult === 'fail') {
+                    markRootRowNonconforming(formData.id);
+                } else {
+                    clearRootRowNonconforming(formData.id);
+                }
+                showToast(successMessage || `钢管 ${formData.id} 修改成功`, 'success');
+                closeEntryDrawer();
+                return;
+            }
+
+            nextId++;
+            showToast(successMessage || '钢管录入成功！', 'success');
+            closeEntryDrawer();
+
+            const shiftCount = document.getElementById('shiftCountValue');
+            const currentCount = parseInt(shiftCount.textContent, 10) + 1;
+            updateWorkOrderProgress(currentCount);
+        }
+
+        function confirmNonconformingRegistration() {
+            if (!pendingNonconformingFormData) return;
+            const formData = pendingNonconformingFormData;
+            const registered = registerNonconformingItem(formData);
+            document.getElementById('nonconformingModal').classList.remove('open');
+            pendingNonconformingFormData = null;
+            performEntrySave(formData, registered ? '已登记不合格品并保存' : '该钢管已登记过不合格品，已直接保存');
+            markRootRowNonconforming(formData.id);
+        }
+
+        function submitEntry() {
+            const formData = collectEntryFormData();
+
+            if (!validateEntryRequiredFields(formData)) {
+                showToast('请输入必填项: 管号、捆号、炉号、批号、长度', 'error');
+                return;
+            }
+
+            if (formData.inspectionResult === 'fail' && !isNonconformingRegistered(formData.id)) {
+                openNonconformingModal(formData);
+                return;
+            }
+
+            performEntrySave(formData);
+        }
+
         function saveAndContinue() {
             const pipeNo = document.getElementById('entryPipeNo').value;
             const bundleNo = document.getElementById('entryBundleNo').value;
@@ -4877,6 +5105,22 @@ updateBatchBar();
             const shiftCount = document.getElementById('shiftCountValue');
             const currentCount = parseInt(shiftCount.textContent, 10) + 1;
             updateWorkOrderProgress(currentCount);
+        }
+
+        function submitEntry() {
+            const formData = collectEntryFormData();
+
+            if (!validateEntryRequiredFields(formData)) {
+                showToast('请输入必填项: 管号、捆号、炉号、批号、长度', 'error');
+                return;
+            }
+
+            if (formData.inspectionResult === 'fail' && !isNonconformingRegistered(formData.id)) {
+                openNonconformingModal(formData);
+                return;
+            }
+
+            performEntrySave(formData);
         }
 
         function saveAndContinue() {
@@ -5390,6 +5634,8 @@ updateBatchBar();
         // ESC键关闭
         document.addEventListener('DOMContentLoaded', function() {
             ensureRootActionButtons();
+            nonconformingItems.forEach(item => markRootRowNonconforming(item.id));
+            updateEntrySelectionCopy();
             const timeStr = getCurrentTimeString();
             document.getElementById('currentTime').textContent = timeStr;
             document.getElementById('entryDrawerCurrentTime').textContent = timeStr;
@@ -5405,6 +5651,7 @@ updateBatchBar();
                 closeWoDetail();
                 closeCodeListModal();
                 closePipePrintModal();
+                closeNonconformingModal();
                 closeSampleDrawer();
             }
         });
