@@ -448,9 +448,8 @@
                         <th class="px-4 py-4 text-center">钢管外观</th>
                         <th class="px-4 py-4 text-center">坡口检查</th>
                         <th class="px-4 py-4 text-center">清洁度</th>
-                        <th class="px-4 py-4 text-center">湿度</th>
                         <th class="px-4 py-4 text-center">间隔时间</th>
-                        <th class="px-4 py-4 text-center">评价</th>
+                        <th class="px-4 py-4 text-center">检验结果</th>
                         <th class="px-4 py-4 text-center">除锈状态</th>
                         <th class="px-4 py-4 text-center">操作时间</th>
                         <th class="px-4 py-4 text-center">质检员</th>
@@ -483,7 +482,6 @@
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>Sa2.5</span></td>
-                        <td class="px-4 py-4 text-center text-sm font-medium text-gray-900">45%</td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-circle-check"></i>合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200"><i class="fas fa-rotate"></i>已完成</span></td>
@@ -529,7 +527,6 @@
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>Sa2.5</span></td>
-                        <td class="px-4 py-4 text-center text-sm font-medium text-gray-900">42%</td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-circle-check"></i>合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200"><i class="fas fa-rotate"></i>已完成</span></td>
@@ -575,7 +572,6 @@
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"><i class="fas fa-times"></i>不合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"><i class="fas fa-times"></i>不合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"><i class="fas fa-times"></i>Sa2.5</span></td>
-                        <td class="px-4 py-4 text-center text-sm font-medium text-red-600">65%</td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"><i class="fas fa-times"></i>不合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-fail"><i class="fas fa-circle-xmark"></i>不合格</span></td>
                         <td class="px-4 py-4 text-center"><span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-200"><i class="fas fa-pause"></i>未完成</span></td>
@@ -607,6 +603,7 @@
                         <tr>
                             <th class="px-4 py-4 text-left w-12"><input type="checkbox" class="custom-checkbox" id="selectAllSample" onclick="toggleSelectAll()"></th>
                             <th class="px-4 py-4 text-left">自编号</th>
+                            <th class="px-4 py-4 text-center">湿度</th>
                             <th class="px-4 py-4 text-center">灰尘度检测</th>
                             <th class="px-4 py-4 text-center">表面粗糙度(μm)</th>
                             <th class="px-4 py-4 text-center">盐分检测 (mg/m²)</th>
@@ -621,6 +618,7 @@
                         <tr class="group" data-id="CJ-0032" data-shift="today_day" data-result="pass">
                             <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                             <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">CJ-0032</div></td>
+                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">45%</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">1级</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">52</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">12</td>
@@ -642,6 +640,7 @@
                         <tr class="group" data-id="CJ-0031" data-shift="today_day" data-result="pass">
                             <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                             <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">CJ-0031</div></td>
+                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">42%</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">2级</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">49</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">15</td>
@@ -663,6 +662,7 @@
                         <tr class="group" data-id="CJ-0030" data-shift="yesterday_night" data-result="fail">
                             <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                             <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">CJ-0030</div></td>
+                            <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">65%</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">4级</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">31</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">28mg/m²</td>
@@ -779,6 +779,11 @@
                     <div class="grid grid-cols-2 gap-4">
 
                         <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">湿度 (%) <span class="text-red-500">*</span></label>
+                            <input type="number" id="sampleHumidity" value="45" min="0" max="100"
+                                   class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                        </div>
+                        <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">表面粗糙度 (μm) <span class="text-red-500">*</span></label>
                             <input id="sampleRoughness" type="number" min="0" step="1" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
@@ -861,6 +866,74 @@
                 <button id="sampleDrawerSaveBtn" onclick="saveSampleEntry()" class="px-8 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-lg">
                     <i class="fas fa-save"></i>
                     保存
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="nonconformingModal" class="modal fixed inset-0 bg-black/50 z-[70] flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl industrial-shadow-lg w-full max-w-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-red-600 to-rose-600 px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3 text-white">
+                    <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-triangle-exclamation text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold">不合格品登记</h3>
+                        <p class="text-sm text-red-100">确认登记后，该钢管会进入不合格品列表</p>
+                    </div>
+                </div>
+                <button onclick="closeNonconformingModal()" class="w-8 h-8 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-2 gap-3 text-sm">
+                    <div class="rounded-xl bg-red-50 border border-red-100 p-3">
+                        <div class="text-red-500 text-xs">自编号</div>
+                        <div id="nonconformingIdText" class="mt-1 font-mono font-bold text-gray-900">-</div>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 border border-gray-200 p-3">
+                        <div class="text-gray-500 text-xs">管号</div>
+                        <div id="nonconformingPipeText" class="mt-1 font-mono font-semibold text-gray-900">-</div>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 border border-gray-200 p-3">
+                        <div class="text-gray-500 text-xs">捆号</div>
+                        <div id="nonconformingBundleText" class="mt-1 font-semibold text-gray-900">-</div>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 border border-gray-200 p-3">
+                        <div class="text-gray-500 text-xs">炉号 / 批号</div>
+                        <div id="nonconformingFurnaceBatchText" class="mt-1 font-semibold text-gray-900">-</div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">不合格原因 <span class="text-red-500">*</span></label>
+                    <select id="nonconformingReason" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-red-500">
+                        <option value="检验结果不合格">检验结果不合格</option>
+                        <option value="钢管外观不合格">钢管外观不合格</option>
+                        <option value="坡口检查不合格">坡口检查不合格</option>
+                        <option value="清洁度不合格">清洁度不合格</option>
+                        <option value="间隔时间不合格">间隔时间不合格</option>
+                        <option value="抽检项目不合格">抽检项目不合格</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">备注</label>
+                    <textarea id="nonconformingRemark" rows="3" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-red-500 resize-none" placeholder="可补充问题描述"></textarea>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex gap-3">
+                <button onclick="closeNonconformingModal()" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:bg-gray-100">
+                    取消
+                </button>
+                <button onclick="confirmNonconformingRegistration()" class="flex-1 py-3 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 industrial-shadow flex items-center justify-center gap-2">
+                    <i class="fas fa-check"></i>
+                    确认登记并保存
                 </button>
             </div>
         </div>
@@ -1449,11 +1522,6 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">湿度 (%) <span class="text-red-500">*</span></label>
-                            <input type="number" id="entryRH" value="45" min="0" max="100"
-                                   class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
-                        </div>
-                        <div>
                             <label class="block text-sm font-medium text-gray-700 mb-3">间隔时间 <span class="text-red-500">*</span></label>
                             <div class="flex gap-3">
                                 <button type="button" onclick="setIntervalCheck('pass')" id="btnIntervalPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
@@ -1465,7 +1533,7 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-3">评价 <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">检验结果 <span class="text-red-500">*</span></label>
                             <div class="flex gap-3">
                                 <button type="button" onclick="setEvaluation('pass')" id="btnEvaluationPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
                                     <i class="fas fa-check-circle"></i>合格
@@ -1841,7 +1909,9 @@
         let currentBevelCheck = 'pass';
         let currentIntervalCheck = 'pass';
         let currentEvaluation = 'pass';
+        let currentSampleResult = 'pass';
         let currentEntryRecordIndex = 0;
+        let pendingNonconformingAction = null;
         let isMaterialListFullscreen = false;
         let lastRecord = {
             bundleNo: '96#',
@@ -1858,10 +1928,11 @@
             { id: '0030', pipeNo: '6508725', bundleNo: '97#', furnaceNo: '15303842', batchNo: '71400', length: '11780', weight: '572.8', cleanLevel: 'Sa2.5', humidity: '65', interval: 'fail', operator: '李师傅', time: '03:15' }
         ];
         const sampleRecordList = [
-            { id: 'CJ-0032', cleanLevel: 'Sa2.5', dustLevel: '1级', roughness: '52', salinity: '12', result: 'pass', inspector: '王检', time: '20:10', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23dbeafe'/><circle cx='42' cy='46' r='10' fill='%2393c5fd'/><circle cx='86' cy='58' r='8' fill='%2360a5fa'/><circle cx='118' cy='40' r='6' fill='%233b82f6'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 1</text></svg>" },
-            { id: 'CJ-0031', cleanLevel: 'Sa2.5', dustLevel: '2级', roughness: '49', salinity: '15', result: 'pass', inspector: '王检', time: '18:55', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23e0f2fe'/><circle cx='38' cy='48' r='8' fill='%2394a3b8'/><circle cx='74' cy='60' r='7' fill='%2360a5fa'/><circle cx='110' cy='44' r='8' fill='%233b82f6'/><circle cx='126' cy='70' r='5' fill='%2394a3b8'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 2</text></svg>" },
-            { id: 'CJ-0030', cleanLevel: 'Sa2.5', dustLevel: '4级', roughness: '31', salinity: '28', result: 'fail', inspector: '赵检', time: '03:40', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23fee2e2'/><circle cx='32' cy='40' r='9' fill='%23ef4444'/><circle cx='56' cy='54' r='7' fill='%23b91c1c'/><circle cx='84' cy='42' r='9' fill='%23ef4444'/><circle cx='114' cy='58' r='8' fill='%23b91c1c'/><circle cx='132' cy='40' r='7' fill='%23ef4444'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%237f1d1d'>Dust 4</text></svg>" }
+            { id: 'CJ-0032', cleanLevel: 'Sa2.5', humidity: '45', dustLevel: '1级', roughness: '52', salinity: '12', result: 'pass', inspector: '王检', time: '20:10', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23dbeafe'/><circle cx='42' cy='46' r='10' fill='%2393c5fd'/><circle cx='86' cy='58' r='8' fill='%2360a5fa'/><circle cx='118' cy='40' r='6' fill='%233b82f6'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 1</text></svg>" },
+            { id: 'CJ-0031', cleanLevel: 'Sa2.5', humidity: '42', dustLevel: '2级', roughness: '49', salinity: '15', result: 'pass', inspector: '王检', time: '18:55', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23e0f2fe'/><circle cx='38' cy='48' r='8' fill='%2394a3b8'/><circle cx='74' cy='60' r='7' fill='%2360a5fa'/><circle cx='110' cy='44' r='8' fill='%233b82f6'/><circle cx='126' cy='70' r='5' fill='%2394a3b8'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 2</text></svg>" },
+            { id: 'CJ-0030', cleanLevel: 'Sa2.5', humidity: '65', dustLevel: '4级', roughness: '31', salinity: '28', result: 'fail', inspector: '赵检', time: '03:40', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23fee2e2'/><circle cx='32' cy='40' r='9' fill='%23ef4444'/><circle cx='56' cy='54' r='7' fill='%23b91c1c'/><circle cx='84' cy='42' r='9' fill='%23ef4444'/><circle cx='114' cy='58' r='8' fill='%23b91c1c'/><circle cx='132' cy='40' r='7' fill='%23ef4444'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%237f1d1d'>Dust 4</text></svg>" }
         ];
+        const nonconformingItems = [];
         let currentSampleDrawerMode = 'create';
 
         // 模拟码单数据
@@ -2677,6 +2748,7 @@
         }
 
         function setSampleResult(type) {
+            currentSampleResult = type;
             const passBtn = document.getElementById('sampleResultPass');
             const failBtn = document.getElementById('sampleResultFail');
 
@@ -2693,6 +2765,10 @@
             const input = document.getElementById('sampleDustLevel');
             if (input) {
                 input.value = level;
+            }
+
+            if (level === '3级' || level === '4级') {
+                setSampleResult('fail');
             }
 
             const activePassClass = 'py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
@@ -2728,6 +2804,7 @@
                 : entryRecordList.find(item => item.id === String((sampleRecord || sampleRecordList[0]).id).replace('CJ-', '')) || entryRecordList[0];
             const record = sampleRecord || {
                 id: linkedRoot ? `CJ-${linkedRoot.id}` : 'CJ-NEW',
+                humidity: linkedRoot?.humidity || '45',
                 dustLevel: '1级',
                 roughness: '50',
                 salinity: '10',
@@ -2747,6 +2824,7 @@
             document.getElementById('sampleBatchNo').value = linkedRoot.batchNo;
             document.getElementById('sampleLength').value = linkedRoot.length;
             document.getElementById('sampleWeight').value = linkedRoot.weight;
+            document.getElementById('sampleHumidity').value = record.humidity || linkedRoot.humidity || '45';
             setSampleDustLevel(record.dustLevel || '1级');
             document.getElementById('sampleRoughness').value = record.roughness;
             document.getElementById('sampleSalinity').value = record.salinity;
@@ -2754,7 +2832,7 @@
             document.getElementById('samplePhotoInput').value = '';
             setSampleResult(record.result);
 
-            const editableIds = ['sampleRoughness', 'sampleSalinity', 'samplePhotoInput'];
+            const editableIds = ['sampleHumidity', 'sampleRoughness', 'sampleSalinity', 'samplePhotoInput'];
             editableIds.forEach(id => {
                 const el = document.getElementById(id);
                 if (!el) return;
@@ -2788,9 +2866,101 @@
             document.body.style.overflow = '';
         }
 
-        function saveSampleEntry() {
+        function buildRootNonconformingPayload(actionType = 'root') {
+            return {
+                source: actionType,
+                id: document.getElementById('entryId').value || entryRecordList[currentEntryRecordIndex]?.id || '',
+                pipeNo: document.getElementById('entryPipeNo').value || '',
+                bundleNo: document.getElementById('entryBundleNo').value || '',
+                furnaceNo: document.getElementById('entryFurnaceNo').value || '',
+                batchNo: document.getElementById('entryBatchNo').value || '',
+                length: document.getElementById('entryLength').value || '',
+                weight: document.getElementById('entryWeight').value || '',
+                process: '除锈',
+                resultSource: '根检记录'
+            };
+        }
+
+        function buildSampleNonconformingPayload() {
+            const sampleId = document.getElementById('sampleEntryId').value || '';
+            return {
+                source: 'sample',
+                id: sampleId.replace('CJ-', ''),
+                sampleId,
+                pipeNo: document.getElementById('samplePipeNo').value || '',
+                bundleNo: document.getElementById('sampleBundleNo').value || '',
+                furnaceNo: document.getElementById('sampleFurnaceNo').value || '',
+                batchNo: document.getElementById('sampleBatchNo').value || '',
+                length: document.getElementById('sampleLength').value || '',
+                weight: document.getElementById('sampleWeight').value || '',
+                process: '除锈',
+                resultSource: '抽检记录'
+            };
+        }
+
+        function getNonconformingKey(payload) {
+            return `${payload.source}:${payload.sampleId || payload.id}`;
+        }
+
+        function isNonconformingRegistered(payload) {
+            const key = getNonconformingKey(payload);
+            return nonconformingItems.some(item => item.key === key);
+        }
+
+        function openNonconformingModal(payload, afterConfirm) {
+            pendingNonconformingAction = { payload, afterConfirm };
+            document.getElementById('nonconformingIdText').textContent = payload.sampleId || payload.id || '-';
+            document.getElementById('nonconformingPipeText').textContent = payload.pipeNo || '-';
+            document.getElementById('nonconformingBundleText').textContent = payload.bundleNo || '-';
+            document.getElementById('nonconformingFurnaceBatchText').textContent = `${payload.furnaceNo || '-'} / ${payload.batchNo || '-'}`;
+            document.getElementById('nonconformingReason').value = '检验结果不合格';
+            document.getElementById('nonconformingRemark').value = '';
+            document.getElementById('nonconformingModal').classList.add('open');
+        }
+
+        function closeNonconformingModal() {
+            document.getElementById('nonconformingModal').classList.remove('open');
+            pendingNonconformingAction = null;
+        }
+
+        function confirmNonconformingRegistration() {
+            if (!pendingNonconformingAction) return;
+
+            const { payload, afterConfirm } = pendingNonconformingAction;
+            if (!isNonconformingRegistered(payload)) {
+                nonconformingItems.unshift({
+                    ...payload,
+                    key: getNonconformingKey(payload),
+                    reason: document.getElementById('nonconformingReason').value,
+                    remark: document.getElementById('nonconformingRemark').value.trim(),
+                    status: '待处理',
+                    registeredAt: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false }),
+                    registeredBy: '张师傅'
+                });
+            }
+
+            document.getElementById('nonconformingModal').classList.remove('open');
+            pendingNonconformingAction = null;
+            afterConfirm?.();
+            showToast('已登记不合格品并保存', 'success');
+        }
+
+        function shouldRegisterNonconforming(payload) {
+            return payload && !isNonconformingRegistered(payload);
+        }
+
+        function performSampleSave() {
             showToast(currentSampleDrawerMode === 'create' ? '抽检记录已创建' : '抽检记录已更新', 'success');
             closeSampleDrawer();
+        }
+
+        function saveSampleEntry() {
+            const payload = buildSampleNonconformingPayload();
+            if (currentSampleResult === 'fail' && shouldRegisterNonconforming(payload)) {
+                openNonconformingModal(payload, performSampleSave);
+                return;
+            }
+            performSampleSave();
         }
 
         function closeWoDetail() {
@@ -2811,7 +2981,6 @@
             document.getElementById('entryLength').value = record.length;
             document.getElementById('entryWeight').value = record.weight;
             setCleanLevel(record.cleanLevel || 'Sa2.5');
-            document.getElementById('entryRH').value = record.humidity;
             setIntervalCheck(record.interval || 'pass');
             document.getElementById('entryRecordPosition').textContent = `第 ${index + 1} 支 / 共 ${entryRecordList.length} 支`;
         }
@@ -2908,25 +3077,29 @@
             }
         }
 
-        // ========== 保存录入 ==========
-        function submitEntry() {
+        function validateRootEntryForSave() {
             const pipeNo = document.getElementById('entryPipeNo').value;
             const bundleNo = document.getElementById('entryBundleNo').value;
             const furnaceNo = document.getElementById('entryFurnaceNo').value;
             const batchNo = document.getElementById('entryBatchNo').value;
             const length = document.getElementById('entryLength').value;
             const cleanLevel = document.getElementById('entryCleanLevel').value;
-            const humidity = document.getElementById('entryRH').value;
             const interval = currentIntervalCheck;
 
-            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !cleanLevel || !humidity || !interval) {
-                showToast('请填写完整的根检结果：清洁度、湿度、间隔时间、评价等信息', 'error');
-                return;
+            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !cleanLevel || !interval) {
+                showToast('请填写完整的根检结果：清洁度、间隔时间、检验结果等信息', 'error');
+                return null;
             }
 
-            // 保存为上一记录
-            lastRecord = { bundleNo, furnaceNo, batchNo };
+            return { pipeNo, bundleNo, furnaceNo, batchNo, length, cleanLevel, interval };
+        }
 
+        function performRootSubmit(validatedData) {
+            lastRecord = {
+                bundleNo: validatedData.bundleNo,
+                furnaceNo: validatedData.furnaceNo,
+                batchNo: validatedData.batchNo
+            };
             // 自编号+1
             nextId++;
 
@@ -2939,24 +3112,26 @@
             updateWorkOrderProgress(currentCount);
         }
 
-        function saveAndContinue() {
-            const pipeNo = document.getElementById('entryPipeNo').value;
-            const bundleNo = document.getElementById('entryBundleNo').value;
-            const furnaceNo = document.getElementById('entryFurnaceNo').value;
-            const batchNo = document.getElementById('entryBatchNo').value;
-            const length = document.getElementById('entryLength').value;
-            const cleanLevel = document.getElementById('entryCleanLevel').value;
-            const humidity = document.getElementById('entryRH').value;
-            const interval = currentIntervalCheck;
+        // ========== 保存录入 ==========
+        function submitEntry() {
+            const validatedData = validateRootEntryForSave();
+            if (!validatedData) return;
 
-            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !cleanLevel || !humidity || !interval) {
-                showToast('请填写完整的根检结果', 'error');
+            const payload = buildRootNonconformingPayload('root');
+            if (currentEvaluation === 'fail' && shouldRegisterNonconforming(payload)) {
+                openNonconformingModal(payload, () => performRootSubmit(validatedData));
                 return;
             }
 
-            // 保存为上一记录
-            lastRecord = { bundleNo, furnaceNo, batchNo };
+            performRootSubmit(validatedData);
+        }
 
+        function performRootSaveAndContinue(validatedData) {
+            lastRecord = {
+                bundleNo: validatedData.bundleNo,
+                furnaceNo: validatedData.furnaceNo,
+                batchNo: validatedData.batchNo
+            };
             nextId++;
 
             // 更新本班数量
@@ -2966,6 +3141,19 @@
 
             showToast('保存成功，请继续录入下一支', 'success');
             navigateEntryRecord(1);
+        }
+
+        function saveAndContinue() {
+            const validatedData = validateRootEntryForSave();
+            if (!validatedData) return;
+
+            const payload = buildRootNonconformingPayload('root');
+            if (currentEvaluation === 'fail' && shouldRegisterNonconforming(payload)) {
+                openNonconformingModal(payload, () => performRootSaveAndContinue(validatedData));
+                return;
+            }
+
+            performRootSaveAndContinue(validatedData);
         }
 
         // ========== 班次切换 ==========
@@ -3263,6 +3451,7 @@
                 closeCodeListModal();
                 closePhotoModal();
                 closeSampleDrawer();
+                closeNonconformingModal();
             }
         });
 
