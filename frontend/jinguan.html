@@ -4021,6 +4021,7 @@ updateBatchBar();
 
         function openEntryDrawer(mode = 'normal') {
             entrySelectionMode = mode === 'reentry' ? 'nonconforming' : 'code';
+            updateEntrySelectionCopy();
             document.getElementById('entryDrawerOverlay').classList.add('open');
             document.getElementById('entryDrawer').classList.add('open');
             document.body.style.overflow = 'hidden';
@@ -4283,6 +4284,7 @@ updateBatchBar();
         // ========== 抽屉控制 ==========
         function openEntryDrawer(mode = 'normal') {
             entrySelectionMode = mode === 'reentry' ? 'nonconforming' : 'code';
+            updateEntrySelectionCopy();
             document.getElementById('entryDrawerOverlay').classList.add('open');
             document.getElementById('entryDrawer').classList.add('open');
             document.body.style.overflow = 'hidden';
@@ -4317,9 +4319,6 @@ updateBatchBar();
             setInspectionResult('pass');
             setEntryDrawerMode('create');
             updateEntrySelectionCopy();
-            if (entrySelectionMode === 'nonconforming') {
-                setTimeout(openCodeListModal, 0);
-            }
         }
 
         function openReentryDrawer() {
