@@ -251,6 +251,56 @@
           </div>
         </section>
 
+        <section class="info-card rounded-3xl industrial-shadow p-5">
+          <div class="flex items-center justify-between gap-4 mb-5">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">承运与签收信息</h3>
+              <p class="text-xs text-slate-500 mt-1">
+                一张出库单对应一辆承运车辆，物流车默认承运本单全部实出钢管
+              </p>
+            </div>
+            <span class="status-pill pending"><span class="status-dot"></span>未出库</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div>
+              <label class="text-xs text-slate-500">物流公司</label>
+              <input id="carrierCompanyInput" class="form-input mt-2" value="中远物流" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">车牌号</label>
+              <input id="plateNoInput" class="form-input mt-2" value="冀B·56218" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">司机姓名</label>
+              <input id="driverNameInput" class="form-input mt-2" value="王建国" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">司机电话</label>
+              <input id="driverPhoneInput" class="form-input mt-2" value="13800001234" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">客户联系人</label>
+              <input id="receiverNameInput" class="form-input mt-2" value="刘工" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">联系电话</label>
+              <input id="receiverPhoneInput" class="form-input mt-2" value="13900005678" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">预计到货时间</label>
+              <input id="etaInput" type="datetime-local" class="form-input mt-2" value="2026-04-13T09:30" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">签收状态</label>
+              <input class="form-input mt-2 bg-slate-50" value="客户未签收" readonly />
+            </div>
+            <div class="md:col-span-2 xl:col-span-4">
+              <label class="text-xs text-slate-500">收货地址</label>
+              <input id="deliveryAddressInput" class="form-input mt-2" value="河北省唐山市曹妃甸工业区项目现场 2 号卸货区" />
+            </div>
+          </div>
+        </section>
+
         <section
           class="info-card rounded-3xl industrial-shadow overflow-hidden"
         >
@@ -560,6 +610,20 @@
           showToast("请先选择销售单");
           return;
         }
+        const requiredShippingFields = [
+          ["carrierCompanyInput", "请填写物流公司"],
+          ["plateNoInput", "请填写车牌号"],
+          ["driverNameInput", "请填写司机姓名"],
+          ["driverPhoneInput", "请填写司机电话"],
+          ["deliveryAddressInput", "请填写收货地址"],
+        ];
+        const missingShippingField = requiredShippingFields.find(
+          ([id]) => !document.getElementById(id)?.value.trim(),
+        );
+        if (missingShippingField) {
+          showToast(missingShippingField[1]);
+          return;
+        }
         if (!currentMaterials.length) {
           showToast("当前销售单没有可生成的物料");
           return;
@@ -573,7 +637,7 @@
         }
         showToast("出库单已创建");
         setTimeout(() => {
-          window.location.href = "./bare-pipe-receipts.html";
+          window.location.href = `./finished-product-issue-detail.html?receiptNo=${encodeURIComponent(document.getElementById("receiptNoInput").value)}`;
         }, 700);
       }
 

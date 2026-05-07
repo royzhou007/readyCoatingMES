@@ -165,7 +165,7 @@
                 运单管理
               </h1>
               <p class="text-xs text-gray-500">
-                合并物流单钢管明细 | 统一生成发运运单
+                合并出库单钢管明细 | 统一生成发运运单
               </p>
             </div>
           </div>
@@ -204,8 +204,8 @@
             <p
               class="mt-3 text-sm md:text-base text-blue-50/90 max-w-3xl leading-relaxed"
             >
-              将多个物流单中的钢管明细统一拼接到同一张运单中，便于集中发运、
-              统一追踪运单状态，并查看本次发运对应的钢管总量与关联物流单范围。
+              将多个出库单中的自编号钢管明细统一拼接到同一张运单中，便于集中发运、
+              统一追踪运单状态，并查看本次发运对应的钢管总量与关联出库单范围。
             </p>
           </div>
           <div
@@ -244,7 +244,7 @@
             <input
               id="searchInput"
               type="text"
-              placeholder="搜索运单号、物流单号、项目名称、物流公司或车牌号"
+              placeholder="搜索运单号、出库单号、项目名称、物流公司或车牌号"
               class="search-input w-full pl-11 pr-4 py-3 rounded-2xl border-2 border-gray-200 text-gray-700 placeholder:text-gray-400 transition-all"
             />
           </div>
@@ -292,7 +292,7 @@
           <div>
             <h3 class="text-lg font-bold text-slate-900">运单列表</h3>
             <p class="text-sm text-slate-500 mt-1">
-              用于把若干个物流单中的钢管列表拼成一张统一运单
+              用于把若干个出库单中的钢管列表拼成一张统一运单
             </p>
           </div>
           <div class="text-sm text-slate-500">
@@ -306,7 +306,7 @@
               <tr>
                 <th class="px-4 py-4 text-left font-bold border-b border-slate-200">序号</th>
                 <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">运单号</th>
-                <th class="px-4 py-4 text-left font-bold border-b border-slate-200 min-w-[260px]">关联物流单 / 项目名称</th>
+                <th class="px-4 py-4 text-left font-bold border-b border-slate-200 min-w-[260px]">关联出库单 / 项目名称</th>
                 <th class="px-4 py-4 text-left font-bold border-b border-slate-200 min-w-[220px]">物流公司 / 车牌号</th>
                 <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">运单日期</th>
                 <th class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap">钢管数量</th>
@@ -445,7 +445,7 @@
         {
           serial: 1,
           waybillNo: "YD-20260413-001",
-          logisticsNos: ["WLD-20260412-001", "WLD-20260412-002"],
+          receiptNos: ["CKD-20260407-001", "CKD-20260407-002"],
           projectName: "唐山港输油管道二期项目",
           company: "中远物流",
           plateNo: "冀B·56218 / 津A·90876",
@@ -463,7 +463,7 @@
         {
           serial: 2,
           waybillNo: "YD-20260413-002",
-          logisticsNos: ["WLD-20260411-008", "WLD-20260410-015"],
+          receiptNos: ["CKD-20260406-018", "CKD-20260406-017"],
           projectName: "沿海 LNG 外输管线项目",
           company: "广联车队",
           plateNo: "鲁F·71355 / 陕K·22831",
@@ -480,7 +480,7 @@
         {
           serial: 3,
           waybillNo: "YD-20260412-006",
-          logisticsNos: ["WLD-20260409-004", "WLD-20260409-005", "WLD-20260409-006"],
+          receiptNos: ["CKD-20260405-011", "CKD-20260405-010", "CKD-20260404-009"],
           projectName: "华北石油管道更新工程",
           company: "顺安运输",
           plateNo: "冀A·90876 / 冀A·90324",
@@ -509,6 +509,10 @@
         { key: "pipeNo", label: "管号" },
       ];
 
+      function getRelatedReceiptNos(record) {
+        return record.receiptNos || [];
+      }
+
       function getStatusClass(status) {
         if (status === "done") return "done";
         if (status === "progress") return "progress";
@@ -534,7 +538,7 @@
             currentStatusFilter === "all" ||
             item.status === currentStatusFilter;
           const searchText =
-            `${item.waybillNo} ${item.logisticsNos.join(" ")} ${item.projectName} ${item.company} ${item.plateNo}`.toLowerCase();
+            `${item.waybillNo} ${getRelatedReceiptNos(item).join(" ")} ${item.projectName} ${item.company} ${item.plateNo}`.toLowerCase();
           return matchStatus && (!keyword || searchText.includes(keyword));
         });
 
@@ -546,7 +550,7 @@
                 <td class="px-4 py-4 border-b border-slate-100 font-semibold text-slate-900">${item.serial}</td>
                 <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap font-semibold text-blue-700">${item.waybillNo}</td>
                 <td class="px-4 py-4 border-b border-slate-100">
-                  <div class="font-semibold text-slate-900">${item.logisticsNos.join("、")}</div>
+                  <div class="font-semibold text-slate-900">${getRelatedReceiptNos(item).join("、")}</div>
                   <div class="mt-1 text-xs text-slate-500">${item.projectName}</div>
                 </td>
                 <td class="px-4 py-4 border-b border-slate-100">
@@ -589,7 +593,7 @@
         const pipes = record.pipes || [];
         document.getElementById("pipePrintOptions").classList.add("hidden");
         document.getElementById("pipeDetailSubtitle").textContent =
-          `${record.waybillNo} | ${record.logisticsNos.join("、")} | ${record.projectName}`;
+          `${record.waybillNo} | ${getRelatedReceiptNos(record).join("、")} | ${record.projectName}`;
         document.getElementById("pipeDetailCount").textContent = pipes.length;
         const body = document.getElementById("pipeDetailTableBody");
         if (!pipes.length) {
@@ -696,7 +700,7 @@
               <h1>运单钢管明细</h1>
               <div class="meta">
                 运单号：${escapePrintText(currentPipeDetailRecord.waybillNo)}<br>
-                物流单：${escapePrintText(currentPipeDetailRecord.logisticsNos.join("、"))}<br>
+                出库单：${escapePrintText(getRelatedReceiptNos(currentPipeDetailRecord).join("、"))}<br>
                 项目：${escapePrintText(currentPipeDetailRecord.projectName)}<br>
                 钢管数量：${pipes.length} 支
               </div>

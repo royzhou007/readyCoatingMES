@@ -249,6 +249,65 @@
           </div>
         </section>
 
+        <section class="card rounded-3xl p-5">
+          <div class="flex items-center justify-between gap-4 mb-4">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">承运与签收信息</h3>
+              <p class="text-xs text-slate-500 mt-1">物流车默认承运本出库单内全部实出自编号钢管</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="markDispatched()" class="px-4 py-2.5 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700">
+                <i class="fas fa-truck-fast mr-2"></i>确认发运
+              </button>
+              <button type="button" onclick="markSigned()" class="px-4 py-2.5 rounded-2xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700">
+                <i class="fas fa-circle-check mr-2"></i>客户签收
+              </button>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div>
+              <label class="text-xs text-slate-500">物流公司</label>
+              <input id="shippingCompanyInput" class="form-input mt-2" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">车牌号</label>
+              <input id="shippingPlateInput" class="form-input mt-2" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">司机姓名</label>
+              <input id="shippingDriverInput" class="form-input mt-2" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">司机电话</label>
+              <input id="shippingDriverPhoneInput" class="form-input mt-2" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">客户联系人</label>
+              <input id="shippingReceiverInput" class="form-input mt-2" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">联系电话</label>
+              <input id="shippingReceiverPhoneInput" class="form-input mt-2" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">预计到货时间</label>
+              <input id="shippingEtaInput" type="datetime-local" class="form-input mt-2" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">签收时间</label>
+              <input id="shippingSignedAtInput" type="datetime-local" class="form-input mt-2" />
+            </div>
+            <div class="md:col-span-2 xl:col-span-3">
+              <label class="text-xs text-slate-500">收货地址</label>
+              <input id="shippingAddressInput" class="form-input mt-2" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">物流状态</label>
+              <input id="shippingStatusInput" class="form-input mt-2 bg-slate-50" readonly />
+            </div>
+          </div>
+        </section>
+
         <section class="card rounded-3xl overflow-hidden">
           <div class="flex items-center justify-between gap-4 px-5 py-4 border-b border-slate-200">
             <div>
@@ -566,6 +625,7 @@
           statusText: "未出库",
           date: "2026-04-07",
           operator: CURRENT_USER,
+          shipping: { company: "中远物流", plateNo: "冀B·56218", driver: "王建国", driverPhone: "13800001234", receiver: "刘工", receiverPhone: "13900005678", eta: "2026-04-13T09:30", address: "河北省唐山市曹妃甸工业区项目现场 2 号卸货区", signedAt: "", statusText: "未出库" },
           materials: [
             { seq: 1, name: "成品管 L415M", code: "MAT-BP-001", spec: "D813 x 17.5 x 12000", unit: "支", expectedQty: 48, actualQty: 0, inspectStatus: "待检验", inspectClass: "pending", storageStatus: "未出库", storageClass: "pending", remark: "待首批发货" },
             { seq: 2, name: "成品管 L450M", code: "MAT-BP-002", spec: "D813 x 19.1 x 12000", unit: "支", expectedQty: 80, actualQty: 0, inspectStatus: "待检验", inspectClass: "pending", storageStatus: "未出库", storageClass: "pending", remark: "按合同批次发货" },
@@ -580,6 +640,7 @@
           statusText: "部分出库",
           date: "2026-04-07",
           operator: CURRENT_USER,
+          shipping: { company: "顺安运输", plateNo: "津A·90876", driver: "赵强", driverPhone: "13800004321", receiver: "张工", receiverPhone: "13900001212", eta: "2026-04-12T16:30", address: "天津港保税区项目临时堆场", signedAt: "", statusText: "部分出库" },
           materials: [
             { seq: 1, name: "成品管 X65", code: "MAT-BP-018", spec: "D711 x 14.2 x 11800", unit: "支", expectedQty: 56, actualQty: 28, inspectStatus: "检验合格", inspectClass: "pass", storageStatus: "部分出库", storageClass: "partial", remark: "首批已完成验收" },
             { seq: 2, name: "成品管 X70", code: "MAT-BP-019", spec: "D711 x 16.0 x 11800", unit: "支", expectedQty: 40, actualQty: 15, inspectStatus: "检验中", inspectClass: "partial", storageStatus: "部分出库", storageClass: "partial", remark: "剩余批次在途" },
@@ -594,6 +655,7 @@
           statusText: "已出库",
           date: "2026-04-06",
           operator: CURRENT_USER,
+          shipping: { company: "陆港供应链", plateNo: "鲁F·71355", driver: "李明", driverPhone: "13800006789", receiver: "陈工", receiverPhone: "13900003456", eta: "2026-04-08T10:00", address: "西北长输原油管线配套项目三号卸货区", signedAt: "", statusText: "待发运" },
           materials: [
             { seq: 1, name: "成品管 X65MS", code: "MAT-BP-032", spec: "D1016 x 21.0 x 12000", unit: "支", expectedQty: 120, actualQty: 120, inspectStatus: "检验合格", inspectClass: "pass", storageStatus: "已出库", storageClass: "pass", remark: "已完成整单出库" },
             { seq: 2, name: "成品管 X70MS", code: "MAT-BP-033", spec: "D1016 x 24.0 x 12000", unit: "支", expectedQty: 100, actualQty: 100, inspectStatus: "检验合格", inspectClass: "pass", storageStatus: "已出库", storageClass: "pass", remark: "库位已全部清空" },
@@ -618,7 +680,8 @@
         return new URLSearchParams(window.location.search).get(name);
       }
       function getStatusClass(status) {
-        if (status === "done") return "done";
+        if (status === "signed") return "done";
+        if (status === "progress" || status === "ready" || status === "done") return "partial";
         if (status === "partial") return "partial";
         return "pending";
       }
@@ -639,6 +702,7 @@
         }, 1800);
       }
       function renderReceiptInfo() {
+        ensureShippingDefaults();
         document.getElementById("heroReceiptNo").textContent = record.receiptNo;
         document.getElementById("heroProject").textContent = record.projectName;
         document.getElementById("infoReceiptNo").textContent = record.receiptNo;
@@ -651,6 +715,48 @@
         const statusNode = document.getElementById("headerStatus");
         statusNode.className = `status-pill ${getStatusClass(record.status)}`;
         statusNode.innerHTML = `<span class="status-dot"></span>${record.statusText}`;
+        renderShippingInfo();
+      }
+      function ensureShippingDefaults() {
+        if (!record.shipping) {
+          record.shipping = {
+            company: "中远物流",
+            plateNo: "冀B·56218",
+            driver: "王建国",
+            driverPhone: "13800001234",
+            receiver: "刘工",
+            receiverPhone: "13900005678",
+            eta: "2026-04-13T09:30",
+            address: "河北省唐山市曹妃甸工业区项目现场 2 号卸货区",
+            signedAt: "",
+            statusText: record.statusText,
+          };
+        }
+      }
+      function renderShippingInfo() {
+        const shipping = record.shipping;
+        document.getElementById("shippingCompanyInput").value = shipping.company || "";
+        document.getElementById("shippingPlateInput").value = shipping.plateNo || "";
+        document.getElementById("shippingDriverInput").value = shipping.driver || "";
+        document.getElementById("shippingDriverPhoneInput").value = shipping.driverPhone || "";
+        document.getElementById("shippingReceiverInput").value = shipping.receiver || "";
+        document.getElementById("shippingReceiverPhoneInput").value = shipping.receiverPhone || "";
+        document.getElementById("shippingEtaInput").value = shipping.eta || "";
+        document.getElementById("shippingSignedAtInput").value = shipping.signedAt || "";
+        document.getElementById("shippingAddressInput").value = shipping.address || "";
+        document.getElementById("shippingStatusInput").value = shipping.statusText || record.statusText;
+      }
+      function syncShippingFromForm() {
+        ensureShippingDefaults();
+        record.shipping.company = document.getElementById("shippingCompanyInput").value.trim();
+        record.shipping.plateNo = document.getElementById("shippingPlateInput").value.trim();
+        record.shipping.driver = document.getElementById("shippingDriverInput").value.trim();
+        record.shipping.driverPhone = document.getElementById("shippingDriverPhoneInput").value.trim();
+        record.shipping.receiver = document.getElementById("shippingReceiverInput").value.trim();
+        record.shipping.receiverPhone = document.getElementById("shippingReceiverPhoneInput").value.trim();
+        record.shipping.eta = document.getElementById("shippingEtaInput").value;
+        record.shipping.signedAt = document.getElementById("shippingSignedAtInput").value;
+        record.shipping.address = document.getElementById("shippingAddressInput").value.trim();
       }
       function renderMetrics() {
         const expectedTotal = record.materials.reduce((sum, item) => sum + item.expectedQty, 0);
@@ -1043,6 +1149,9 @@
       function refreshReceiptStatus() {
         const expectedTotal = record.materials.reduce((sum, item) => sum + item.expectedQty, 0);
         const actualTotal = record.materials.reduce((sum, item) => sum + item.actualQty, 0);
+        if (["ready", "progress", "signed"].includes(record.status)) {
+          return;
+        }
         if (actualTotal <= 0) {
           record.status = "pending";
           record.statusText = "未出库";
@@ -1050,9 +1159,11 @@
           record.status = "partial";
           record.statusText = "部分出库";
         } else {
-          record.status = "done";
-          record.statusText = "已出库";
+          record.status = "ready";
+          record.statusText = "已出库/待发运";
         }
+        ensureShippingDefaults();
+        record.shipping.statusText = record.statusText;
       }
       function confirmStorage() {
         if (activeMaterialIndex < 0) return;
@@ -1093,7 +1204,39 @@
         showToast("出库完成");
       }
       function saveReceipt() {
+        syncShippingFromForm();
         showToast("出库单保存成功");
+      }
+      function markDispatched() {
+        syncShippingFromForm();
+        const actualTotal = record.materials.reduce((sum, item) => sum + item.actualQty, 0);
+        if (actualTotal <= 0) {
+          showToast("请先完成出库后再发运");
+          return;
+        }
+        record.status = "progress";
+        record.statusText = "运输中";
+        record.shipping.statusText = "运输中";
+        renderReceiptInfo();
+        showToast("已确认发运");
+      }
+      function markSigned() {
+        syncShippingFromForm();
+        const actualTotal = record.materials.reduce((sum, item) => sum + item.actualQty, 0);
+        if (actualTotal <= 0) {
+          showToast("请先完成出库后再签收");
+          return;
+        }
+        record.status = "signed";
+        record.statusText = "客户已签收";
+        record.shipping.statusText = "客户已签收";
+        if (!record.shipping.signedAt) {
+          const now = new Date();
+          const offset = now.getTimezoneOffset() * 60000;
+          record.shipping.signedAt = new Date(now.getTime() - offset).toISOString().slice(0, 16);
+        }
+        renderReceiptInfo();
+        showToast("客户签收已确认");
       }
       document.getElementById("storageDrawerOverlay").addEventListener("click", (event) => {
         if (event.target.id === "storageDrawerOverlay") closeStorageDrawer();

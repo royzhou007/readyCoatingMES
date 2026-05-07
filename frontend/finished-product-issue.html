@@ -81,6 +81,11 @@
         color: #15803d;
         border-color: #86efac;
       }
+      .status-pill.progress {
+        background: #eff6ff;
+        color: #1d4ed8;
+        border-color: #93c5fd;
+      }
       .status-dot {
         width: 8px;
         height: 8px;
@@ -251,6 +256,20 @@
             >
               已出库
             </button>
+            <button
+              type="button"
+              class="chip px-4 py-2.5 rounded-2xl border-2 border-gray-200 text-sm font-semibold text-gray-700 bg-white"
+              data-status-filter="progress"
+            >
+              运输中
+            </button>
+            <button
+              type="button"
+              class="chip px-4 py-2.5 rounded-2xl border-2 border-gray-200 text-sm font-semibold text-gray-700 bg-white"
+              data-status-filter="signed"
+            >
+              已签收
+            </button>
           </div>
         </div>
       </div>
@@ -312,6 +331,16 @@
                   class="px-4 py-4 text-right font-bold border-b border-slate-200 whitespace-nowrap"
                 >
                   实出数量
+                </th>
+                <th
+                  class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap"
+                >
+                  物流公司 / 车牌号
+                </th>
+                <th
+                  class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap"
+                >
+                  司机 / 电话
                 </th>
                 <th
                   class="px-4 py-4 text-left font-bold border-b border-slate-200 whitespace-nowrap"
@@ -435,8 +464,25 @@
           date: "2026-04-05",
         },
       ];
+      const shippingSamples = [
+        { company: "中远物流", plateNo: "冀B·56218", driver: "王建国", driverPhone: "13800001234" },
+        { company: "顺安运输", plateNo: "津A·90876", driver: "赵强", driverPhone: "13800004321" },
+        { company: "陆港供应链", plateNo: "鲁F·71355", driver: "李明", driverPhone: "13800006789" },
+        { company: "广联车队", plateNo: "冀A·90324", driver: "周鹏", driverPhone: "13800007654" },
+        { company: "中远物流", plateNo: "陕K·22831", driver: "孙勇", driverPhone: "13800008866" },
+        { company: "待安排", plateNo: "-", driver: "待安排", driverPhone: "-" },
+      ];
+      receiptData.forEach((item, index) => {
+        Object.assign(item, shippingSamples[index] || shippingSamples[0]);
+      });
+      receiptData[2].status = "progress";
+      receiptData[2].statusText = "运输中";
+      receiptData[4].status = "signed";
+      receiptData[4].statusText = "客户已签收";
       let activeStatusFilter = "all";
       function getStatusClass(status) {
+        if (status === "signed") return "done";
+        if (status === "progress" || status === "ready") return "progress";
         if (status === "done") return "done";
         if (status === "partial") return "partial";
         return "pending";
@@ -454,7 +500,10 @@
             !keyword ||
             item.receiptNo.toLowerCase().includes(keyword) ||
             item.salesNo.toLowerCase().includes(keyword) ||
-            item.projectName.toLowerCase().includes(keyword);
+            item.projectName.toLowerCase().includes(keyword) ||
+            item.company.toLowerCase().includes(keyword) ||
+            item.plateNo.toLowerCase().includes(keyword) ||
+            item.driver.toLowerCase().includes(keyword);
           return matchStatus && matchKeyword;
         });
         body.innerHTML = filtered
@@ -468,6 +517,8 @@
             <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${item.receiptType}</td>
             <td class="px-4 py-4 border-b border-slate-100 text-right font-semibold">${item.expectedQty}</td>
             <td class="px-4 py-4 border-b border-slate-100 text-right font-semibold ${item.actualQty < item.expectedQty ? "text-amber-600" : "text-emerald-600"}">${item.actualQty}</td>
+            <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap"><div class="font-semibold text-slate-900">${item.company}</div><div class="mt-1 text-xs text-slate-500">${item.plateNo}</div></td>
+            <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap"><div class="font-semibold text-slate-900">${item.driver}</div><div class="mt-1 text-xs text-slate-500">${item.driverPhone}</div></td>
             <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap"><span class="status-pill ${getStatusClass(item.status)}"><span class="status-dot"></span>${item.statusText}</span></td>
             <td class="px-4 py-4 border-b border-slate-100 whitespace-nowrap">${item.date}</td>
           </tr>
@@ -475,7 +526,7 @@
           )
           .join("");
         if (!filtered.length) {
-          body.innerHTML = `<tr><td colspan="9" class="px-4 py-16 text-center text-slate-400"><div class="flex flex-col items-center gap-3"><div class="w-14 h-14 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center"><i class="fas fa-inbox text-xl"></i></div><div class="text-base font-semibold text-slate-500">未找到匹配的出库单</div><div class="text-sm">请调整搜索关键词或状态筛选条件</div></div></td></tr>`;
+          body.innerHTML = `<tr><td colspan="11" class="px-4 py-16 text-center text-slate-400"><div class="flex flex-col items-center gap-3"><div class="w-14 h-14 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center"><i class="fas fa-inbox text-xl"></i></div><div class="text-base font-semibold text-slate-500">未找到匹配的出库单</div><div class="text-sm">请调整搜索关键词或状态筛选条件</div></div></td></tr>`;
         }
         document.getElementById("visibleCount").textContent = filtered.length;
         document.getElementById("totalCount").textContent = receiptData.length;
@@ -486,7 +537,7 @@
         document.getElementById("metricPartial").textContent =
           receiptData.filter((item) => item.status === "partial").length;
         document.getElementById("metricDone").textContent = receiptData.filter(
-          (item) => item.status === "done",
+          (item) => ["done", "ready", "progress", "signed"].includes(item.status),
         ).length;
       }
       function openReceiptDetail(receiptNo) {
