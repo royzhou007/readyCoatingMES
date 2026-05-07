@@ -54,7 +54,7 @@
         .data-table th { 
             background: #F8FAFC; 
             font-weight: 600; 
-            text-transform: uppercase; 
+            text-transform: none; 
             letter-spacing: 0.05em; 
             font-size: 0.75rem; 
             color: #64748B; 
@@ -194,6 +194,7 @@
         .status-pending { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
         .status-saved { background: #DCFCE7; color: #166534; border: 1px solid #86EFAC; }
         .status-editing { background: #DBEAFE; color: #1E40AF; border: 1px solid #93C5FD; }
+        .status-maintenance { background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5; }
 
         .readonly-field {
             background: #F8FAFC;
@@ -247,21 +248,24 @@
 
         /* 列宽定义 */
         .col-time { width: 90px; }
-        .col-speed { width: 85px; }
-        .col-freq { width: 85px; }
+        .col-speed { width: 82px; }
+        .col-freq { width: 82px; }
+        .col-pitch { width: 90px; }
+        .col-grade { width: 90px; }
+        .col-anchor { width: 95px; }
         .col-dust { width: 70px; }
         .col-hydraulic { width: 70px; }
-        .col-checktime { width: 130px; }
+        .col-checktime { width: 110px; }
         .col-operator { width: 90px; }
         .col-status { width: 85px; }
-        .col-action { width: 160px; }
+        .col-action { width: 130px; }
     </style>
 </head>
 <body class="min-h-screen bg-gray-50 pb-20">
 
     <!-- Header -->
     <header class="bg-white industrial-shadow sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-4">
                     <button onclick="history.back()" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
@@ -293,7 +297,7 @@
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <main class="w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
         <!-- 班次信息卡片 -->
         <div class="wo-card rounded-xl p-5 industrial-shadow relative overflow-hidden">
@@ -341,7 +345,7 @@
                 </button>
             </div>
             
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="baseInfoContainer">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="baseInfoContainer">
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">钢砂厂家 <span class="text-red-500">*</span></label>
                     <input type="text" id="sandFactory" class="form-input" placeholder="请输入" disabled>
@@ -361,24 +365,6 @@
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">丸、砂配比 <span class="text-red-500">*</span></label>
                     <input type="text" id="mixRatio" class="form-input" placeholder="如: 7:3" disabled>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">传送线螺距 <span class="text-red-500">*</span></label>
-                    <input type="text" id="screwPitch" class="form-input" placeholder="请输入" disabled>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">除锈等级 <span class="text-red-500">*</span></label>
-                    <select id="rustGrade" class="form-input" disabled>
-                        <option value="">请选择</option>
-                        <option value="Sa1">Sa1</option>
-                        <option value="Sa2">Sa2</option>
-                        <option value="Sa2.5" selected>Sa2.5</option>
-                        <option value="Sa3">Sa3</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1.5">锚纹深度(μm) <span class="text-red-500">*</span></label>
-                    <input type="number" id="anchorDepth" class="form-input" placeholder="40-70" disabled>
                 </div>
             </div>
         </div>
@@ -402,7 +388,10 @@
                         <tr>
                             <th class="col-time">时段</th>
                             <th class="col-speed">传送线速度<br><span class="text-xs font-normal text-gray-400">(m/min)</span></th>
-                            <th class="col-freq">传送线频率<br><span class="text-xs font-normal text-gray-400">(Hz)</span></th>
+                            <th class="col-freq">传送线频率<br><span class="text-xs font-normal text-gray-400">(hz)</span></th>
+                            <th class="col-pitch">传送线螺距</th>
+                            <th class="col-grade">除锈等级</th>
+                            <th class="col-anchor">锚纹深度<br><span class="text-xs font-normal text-gray-400">(μm)</span></th>
                             <th class="col-dust">除尘系统<br><span class="text-xs font-normal text-gray-400">运行</span></th>
                             <th class="col-hydraulic">液压系统<br><span class="text-xs font-normal text-gray-400">运行</span></th>
                             <th class="col-checktime">检测时间</th>
@@ -459,7 +448,7 @@
 
     <!-- 底部提交栏 -->
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 industrial-shadow-lg z-30">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="w-full flex items-center justify-between">
             <div class="text-sm text-gray-600">
                 <span class="font-semibold text-gray-900" id="bottomShiftInfo">今日白班</span>
                 <span class="mx-2">|</span>
@@ -549,6 +538,17 @@
                     <td class="time-slot">${slot}</td>
                     <td><input type="number" class="form-input speed-input" placeholder="-" disabled step="0.1"></td>
                     <td><input type="number" class="form-input freq-input" placeholder="-" disabled step="0.1"></td>
+                    <td><input type="text" class="form-input pitch-input" placeholder="-" disabled></td>
+                    <td>
+                        <select class="form-input grade-input" disabled>
+                            <option value="">-</option>
+                            <option value="Sa1">Sa1</option>
+                            <option value="Sa2">Sa2</option>
+                            <option value="Sa2.5">Sa2.5</option>
+                            <option value="Sa3">Sa3</option>
+                        </select>
+                    </td>
+                    <td><input type="number" class="form-input anchor-input" placeholder="40-70" disabled></td>
                     <td>
                         <input type="checkbox" class="custom-checkbox dust-checkbox" disabled title="除尘系统正常">
                     </td>
@@ -579,6 +579,9 @@
                             <button onclick="startEdit(${index})" class="btn-primary">
                                 <i class="fas fa-edit"></i>录入
                             </button>
+                            <button onclick="markMaintenance(${index})" class="btn-secondary">
+                                <i class="fas fa-screwdriver-wrench"></i>维修
+                            </button>
                         </div>
                     </td>
                 `;
@@ -602,6 +605,9 @@
             // 启用工艺参数输入
             row.querySelector('.speed-input').disabled = false;
             row.querySelector('.freq-input').disabled = false;
+            row.querySelector('.pitch-input').disabled = false;
+            row.querySelector('.grade-input').disabled = false;
+            row.querySelector('.anchor-input').disabled = false;
             row.querySelector('.dust-checkbox').disabled = false;
             row.querySelector('.hydraulic-checkbox').disabled = false;
             
@@ -646,15 +652,42 @@
             return `${h}:${min}`;
         }
 
+        function markMaintenance(index) {
+            if (editingRow !== null && editingRow !== index) {
+                if (!confirm('有其他时段正在编辑，是否放弃修改并标记维修？')) {
+                    return;
+                }
+                cancelEdit(editingRow);
+            }
+
+            if (!confirm('确认将该时段设置为维修吗？设置后本行运行数据无需填写。')) {
+                return;
+            }
+
+            const now = new Date();
+            records[index] = {
+                maintenance: true,
+                time: formatDateTime(now),
+                operator: currentUser.name
+            };
+            setRowMaintenance(index);
+            editingRow = null;
+            showToast('该时段已标记为维修', 'success');
+            updateStats();
+        }
+
         function saveRow(index) {
             const row = document.getElementById(`row-${index}`);
             
             // 验证必填项
             const speed = row.querySelector('.speed-input').value;
             const freq = row.querySelector('.freq-input').value;
+            const pitch = row.querySelector('.pitch-input').value;
+            const grade = row.querySelector('.grade-input').value;
+            const anchor = row.querySelector('.anchor-input').value;
             
-            if (!speed || !freq) {
-                showToast('请填写传送线速度和频率', 'error');
+            if (!speed || !freq || !pitch || !grade || !anchor) {
+                showToast('请填写速度、频率、螺距、除锈等级和锚纹深度', 'error');
                 return;
             }
             
@@ -662,6 +695,9 @@
             const data = {
                 speed: speed,
                 freq: freq,
+                screwPitch: pitch,
+                rustGrade: grade,
+                anchorDepth: anchor,
                 dust: row.querySelector('.dust-checkbox').checked,
                 hydraulic: row.querySelector('.hydraulic-checkbox').checked,
                 time: document.getElementById(`time-${index}`).querySelector('span').textContent,
@@ -679,11 +715,15 @@
             const row = document.getElementById(`row-${index}`);
             row.dataset.status = 'saved';
             row.classList.remove('editing');
+            row.classList.remove('maintenance');
             row.classList.add('saved');
             
             // 禁用工艺参数输入
             row.querySelector('.speed-input').disabled = true;
             row.querySelector('.freq-input').disabled = true;
+            row.querySelector('.pitch-input').disabled = true;
+            row.querySelector('.grade-input').disabled = true;
+            row.querySelector('.anchor-input').disabled = true;
             row.querySelector('.dust-checkbox').disabled = true;
             row.querySelector('.hydraulic-checkbox').disabled = true;
             
@@ -708,13 +748,57 @@
             `;
         }
 
+        function setRowMaintenance(index) {
+            const row = document.getElementById(`row-${index}`);
+            row.dataset.status = 'saved';
+            row.classList.remove('editing');
+            row.classList.add('saved');
+
+            row.querySelector('.speed-input').value = '';
+            row.querySelector('.freq-input').value = '';
+            row.querySelector('.pitch-input').value = '';
+            row.querySelector('.grade-input').value = '';
+            row.querySelector('.anchor-input').value = '';
+            row.querySelector('.dust-checkbox').checked = false;
+            row.querySelector('.hydraulic-checkbox').checked = false;
+
+            row.querySelectorAll('input, select').forEach(input => input.disabled = true);
+
+            const timeDisplay = document.getElementById(`time-${index}`);
+            const timeEmpty = document.getElementById(`time-empty-${index}`);
+            timeDisplay.style.display = 'inline-flex';
+            timeDisplay.className = 'readonly-field bg-red-50 text-red-700 border-red-200';
+            timeDisplay.innerHTML = `<i class="fas fa-screwdriver-wrench text-xs text-red-600 mr-1"></i><span>${records[index].time}</span>`;
+            timeEmpty.style.display = 'none';
+
+            const operatorDisplay = document.getElementById(`operator-${index}`);
+            const operatorEmpty = document.getElementById(`operator-empty-${index}`);
+            operatorDisplay.style.display = 'inline-flex';
+            operatorDisplay.className = 'readonly-field bg-red-50 text-red-700 border-red-200';
+            operatorDisplay.innerHTML = `<i class="fas fa-user-check text-xs text-red-600 mr-1"></i><span>${records[index].operator}</span>`;
+            operatorEmpty.style.display = 'none';
+
+            document.getElementById(`status-${index}`).className = 'status-badge status-maintenance';
+            document.getElementById(`status-${index}`).innerHTML = '<i class="fas fa-screwdriver-wrench text-xs"></i> 维修';
+
+            document.getElementById(`actions-${index}`).innerHTML = `
+                <button onclick="startEdit(${index})" class="btn-secondary" style="min-width: 80px;">
+                    <i class="fas fa-edit"></i>修改
+                </button>
+            `;
+        }
+
         function cancelEdit(index) {
             const row = document.getElementById(`row-${index}`);
             
             if (records[index]) {
                 // 如果有已保存的数据，恢复原值
-                fillRowData(index, records[index]);
-                setRowSaved(index);
+                if (records[index].maintenance) {
+                    setRowMaintenance(index);
+                } else {
+                    fillRowData(index, records[index]);
+                    setRowSaved(index);
+                }
             } else {
                 // 清空并恢复初始状态
                 row.dataset.status = 'empty';
@@ -723,6 +807,9 @@
                 // 清空工艺参数
                 row.querySelector('.speed-input').value = '';
                 row.querySelector('.freq-input').value = '';
+                row.querySelector('.pitch-input').value = '';
+                row.querySelector('.grade-input').value = '';
+                row.querySelector('.anchor-input').value = '';
                 row.querySelector('.dust-checkbox').checked = false;
                 row.querySelector('.hydraulic-checkbox').checked = false;
                 
@@ -744,6 +831,9 @@
                     <button onclick="startEdit(${index})" class="btn-primary">
                         <i class="fas fa-edit"></i>录入
                     </button>
+                    <button onclick="markMaintenance(${index})" class="btn-secondary">
+                        <i class="fas fa-screwdriver-wrench"></i>维修
+                    </button>
                 `;
             }
             
@@ -753,8 +843,15 @@
 
         function fillRowData(index, data) {
             const row = document.getElementById(`row-${index}`);
+            if (data.maintenance) {
+                setRowMaintenance(index);
+                return;
+            }
             row.querySelector('.speed-input').value = data.speed;
             row.querySelector('.freq-input').value = data.freq;
+            row.querySelector('.pitch-input').value = data.screwPitch || '';
+            row.querySelector('.grade-input').value = data.rustGrade || '';
+            row.querySelector('.anchor-input').value = data.anchorDepth || '';
             row.querySelector('.dust-checkbox').checked = data.dust;
             row.querySelector('.hydraulic-checkbox').checked = data.hydraulic;
             
@@ -889,10 +986,7 @@
                 sandSpec: document.getElementById('sandSpec').value,
                 shotFactory: document.getElementById('shotFactory').value,
                 shotSpec: document.getElementById('shotSpec').value,
-                mixRatio: document.getElementById('mixRatio').value,
-                screwPitch: document.getElementById('screwPitch').value,
-                rustGrade: document.getElementById('rustGrade').value,
-                anchorDepth: document.getElementById('anchorDepth').value
+                mixRatio: document.getElementById('mixRatio').value
             };
             
             const slotRecords = [];
