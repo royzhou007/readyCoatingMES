@@ -98,6 +98,11 @@
         .page-btn.active { background: #2563EB; color: white; border-color: #2563EB; }
 
         .toast { animation: slideIn 0.3s ease; }
+        .residual-warning {
+            border-color: #F59E0B !important;
+            background: #FFFBEB !important;
+            color: #92400E !important;
+        }
         @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
         .sticky-header { position: sticky; top: 0; z-index: 40; background: white; }
@@ -453,7 +458,7 @@
                         <th class="root-detail-col px-4 py-4 text-left"><div class="flex flex-col"><span>捆号</span><span class="text-xs text-gray-400 font-normal normal-case">管号</span></div></th>
                         <th class="root-detail-col px-4 py-4 text-left"><div class="flex flex-col"><span>炉号</span><span class="text-xs text-gray-400 font-normal normal-case">批号</span></div></th>
                         <th class="root-detail-col px-4 py-4 text-center"><div class="flex flex-col items-center"><span>规格</span><span class="text-xs text-gray-400 font-normal normal-case">长度/重量</span></div></th>
-                        <th class="px-4 py-4 text-center">
+                        <th class="sample-moved-col hidden px-4 py-4 text-center">
                             <div class="flex flex-col items-center gap-1">
                                 <span>冷却温度</span>
                                 <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 normal-case">≤60℃</span>
@@ -484,15 +489,15 @@
                                 <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 normal-case">≥20mm</span>
                             </div>
                         </th>
-                        <th class="px-4 py-4 text-center">
+                        <th class="sample-moved-col hidden px-4 py-4 text-center">
                             <div class="flex flex-col items-center gap-1">
                                 <span>&#x5269;&#x78C1;&#x68C0;&#x6D4B;</span>
                                 <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 normal-case">&lt;15 Gauss</span>
                             </div>
                         </th>
                         <th class="px-4 py-4 text-center">留端处理</th>
-                        <th class="px-4 py-4 text-center">涂层厚度</th>
-                        <th class="px-4 py-4 text-center">结论</th>
+                        <th class="sample-moved-col hidden px-4 py-4 text-center">涂层厚度</th>
+                        <th class="px-4 py-4 text-center">根检检验结果</th>
                         <th class="px-4 py-4 text-center">操作时间</th>
                         <th class="px-4 py-4 text-center">质检员</th>
                         <th class="px-4 py-4 text-center">操作</th>
@@ -519,7 +524,7 @@
                         <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">张</div><span class="text-xs text-gray-600">张师傅</span></div></td>
                         <td class="px-4 py-4 text-center"><div class="flex items-center justify-center gap-2"><button onclick="openEntryDrawer('0032')" class="w-9 h-9 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 transition-colors flex items-center justify-center" title="录入"><i class="fas fa-pen-to-square text-sm"></i></button><button onclick="openSampleDrawer('create', '0032')" class="w-9 h-9 rounded-lg bg-cyan-50 hover:bg-cyan-100 text-cyan-600 transition-colors flex items-center justify-center" title="去抽检"><i class="fas fa-vials text-sm"></i></button><button onclick="deleteRow('0032')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center justify-center" title="删除"><i class="fas fa-trash-alt text-sm"></i></button></div></td>
                     </tr>
-                    <tr class="group" data-id="0031" data-shift="today_day" data-result="pass">
+                    <tr class="group" data-id="0031" data-shift="today_day" data-result="fail">
                         <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                         <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">0031</div></td>
                         <td class="root-detail-col px-4 py-4"><div class="flex flex-col gap-1"><div class="text-sm font-semibold text-gray-900">96#</div><div class="font-mono text-xs text-gray-500">6508739</div></div></td>
@@ -573,6 +578,7 @@
                             <th class="px-4 py-4 text-center">剥离强度1</th>
                             <th class="px-4 py-4 text-center">剥离温度2</th>
                             <th class="px-4 py-4 text-center">剥离强度2</th>
+                            <th class="px-4 py-4 text-center">涂层厚度</th>
                             <th class="px-4 py-4 text-center">操作时间</th>
                             <th class="px-4 py-4 text-center">质检员</th>
                             <th class="px-4 py-4 text-center">操作</th>
@@ -586,6 +592,7 @@
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">38.5 N/cm</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">201℃</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">39.2 N/cm</td>
+                            <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs font-medium text-gray-700"><div>Max: 426 μm</div><div>Min: 401 μm</div></div></td>
                             <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">20:10</div><div class="text-xs text-gray-500">今天</div></td>
                             <td class="px-4 py-4 text-center"><span class="text-sm text-gray-700">王检</span></td>
                             <td class="px-4 py-4 text-center">
@@ -603,6 +610,7 @@
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">37.8 N/cm</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">199℃</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">38.6 N/cm</td>
+                            <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs font-medium text-gray-700"><div>Max: 416 μm</div><div>Min: 388 μm</div></div></td>
                             <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">18:55</div><div class="text-xs text-gray-500">今天</div></td>
                             <td class="px-4 py-4 text-center"><span class="text-sm text-gray-700">王检</span></td>
                             <td class="px-4 py-4 text-center">
@@ -620,6 +628,7 @@
                             <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">32.4 N/cm</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">191℃</td>
                             <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">31.7 N/cm</td>
+                            <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs font-medium text-gray-700"><div>Max: 392 μm</div><div>Min: 352 μm</div></div></td>
                             <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">03:40</div><div class="text-xs text-gray-500">昨天</div></td>
                             <td class="px-4 py-4 text-center"><span class="text-sm text-gray-700">赵检</span></td>
                             <td class="px-4 py-4 text-center">
@@ -721,6 +730,34 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="bg-white rounded-3xl industrial-shadow border border-gray-200 overflow-hidden">
+                                <div class="flex flex-col xl:flex-row">
+                                    <div class="xl:w-44 bg-gradient-to-br from-teal-500 to-cyan-400 px-6 py-5 text-white flex items-center">
+                                        <div class="text-2xl font-bold leading-tight">管端防锈漆</div>
+                                    </div>
+                                    <div class="flex-1 p-5">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+                                            <div>
+                                                <label class="block text-xs font-semibold uppercase tracking-[0.18em] text-gray-400 mb-2 text-center">厂家</label>
+                                                <input type="text" placeholder="请输入厂家名称" class="form-input w-full px-4 py-3.5 text-center bg-gray-50 border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-semibold uppercase tracking-[0.18em] text-gray-400 mb-2 text-center">型号</label>
+                                                <input type="text" placeholder="请输入型号" class="form-input w-full px-4 py-3.5 text-center bg-gray-50 border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-semibold uppercase tracking-[0.18em] text-gray-400 mb-2 text-center">批号</label>
+                                                <input type="text" placeholder="请输入批号" class="form-input w-full px-4 py-3.5 text-center bg-gray-50 border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-semibold uppercase tracking-[0.18em] text-gray-400 mb-2 text-center">追溯码</label>
+                                                <input type="text" placeholder="请输入追溯码（选填）" class="form-input w-full px-4 py-3.5 text-center bg-gray-50 border-2 border-gray-200 rounded-2xl outline-none focus:border-blue-500">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="flex justify-end">
                             <button type="button" onclick="saveMaterialInfo()" class="px-8 py-3 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-lg">
@@ -757,6 +794,68 @@
     <div id="photoModal" class="modal fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-6" onclick="closePhotoModal()">
         <div class="modal-content max-w-5xl w-full flex items-center justify-center">
             <img id="photoModalImage" src="" alt="照片预览" class="max-h-[85vh] max-w-full rounded-2xl border-4 border-white shadow-2xl" />
+        </div>
+    </div>
+
+    <div id="nonconformingModal" class="modal fixed inset-0 bg-black/50 z-[70] flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl industrial-shadow-lg w-full max-w-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-red-600 to-rose-600 px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3 text-white">
+                    <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-triangle-exclamation text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold">不合格品登记</h3>
+                        <p class="text-sm text-red-100">确认登记后，该钢管会进入不合格品池子</p>
+                    </div>
+                </div>
+                <button onclick="closeNonconformingModal()" class="w-8 h-8 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-2 gap-3 text-sm">
+                    <div class="rounded-xl bg-red-50 border border-red-100 p-3">
+                        <div class="text-red-500 text-xs">自编号</div>
+                        <div id="nonconformingIdText" class="mt-1 font-mono font-bold text-gray-900">-</div>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 border border-gray-200 p-3">
+                        <div class="text-gray-500 text-xs">管号</div>
+                        <div id="nonconformingPipeText" class="mt-1 font-mono font-semibold text-gray-900">-</div>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 border border-gray-200 p-3">
+                        <div class="text-gray-500 text-xs">捆号</div>
+                        <div id="nonconformingBundleText" class="mt-1 font-semibold text-gray-900">-</div>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 border border-gray-200 p-3">
+                        <div class="text-gray-500 text-xs">炉号 / 批号</div>
+                        <div id="nonconformingFurnaceBatchText" class="mt-1 font-semibold text-gray-900">-</div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">不合格原因 <span class="text-red-500">*</span></label>
+                    <select id="nonconformingReason" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-red-500">
+                        <option value="根检检验结果不合格">根检检验结果不合格</option>
+                        <option value="抽检检验结果不合格">抽检检验结果不合格</option>
+                        <option value="外观不合格">外观不合格</option>
+                        <option value="仪器读数异常">仪器读数异常</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">备注</label>
+                    <textarea id="nonconformingRemark" rows="3" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-red-500 resize-none" placeholder="可补充问题描述"></textarea>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex gap-3">
+                <button onclick="closeNonconformingModal()" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:bg-gray-100">
+                    取消
+                </button>
+                <button onclick="confirmNonconformingRegistration()" class="flex-1 py-3 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 industrial-shadow flex items-center justify-center gap-2">
+                    <i class="fas fa-check"></i>
+                    确认登记并保存
+                </button>
+            </div>
         </div>
     </div>
 
@@ -836,21 +935,126 @@
                     </h4>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">剥离温度1 (℃) <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">剥离温度1 (℃)</label>
                             <input id="sampleTemp1" type="number" min="0" step="0.1" value="198" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">剥离强度1 (N/cm) <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">剥离强度1 (N/cm)</label>
                             <input id="sampleStrength1" type="number" min="0" step="0.1" value="38.5" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">剥离温度2 (℃) <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">剥离温度2 (℃)</label>
                             <input id="sampleTemp2" type="number" min="0" step="0.1" value="201" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">剥离强度2 (N/cm) <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">剥离强度2 (N/cm)</label>
                             <input id="sampleStrength2" type="number" min="0" step="0.1" value="39.2" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-5">
+                    <h4 class="font-bold text-gray-900 mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-temperature-half text-blue-600"></i>
+                            涂敷温度
+                        </span>
+                        <span class="flex items-center gap-4 text-sm font-medium text-gray-500">
+                            <span>录入时间：<span id="coatingTempSectionTime" class="font-semibold text-gray-900">-</span></span>
+                            <button type="button" id="coatingTempSectionSaveBtn" onclick="saveCoatingTempSection()" class="min-h-12 px-6 rounded-xl border-2 border-blue-200 bg-white text-blue-600 text-base font-bold hover:bg-blue-50 transition-colors">
+                                保存本项
+                            </button>
+                        </span>
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">FBE温度(℃)</label>
+                            <input id="sampleCoatingTempFbe" type="number" min="0" step="0.1" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">AD温度(℃)</label>
+                            <input id="sampleCoatingTempAd" type="number" min="0" step="0.1" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">PE/PP温度(℃)</label>
+                            <input id="sampleCoatingTempPePp" type="number" min="0" step="0.1" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-5">
+                    <h4 class="font-bold text-gray-900 mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-layer-group text-blue-600"></i>
+                            三色管3层厚度
+                        </span>
+                        <span class="flex items-center gap-4 text-sm font-medium text-gray-500">
+                            <span>录入时间：<span id="threeLayerThicknessSectionTime" class="font-semibold text-gray-900">-</span></span>
+                            <button type="button" id="threeLayerThicknessSectionSaveBtn" onclick="saveThreeLayerThicknessSection()" class="min-h-12 px-6 rounded-xl border-2 border-blue-200 bg-white text-blue-600 text-base font-bold hover:bg-blue-50 transition-colors">
+                                保存本项
+                            </button>
+                        </span>
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">FBE层厚度</label>
+                            <input id="sampleThreeLayerFbeThickness" type="number" min="0" step="0.1" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">AD层厚度</label>
+                            <input id="sampleThreeLayerAdThickness" type="number" min="0" step="0.1" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">PE/PP层厚度</label>
+                            <input id="sampleThreeLayerPePpThickness" type="number" min="0" step="0.1" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-5">
+                    <h4 class="font-bold text-gray-900 mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-temperature-half text-blue-600"></i>
+                            冷却温度
+                            <span class="ml-2 inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">合格标准：≤60℃</span>
+                        </span>
+                        <span class="flex items-center gap-4 text-sm font-medium text-gray-500">
+                            <span>录入时间：<span id="coolingSectionTime" class="font-semibold text-gray-900">-</span></span>
+                            <button type="button" id="coolingSectionSaveBtn" onclick="saveCoolingSection()" class="min-h-12 px-6 rounded-xl border-2 border-blue-200 bg-white text-blue-600 text-base font-bold hover:bg-blue-50 transition-colors">
+                                保存本项
+                            </button>
+                        </span>
+                    </h4>
+                    <div class="flex gap-3">
+                        <button type="button" onclick="setSampleCoolingResult('pass')" id="btnSampleCoolingPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-check-circle"></i>合格
+                        </button>
+                        <button type="button" onclick="setSampleCoolingResult('fail')" id="btnSampleCoolingFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-times-circle"></i>不合格
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-5">
+                    <h4 class="font-bold text-gray-900 mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-magnet text-blue-600"></i>
+                            剩磁检测
+                            <span class="ml-2 inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">合格标准：&lt;15 Gauss</span>
+                        </span>
+                        <span class="flex items-center gap-4 text-sm font-medium text-gray-500">
+                            <span>录入时间：<span id="residualSectionTime" class="font-semibold text-gray-900">-</span></span>
+                            <button type="button" id="residualSectionSaveBtn" onclick="saveResidualSection()" class="min-h-12 px-6 rounded-xl border-2 border-blue-200 bg-white text-blue-600 text-base font-bold hover:bg-blue-50 transition-colors">
+                                保存本项
+                            </button>
+                        </span>
+                    </h4>
+                    <div class="relative">
+                        <input type="number" id="sampleResidualMagnetism" min="0" step="0.1" placeholder="输入剩磁检测值" class="w-full px-4 py-3 pr-20 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-400 font-medium">Gauss</span>
+                    </div>
+                    <div id="sampleResidualWarning" class="hidden mt-2 text-sm font-medium text-amber-700">
+                        数值超过 15 Gauss，请注意复核。
                     </div>
                 </div>
 
@@ -889,7 +1093,7 @@
                     <h4 class="font-bold text-gray-900 mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                         <span class="flex items-center gap-2">
                             <i class="fas fa-ruler-combined text-blue-600"></i>
-                            根检结果值
+                            留端检测
                         </span>
                         <span class="flex items-center gap-4 text-sm font-medium text-gray-500">
                             <span>录入时间：<span id="rootResultSectionTime" class="font-semibold text-gray-900">-</span></span>
@@ -898,29 +1102,71 @@
                             </button>
                         </span>
                     </h4>
-                    <div class="grid grid-cols-3 gap-4">
+                    <div class="grid grid-cols-[3rem_repeat(3,minmax(0,1fr))] gap-3 items-end">
+                        <div></div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">留端长度 (mm) <span class="ml-2 inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">合格标准：≥300mm</span></label>
-                            <input id="sampleLeaveLength" type="number" min="0" step="0.1" value="300" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">涂层坡口角度 (°) <span class="ml-2 inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">合格标准：≤30°</span></label>
-                            <input id="sampleBevelAngle" type="number" min="0" step="0.1" value="30" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">FBE预留 (mm) <span class="ml-2 inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">合格标准：≥20mm</span></label>
-                            <input id="sampleFbeReserved" type="number" min="0" step="0.1" value="20" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
                         </div>
+                        <div class="pb-3 text-lg font-bold text-red-500 text-center">S</div>
+                        <div>
+                            <input id="sampleLeaveLengthS" type="number" min="0" step="0.1" value="300" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <input id="sampleBevelAngleS" type="number" min="0" step="0.1" value="30" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <input id="sampleFbeReservedS" type="number" min="0" step="0.1" value="20" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                        </div>
+                        <div class="pb-3 text-lg font-bold text-red-500 text-center">N</div>
+                        <div>
+                            <input id="sampleLeaveLengthN" type="number" min="0" step="0.1" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <input id="sampleBevelAngleN" type="number" min="0" step="0.1" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <input id="sampleFbeReservedN" type="number" min="0" step="0.1" class="form-input w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-5">
+                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-clipboard-check text-blue-600"></i>
+                        抽检检验结果
+                        <span class="text-red-500">*</span>
+                    </h4>
+                    <div class="flex gap-3">
+                        <button type="button" onclick="setSampleInspectionResult('pass')" id="btnSampleInspectionPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-check-circle"></i>合格
+                        </button>
+                        <button type="button" onclick="setSampleInspectionResult('fail')" id="btnSampleInspectionFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-times-circle"></i>不合格
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="sampleDrawerFooter" class="border-t border-gray-200 px-6 py-4 bg-gray-50">
-            <div class="max-w-4xl mx-auto flex justify-end">
+            <div class="max-w-4xl mx-auto flex gap-3">
+                <button onclick="closeSampleDrawer()" class="px-8 py-3 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition-colors">
+                    取消
+                </button>
+                <div class="flex-1"></div>
                 <button id="sampleDrawerPrintBtn" onclick="printDetail()" class="px-8 py-3 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition-colors flex items-center gap-2">
                     <i class="fas fa-print"></i>
                     打印
+                </button>
+                <button id="sampleDrawerSaveBtn" onclick="saveSampleEntry()" class="px-8 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-lg">
+                    <i class="fas fa-save"></i>
+                    保存
                 </button>
             </div>
         </div>
@@ -1484,7 +1730,7 @@
                         检验结果
                     </h4>
                     <div class="grid grid-cols-2 gap-4">
-                        <div>
+                        <div class="hidden">
                             <label class="block text-sm font-medium text-gray-700 mb-3">冷却温度 <span class="text-red-500">*</span> <span class="ml-2 inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">合格标准：≤60℃</span></label>
                             <div class="flex gap-3">
                                 <button type="button" onclick="setAppearance('pass')" id="btnPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
@@ -1609,7 +1855,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
+                        <div class="hidden">
                             <label class="block text-sm font-medium text-gray-700 mb-3">&#x5269;&#x78C1;&#x68C0;&#x6D4B; <span class="text-red-500">*</span><span class="ml-2 inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">&#x5408;&#x683C;&#x6807;&#x51C6;&#xFF1A;&lt;15 Gauss</span></label>
                             <div class="relative">
                                 <input type="number" id="entryResidualMagnetism" min="0" step="0.1" placeholder="&#x8F93;&#x5165;&#x5269;&#x78C1;&#x68C0;&#x6D4B;&#x503C;" class="w-full px-4 py-3 pr-20 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500">
@@ -1617,7 +1863,7 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-3">评价 <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">根检检验结果 <span class="text-red-500">*</span></label>
                             <div class="flex gap-3">
                                 <button type="button" onclick="setEvaluation('pass')" id="btnEvaluationPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2">
                                     <i class="fas fa-check-circle"></i>合格
@@ -2004,10 +2250,17 @@
         let currentThicknessValues = [];
         let currentThicknessEditing = false;
         let currentThicknessRecord = null;
+        let currentCoatingTempEditing = false;
+        let currentThreeLayerThicknessEditing = false;
         let currentPeelingEditing = false;
+        let currentCoolingEditing = false;
+        let currentCoolingResult = 'pass';
+        let currentResidualEditing = false;
         let currentRootResultEditing = false;
         let currentEvaluation = 'pass';
+        let currentSampleInspectionResult = 'pass';
         let currentEntryRecordIndex = 0;
+        let pendingNonconformingFormData = null;
         let lastRecord = {
             bundleNo: '96#',
             furnaceNo: '15303842',
@@ -2018,15 +2271,16 @@
         let isBevelExpanded = false; // 鍏煎鏃ч€昏緫
 
         const entryRecordList = [
-            { id: '0032', pipeNo: '6508741', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: '11856', weight: '573.5', pipeType: '正常管', residualMagnetism: '8', humidity: '45', interval: '18', thicknesses: [418, 423, 426, 409, 401, 414, 420, 424, 411, 416, 419, 422], operator: '\u5f20\u5e08\u5085', time: '19:35' },
-            { id: '0031', pipeNo: '6508739', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: '11920', weight: '574.2', pipeType: '正常管', residualMagnetism: '11', humidity: '42', interval: '22', thicknesses: [388, 401, 409, 416, 395, 402, 410, 397, 404, 392, 408, 411], operator: '\u5f20\u5e08\u5085', time: '18:42' },
-            { id: '0030', pipeNo: '6508725', bundleNo: '97#', furnaceNo: '15303842', batchNo: '71400', length: '11780', weight: '572.8', pipeType: '正常管', residualMagnetism: '18', humidity: '65', interval: '41', thicknesses: [352, 368, 379, 385, 392, 361, 374, 388, 357, 364, 371, 380], operator: '\u674e\u5e08\u5085', time: '03:15' }
+            { id: '0032', pipeNo: '6508741', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: '11856', weight: '573.5', pipeType: '正常管', residualMagnetism: '8', humidity: '45', interval: '18', thicknesses: [418, 423, 426, 409, 401, 414, 420, 424, 411, 416, 419, 422], evaluation: 'pass', operator: '\u5f20\u5e08\u5085', time: '19:35' },
+            { id: '0031', pipeNo: '6508739', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: '11920', weight: '574.2', pipeType: '正常管', residualMagnetism: '11', humidity: '42', interval: '22', thicknesses: [388, 401, 409, 416, 395, 402, 410, 397, 404, 392, 408, 411], evaluation: 'fail', operator: '\u5f20\u5e08\u5085', time: '18:42' },
+            { id: '0030', pipeNo: '6508725', bundleNo: '97#', furnaceNo: '15303842', batchNo: '71400', length: '11780', weight: '572.8', pipeType: '正常管', residualMagnetism: '18', humidity: '65', interval: '41', thicknesses: [352, 368, 379, 385, 392, 361, 374, 388, 357, 364, 371, 380], evaluation: 'fail', operator: '\u674e\u5e08\u5085', time: '03:15' }
         ];
         const sampleRecordList = [
-            { id: 'CJ-0032', temp1: '198', strength1: '38.5', temp2: '201', strength2: '39.2', leaveLength: '300', bevelAngle: '30', fbeReserved: '20', inspector: '王检', time: '20:10', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23dbeafe'/><circle cx='42' cy='46' r='10' fill='%2393c5fd'/><circle cx='86' cy='58' r='8' fill='%2360a5fa'/><circle cx='118' cy='40' r='6' fill='%233b82f6'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 1</text></svg>" },
-            { id: 'CJ-0031', temp1: '194', strength1: '37.8', temp2: '199', strength2: '38.6', leaveLength: '305', bevelAngle: '29.5', fbeReserved: '22', inspector: '王检', time: '18:55', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23e0f2fe'/><circle cx='38' cy='48' r='8' fill='%2394a3b8'/><circle cx='74' cy='60' r='7' fill='%2360a5fa'/><circle cx='110' cy='44' r='8' fill='%233b82f6'/><circle cx='126' cy='70' r='5' fill='%2394a3b8'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 2</text></svg>" },
-            { id: 'CJ-0030', temp1: '186', strength1: '32.4', temp2: '191', strength2: '31.7', leaveLength: '298', bevelAngle: '31', fbeReserved: '18', inspector: '赵检', time: '03:40', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23fee2e2'/><circle cx='32' cy='40' r='9' fill='%23ef4444'/><circle cx='56' cy='54' r='7' fill='%23b91c1c'/><circle cx='84' cy='42' r='9' fill='%23ef4444'/><circle cx='114' cy='58' r='8' fill='%23b91c1c'/><circle cx='132' cy='40' r='7' fill='%23ef4444'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%237f1d1d'>Dust 4</text></svg>" }
+            { id: 'CJ-0032', temp1: '198', strength1: '38.5', temp2: '201', strength2: '39.2', coolingResult: 'pass', residualMagnetism: '8', leaveLength: '300', bevelAngle: '30', fbeReserved: '20', inspector: '王检', time: '20:10', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23dbeafe'/><circle cx='42' cy='46' r='10' fill='%2393c5fd'/><circle cx='86' cy='58' r='8' fill='%2360a5fa'/><circle cx='118' cy='40' r='6' fill='%233b82f6'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 1</text></svg>" },
+            { id: 'CJ-0031', temp1: '194', strength1: '37.8', temp2: '199', strength2: '38.6', coolingResult: 'pass', residualMagnetism: '11', leaveLength: '305', bevelAngle: '29.5', fbeReserved: '22', inspector: '王检', time: '18:55', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23e0f2fe'/><circle cx='38' cy='48' r='8' fill='%2394a3b8'/><circle cx='74' cy='60' r='7' fill='%2360a5fa'/><circle cx='110' cy='44' r='8' fill='%233b82f6'/><circle cx='126' cy='70' r='5' fill='%2394a3b8'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 2</text></svg>" },
+            { id: 'CJ-0030', temp1: '186', strength1: '32.4', temp2: '191', strength2: '31.7', coolingResult: 'fail', residualMagnetism: '18', leaveLength: '298', bevelAngle: '31', fbeReserved: '18', inspector: '赵检', time: '03:40', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23fee2e2'/><circle cx='32' cy='40' r='9' fill='%23ef4444'/><circle cx='56' cy='54' r='7' fill='%23b91c1c'/><circle cx='84' cy='42' r='9' fill='%23ef4444'/><circle cx='114' cy='58' r='8' fill='%23b91c1c'/><circle cx='132' cy='40' r='7' fill='%23ef4444'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%237f1d1d'>Dust 4</text></svg>" }
         ];
+        const nonconformingItems = [];
         let currentSampleDrawerMode = 'create';
 
         // 妯℃嫙鐮佸崟鏁版嵁
@@ -2906,9 +3160,21 @@
                 temp2: '201',
                 temp2Result: 'pass',
                 strength2: '39.2',
-                leaveLength: '300',
-                bevelAngle: '30',
-                fbeReserved: '20',
+                coatingTempFbe: '',
+                coatingTempAd: '',
+                coatingTempPePp: '',
+                threeLayerFbeThickness: '',
+                threeLayerAdThickness: '',
+                threeLayerPePpThickness: '',
+                coolingResult: linkedRoot?.coolingResult || 'pass',
+                residualMagnetism: linkedRoot?.residualMagnetism || '',
+                inspectionResult: 'pass',
+                leaveLengthS: '300',
+                leaveLengthN: '',
+                bevelAngleS: '30',
+                bevelAngleN: '',
+                fbeReservedS: '20',
+                fbeReservedN: '',
                 inspector: '褰撳墠鐝粍',
                 time: '\u5f85\u4fdd\u5b58',
                 photo: sampleRecordList[0].photo
@@ -2930,9 +3196,19 @@
             document.getElementById('sampleStrength1').value = record.strength1 ?? '38.5';
             document.getElementById('sampleTemp2').value = record.temp2 ?? '201';
             document.getElementById('sampleStrength2').value = record.strength2 ?? '39.2';
-            document.getElementById('sampleLeaveLength').value = record.leaveLength ?? '300';
-            document.getElementById('sampleBevelAngle').value = record.bevelAngle ?? '30';
-            document.getElementById('sampleFbeReserved').value = record.fbeReserved ?? '20';
+            document.getElementById('sampleCoatingTempFbe').value = record.coatingTempFbe ?? '';
+            document.getElementById('sampleCoatingTempAd').value = record.coatingTempAd ?? '';
+            document.getElementById('sampleCoatingTempPePp').value = record.coatingTempPePp ?? '';
+            document.getElementById('sampleThreeLayerFbeThickness').value = record.threeLayerFbeThickness ?? '';
+            document.getElementById('sampleThreeLayerAdThickness').value = record.threeLayerAdThickness ?? '';
+            document.getElementById('sampleThreeLayerPePpThickness').value = record.threeLayerPePpThickness ?? '';
+            document.getElementById('sampleResidualMagnetism').value = record.residualMagnetism ?? linkedRoot.residualMagnetism ?? '';
+            document.getElementById('sampleLeaveLengthS').value = record.leaveLengthS ?? record.leaveLength ?? '300';
+            document.getElementById('sampleLeaveLengthN').value = record.leaveLengthN ?? '';
+            document.getElementById('sampleBevelAngleS').value = record.bevelAngleS ?? record.bevelAngle ?? '30';
+            document.getElementById('sampleBevelAngleN').value = record.bevelAngleN ?? '';
+            document.getElementById('sampleFbeReservedS').value = record.fbeReservedS ?? record.fbeReserved ?? '20';
+            document.getElementById('sampleFbeReservedN').value = record.fbeReservedN ?? '';
             currentThicknessRecord = record;
             currentThicknessValues = Array.isArray(record.thicknesses)
                 ? [...record.thicknesses]
@@ -2940,19 +3216,39 @@
                     ? [...linkedRoot.thicknesses]
                     : [];
             currentThicknessEditing = false;
+            currentCoatingTempEditing = false;
+            currentThreeLayerThicknessEditing = false;
             currentPeelingEditing = false;
+            currentCoolingEditing = false;
+            currentCoolingResult = record.coolingResult ?? linkedRoot.coolingResult ?? 'pass';
+            currentResidualEditing = false;
             currentRootResultEditing = false;
+            currentSampleInspectionResult = record.inspectionResult || 'pass';
             setThicknessCount(12);
-            document.getElementById('thicknessEditToggle')?.classList.toggle('hidden', isView);
-            document.getElementById('peelingSectionSaveBtn')?.classList.toggle('hidden', isView);
-            document.getElementById('rootResultSectionSaveBtn')?.classList.toggle('hidden', isView);
+            document.getElementById('coatingTempSectionTime').textContent = record.coatingTempTime || '-';
+            document.getElementById('threeLayerThicknessSectionTime').textContent = record.threeLayerThicknessTime || '-';
+            document.getElementById('coolingSectionTime').textContent = record.coolingTime || '-';
+            document.getElementById('residualSectionTime').textContent = record.residualTime || '-';
             document.getElementById('peelingSectionTime').textContent = record.peelingTime || '-';
             document.getElementById('thicknessSectionTime').textContent = record.thicknessTime || '-';
             document.getElementById('rootResultSectionTime').textContent = record.rootResultTime || '-';
+            syncCoolingSectionEditState();
+            syncResidualSectionEditState();
+            syncCoatingTempSectionEditState();
+            syncThreeLayerThicknessSectionEditState();
             syncPeelingSectionEditState();
             syncRootResultSectionEditState();
+            setSampleInspectionResult(currentSampleInspectionResult);
+            document.getElementById('thicknessEditToggle')?.classList.toggle('hidden', isView);
+            document.getElementById('coatingTempSectionSaveBtn')?.classList.toggle('hidden', isView);
+            document.getElementById('threeLayerThicknessSectionSaveBtn')?.classList.toggle('hidden', isView);
+            document.getElementById('coolingSectionSaveBtn')?.classList.toggle('hidden', isView);
+            document.getElementById('residualSectionSaveBtn')?.classList.toggle('hidden', isView);
+            document.getElementById('peelingSectionSaveBtn')?.classList.toggle('hidden', isView);
+            document.getElementById('rootResultSectionSaveBtn')?.classList.toggle('hidden', isView);
+            setSampleInspectionReadonly(isView);
+            document.getElementById('sampleDrawerSaveBtn')?.classList.toggle('hidden', isView);
 
-            document.getElementById('sampleDrawerFooter').classList.toggle('hidden', isCreate);
             document.getElementById('sampleDrawerPrintBtn').classList.toggle('hidden', isCreate);
 document.getElementById('sampleDrawerOverlay').classList.add('open');
             document.getElementById('sampleDrawer').classList.add('open');
@@ -2995,14 +3291,170 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
                 : 'min-h-12 px-6 rounded-xl border-2 border-blue-200 bg-white text-blue-600 text-base font-bold hover:bg-blue-50 transition-colors';
         }
 
+        function setSampleCoolingResult(type) {
+            currentCoolingResult = type;
+            const btnPass = document.getElementById('btnSampleCoolingPass');
+            const btnFail = document.getElementById('btnSampleCoolingFail');
+            if (!btnPass || !btnFail) return;
+
+            if (type === 'pass') {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+        }
+
+        function applySampleMovedColumnState() {
+            document.querySelectorAll('#rootTableBody tr[data-id]').forEach(row => {
+                [5, 11, 13].forEach(index => row.children[index]?.classList.add('hidden'));
+            });
+        }
+
+        function setSampleCoolingDisabled(disabled) {
+            ['btnSampleCoolingPass', 'btnSampleCoolingFail'].forEach(id => {
+                const button = document.getElementById(id);
+                if (!button) return;
+                button.disabled = disabled;
+                button.classList.toggle('cursor-not-allowed', disabled);
+                button.classList.toggle('opacity-70', disabled);
+            });
+        }
+
+        function syncCoolingSectionEditState() {
+            setSampleCoolingResult(currentCoolingResult);
+            setSampleCoolingDisabled(!currentCoolingEditing);
+            setSectionToggleButton('coolingSectionSaveBtn', currentCoolingEditing);
+        }
+
+        function syncResidualSectionEditState() {
+            setSectionInputsDisabled(['sampleResidualMagnetism'], !currentResidualEditing);
+            setSectionToggleButton('residualSectionSaveBtn', currentResidualEditing);
+            updateResidualWarning();
+        }
+
+        function updateResidualWarning() {
+            const input = document.getElementById('sampleResidualMagnetism');
+            const warning = document.getElementById('sampleResidualWarning');
+            if (!input || !warning) return;
+            const value = Number(input.value);
+            const isWarning = input.value.trim() !== '' && !Number.isNaN(value) && value > 15;
+            input.classList.toggle('residual-warning', isWarning);
+            warning.classList.toggle('hidden', !isWarning);
+        }
+
         function syncPeelingSectionEditState() {
             setSectionInputsDisabled(['sampleTemp1', 'sampleStrength1', 'sampleTemp2', 'sampleStrength2'], !currentPeelingEditing);
             setSectionToggleButton('peelingSectionSaveBtn', currentPeelingEditing);
         }
 
+        function syncCoatingTempSectionEditState() {
+            setSectionInputsDisabled(['sampleCoatingTempFbe', 'sampleCoatingTempAd', 'sampleCoatingTempPePp'], !currentCoatingTempEditing);
+            setSectionToggleButton('coatingTempSectionSaveBtn', currentCoatingTempEditing);
+        }
+
+        function syncThreeLayerThicknessSectionEditState() {
+            setSectionInputsDisabled(['sampleThreeLayerFbeThickness', 'sampleThreeLayerAdThickness', 'sampleThreeLayerPePpThickness'], !currentThreeLayerThicknessEditing);
+            setSectionToggleButton('threeLayerThicknessSectionSaveBtn', currentThreeLayerThicknessEditing);
+        }
+
         function syncRootResultSectionEditState() {
-            setSectionInputsDisabled(['sampleLeaveLength', 'sampleBevelAngle', 'sampleFbeReserved'], !currentRootResultEditing);
+            setSectionInputsDisabled(['sampleLeaveLengthS', 'sampleLeaveLengthN', 'sampleBevelAngleS', 'sampleBevelAngleN', 'sampleFbeReservedS', 'sampleFbeReservedN'], !currentRootResultEditing);
             setSectionToggleButton('rootResultSectionSaveBtn', currentRootResultEditing);
+        }
+
+        function saveCoolingSection() {
+            if (!currentCoolingEditing) {
+                currentCoolingEditing = true;
+                syncCoolingSectionEditState();
+                return;
+            }
+
+            if (currentThicknessRecord) {
+                currentThicknessRecord.coolingResult = currentCoolingResult;
+                currentThicknessRecord.coolingTime = getSampleSectionTimeText();
+                document.getElementById('coolingSectionTime').textContent = currentThicknessRecord.coolingTime;
+            }
+
+            currentCoolingEditing = false;
+            syncCoolingSectionEditState();
+            showToast('冷却温度已保存', 'success');
+        }
+
+        function saveResidualSection() {
+            if (!currentResidualEditing) {
+                currentResidualEditing = true;
+                syncResidualSectionEditState();
+                document.getElementById('sampleResidualMagnetism')?.focus();
+                return;
+            }
+
+            const residualMagnetism = document.getElementById('sampleResidualMagnetism').value.trim();
+            if (!residualMagnetism || Number.isNaN(Number(residualMagnetism))) {
+                showToast('请填写有效的剩磁检测值', 'error');
+                return;
+            }
+
+            if (currentThicknessRecord) {
+                currentThicknessRecord.residualMagnetism = residualMagnetism;
+                currentThicknessRecord.residualTime = getSampleSectionTimeText();
+                document.getElementById('residualSectionTime').textContent = currentThicknessRecord.residualTime;
+            }
+
+            currentResidualEditing = false;
+            syncResidualSectionEditState();
+            showToast(Number(residualMagnetism) > 15 ? '剩磁检测已保存，请注意异常值' : '剩磁检测已保存', Number(residualMagnetism) > 15 ? 'info' : 'success');
+        }
+
+        function saveCoatingTempSection() {
+            if (!currentCoatingTempEditing) {
+                currentCoatingTempEditing = true;
+                syncCoatingTempSectionEditState();
+                document.getElementById('sampleCoatingTempFbe')?.focus();
+                return;
+            }
+
+            const coatingTempFbe = document.getElementById('sampleCoatingTempFbe').value.trim();
+            const coatingTempAd = document.getElementById('sampleCoatingTempAd').value.trim();
+            const coatingTempPePp = document.getElementById('sampleCoatingTempPePp').value.trim();
+
+            if (currentThicknessRecord) {
+                currentThicknessRecord.coatingTempFbe = coatingTempFbe;
+                currentThicknessRecord.coatingTempAd = coatingTempAd;
+                currentThicknessRecord.coatingTempPePp = coatingTempPePp;
+                currentThicknessRecord.coatingTempTime = getSampleSectionTimeText();
+                document.getElementById('coatingTempSectionTime').textContent = currentThicknessRecord.coatingTempTime;
+            }
+
+            currentCoatingTempEditing = false;
+            syncCoatingTempSectionEditState();
+            showToast('涂敷温度已保存', 'success');
+        }
+
+        function saveThreeLayerThicknessSection() {
+            if (!currentThreeLayerThicknessEditing) {
+                currentThreeLayerThicknessEditing = true;
+                syncThreeLayerThicknessSectionEditState();
+                document.getElementById('sampleThreeLayerFbeThickness')?.focus();
+                return;
+            }
+
+            const threeLayerFbeThickness = document.getElementById('sampleThreeLayerFbeThickness').value.trim();
+            const threeLayerAdThickness = document.getElementById('sampleThreeLayerAdThickness').value.trim();
+            const threeLayerPePpThickness = document.getElementById('sampleThreeLayerPePpThickness').value.trim();
+
+            if (currentThicknessRecord) {
+                currentThicknessRecord.threeLayerFbeThickness = threeLayerFbeThickness;
+                currentThicknessRecord.threeLayerAdThickness = threeLayerAdThickness;
+                currentThicknessRecord.threeLayerPePpThickness = threeLayerPePpThickness;
+                currentThicknessRecord.threeLayerThicknessTime = getSampleSectionTimeText();
+                document.getElementById('threeLayerThicknessSectionTime').textContent = currentThicknessRecord.threeLayerThicknessTime;
+            }
+
+            currentThreeLayerThicknessEditing = false;
+            syncThreeLayerThicknessSectionEditState();
+            showToast('三色管3层厚度已保存', 'success');
         }
 
         function savePeelingSection() {
@@ -3017,11 +3469,6 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             const strength1 = document.getElementById('sampleStrength1').value.trim();
             const temp2 = document.getElementById('sampleTemp2').value.trim();
             const strength2 = document.getElementById('sampleStrength2').value.trim();
-
-            if (!temp1 || !strength1 || !temp2 || !strength2) {
-                showToast('请填写完整的剥离强度检测数据', 'error');
-                return;
-            }
 
             if (currentThicknessRecord) {
                 currentThicknessRecord.temp1 = temp1;
@@ -3041,30 +3488,83 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             if (!currentRootResultEditing) {
                 currentRootResultEditing = true;
                 syncRootResultSectionEditState();
-                document.getElementById('sampleLeaveLength')?.focus();
+                document.getElementById('sampleLeaveLengthS')?.focus();
                 return;
             }
 
-            const leaveLength = document.getElementById('sampleLeaveLength').value.trim();
-            const bevelAngle = document.getElementById('sampleBevelAngle').value.trim();
-            const fbeReserved = document.getElementById('sampleFbeReserved').value.trim();
+            const leaveLengthS = document.getElementById('sampleLeaveLengthS').value.trim();
+            const leaveLengthN = document.getElementById('sampleLeaveLengthN').value.trim();
+            const bevelAngleS = document.getElementById('sampleBevelAngleS').value.trim();
+            const bevelAngleN = document.getElementById('sampleBevelAngleN').value.trim();
+            const fbeReservedS = document.getElementById('sampleFbeReservedS').value.trim();
+            const fbeReservedN = document.getElementById('sampleFbeReservedN').value.trim();
 
-            if (!leaveLength || !bevelAngle || !fbeReserved) {
-                showToast('请填写完整的根检结果值', 'error');
+            if (!leaveLengthS || !leaveLengthN || !bevelAngleS || !bevelAngleN || !fbeReservedS || !fbeReservedN) {
+                showToast('请填写完整的留端检测数据', 'error');
                 return;
             }
 
             if (currentThicknessRecord) {
-                currentThicknessRecord.leaveLength = leaveLength;
-                currentThicknessRecord.bevelAngle = bevelAngle;
-                currentThicknessRecord.fbeReserved = fbeReserved;
+                currentThicknessRecord.leaveLengthS = leaveLengthS;
+                currentThicknessRecord.leaveLengthN = leaveLengthN;
+                currentThicknessRecord.bevelAngleS = bevelAngleS;
+                currentThicknessRecord.bevelAngleN = bevelAngleN;
+                currentThicknessRecord.fbeReservedS = fbeReservedS;
+                currentThicknessRecord.fbeReservedN = fbeReservedN;
+                currentThicknessRecord.leaveLength = leaveLengthS;
+                currentThicknessRecord.bevelAngle = bevelAngleS;
+                currentThicknessRecord.fbeReserved = fbeReservedS;
                 currentThicknessRecord.rootResultTime = getSampleSectionTimeText();
                 document.getElementById('rootResultSectionTime').textContent = currentThicknessRecord.rootResultTime;
             }
 
             currentRootResultEditing = false;
             syncRootResultSectionEditState();
-            showToast('根检结果值已保存', 'success');
+            showToast('留端检测已保存', 'success');
+        }
+
+        function collectSampleEntryFormData() {
+            return {
+                id: document.getElementById('sampleEntryId').value,
+                pipeNo: document.getElementById('samplePipeNo').value,
+                bundleNo: document.getElementById('sampleBundleNo').value,
+                furnaceNo: document.getElementById('sampleFurnaceNo').value,
+                batchNo: document.getElementById('sampleBatchNo').value,
+                length: document.getElementById('sampleLength').value,
+                weight: document.getElementById('sampleWeight').value,
+                inspectionResult: currentSampleInspectionResult,
+                defaultReason: '抽检检验结果不合格',
+                source: 'sample',
+                inspector: currentThicknessRecord?.inspector || '当前班组',
+                afterConfirm: 'sample'
+            };
+        }
+
+        function performSampleEntrySave(successMessage = '') {
+            const formData = collectSampleEntryFormData();
+            if (currentThicknessRecord) {
+                currentThicknessRecord.inspectionResult = currentSampleInspectionResult;
+                currentThicknessRecord.time = getSampleSectionTimeText();
+            }
+            if (currentSampleInspectionResult === 'pass') {
+                clearRootRowNonconforming(formData.id);
+            } else {
+                markRootRowNonconforming(formData.id);
+            }
+            showToast(successMessage || (currentSampleDrawerMode === 'create' ? '抽检记录已创建' : '抽检记录已更新'), 'success');
+            closeSampleDrawer();
+        }
+
+        function saveSampleEntry() {
+            const formData = collectSampleEntryFormData();
+            if (currentSampleInspectionResult === 'fail' && !isNonconformingRegistered(formData.id)) {
+                openNonconformingModal(formData);
+                return;
+            }
+            if (currentSampleInspectionResult === 'fail') {
+                markRootRowNonconforming(formData.id);
+            }
+            performSampleEntrySave();
         }
 
         function closeWoDetail() {
@@ -3086,6 +3586,7 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             document.getElementById('entryWeight').value = record.weight;
             setPipeType(record.pipeType || '正常管');
             document.getElementById('entryResidualMagnetism').value = record.residualMagnetism || ''; 
+            setEvaluation(record.evaluation || 'pass');
             document.getElementById('entryRecordPosition').textContent = '\u7b2c ' + (index + 1) + ' \u652f / \u5171 ' + entryRecordList.length + ' \u652f';
         }
 
@@ -3180,6 +3681,30 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             avgNode.textContent = avg + ' \u03bcm';
         }
 
+        function renderThicknessListSummary(values) {
+            const validValues = Array.isArray(values)
+                ? values.map(value => Number(value)).filter(value => !Number.isNaN(value) && value > 0)
+                : [];
+
+            if (!validValues.length) {
+                return '<div class="text-xs font-medium text-gray-400">未录入</div>';
+            }
+
+            const max = Math.max(...validValues);
+            const min = Math.min(...validValues);
+            return `<div class="flex flex-col items-center gap-1 text-xs font-medium text-gray-700"><div>Max: ${max} μm</div><div>Min: ${min} μm</div></div>`;
+        }
+
+        function syncSampleThicknessToList(record) {
+            if (!record?.id) return;
+            const row = document.querySelector(`#sampleTableBody tr[data-id="${record.id}"]`);
+            if (!row) return;
+            const thicknessCell = row.children[6];
+            if (thicknessCell) {
+                thicknessCell.innerHTML = renderThicknessListSummary(record.thicknesses);
+            }
+        }
+
         function saveThicknessSection() {
             const thicknessValues = currentThicknessValues
                 .slice(0, currentThicknessCount)
@@ -3197,6 +3722,7 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
                 record.thicknesses = [...thicknessValues];
                 record.thicknessTime = getSampleSectionTimeText();
                 document.getElementById('thicknessSectionTime').textContent = record.thicknessTime;
+                syncSampleThicknessToList(record);
             }
 
             currentThicknessEditing = false;
@@ -3381,23 +3907,226 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             }
         }
 
-        // ========== 淇濆瓨褰曞叆 ==========
+        function setSampleInspectionResult(type) {
+            currentSampleInspectionResult = type;
+            const btnPass = document.getElementById('btnSampleInspectionPass');
+            const btnFail = document.getElementById('btnSampleInspectionFail');
+            if (!btnPass || !btnFail) return;
+
+            if (type === 'pass') {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
+            } else {
+                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
+                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+            }
+        }
+
+        function setSampleInspectionReadonly(readonly) {
+            ['btnSampleInspectionPass', 'btnSampleInspectionFail'].forEach(id => {
+                const button = document.getElementById(id);
+                if (!button) return;
+                button.classList.remove('hidden');
+                button.disabled = readonly;
+                button.classList.toggle('cursor-not-allowed', readonly);
+                button.classList.toggle('opacity-80', readonly);
+            });
+        }
+
+        function renderResultIcon(type) {
+            const passed = type === 'pass';
+            return `<span class="inline-flex h-7 w-7 items-center justify-center rounded-full ${passed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}"><i class="fas ${passed ? 'fa-check' : 'fa-times'} text-sm"></i></span>`;
+        }
+
+        function syncRootEvaluationToList(record) {
+            if (!record) return;
+            const row = document.querySelector(`#rootTableBody tr[data-id="${record.id}"]`);
+            if (!row) return;
+            row.dataset.result = record.evaluation || 'pass';
+            const evaluationCell = row.children[14];
+            if (evaluationCell) {
+                evaluationCell.innerHTML = renderResultIcon(record.evaluation || 'pass');
+            }
+            applyMaterialTableFilters();
+        }
+
+        function normalizePipeRecordId(id) {
+            return String(id || '').replace(/^CJ-/, '');
+        }
+
+        function isNonconformingRegistered(id) {
+            const normalized = normalizePipeRecordId(id);
+            return nonconformingItems.some(item => normalizePipeRecordId(item.id) === normalized);
+        }
+
+        function getCurrentTimeText() {
+            const now = new Date();
+            return String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+        }
+
+        function buildNonconformingPayload(formData) {
+            return {
+                id: formData.id,
+                pipeNo: formData.pipeNo,
+                bundleNo: formData.bundleNo,
+                furnaceNo: formData.furnaceNo,
+                batchNo: formData.batchNo,
+                length: Number(formData.length) || 0,
+                weight: Number(formData.weight) || 0,
+                source: formData.source || 'root',
+                reason: document.getElementById('nonconformingReason')?.value || formData.defaultReason || '检验结果不合格',
+                remark: document.getElementById('nonconformingRemark')?.value.trim() || '',
+                status: '待处理',
+                registeredAt: getCurrentTimeText(),
+                registeredBy: formData.operator || formData.inspector || '当前班组'
+            };
+        }
+
+        function openNonconformingModal(formData) {
+            pendingNonconformingFormData = formData;
+            document.getElementById('nonconformingIdText').textContent = formData.id || '-';
+            document.getElementById('nonconformingPipeText').textContent = formData.pipeNo || '-';
+            document.getElementById('nonconformingBundleText').textContent = formData.bundleNo || '-';
+            document.getElementById('nonconformingFurnaceBatchText').textContent = `${formData.furnaceNo || '-'} / ${formData.batchNo || '-'}`;
+            document.getElementById('nonconformingReason').value = formData.defaultReason || '检验结果不合格';
+            document.getElementById('nonconformingRemark').value = '';
+            document.getElementById('nonconformingModal').classList.add('open');
+        }
+
+        function closeNonconformingModal() {
+            document.getElementById('nonconformingModal').classList.remove('open');
+            pendingNonconformingFormData = null;
+        }
+
+        function registerNonconformingItem(formData) {
+            if (isNonconformingRegistered(formData.id)) return false;
+            nonconformingItems.unshift(buildNonconformingPayload(formData));
+            return true;
+        }
+
+        function markRootRowNonconforming(id) {
+            const rootId = String(id).replace(/^CJ-/, '');
+            const row = document.querySelector(`#rootTableBody tr[data-id="${rootId}"]`);
+            if (!row) return;
+            row.dataset.nonconforming = 'true';
+            row.classList.add('bg-red-50');
+        }
+
+        function clearRootRowNonconforming(id) {
+            const rootId = String(id).replace(/^CJ-/, '');
+            const row = document.querySelector(`#rootTableBody tr[data-id="${rootId}"]`);
+            if (!row) return;
+            row.dataset.nonconforming = 'false';
+            row.classList.remove('bg-red-50');
+        }
+
+        function confirmNonconformingRegistration() {
+            if (!pendingNonconformingFormData) return;
+            const formData = pendingNonconformingFormData;
+            const registered = registerNonconformingItem(formData);
+            document.getElementById('nonconformingModal').classList.remove('open');
+            pendingNonconformingFormData = null;
+            markRootRowNonconforming(formData.id);
+
+            if (formData.afterConfirm === 'sample') {
+                performSampleEntrySave(registered ? '已登记不合格品并保存抽检记录' : '该钢管已登记过不合格品，已保存抽检记录');
+                return;
+            }
+
+            performRootEntrySave(registered ? '已登记不合格品并保存根检记录' : '该钢管已登记过不合格品，已保存根检记录', formData.continueAfterSave);
+        }
+
+        function collectRootEntryFormData(continueAfterSave = false) {
+            return {
+                id: document.getElementById('entryId').value,
+                pipeNo: document.getElementById('entryPipeNo').value,
+                bundleNo: document.getElementById('entryBundleNo').value,
+                furnaceNo: document.getElementById('entryFurnaceNo').value,
+                batchNo: document.getElementById('entryBatchNo').value,
+                length: document.getElementById('entryLength').value,
+                weight: document.getElementById('entryWeight').value,
+                pipeType: document.getElementById('entryPipeType').value,
+                evaluation: currentEvaluation,
+                defaultReason: '根检检验结果不合格',
+                source: 'root',
+                operator: entryRecordList[currentEntryRecordIndex]?.operator || '当前班组',
+                continueAfterSave
+            };
+        }
+
+        function validateRootEntryFormData(formData) {
+            if (!formData.pipeNo || !formData.bundleNo || !formData.furnaceNo || !formData.batchNo || !formData.length) {
+                showToast('\u8bf7\u586b\u5199\u5b8c\u6574\u7684\u6839\u68c0\u7ed3\u679c', 'error');
+                return false;
+            }
+            return true;
+        }
+
+        function performRootEntrySave(successMessage = '', continueAfterSave = false) {
+            const formData = collectRootEntryFormData(continueAfterSave);
+            const record = entryRecordList[currentEntryRecordIndex];
+            if (record) {
+                record.pipeType = formData.pipeType || '正常管';
+                record.evaluation = currentEvaluation;
+                syncRootEvaluationToList(record);
+            }
+            lastRecord = { bundleNo: formData.bundleNo, furnaceNo: formData.furnaceNo, batchNo: formData.batchNo };
+            if (currentEvaluation === 'pass') {
+                clearRootRowNonconforming(formData.id);
+            } else {
+                markRootRowNonconforming(formData.id);
+            }
+
+            nextId++;
+            const shiftCount = document.getElementById('shiftCountValue');
+            const currentCount = parseInt(shiftCount.textContent, 10) + 1;
+            updateWorkOrderProgress(currentCount);
+
+            if (continueAfterSave) {
+                showToast(successMessage || '\u4fdd\u5b58\u6210\u529f\uff0c\u8bf7\u7ee7\u7eed\u5f55\u5165\u4e0b\u4e00\u652f', 'success');
+                navigateEntryRecord(1);
+                return;
+            }
+
+            showToast(successMessage || '\u6d82\u8986\u8bb0\u5f55\u63d0\u4ea4\u6210\u529f', 'success');
+            closeEntryDrawer();
+        }
+
+        // ========== 淇濆瓨褰曞叆 ========== 
         function submitEntry() {
+            const formData = collectRootEntryFormData(false);
+            if (!validateRootEntryFormData(formData)) return;
+
+            if (currentEvaluation === 'fail' && !isNonconformingRegistered(formData.id)) {
+                openNonconformingModal(formData);
+                return;
+            }
+
+            performRootEntrySave('', false);
+        }
+
+        function saveAndContinue() {
+            const formData = collectRootEntryFormData(true);
+            if (!validateRootEntryFormData(formData)) return;
+
+            if (currentEvaluation === 'fail' && !isNonconformingRegistered(formData.id)) {
+                openNonconformingModal(formData);
+                return;
+            }
+
+            performRootEntrySave('', true);
+        }
+
+        function submitEntry_old_unused() {
             const pipeNo = document.getElementById('entryPipeNo').value;
             const bundleNo = document.getElementById('entryBundleNo').value;
             const furnaceNo = document.getElementById('entryFurnaceNo').value;
             const batchNo = document.getElementById('entryBatchNo').value;
             const length = document.getElementById('entryLength').value;
             const pipeType = document.getElementById('entryPipeType').value;
-            const residualMagnetism = document.getElementById('entryResidualMagnetism').value.trim();
 
-            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !residualMagnetism) {
+            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length) {
                 showToast('\u8bf7\u586b\u5199\u5b8c\u6574\u7684\u6839\u68c0\u7ed3\u679c', 'error');
-                return;
-            }
-
-            if (Number.isNaN(Number(residualMagnetism)) || Number(residualMagnetism) >= 15) {
-                showToast('\u5269\u78c1\u68c0\u6d4b\u5fc5\u987b\u586b\u5199\u4e14\u9700\u5c0f\u4e8e15 Gauss', 'error');
                 return;
             }
 
@@ -3405,7 +4134,8 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             const record = entryRecordList[currentEntryRecordIndex];
             if (record) {
                 record.pipeType = pipeType || '正常管';
-                record.residualMagnetism = residualMagnetism;
+                record.evaluation = currentEvaluation;
+                syncRootEvaluationToList(record);
             }
             lastRecord = { bundleNo, furnaceNo, batchNo };
 
@@ -3421,22 +4151,16 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             updateWorkOrderProgress(currentCount);
         }
 
-        function saveAndContinue() {
+        function saveAndContinue_old_unused() {
             const pipeNo = document.getElementById('entryPipeNo').value;
             const bundleNo = document.getElementById('entryBundleNo').value;
             const furnaceNo = document.getElementById('entryFurnaceNo').value;
             const batchNo = document.getElementById('entryBatchNo').value;
             const length = document.getElementById('entryLength').value;
             const pipeType = document.getElementById('entryPipeType').value;
-            const residualMagnetism = document.getElementById('entryResidualMagnetism').value.trim();
 
-            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !residualMagnetism) {
+            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length) {
                 showToast('\u8bf7\u586b\u5199\u5b8c\u6574\u7684\u6839\u68c0\u7ed3\u679c', 'error');
-                return;
-            }
-
-            if (Number.isNaN(Number(residualMagnetism)) || Number(residualMagnetism) >= 15) {
-                showToast('\u5269\u78c1\u68c0\u6d4b\u5fc5\u987b\u586b\u5199\u4e14\u9700\u5c0f\u4e8e15 Gauss', 'error');
                 return;
             }
 
@@ -3444,7 +4168,8 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             const record = entryRecordList[currentEntryRecordIndex];
             if (record) {
                 record.pipeType = pipeType || '正常管';
-                record.residualMagnetism = residualMagnetism;
+                record.evaluation = currentEvaluation;
+                syncRootEvaluationToList(record);
             }
             lastRecord = { bundleNo, furnaceNo, batchNo };
 
@@ -3729,6 +4454,7 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             switchMaterialSubTab('root');
             updateMaterialListFullscreenButton();
             applyRootDetailColumnState();
+            applySampleMovedColumnState();
             applyMaterialTableFilters();
             setAppearance('pass');
             renderInstrumentTable();
@@ -3740,6 +4466,7 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             const now = new Date();
             const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
             document.getElementById('currentTime').textContent = timeStr;
+            document.getElementById('sampleResidualMagnetism')?.addEventListener('input', updateResidualWarning);
         });
 
         // ESC閿叧闂?

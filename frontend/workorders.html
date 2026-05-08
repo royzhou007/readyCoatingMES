@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>进管工单列表 - MES系统</title>
+    <title>工单列表 - MES系统</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="stylesheet"
@@ -195,10 +195,10 @@
             </div>
             <div>
               <h1 class="text-xl font-bold text-gray-900 tracking-tight">
-                进管工单列表
+                工单列表
               </h1>
               <p class="text-xs text-gray-500">
-                产线 A-03 | 工序质检记录 | 点击工单进入进管记录页
+                产线 A-03 | 工序质检记录 | 点击工单进入对应工序记录页
               </p>
             </div>
           </div>
@@ -230,7 +230,7 @@
               class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-sm font-semibold"
             >
               <i class="fas fa-wave-square"></i>
-              <span>进管工序排产看板</span>
+              <span>工序排产看板</span>
             </div>
             <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mt-4">
               当前待处理与执行中的工单一览
@@ -351,7 +351,7 @@
           antiCorrosionType: "3PE",
           shift: "今日白班",
           todayTarget: 68,
-          remark: "当前重点工单，需优先保障进管节拍",
+          remark: "当前重点工单，需优先保障生产节拍",
         },
         {
           id: "WO-2026-0320-004",
@@ -561,7 +561,7 @@
                       <div class="text-2xl font-extrabold text-gray-900 mt-1">${order.quantity}</div>
                     </div>
                     <div class="bg-blue-50 rounded-2xl px-4 py-3">
-                      <div class="text-xs text-blue-700">进管已完成</div>
+                      <div class="text-xs text-blue-700">当前工序已完成</div>
                       <div class="text-2xl font-extrabold text-blue-700 mt-1">${order.completed}</div>
                     </div>
                     <div class="bg-slate-50 rounded-2xl px-4 py-3">

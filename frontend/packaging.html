@@ -72,6 +72,52 @@
         .status-pass { background: #DCFCE7; color: #166534; border: 1px solid #86EFAC; }
         .status-fail { background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5; }
 
+        .inspection-choice-group {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+        .inspection-result-group {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+        .inspection-option {
+            min-height: 3.25rem;
+            border: 2px solid #E2E8F0;
+            border-radius: 0.75rem;
+            background: #FFFFFF;
+            color: #475569;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        .inspection-option:hover {
+            border-color: #CBD5E1;
+            background: #F8FAFC;
+        }
+        .inspection-option.selected-pass {
+            border-color: #22C55E;
+            background: #22C55E;
+            color: #FFFFFF;
+            box-shadow: 0 10px 20px rgba(34, 197, 94, 0.18);
+        }
+        .inspection-option.selected-none {
+            border-color: #64748B;
+            background: #64748B;
+            color: #FFFFFF;
+            box-shadow: 0 10px 20px rgba(100, 116, 139, 0.16);
+        }
+        .inspection-option.selected-fail {
+            border-color: #EF4444;
+            background: #EF4444;
+            color: #FFFFFF;
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.18);
+        }
+
         .corrosion-none { background: #DCFCE7; color: #166534; }
         .corrosion-light { background: #DBEAFE; color: #1E40AF; }
         .corrosion-medium { background: #FEF3C7; color: #92400E; }
@@ -424,7 +470,7 @@
                         <th class="px-4 py-4 text-center">管帽/堵头布</th>
                         <th class="px-4 py-4 text-center">防撞绳/包装质量</th>
                         <th class="px-4 py-4 text-center">唛头/吊带</th>
-                        <th class="px-4 py-4 text-center">结论</th>
+                        <th class="px-4 py-4 text-center">终检检验结果</th>
                         <th class="px-4 py-4 text-center">操作时间</th>
                         <th class="px-4 py-4 text-center">质检员</th>
                         <th class="px-4 py-4 text-center">操作</th>
@@ -1032,65 +1078,73 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-3">标签</label>
-                            <div class="flex gap-3">
-                                <button type="button" onclick="setAppearance('pass')" id="btnPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2"><i class="fas fa-check-circle"></i>合格</button>
-                                <button type="button" onclick="setAppearance('fail')" id="btnFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2"><i class="fas fa-times-circle"></i>不合格</button>
+                            <div class="inspection-choice-group">
+                                <button type="button" onclick="setAppearance('pass')" id="btnPass" class="inspection-option"><i class="fas fa-check-circle"></i>合格</button>
+                                <button type="button" onclick="setAppearance('none')" id="btnNone" class="inspection-option"><i class="fas fa-check-circle"></i>无</button>
+                                <button type="button" onclick="setAppearance('fail')" id="btnFail" class="inspection-option"><i class="fas fa-times-circle"></i>不合格</button>
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-3">标识</label>
-                            <div class="flex gap-3">
-                                <button type="button" onclick="setBevelCheck('pass')" id="btnBevelPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2"><i class="fas fa-check-circle"></i>合格</button>
-                                <button type="button" onclick="setBevelCheck('fail')" id="btnBevelFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2"><i class="fas fa-times-circle"></i>不合格</button>
+                            <div class="inspection-choice-group">
+                                <button type="button" onclick="setBevelCheck('pass')" id="btnBevelPass" class="inspection-option"><i class="fas fa-check-circle"></i>合格</button>
+                                <button type="button" onclick="setBevelCheck('none')" id="btnBevelNone" class="inspection-option"><i class="fas fa-check-circle"></i>无</button>
+                                <button type="button" onclick="setBevelCheck('fail')" id="btnBevelFail" class="inspection-option"><i class="fas fa-times-circle"></i>不合格</button>
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-3">管帽</label>
-                            <div class="flex gap-3">
-                                <button type="button" onclick="setLeakTest('pass')" id="btnLeakPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2"><i class="fas fa-check-circle"></i>合格</button>
-                                <button type="button" onclick="setLeakTest('fail')" id="btnLeakFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2"><i class="fas fa-times-circle"></i>不合格</button>
+                            <div class="inspection-choice-group">
+                                <button type="button" onclick="setLeakTest('pass')" id="btnLeakPass" class="inspection-option"><i class="fas fa-check-circle"></i>合格</button>
+                                <button type="button" onclick="setLeakTest('none')" id="btnLeakNone" class="inspection-option"><i class="fas fa-check-circle"></i>无</button>
+                                <button type="button" onclick="setLeakTest('fail')" id="btnLeakFail" class="inspection-option"><i class="fas fa-times-circle"></i>不合格</button>
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-3">堵头布</label>
-                            <div class="flex gap-3">
-                                <button type="button" onclick="setEndTreatment('pass')" id="btnEndTreatmentPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2"><i class="fas fa-check-circle"></i>合格</button>
-                                <button type="button" onclick="setEndTreatment('fail')" id="btnEndTreatmentFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold flex items-center justify-center gap-2"><i class="fas fa-times-circle"></i>不合格</button>
+                            <div class="inspection-choice-group">
+                                <button type="button" onclick="setEndTreatment('pass')" id="btnEndTreatmentPass" class="inspection-option"><i class="fas fa-check-circle"></i>合格</button>
+                                <button type="button" onclick="setEndTreatment('none')" id="btnEndTreatmentNone" class="inspection-option"><i class="fas fa-check-circle"></i>无</button>
+                                <button type="button" onclick="setEndTreatment('fail')" id="btnEndTreatmentFail" class="inspection-option"><i class="fas fa-times-circle"></i>不合格</button>
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-3">防撞绳</label>
-                            <div class="flex gap-3">
-                                <button type="button" onclick="setLeaveLengthS('pass')" id="btnLeaveLengthSPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">合格</button>
-                                <button type="button" onclick="setLeaveLengthS('fail')" id="btnLeaveLengthSFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">不合格</button>
+                            <div class="inspection-choice-group">
+                                <button type="button" onclick="setLeaveLengthS('pass')" id="btnLeaveLengthSPass" class="inspection-option"><i class="fas fa-check-circle"></i>合格</button>
+                                <button type="button" onclick="setLeaveLengthS('none')" id="btnLeaveLengthSNone" class="inspection-option"><i class="fas fa-check-circle"></i>无</button>
+                                <button type="button" onclick="setLeaveLengthS('fail')" id="btnLeaveLengthSFail" class="inspection-option"><i class="fas fa-times-circle"></i>不合格</button>
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-3">包装质量</label>
-                            <div class="flex gap-3">
-                                <button type="button" onclick="setLeaveLengthN('pass')" id="btnLeaveLengthNPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">合格</button>
-                                <button type="button" onclick="setLeaveLengthN('fail')" id="btnLeaveLengthNFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">不合格</button>
+                            <div class="inspection-choice-group">
+                                <button type="button" onclick="setLeaveLengthN('pass')" id="btnLeaveLengthNPass" class="inspection-option"><i class="fas fa-check-circle"></i>合格</button>
+                                <button type="button" onclick="setLeaveLengthN('none')" id="btnLeaveLengthNNone" class="inspection-option"><i class="fas fa-check-circle"></i>无</button>
+                                <button type="button" onclick="setLeaveLengthN('fail')" id="btnLeaveLengthNFail" class="inspection-option"><i class="fas fa-times-circle"></i>不合格</button>
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-3">唛头</label>
-                            <div class="flex gap-3">
-                                <button type="button" onclick="setBevelAngleS('pass')" id="btnBevelAngleSPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">合格</button>
-                                <button type="button" onclick="setBevelAngleS('fail')" id="btnBevelAngleSFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">不合格</button>
+                            <div class="inspection-choice-group">
+                                <button type="button" onclick="setBevelAngleS('pass')" id="btnBevelAngleSPass" class="inspection-option"><i class="fas fa-check-circle"></i>合格</button>
+                                <button type="button" onclick="setBevelAngleS('none')" id="btnBevelAngleSNone" class="inspection-option"><i class="fas fa-check-circle"></i>无</button>
+                                <button type="button" onclick="setBevelAngleS('fail')" id="btnBevelAngleSFail" class="inspection-option"><i class="fas fa-times-circle"></i>不合格</button>
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-3">吊带</label>
-                            <div class="flex gap-3">
-                                <button type="button" onclick="setBevelAngleN('pass')" id="btnBevelAngleNPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">合格</button>
-                                <button type="button" onclick="setBevelAngleN('fail')" id="btnBevelAngleNFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">不合格</button>
+                            <div class="inspection-choice-group">
+                                <button type="button" onclick="setBevelAngleN('pass')" id="btnBevelAngleNPass" class="inspection-option"><i class="fas fa-check-circle"></i>合格</button>
+                                <button type="button" onclick="setBevelAngleN('none')" id="btnBevelAngleNNone" class="inspection-option"><i class="fas fa-check-circle"></i>无</button>
+                                <button type="button" onclick="setBevelAngleN('fail')" id="btnBevelAngleNFail" class="inspection-option"><i class="fas fa-times-circle"></i>不合格</button>
                             </div>
                         </div>
                         <div class="col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-3">结论</label>
-                            <div class="flex gap-3">
-                                <button type="button" onclick="setEvaluation('pass')" id="btnEvaluationPass" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">合格</button>
-                                <button type="button" onclick="setEvaluation('fail')" id="btnEvaluationFail" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold">不合格</button>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">终检检验结果</label>
+                            <div class="inspection-result-group">
+                                <button type="button" onclick="setEvaluation('pass')" id="btnEvaluationPass" class="inspection-option"><i class="fas fa-check-circle"></i>合格</button>
+                                <button type="button" onclick="setEvaluation('fail')" id="btnEvaluationFail" class="inspection-option"><i class="fas fa-times-circle"></i>不合格</button>
                             </div>
                         </div>
                     </div>
@@ -1104,6 +1158,73 @@
                 <div class="flex-1"></div>
                 <button onclick="saveAndContinue()" class="px-8 py-3 rounded-xl bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 transition-colors flex items-center gap-2"><i class="fas fa-save"></i>保存并继续</button>
                 <button onclick="submitEntry()" class="px-8 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors flex items-center gap-2 shadow-lg"><i class="fas fa-check"></i>保存录入</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="nonconformingModal" class="modal fixed inset-0 bg-black/50 z-[70] flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl industrial-shadow-lg w-full max-w-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-red-600 to-rose-600 px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3 text-white">
+                    <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-triangle-exclamation text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold">不合格品登记</h3>
+                        <p class="text-sm text-red-100">确认登记后，该钢管会进入不合格品列表</p>
+                    </div>
+                </div>
+                <button onclick="closeNonconformingModal()" class="w-8 h-8 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-2 gap-3 text-sm">
+                    <div class="rounded-xl bg-red-50 border border-red-100 p-3">
+                        <div class="text-red-500 text-xs">自编号</div>
+                        <div id="nonconformingIdText" class="mt-1 font-mono font-bold text-gray-900">-</div>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 border border-gray-200 p-3">
+                        <div class="text-gray-500 text-xs">管号</div>
+                        <div id="nonconformingPipeText" class="mt-1 font-mono font-semibold text-gray-900">-</div>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 border border-gray-200 p-3">
+                        <div class="text-gray-500 text-xs">捆号</div>
+                        <div id="nonconformingBundleText" class="mt-1 font-semibold text-gray-900">-</div>
+                    </div>
+                    <div class="rounded-xl bg-gray-50 border border-gray-200 p-3">
+                        <div class="text-gray-500 text-xs">炉号 / 批号</div>
+                        <div id="nonconformingFurnaceBatchText" class="mt-1 font-semibold text-gray-900">-</div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">不合格原因 <span class="text-red-500">*</span></label>
+                    <select id="nonconformingReason" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-red-500">
+                        <option value="终检检验结果不合格">终检检验结果不合格</option>
+                        <option value="标签不合格">标签不合格</option>
+                        <option value="标识不合格">标识不合格</option>
+                        <option value="管帽不合格">管帽不合格</option>
+                        <option value="包装质量不合格">包装质量不合格</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">备注</label>
+                    <textarea id="nonconformingRemark" rows="3" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-red-500 resize-none" placeholder="可补充问题描述"></textarea>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex gap-3">
+                <button onclick="closeNonconformingModal()" class="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:bg-gray-100">
+                    取消
+                </button>
+                <button onclick="confirmNonconformingRegistration()" class="flex-1 py-3 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 industrial-shadow flex items-center justify-center gap-2">
+                    <i class="fas fa-check"></i>
+                    确认登记并保存
+                </button>
             </div>
         </div>
     </div>
@@ -1158,7 +1279,7 @@
                         <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600">包装质量</span><span id="detailPackageQualityStatus" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></div>
                         <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600">唛头</span><span id="detailMarkingHeadStatus" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></div>
                         <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600">吊带</span><span id="detailSlingStatus" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></div>
-                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600">结论</span><span id="detailConclusionStatus" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600">终检检验结果</span><span id="detailConclusionStatus" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold status-pass"><i class="fas fa-check"></i>合格</span></div>
                     </div>
                 </div>
 
@@ -1193,21 +1314,22 @@
         let currentRowFilter = 'all';
         let isRootDetailCollapsed = true;
         let selectedRows = new Set();
-        let currentAppearance = 'pass';
-        let currentBevelCheck = 'pass';
-        let currentLeakTest = 'pass';
-        let currentLeaveLengthS = 'pass';
-        let currentLeaveLengthN = 'pass';
-        let currentBevelAngleS = 'pass';
-        let currentBevelAngleN = 'pass';
+        let currentAppearance = null;
+        let currentBevelCheck = null;
+        let currentLeakTest = null;
+        let currentLeaveLengthS = null;
+        let currentLeaveLengthN = null;
+        let currentBevelAngleS = null;
+        let currentBevelAngleN = null;
         let currentFbeReserveS = 'pass';
         let currentFbeReserveN = 'pass';
-        let currentEndTreatment = 'pass';
+        let currentEndTreatment = null;
         let currentThicknessCount = 10;
         let currentThicknessValues = [];
         let currentThicknessEditing = false;
-        let currentEvaluation = 'pass';
+        let currentEvaluation = null;
         let currentEntryRecordIndex = 0;
+        let pendingNonconformingSave = null;
         let lastRecord = {
             bundleNo: '96#',
             furnaceNo: '15303842',
@@ -1221,6 +1343,9 @@
             { id: '0032', pipeNo: '6508741', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: '11856', weight: '573.5', newBundleNo: '128', operator: '张师傅', time: '19:35' },
             { id: '0031', pipeNo: '6508739', bundleNo: '96#', furnaceNo: '15303842', batchNo: '71399', length: '11920', weight: '574.2', newBundleNo: '129', operator: '张师傅', time: '18:42' },
             { id: '0030', pipeNo: '6508725', bundleNo: '97#', furnaceNo: '15303842', batchNo: '71400', length: '11780', weight: '572.8', newBundleNo: '130', operator: '李师傅', time: '03:15' }
+        ];
+        const nonconformingItems = [
+            { id: '0030', pipeNo: '6508725', bundleNo: '97#', furnaceNo: '15303842', batchNo: '71400', length: 11780, weight: 572.8, reason: '终检检验结果不合格', remark: '', status: '待处理', registeredAt: '03:15', registeredBy: '李师傅' }
         ];
         const sampleRecordList = [
             { id: 'CJ-0032', temp1: '198', temp1Result: 'pass', temp2: '201', temp2Result: 'pass', inspector: '王检', time: '20:10', photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'><rect width='160' height='120' fill='%23dbeafe'/><circle cx='42' cy='46' r='10' fill='%2393c5fd'/><circle cx='86' cy='58' r='8' fill='%2360a5fa'/><circle cx='118' cy='40' r='6' fill='%233b82f6'/><text x='80' y='102' font-size='14' text-anchor='middle' fill='%231e3a8a'>Dust 1</text></svg>" },
@@ -1866,15 +1991,7 @@
             const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
             document.getElementById('currentTime').textContent = timeStr;
 
-            setAppearance('pass');
-            setBevelCheck('pass');
-            setLeakTest('pass');
-            setLeaveLengthS('pass');
-            setLeaveLengthN('pass');
-            setBevelAngleS('pass');
-            setBevelAngleN('pass');
-            setEndTreatment('pass');
-            setEvaluation('pass');
+            resetInspectionChoices();
 
             const targetIndex = recordId
                 ? Math.max(0, entryRecordList.findIndex(item => item.id === String(recordId).replace(/^DR-/, '').replace(/^CJ-/, '')))
@@ -2131,103 +2248,99 @@
             showToast('涂层厚度已单独保存', 'success');
         }
 
-        // ========== 澶栬閫夋嫨 ==========
+        // ========== 根检选项 ==========
+        const inspectionChoiceGroups = {
+            appearance: { ids: ['btnPass', 'btnNone', 'btnFail'], types: ['pass', 'none', 'fail'] },
+            bevelCheck: { ids: ['btnBevelPass', 'btnBevelNone', 'btnBevelFail'], types: ['pass', 'none', 'fail'] },
+            leakTest: { ids: ['btnLeakPass', 'btnLeakNone', 'btnLeakFail'], types: ['pass', 'none', 'fail'] },
+            endTreatment: { ids: ['btnEndTreatmentPass', 'btnEndTreatmentNone', 'btnEndTreatmentFail'], types: ['pass', 'none', 'fail'] },
+            leaveLengthS: { ids: ['btnLeaveLengthSPass', 'btnLeaveLengthSNone', 'btnLeaveLengthSFail'], types: ['pass', 'none', 'fail'] },
+            leaveLengthN: { ids: ['btnLeaveLengthNPass', 'btnLeaveLengthNNone', 'btnLeaveLengthNFail'], types: ['pass', 'none', 'fail'] },
+            bevelAngleS: { ids: ['btnBevelAngleSPass', 'btnBevelAngleSNone', 'btnBevelAngleSFail'], types: ['pass', 'none', 'fail'] },
+            bevelAngleN: { ids: ['btnBevelAngleNPass', 'btnBevelAngleNNone', 'btnBevelAngleNFail'], types: ['pass', 'none', 'fail'] },
+            evaluation: { ids: ['btnEvaluationPass', 'btnEvaluationFail'], types: ['pass', 'fail'] },
+        };
+
+        const inspectionChoiceSelectedClass = {
+            pass: 'selected-pass',
+            none: 'selected-none',
+            fail: 'selected-fail',
+        };
+
+        function updateInspectionChoice(groupName, type) {
+            const group = inspectionChoiceGroups[groupName];
+            if (!group) return;
+            group.ids.forEach((id, index) => {
+                const btn = document.getElementById(id);
+                if (!btn) return;
+                const optionType = group.types[index];
+                btn.className = `inspection-option ${optionType === type ? inspectionChoiceSelectedClass[type] : ''}`.trim();
+            });
+        }
+
+        function resetInspectionChoices() {
+            currentAppearance = null;
+            currentBevelCheck = null;
+            currentLeakTest = null;
+            currentEndTreatment = null;
+            currentLeaveLengthS = null;
+            currentLeaveLengthN = null;
+            currentBevelAngleS = null;
+            currentBevelAngleN = null;
+            currentEvaluation = null;
+
+            Object.keys(inspectionChoiceGroups).forEach(groupName => {
+                updateInspectionChoice(groupName, null);
+            });
+        }
+
+        function hasCompleteInspectionChoices() {
+            return [
+                currentAppearance,
+                currentBevelCheck,
+                currentLeakTest,
+                currentEndTreatment,
+                currentLeaveLengthS,
+                currentLeaveLengthN,
+                currentBevelAngleS,
+                currentBevelAngleN,
+                currentEvaluation,
+            ].every(Boolean);
+        }
+
         function setAppearance(type) {
             currentAppearance = type;
-            const btnPass = document.getElementById('btnPass');
-            const btnFail = document.getElementById('btnFail');
-
-            if (type === 'pass') {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
-            } else {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-            }
+            updateInspectionChoice('appearance', type);
         }
 
         function setBevelCheck(type) {
             currentBevelCheck = type;
-            const btnPass = document.getElementById('btnBevelPass');
-            const btnFail = document.getElementById('btnBevelFail');
-
-            if (type === 'pass') {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
-            } else {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-            }
+            updateInspectionChoice('bevelCheck', type);
         }
 
         function setLeakTest(type) {
             currentLeakTest = type;
-            const btnPass = document.getElementById('btnLeakPass');
-            const btnFail = document.getElementById('btnLeakFail');
-
-            if (type === 'pass') {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
-            } else {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-            }
+            updateInspectionChoice('leakTest', type);
         }
 
         function setLeaveLengthS(type) {
             currentLeaveLengthS = type;
-            const btnPass = document.getElementById('btnLeaveLengthSPass');
-            const btnFail = document.getElementById('btnLeaveLengthSFail');
-
-            if (type === 'pass') {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
-            } else {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-            }
+            updateInspectionChoice('leaveLengthS', type);
         }
 
         function setLeaveLengthN(type) {
             currentLeaveLengthN = type;
-            const btnPass = document.getElementById('btnLeaveLengthNPass');
-            const btnFail = document.getElementById('btnLeaveLengthNFail');
-
-            if (type === 'pass') {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
-            } else {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-            }
+            updateInspectionChoice('leaveLengthN', type);
         }
 
         function setBevelAngleS(type) {
             currentBevelAngleS = type;
-            const btnPass = document.getElementById('btnBevelAngleSPass');
-            const btnFail = document.getElementById('btnBevelAngleSFail');
-
-            if (type === 'pass') {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
-            } else {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-            }
+            updateInspectionChoice('bevelAngleS', type);
         }
 
         function setBevelAngleN(type) {
             currentBevelAngleN = type;
-            const btnPass = document.getElementById('btnBevelAngleNPass');
-            const btnFail = document.getElementById('btnBevelAngleNFail');
-
-            if (type === 'pass') {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
-            } else {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-            }
+            updateInspectionChoice('bevelAngleN', type);
         }
 
         function setFbeReserveS(type) {
@@ -2260,96 +2373,179 @@
 
         function setEndTreatment(type) {
             currentEndTreatment = type;
-            const btnPass = document.getElementById('btnEndTreatmentPass');
-            const btnFail = document.getElementById('btnEndTreatmentFail');
-
-            if (type === 'pass') {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
-            } else {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-            }
+            updateInspectionChoice('endTreatment', type);
         }
 
         function setEvaluation(type) {
             currentEvaluation = type;
-            const btnPass = document.getElementById('btnEvaluationPass');
-            const btnFail = document.getElementById('btnEvaluationFail');
+            updateInspectionChoice('evaluation', type);
+        }
 
-            if (type === 'pass') {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all flex items-center justify-center gap-2';
-            } else {
-                btnPass.className = 'flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all flex items-center justify-center gap-2';
-                btnFail.className = 'flex-1 py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold shadow-lg flex items-center justify-center gap-2';
+        function collectEntryFormData() {
+            return {
+                id: document.getElementById('entryId').value,
+                pipeNo: document.getElementById('entryPipeNo').value,
+                bundleNo: document.getElementById('entryBundleNo').value,
+                furnaceNo: document.getElementById('entryFurnaceNo').value,
+                batchNo: document.getElementById('entryBatchNo').value,
+                length: document.getElementById('entryLength').value,
+                weight: document.getElementById('entryWeight').value,
+                newBundleNo: document.getElementById('entryNewBundleNo').value.trim(),
+                inspectionResult: currentEvaluation,
+            };
+        }
+
+        function getCurrentTimeString() {
+            const now = new Date();
+            return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        }
+
+        function validateEntryFormData(formData) {
+            if (!formData.pipeNo || !formData.bundleNo || !formData.furnaceNo || !formData.batchNo || !formData.length || !formData.newBundleNo) {
+                showToast('请填写完整的钢管标识信息和新捆号', 'error');
+                return false;
+            }
+
+            if (!hasCompleteInspectionChoices()) {
+                showToast('请完成全部根检选项后再保存', 'error');
+                return false;
+            }
+
+            return true;
+        }
+
+        function isNonconformingRegistered(id) {
+            return nonconformingItems.some(item => item.id === id);
+        }
+
+        function getNonconformingPayload(formData) {
+            return {
+                id: formData.id,
+                pipeNo: formData.pipeNo,
+                bundleNo: formData.bundleNo,
+                furnaceNo: formData.furnaceNo,
+                batchNo: formData.batchNo,
+                length: Number(formData.length) || 0,
+                weight: Number(formData.weight) || 0,
+                reason: document.getElementById('nonconformingReason')?.value || '终检检验结果不合格',
+                remark: document.getElementById('nonconformingRemark')?.value.trim() || '',
+                status: '待处理',
+                registeredAt: getCurrentTimeString(),
+                registeredBy: '张师傅',
+            };
+        }
+
+        function openNonconformingModal(formData, continueAfterSave) {
+            pendingNonconformingSave = { formData, continueAfterSave };
+            document.getElementById('nonconformingIdText').textContent = formData.id || '-';
+            document.getElementById('nonconformingPipeText').textContent = formData.pipeNo || '-';
+            document.getElementById('nonconformingBundleText').textContent = formData.bundleNo || '-';
+            document.getElementById('nonconformingFurnaceBatchText').textContent = `${formData.furnaceNo || '-'} / ${formData.batchNo || '-'}`;
+            document.getElementById('nonconformingReason').value = '终检检验结果不合格';
+            document.getElementById('nonconformingRemark').value = '';
+            document.getElementById('nonconformingModal').classList.add('open');
+        }
+
+        function closeNonconformingModal() {
+            document.getElementById('nonconformingModal').classList.remove('open');
+            pendingNonconformingSave = null;
+        }
+
+        function registerNonconformingItem(formData) {
+            if (isNonconformingRegistered(formData.id)) return false;
+            nonconformingItems.unshift(getNonconformingPayload(formData));
+            return true;
+        }
+
+        function markRootRowNonconforming(id) {
+            const row = document.querySelector(`#rootTableBody tr[data-id="${id}"]`);
+            if (!row) return;
+            row.dataset.result = 'fail';
+            row.dataset.nonconforming = 'true';
+            row.classList.add('bg-red-50');
+        }
+
+        function clearRootRowNonconforming(id) {
+            const row = document.querySelector(`#rootTableBody tr[data-id="${id}"]`);
+            if (!row) return;
+            row.dataset.result = 'pass';
+            row.dataset.nonconforming = 'false';
+            row.classList.remove('bg-red-50');
+        }
+
+        function updateRootRowResult(formData) {
+            const row = document.querySelector(`#rootTableBody tr[data-id="${formData.id}"]`);
+            if (!row) return;
+            row.dataset.result = formData.inspectionResult;
+            const newBundleCell = row.children[5]?.querySelector('div');
+            if (newBundleCell) newBundleCell.textContent = formData.newBundleNo;
+            const resultCell = row.children[10];
+            if (resultCell) {
+                const isFail = formData.inspectionResult === 'fail';
+                resultCell.innerHTML = `<span class="inline-flex h-7 w-7 items-center justify-center rounded-full ${isFail ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}"><i class="fas ${isFail ? 'fa-times' : 'fa-check'} text-sm"></i></span>`;
             }
         }
 
-        // ========== 淇濆瓨褰曞叆 ==========
-        function submitEntry() {
-            const pipeNo = document.getElementById('entryPipeNo').value;
-            const bundleNo = document.getElementById('entryBundleNo').value;
-            const furnaceNo = document.getElementById('entryFurnaceNo').value;
-            const batchNo = document.getElementById('entryBatchNo').value;
-            const length = document.getElementById('entryLength').value;
-            const newBundleNo = document.getElementById('entryNewBundleNo').value.trim();
-
-            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !newBundleNo) {
-                showToast('请填写完整的根检结果', 'error');
-                return;
-            }
-
+        function performEntrySave(formData, continueAfterSave = false, successMessage = '') {
             const record = entryRecordList[currentEntryRecordIndex];
             if (record) {
-                record.newBundleNo = newBundleNo;
+                record.newBundleNo = formData.newBundleNo;
             }
 
-            // 淇濆瓨涓轰笂涓€璁板綍
-            lastRecord = { bundleNo, furnaceNo, batchNo };
+            lastRecord = {
+                bundleNo: formData.bundleNo,
+                furnaceNo: formData.furnaceNo,
+                batchNo: formData.batchNo,
+            };
 
-            // 鑷紪鍙?1
-            nextId++;
+            updateRootRowResult(formData);
+            if (formData.inspectionResult === 'fail') {
+                markRootRowNonconforming(formData.id);
+            } else {
+                clearRootRowNonconforming(formData.id);
+            }
 
-            showToast('包装记录提交成功', 'success');
-            closeEntryDrawer();
-
-            // 鏇存柊鏈彮鏁伴噺
             const shiftCount = document.getElementById('shiftCountValue');
             const currentCount = parseInt(shiftCount.textContent, 10) + 1;
             updateWorkOrderProgress(currentCount);
+
+            if (continueAfterSave) {
+                showToast(successMessage || '保存成功，请继续录入下一支', 'success');
+                navigateEntryRecord(1);
+            } else {
+                showToast(successMessage || '包装记录提交成功', 'success');
+                closeEntryDrawer();
+            }
+        }
+
+        function saveEntry(continueAfterSave = false) {
+            const formData = collectEntryFormData();
+            if (!validateEntryFormData(formData)) return;
+
+            if (formData.inspectionResult === 'fail' && !isNonconformingRegistered(formData.id)) {
+                openNonconformingModal(formData, continueAfterSave);
+                return;
+            }
+
+            performEntrySave(formData, continueAfterSave);
+        }
+
+        function confirmNonconformingRegistration() {
+            if (!pendingNonconformingSave) return;
+            const { formData, continueAfterSave } = pendingNonconformingSave;
+            const registered = registerNonconformingItem(formData);
+            document.getElementById('nonconformingModal').classList.remove('open');
+            pendingNonconformingSave = null;
+            performEntrySave(formData, continueAfterSave, registered ? '已登记不合格品并保存' : '该钢管已登记过不合格品，已直接保存');
+        }
+
+        // ========== 保存录入 ==========
+        function submitEntry() {
+            saveEntry(false);
         }
 
         function saveAndContinue() {
-            const pipeNo = document.getElementById('entryPipeNo').value;
-            const bundleNo = document.getElementById('entryBundleNo').value;
-            const furnaceNo = document.getElementById('entryFurnaceNo').value;
-            const batchNo = document.getElementById('entryBatchNo').value;
-            const length = document.getElementById('entryLength').value;
-            const newBundleNo = document.getElementById('entryNewBundleNo').value.trim();
-
-            if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !newBundleNo) {
-                showToast('请填写完整的根检结果', 'error');
-                return;
-            }
-
-            const record = entryRecordList[currentEntryRecordIndex];
-            if (record) {
-                record.newBundleNo = newBundleNo;
-            }
-
-            // 淇濆瓨涓轰笂涓€璁板綍
-            lastRecord = { bundleNo, furnaceNo, batchNo };
-
-            nextId++;
-
-            // 鏇存柊鏈彮鏁伴噺
-            const shiftCount = document.getElementById('shiftCountValue');
-            const currentCount = parseInt(shiftCount.textContent, 10) + 1;
-            updateWorkOrderProgress(currentCount);
-
-            showToast('保存成功，请继续录入下一支', 'success');
-            navigateEntryRecord(1);
+            saveEntry(true);
         }
 
         // ========== 鐝鍒囨崲 ==========
@@ -2609,7 +2805,7 @@
             switchMaterialSubTab('root');
             applyRootDetailColumnState();
             applyMaterialTableFilters();
-            setAppearance('pass');
+            resetInspectionChoices();
             renderInstrumentTable();
             setCompressedAirResult('pass');
             updateWorkOrderProgress(parseInt(document.getElementById('shiftCountValue')?.textContent || '247', 10));
@@ -2628,6 +2824,7 @@
                 closeDetailDrawer();
                 closeEntryDrawer();
                 closeFilter();
+                closeNonconformingModal();
                 closeAddShiftModal();
                 closeWoDetail();
                 closeCodeListModal();

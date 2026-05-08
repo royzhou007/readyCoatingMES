@@ -940,8 +940,8 @@
     </div>
 
     <section id="tab-panel-instrument" class="tab-panel flex-1 flex-col min-h-0 bg-gray-50 p-6">
-        <div class="grid grid-cols-1 gap-6 h-full">
-            <div class="bg-white rounded-2xl industrial-shadow p-6 flex flex-col min-h-0">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 h-full">
+            <div class="xl:col-span-2 bg-white rounded-2xl industrial-shadow p-6 flex flex-col min-h-0">
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
                     <div>
                         <h3 class="text-xl font-bold text-gray-900">仪器列表</h3>
@@ -977,6 +977,43 @@
                 </div>
             </div>
 
+            <div class="bg-white rounded-2xl industrial-shadow p-6">
+                <h3 class="text-lg font-bold text-gray-900">仪器检测属性</h3>
+                <p class="text-sm text-gray-500 mt-1">填写本工单对应的环境与检测参数</p>
+
+                <div class="space-y-5 mt-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">压缩空气检测</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button id="btnAirPass" type="button" onclick="setCompressedAirResult('pass')" class="py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold transition-all">
+                                合格
+                            </button>
+                            <button id="btnAirFail" type="button" onclick="setCompressedAirResult('fail')" class="py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all">
+                                不合格
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="instrumentAbrasiveConductivity" class="block text-sm font-medium text-gray-700 mb-2">磨料电导率（%）</label>
+                        <input id="instrumentAbrasiveConductivity" type="number" step="0.01" min="0" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all" placeholder="请输入百分比数值">
+                    </div>
+
+                    <div>
+                        <label for="instrumentIlluminance" class="block text-sm font-medium text-gray-700 mb-2">光照度</label>
+                        <input id="instrumentIlluminance" type="number" step="0.01" min="0" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all" placeholder="请输入光照度数值">
+                    </div>
+
+                    <div>
+                        <label for="instrumentSalinity" class="block text-sm font-medium text-gray-700 mb-2">盐分</label>
+                        <input id="instrumentSalinity" type="number" step="0.01" min="0" class="form-input w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl outline-none transition-all" placeholder="请输入盐分数值">
+                    </div>
+                </div>
+
+                <button onclick="saveInstrumentAttributes()" class="w-full mt-6 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 industrial-shadow">
+                    保存
+                </button>
+            </div>
         </div>
         </div>
     </section>
