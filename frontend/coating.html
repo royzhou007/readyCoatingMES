@@ -822,9 +822,17 @@
                 </div>
 
                 <div class="bg-white rounded-xl border border-gray-200 p-5">
-                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <i class="fas fa-flask text-blue-600"></i>
-                        抽检项目
+                    <h4 class="font-bold text-gray-900 mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-flask text-blue-600"></i>
+                            剥离强度检测
+                        </span>
+                        <span class="flex items-center gap-4 text-sm font-medium text-gray-500">
+                            <span>录入时间：<span id="peelingSectionTime" class="font-semibold text-gray-900">-</span></span>
+                            <button type="button" id="peelingSectionSaveBtn" onclick="savePeelingSection()" class="min-h-12 px-6 rounded-xl border-2 border-blue-200 bg-white text-blue-600 text-base font-bold hover:bg-blue-50 transition-colors">
+                                保存本项
+                            </button>
+                        </span>
                     </h4>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
@@ -847,9 +855,48 @@
                 </div>
 
                 <div class="bg-white rounded-xl border border-gray-200 p-5">
-                    <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <i class="fas fa-ruler-combined text-blue-600"></i>
-                        根检结果值
+                    <h4 class="font-bold text-gray-900 mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-ruler-combined text-blue-600"></i>
+                            涂层厚度
+                            <span class="text-red-500">*</span>
+                        </span>
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm font-medium text-gray-500">录入时间：<span id="thicknessSectionTime" class="font-semibold text-gray-900">-</span></span>
+                            <button type="button" id="thicknessEditToggle" onclick="toggleThicknessEdit()" class="min-h-12 px-6 rounded-xl border-2 border-blue-200 bg-white text-blue-600 text-base font-bold hover:bg-blue-50 transition-colors">
+                                修改
+                            </button>
+                        </div>
+                    </h4>
+                    <div id="thicknessInputGrid" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-3"></div>
+                    <div class="grid grid-cols-3 gap-3 mt-4">
+                        <div class="rounded-xl bg-white border border-gray-200 p-3 text-center">
+                            <div class="text-xs text-gray-500">Max</div>
+                            <div id="thicknessMaxValue" class="text-base font-bold text-gray-900 mt-1">-- μm</div>
+                        </div>
+                        <div class="rounded-xl bg-white border border-gray-200 p-3 text-center">
+                            <div class="text-xs text-gray-500">Min</div>
+                            <div id="thicknessMinValue" class="text-base font-bold text-gray-900 mt-1">-- μm</div>
+                        </div>
+                        <div class="rounded-xl bg-white border border-gray-200 p-3 text-center">
+                            <div class="text-xs text-gray-500">平均值</div>
+                            <div id="thicknessAvgValue" class="text-base font-bold text-gray-900 mt-1">-- μm</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-5">
+                    <h4 class="font-bold text-gray-900 mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-ruler-combined text-blue-600"></i>
+                            根检结果值
+                        </span>
+                        <span class="flex items-center gap-4 text-sm font-medium text-gray-500">
+                            <span>录入时间：<span id="rootResultSectionTime" class="font-semibold text-gray-900">-</span></span>
+                            <button type="button" id="rootResultSectionSaveBtn" onclick="saveRootResultSection()" class="min-h-12 px-6 rounded-xl border-2 border-blue-200 bg-white text-blue-600 text-base font-bold hover:bg-blue-50 transition-colors">
+                                保存本项
+                            </button>
+                        </span>
                     </h4>
                     <div class="grid grid-cols-3 gap-4">
                         <div>
@@ -869,19 +916,11 @@
             </div>
         </div>
 
-        <div class="border-t border-gray-200 px-6 py-4 bg-gray-50">
-            <div class="max-w-4xl mx-auto flex gap-3">
-                <button onclick="closeSampleDrawer()" class="px-8 py-3 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition-colors">
-                    取消
-                </button>
-                <div class="flex-1"></div>
+        <div id="sampleDrawerFooter" class="border-t border-gray-200 px-6 py-4 bg-gray-50">
+            <div class="max-w-4xl mx-auto flex justify-end">
                 <button id="sampleDrawerPrintBtn" onclick="printDetail()" class="px-8 py-3 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition-colors flex items-center gap-2">
                     <i class="fas fa-print"></i>
                     打印
-                </button>
-                <button id="sampleDrawerSaveBtn" onclick="saveSampleEntry()" class="px-8 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-lg">
-                    <i class="fas fa-save"></i>
-                    保存
                 </button>
             </div>
         </div>
@@ -1577,38 +1616,6 @@
                                 <span class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-400 font-medium">Gauss</span>
                             </div>
                         </div>
-                        <div class="col-span-2 rounded-2xl border-2 border-blue-100 bg-blue-50/50 p-4">
-                            <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between mb-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">涂层厚度 <span class="text-red-500">*</span></label>
-                                    <p class="text-xs text-gray-500 mt-1">抽测12个随机点位，逐点录入厚度值，系统自动汇总 Max、Min 和平均值。</p>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <button type="button" id="thicknessEditToggle" onclick="toggleThicknessEdit()" class="px-3 py-1.5 rounded-lg border border-blue-200 bg-white text-blue-600 text-sm font-semibold hover:bg-blue-50 transition-colors">
-                                        修改
-                                    </button>
-                                    <span class="text-sm font-medium text-gray-600">检测点数</span>
-                                    <div class="flex rounded-xl border border-gray-200 bg-white p-1">
-                                        <button type="button" id="btnThicknessCount12" class="px-3 py-1.5 rounded-lg text-sm font-semibold bg-blue-600 text-white shadow-sm transition-colors">12点</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="thicknessInputGrid" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-3"></div>
-                            <div class="grid grid-cols-3 gap-3 mt-4">
-                                <div class="rounded-xl bg-white border border-gray-200 p-3 text-center">
-                                    <div class="text-xs text-gray-500">Max</div>
-                                    <div id="thicknessMaxValue" class="text-base font-bold text-gray-900 mt-1">-- μm</div>
-                                </div>
-                                <div class="rounded-xl bg-white border border-gray-200 p-3 text-center">
-                                    <div class="text-xs text-gray-500">Min</div>
-                                    <div id="thicknessMinValue" class="text-base font-bold text-gray-900 mt-1">-- μm</div>
-                                </div>
-                                <div class="rounded-xl bg-white border border-gray-200 p-3 text-center">
-                                    <div class="text-xs text-gray-500">平均值</div>
-                                    <div id="thicknessAvgValue" class="text-base font-bold text-gray-900 mt-1">-- μm</div>
-                                </div>
-                            </div>
-                        </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-3">评价 <span class="text-red-500">*</span></label>
                             <div class="flex gap-3">
@@ -1996,6 +2003,9 @@
         let currentThicknessCount = 10;
         let currentThicknessValues = [];
         let currentThicknessEditing = false;
+        let currentThicknessRecord = null;
+        let currentPeelingEditing = false;
+        let currentRootResultEditing = false;
         let currentEvaluation = 'pass';
         let currentEntryRecordIndex = 0;
         let lastRecord = {
@@ -2923,16 +2933,26 @@
             document.getElementById('sampleLeaveLength').value = record.leaveLength ?? '300';
             document.getElementById('sampleBevelAngle').value = record.bevelAngle ?? '30';
             document.getElementById('sampleFbeReserved').value = record.fbeReserved ?? '20';
+            currentThicknessRecord = record;
+            currentThicknessValues = Array.isArray(record.thicknesses)
+                ? [...record.thicknesses]
+                : Array.isArray(linkedRoot.thicknesses)
+                    ? [...linkedRoot.thicknesses]
+                    : [];
+            currentThicknessEditing = false;
+            currentPeelingEditing = false;
+            currentRootResultEditing = false;
+            setThicknessCount(12);
+            document.getElementById('thicknessEditToggle')?.classList.toggle('hidden', isView);
+            document.getElementById('peelingSectionSaveBtn')?.classList.toggle('hidden', isView);
+            document.getElementById('rootResultSectionSaveBtn')?.classList.toggle('hidden', isView);
+            document.getElementById('peelingSectionTime').textContent = record.peelingTime || '-';
+            document.getElementById('thicknessSectionTime').textContent = record.thicknessTime || '-';
+            document.getElementById('rootResultSectionTime').textContent = record.rootResultTime || '-';
+            syncPeelingSectionEditState();
+            syncRootResultSectionEditState();
 
-            const editableIds = ['sampleTemp1', 'sampleStrength1', 'sampleTemp2', 'sampleStrength2', 'sampleLeaveLength', 'sampleBevelAngle', 'sampleFbeReserved'];
-            editableIds.forEach(id => {
-                const el = document.getElementById(id);
-                if (!el) return;
-                el.disabled = isView;
-                el.classList.toggle('bg-gray-50', isView);
-            });
-
-            document.getElementById('sampleDrawerSaveBtn').classList.toggle('hidden', isView);
+            document.getElementById('sampleDrawerFooter').classList.toggle('hidden', isCreate);
             document.getElementById('sampleDrawerPrintBtn').classList.toggle('hidden', isCreate);
 document.getElementById('sampleDrawerOverlay').classList.add('open');
             document.getElementById('sampleDrawer').classList.add('open');
@@ -2943,11 +2963,108 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             document.getElementById('sampleDrawerOverlay').classList.remove('open');
             document.getElementById('sampleDrawer').classList.remove('open');
             document.body.style.overflow = '';
+            currentThicknessRecord = null;
         }
 
-        function saveSampleEntry() {
-            showToast(currentSampleDrawerMode === 'create' ? '\u62bd\u68c0\u8bb0\u5f55\u5df2\u521b\u5efa' : '\u62bd\u68c0\u8bb0\u5f55\u5df2\u66f4\u65b0', 'success');
-            closeSampleDrawer();
+        function getSampleSectionTimeText() {
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const min = String(now.getMinutes()).padStart(2, '0');
+            return h + ':' + min;
+        }
+
+        function setSectionInputsDisabled(ids, disabled) {
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.disabled = disabled;
+                el.classList.toggle('bg-gray-100', disabled);
+                el.classList.toggle('text-gray-600', disabled);
+                el.classList.toggle('cursor-not-allowed', disabled);
+                el.classList.toggle('bg-white', !disabled);
+                el.classList.toggle('focus:border-blue-500', !disabled);
+            });
+        }
+
+        function setSectionToggleButton(buttonId, editing) {
+            const button = document.getElementById(buttonId);
+            if (!button) return;
+            button.textContent = editing ? '保存' : '修改';
+            button.className = editing
+                ? 'min-h-12 px-6 rounded-xl border-2 border-green-200 bg-green-600 text-white text-base font-bold hover:bg-green-700 transition-colors'
+                : 'min-h-12 px-6 rounded-xl border-2 border-blue-200 bg-white text-blue-600 text-base font-bold hover:bg-blue-50 transition-colors';
+        }
+
+        function syncPeelingSectionEditState() {
+            setSectionInputsDisabled(['sampleTemp1', 'sampleStrength1', 'sampleTemp2', 'sampleStrength2'], !currentPeelingEditing);
+            setSectionToggleButton('peelingSectionSaveBtn', currentPeelingEditing);
+        }
+
+        function syncRootResultSectionEditState() {
+            setSectionInputsDisabled(['sampleLeaveLength', 'sampleBevelAngle', 'sampleFbeReserved'], !currentRootResultEditing);
+            setSectionToggleButton('rootResultSectionSaveBtn', currentRootResultEditing);
+        }
+
+        function savePeelingSection() {
+            if (!currentPeelingEditing) {
+                currentPeelingEditing = true;
+                syncPeelingSectionEditState();
+                document.getElementById('sampleTemp1')?.focus();
+                return;
+            }
+
+            const temp1 = document.getElementById('sampleTemp1').value.trim();
+            const strength1 = document.getElementById('sampleStrength1').value.trim();
+            const temp2 = document.getElementById('sampleTemp2').value.trim();
+            const strength2 = document.getElementById('sampleStrength2').value.trim();
+
+            if (!temp1 || !strength1 || !temp2 || !strength2) {
+                showToast('请填写完整的剥离强度检测数据', 'error');
+                return;
+            }
+
+            if (currentThicknessRecord) {
+                currentThicknessRecord.temp1 = temp1;
+                currentThicknessRecord.strength1 = strength1;
+                currentThicknessRecord.temp2 = temp2;
+                currentThicknessRecord.strength2 = strength2;
+                currentThicknessRecord.peelingTime = getSampleSectionTimeText();
+                document.getElementById('peelingSectionTime').textContent = currentThicknessRecord.peelingTime;
+            }
+
+            currentPeelingEditing = false;
+            syncPeelingSectionEditState();
+            showToast('剥离强度检测已保存', 'success');
+        }
+
+        function saveRootResultSection() {
+            if (!currentRootResultEditing) {
+                currentRootResultEditing = true;
+                syncRootResultSectionEditState();
+                document.getElementById('sampleLeaveLength')?.focus();
+                return;
+            }
+
+            const leaveLength = document.getElementById('sampleLeaveLength').value.trim();
+            const bevelAngle = document.getElementById('sampleBevelAngle').value.trim();
+            const fbeReserved = document.getElementById('sampleFbeReserved').value.trim();
+
+            if (!leaveLength || !bevelAngle || !fbeReserved) {
+                showToast('请填写完整的根检结果值', 'error');
+                return;
+            }
+
+            if (currentThicknessRecord) {
+                currentThicknessRecord.leaveLength = leaveLength;
+                currentThicknessRecord.bevelAngle = bevelAngle;
+                currentThicknessRecord.fbeReserved = fbeReserved;
+                currentThicknessRecord.rootResultTime = getSampleSectionTimeText();
+                document.getElementById('rootResultSectionTime').textContent = currentThicknessRecord.rootResultTime;
+            }
+
+            currentRootResultEditing = false;
+            syncRootResultSectionEditState();
+            showToast('根检结果值已保存', 'success');
         }
 
         function closeWoDetail() {
@@ -2969,9 +3086,6 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             document.getElementById('entryWeight').value = record.weight;
             setPipeType(record.pipeType || '正常管');
             document.getElementById('entryResidualMagnetism').value = record.residualMagnetism || ''; 
-            currentThicknessValues = Array.isArray(record.thicknesses) ? [...record.thicknesses] : [];
-            currentThicknessEditing = false;
-            setThicknessCount(12);
             document.getElementById('entryRecordPosition').textContent = '\u7b2c ' + (index + 1) + ' \u652f / \u5171 ' + entryRecordList.length + ' \u652f';
         }
 
@@ -3009,12 +3123,6 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
 
         function setThicknessCount(count) {
             currentThicknessCount = 12;
-            const button = document.getElementById('btnThicknessCount12');
-            if (button) {
-                button.className = 'px-3 py-1.5 rounded-lg text-sm font-semibold bg-blue-600 text-white shadow-sm transition-colors';
-                button.disabled = true;
-                button.classList.remove('opacity-50', 'cursor-not-allowed');
-            }
             currentThicknessValues = currentThicknessValues.slice(0, currentThicknessCount);
             while (currentThicknessValues.length < currentThicknessCount) currentThicknessValues.push('');
             renderThicknessInputs();
@@ -3026,14 +3134,8 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
 
             toggle.textContent = currentThicknessEditing ? '保存' : '修改';
             toggle.className = currentThicknessEditing
-                ? 'px-3 py-1.5 rounded-lg border border-green-200 bg-green-600 text-white text-sm font-semibold hover:bg-green-700 transition-colors'
-                : 'px-3 py-1.5 rounded-lg border border-blue-200 bg-white text-blue-600 text-sm font-semibold hover:bg-blue-50 transition-colors';
-
-            const button = document.getElementById('btnThicknessCount12');
-            if (button) {
-                button.disabled = true;
-                button.classList.remove('opacity-50', 'cursor-not-allowed');
-            }
+                ? 'min-h-12 px-6 rounded-xl border-2 border-green-200 bg-green-600 text-white text-base font-bold hover:bg-green-700 transition-colors'
+                : 'min-h-12 px-6 rounded-xl border-2 border-blue-200 bg-white text-blue-600 text-base font-bold hover:bg-blue-50 transition-colors';
         }
 
         function toggleThicknessEdit() {
@@ -3090,9 +3192,11 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
                 return;
             }
 
-            const record = entryRecordList[currentEntryRecordIndex];
+            const record = currentThicknessRecord || entryRecordList[currentEntryRecordIndex];
             if (record) {
                 record.thicknesses = [...thicknessValues];
+                record.thicknessTime = getSampleSectionTimeText();
+                document.getElementById('thicknessSectionTime').textContent = record.thicknessTime;
             }
 
             currentThicknessEditing = false;
@@ -3286,10 +3390,6 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             const length = document.getElementById('entryLength').value;
             const pipeType = document.getElementById('entryPipeType').value;
             const residualMagnetism = document.getElementById('entryResidualMagnetism').value.trim();
-            const thicknessValues = currentThicknessValues
-                .slice(0, currentThicknessCount)
-                .map(value => Number(value))
-                .filter(value => !Number.isNaN(value) && value > 0);
 
             if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !residualMagnetism) {
                 showToast('\u8bf7\u586b\u5199\u5b8c\u6574\u7684\u6839\u68c0\u7ed3\u679c', 'error');
@@ -3298,11 +3398,6 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
 
             if (Number.isNaN(Number(residualMagnetism)) || Number(residualMagnetism) >= 15) {
                 showToast('\u5269\u78c1\u68c0\u6d4b\u5fc5\u987b\u586b\u5199\u4e14\u9700\u5c0f\u4e8e15 Gauss', 'error');
-                return;
-            }
-
-            if (thicknessValues.length !== currentThicknessCount) {
-                showToast('\u8bf7\u5b8c\u6210 ' + currentThicknessCount + ' \u4e2a\u539a\u5ea6\u70b9\u4f4d\u7684\u5f55\u5165', 'error');
                 return;
             }
 
@@ -3334,10 +3429,6 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             const length = document.getElementById('entryLength').value;
             const pipeType = document.getElementById('entryPipeType').value;
             const residualMagnetism = document.getElementById('entryResidualMagnetism').value.trim();
-            const thicknessValues = currentThicknessValues
-                .slice(0, currentThicknessCount)
-                .map(value => Number(value))
-                .filter(value => !Number.isNaN(value) && value > 0);
 
             if (!pipeNo || !bundleNo || !furnaceNo || !batchNo || !length || !residualMagnetism) {
                 showToast('\u8bf7\u586b\u5199\u5b8c\u6574\u7684\u6839\u68c0\u7ed3\u679c', 'error');
@@ -3346,11 +3437,6 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
 
             if (Number.isNaN(Number(residualMagnetism)) || Number(residualMagnetism) >= 15) {
                 showToast('\u5269\u78c1\u68c0\u6d4b\u5fc5\u987b\u586b\u5199\u4e14\u9700\u5c0f\u4e8e15 Gauss', 'error');
-                return;
-            }
-
-            if (thicknessValues.length !== currentThicknessCount) {
-                showToast('\u8bf7\u5b8c\u6210 ' + currentThicknessCount + ' \u4e2a\u539a\u5ea6\u70b9\u4f4d\u7684\u5f55\u5165', 'error');
                 return;
             }
 
