@@ -246,6 +246,7 @@
     </style>
 </head>
 <body class="h-screen w-screen flex flex-col">
+    <div id="toastContainer" class="fixed top-20 right-6 z-[80] space-y-2"></div>
 
     <!-- Header -->
     <header class="bg-white industrial-shadow z-50 flex-none">
@@ -552,7 +553,7 @@
         </div>
     </main>
     <section id="tab-panel-instrument" class="tab-panel flex-1 flex-col min-h-0 bg-gray-50 p-6">
-        <div class="grid grid-cols-1 gap-6 h-full">
+        <div class="grid grid-cols-1 xl:grid-cols-[minmax(0,2fr)_minmax(360px,1fr)] gap-6 h-full">
             <div class="bg-white rounded-2xl industrial-shadow p-6 flex flex-col min-h-0">
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
                     <div>
@@ -589,6 +590,7 @@
                 </div>
             </div>
 
+            <div id="instrumentAttributePanel"></div>
         </div>
     </section>
 
@@ -1701,33 +1703,6 @@
             showToast('仪器已移除', 'success');
         }
 
-        function setCompressedAirResult(type) {
-            compressedAirResult = type;
-
-            const passBtn = document.getElementById('btnAirPass');
-            const failBtn = document.getElementById('btnAirFail');
-
-            if (type === 'pass') {
-                passBtn.className = 'py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold transition-all';
-                failBtn.className = 'py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all';
-            } else {
-                passBtn.className = 'py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all';
-                failBtn.className = 'py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold transition-all';
-            }
-        }
-        function saveInstrumentAttributes() {
-            const abrasiveConductivity = document.getElementById('instrumentAbrasiveConductivity')?.value.trim() || '';
-            const illuminance = document.getElementById('instrumentIlluminance')?.value.trim() || '';
-            const salinity = document.getElementById('instrumentSalinity')?.value.trim() || '';
-
-            if (!abrasiveConductivity || !illuminance || !salinity) {
-                showToast('请填写完整的仪器附属信息', 'error');
-                return;
-            }
-
-            showToast(`仪器附属信息已保存，压缩空气结果为${compressedAirResult === 'pass' ? '合格' : '不合格'}`, 'success');
-        }
-
         function updateWorkOrderProgress(recordedCount) {
             const target = parseInt(document.getElementById('workOrderTarget')?.textContent || '316', 10);
             const percent = Math.min(100, Math.round((recordedCount / target) * 100));
@@ -2116,18 +2091,18 @@
             document.getElementById('entryLength').value = record.length;
             document.getElementById('entryWeight').value = record.weight;
             document.getElementById('entryNewBundleNo').value = record.newBundleNo || '';
-            document.getElementById('entryRecordPosition').textContent = `绗?${index + 1} 鏀?/ 鍏?${entryRecordList.length} 鏀?`;
+            document.getElementById('entryRecordPosition').textContent = `第 ${index + 1} 支 / 共 ${entryRecordList.length} 支`;
         }
 
         function navigateEntryRecord(offset) {
             const nextIndex = currentEntryRecordIndex + offset;
             if (nextIndex < 0 || nextIndex >= entryRecordList.length) {
-                showToast(offset < 0 ? '宸茬粡鏄涓€鏀挗绠?' : '宸茬粡鏄渶鍚庝竴鏀挗绠?' , 'info');
+                showToast(offset < 0 ? '已经是第一支钢管' : '已经是最后一支钢管', 'info');
                 return;
             }
 
             populateEntryRecord(nextIndex);
-            showToast(offset < 0 ? '宸插垏鎹㈠埌涓婁竴鏀挗绠?' : '宸插垏鎹㈠埌涓嬩竴鏀挗绠?' , 'success');
+            showToast(offset < 0 ? '已切换到上一支钢管' : '已切换到下一支钢管', 'success');
         }
 
         function renderThicknessInputs() {
@@ -2727,7 +2702,13 @@
 
         // Toast閫氱煡
         function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
+            let container = document.getElementById('toastContainer');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toastContainer';
+                container.className = 'fixed top-20 right-6 z-[80] space-y-2';
+                document.body.appendChild(container);
+            }
             const toast = document.createElement('div');
 
             const colors = {
@@ -2841,6 +2822,7 @@
             setTimeout(applyPadActionBars, 500);
         });
     </script>
+    <script src="/instrument-tab.js"></script>
 </body>
 </html>
 

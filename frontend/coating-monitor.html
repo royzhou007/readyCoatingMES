@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>涂覆点监控记录 - MES系统</title>
+    <title>涂敷点监控记录 - MES系统</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -71,7 +71,7 @@
                             <i class="fas fa-sliders text-xl"></i>
                         </div>
                         <div>
-                            <h1 class="text-xl font-bold text-gray-900 tracking-tight">涂覆点监控记录</h1>
+                            <h1 class="text-xl font-bold text-gray-900 tracking-tight">涂敷点监控记录</h1>
                             <p class="text-xs text-gray-500">产线A-03 | 监控记录列表</p>
                         </div>
                     </div>
@@ -472,7 +472,7 @@
             const pendingCount = slots.length - Object.keys(records).length;
             if (pendingCount > 0 && !confirm(`还有 ${pendingCount} 个时段未录入，确认继续提交吗？`)) return;
             console.log('提交监控记录', records);
-            showToast('涂覆点监控记录提交成功', 'success');
+            showToast('涂敷点监控记录提交成功', 'success');
         }
 
         function formatTime(date) {

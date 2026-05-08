@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>涂覆作业记录 - MES系统</title>
+    <title>涂敷作业记录 - MES系统</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -236,7 +236,7 @@
                         <i class="fas fa-list-alt text-xl"></i>
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold text-gray-900 tracking-tight">涂覆作业记录</h1>
+                        <h1 class="text-xl font-bold text-gray-900 tracking-tight">涂敷作业记录</h1>
                         <p class="text-xs text-gray-500">产线A-03 | 当前工单 245 支 | 当前班次 <span class="font-semibold text-blue-600">今日白班</span></p>
                     </div>
                 </div>
@@ -272,7 +272,7 @@
                             <h2 class="text-lg font-bold text-gray-900">WO-2026-0318-001</h2>
                             <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200 flex items-center gap-1.5">
                                 <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
-                                涂覆中
+                                涂敷中
                             </span>
                         </div>
                         <div class="mt-1 space-y-1 text-sm text-gray-600">
@@ -294,7 +294,7 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <div class="text-xs text-gray-500 mb-1">本班已涂覆</div>
+                        <div class="text-xs text-gray-500 mb-1">本班已涂敷</div>
                         <div class="text-xl font-bold text-blue-600" id="shiftCount">156<span class="text-xs text-gray-500 font-normal ml-1">支</span></div>
                     </div>
                 </div>
@@ -316,7 +316,7 @@
                         <div class="px-1 text-center">
                             <div class="flex items-baseline justify-center gap-3 mb-2">
                                 <span class="text-3xl font-extrabold text-blue-600" id="progressPercent">78%</span>
-                                <span class="text-base font-semibold text-gray-600">涂覆完成度</span>
+                                <span class="text-base font-semibold text-gray-600">涂敷完成度</span>
                             </div>
                             <div class="progress-bar h-4">
                                 <div id="workOrderProgressFill" class="progress-fill h-full rounded-full" style="width: 78%"></div>
@@ -574,11 +574,13 @@
                         <tr>
                             <th class="px-4 py-4 text-left w-12"><input type="checkbox" class="custom-checkbox" id="selectAllSample" onclick="toggleSelectAll()"></th>
                             <th class="px-4 py-4 text-left">自编号</th>
-                            <th class="px-4 py-4 text-center">剥离温度1</th>
-                            <th class="px-4 py-4 text-center">剥离强度1</th>
-                            <th class="px-4 py-4 text-center">剥离温度2</th>
-                            <th class="px-4 py-4 text-center">剥离强度2</th>
+                            <th class="px-4 py-4 text-center">涂敷温度</th>
+                            <th class="px-4 py-4 text-center">三色管3层厚度</th>
+                            <th class="px-4 py-4 text-center">剥离强度检测</th>
+                            <th class="px-4 py-4 text-center">冷却温度</th>
+                            <th class="px-4 py-4 text-center">剩磁检测</th>
                             <th class="px-4 py-4 text-center">涂层厚度</th>
+                            <th class="px-4 py-4 text-center">留端检测</th>
                             <th class="px-4 py-4 text-center">操作时间</th>
                             <th class="px-4 py-4 text-center">质检员</th>
                             <th class="px-4 py-4 text-center">操作</th>
@@ -588,11 +590,13 @@
                         <tr class="group" data-id="CJ-0032" data-shift="today_day" data-result="pass">
                             <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                             <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">CJ-0032</div></td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">198℃</td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">38.5 N/cm</td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">201℃</td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">39.2 N/cm</td>
-                            <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs font-medium text-gray-700"><div>Max: 426 μm</div><div>Min: 401 μm</div></div></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="coatingTemp"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="threeLayerThickness"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="peeling"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="cooling"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="residual"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="thickness"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="rootResult"></td>
                             <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">20:10</div><div class="text-xs text-gray-500">今天</div></td>
                             <td class="px-4 py-4 text-center"><span class="text-sm text-gray-700">王检</span></td>
                             <td class="px-4 py-4 text-center">
@@ -606,11 +610,13 @@
                         <tr class="group" data-id="CJ-0031" data-shift="today_day" data-result="pass">
                             <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                             <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">CJ-0031</div></td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">194℃</td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">37.8 N/cm</td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">199℃</td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-gray-900">38.6 N/cm</td>
-                            <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs font-medium text-gray-700"><div>Max: 416 μm</div><div>Min: 388 μm</div></div></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="coatingTemp"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="threeLayerThickness"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="peeling"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="cooling"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="residual"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="thickness"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="rootResult"></td>
                             <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">18:55</div><div class="text-xs text-gray-500">今天</div></td>
                             <td class="px-4 py-4 text-center"><span class="text-sm text-gray-700">王检</span></td>
                             <td class="px-4 py-4 text-center">
@@ -624,11 +630,13 @@
                         <tr class="group" data-id="CJ-0030" data-shift="yesterday_night" data-result="fail">
                             <td class="px-4 py-4"><input type="checkbox" class="custom-checkbox row-checkbox" onclick="toggleRow(this)"></td>
                             <td class="px-4 py-4"><div class="font-bold text-gray-900 font-mono text-base">CJ-0030</div></td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">186℃</td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">32.4 N/cm</td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">191℃</td>
-                            <td class="px-4 py-4 text-center text-sm font-semibold text-red-600">31.7 N/cm</td>
-                            <td class="px-4 py-4 text-center"><div class="flex flex-col items-center gap-1 text-xs font-medium text-gray-700"><div>Max: 392 μm</div><div>Min: 352 μm</div></div></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="coatingTemp"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="threeLayerThickness"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="peeling"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="cooling"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="residual"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="thickness"></td>
+                            <td class="px-4 py-4 text-center" data-sample-project="rootResult"></td>
                             <td class="px-4 py-4 text-center"><div class="text-sm font-medium text-gray-900">03:40</div><div class="text-xs text-gray-500">昨天</div></td>
                             <td class="px-4 py-4 text-center"><span class="text-sm text-gray-700">赵检</span></td>
                             <td class="px-4 py-4 text-center">
@@ -1173,7 +1181,7 @@
     </div>
 
     <section id="tab-panel-instrument" class="tab-panel flex-1 flex-col min-h-0 bg-gray-50 p-6">
-        <div class="grid grid-cols-1 gap-6 h-full">
+        <div class="grid grid-cols-1 xl:grid-cols-[minmax(0,2fr)_minmax(360px,1fr)] gap-6 h-full">
             <div class="bg-white rounded-2xl industrial-shadow p-6 flex flex-col min-h-0">
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
                     <div>
@@ -1210,7 +1218,7 @@
                 </div>
             </div>
 
-        </div>
+            <div id="instrumentAttributePanel"></div>
         </div>
     </section>
 
@@ -1219,7 +1227,7 @@
             <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4 mb-6">
                 <div>
                     <div class="text-sm text-gray-500">工艺卡名称</div>
-                    <h3 class="text-2xl font-bold text-gray-900 mt-1">钢管涂覆工艺卡</h3>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1">钢管涂敷工艺卡</h3>
                 </div>
                 <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3">
                     <div class="text-sm text-blue-700">工艺卡编号</div>
@@ -1522,8 +1530,8 @@
             <div class="hidden">
             <div class="flex items-start justify-between gap-4 mb-6">
                 <div>
-                    <h3 class="text-xl font-bold text-gray-900">涂覆作业要点</h3>
-                    <p class="text-sm text-gray-500 mt-1">围绕当前工单展示关键涂覆参数、节拍与执行要求</p>
+                    <h3 class="text-xl font-bold text-gray-900">涂敷作业要点</h3>
+                    <p class="text-sm text-gray-500 mt-1">围绕当前工单展示关键涂敷参数、节拍与执行要求</p>
                 </div>
                 <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">版本 V2.3</span>
             </div>
@@ -1543,7 +1551,7 @@
             </div>
             <div class="space-y-4">
                 <div class="border border-gray-200 rounded-xl p-5">
-                    <div class="font-semibold text-gray-900">1. 涂覆前确认</div>
+                    <div class="font-semibold text-gray-900">1. 涂敷前确认</div>
                     <div class="text-sm text-gray-600 mt-2">核对炉号、批号、捆号与工单一致；确认钢管表面状态、返锈情况和待处理缺陷。</div>
                 </div>
                 <div class="border border-gray-200 rounded-xl p-5">
@@ -1556,7 +1564,7 @@
                 </div>
                 <div class="border border-gray-200 rounded-xl p-5">
                     <div class="font-semibold text-gray-900">4. 浜ゆ帴瑕佹眰</div>
-                    <div class="text-sm text-gray-600 mt-2">班次切换前请完成返修件、待复检件和抽检记录确认，确保涂覆记录与现场状态一致。</div>
+                    <div class="text-sm text-gray-600 mt-2">班次切换前请完成返修件、待复检件和抽检记录确认，确保涂敷记录与现场状态一致。</div>
                 </div>
             </div>
         </div>
@@ -1615,7 +1623,7 @@
                     <i class="fas fa-plus"></i>
                 </div>
                 <div>
-                    <h3 class="text-lg font-bold text-gray-900">涂覆根检录入</h3>
+                    <h3 class="text-lg font-bold text-gray-900">涂敷根检录入</h3>
                     <p class="text-sm text-gray-500">当前时间: <span id="currentTime">08:32</span></p>
                 </div>
             </div>
@@ -2590,42 +2598,6 @@
             updateMaterialListFullscreenButton();
         }
 
-        // ========== 鍧″彛淇℃伅鎶樺彔鍔熻兘 ==========
-        function renderInstrumentTable() {
-            const tbody = document.getElementById('instrumentTableBody');
-            const emptyState = document.getElementById('instrumentEmptyState');
-
-            if (!tbody || !emptyState) return;
-
-            tbody.innerHTML = '';
-
-            if (instrumentSelection.length === 0) {
-                emptyState.classList.remove('hidden');
-                emptyState.classList.add('flex');
-                return;
-            }
-
-            emptyState.classList.add('hidden');
-            emptyState.classList.remove('flex');
-
-            instrumentSelection.forEach((item, index) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="px-4 py-4 text-center font-semibold text-gray-700">${index + 1}</td>
-                    <td class="px-4 py-4 text-gray-900 font-medium">${item.name}</td>
-                    <td class="px-4 py-4 text-gray-600">${item.model}</td>
-                    <td class="px-4 py-4 font-mono text-gray-700">${item.code}</td>
-                    <td class="px-4 py-4 text-gray-600">${item.expiry}</td>
-                    <td class="px-4 py-4 text-center">
-                        <button onclick="removeInstrument('${item.code}')" class="px-3 py-1.5 rounded-lg bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition-colors">
-                            移除
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
         function openInstrumentLedgerModal() {
             document.getElementById('instrumentLedgerModal').classList.add('open');
             document.getElementById('instrumentLedgerSearch').value = '';
@@ -2705,34 +2677,6 @@
             instrumentSelection = instrumentSelection.filter(item => item.code !== code);
             renderInstrumentTable();
             showToast('\u4eea\u5668\u5df2\u79fb\u9664', 'success');
-        }
-
-        function setCompressedAirResult(type) {
-            compressedAirResult = type;
-
-            const passBtn = document.getElementById('btnAirPass');
-            const failBtn = document.getElementById('btnAirFail');
-
-            if (type === 'pass') {
-                passBtn.className = 'py-3 rounded-xl border-2 border-green-500 bg-green-500 text-white font-semibold transition-all';
-                failBtn.className = 'py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all';
-            } else {
-                passBtn.className = 'py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-green-50 hover:text-green-600 hover:border-green-300 transition-all';
-                failBtn.className = 'py-3 rounded-xl border-2 border-red-500 bg-red-500 text-white font-semibold transition-all';
-            }
-        }
-
-        function saveInstrumentAttributes() {
-            const abrasiveConductivity = document.getElementById('instrumentAbrasiveConductivity')?.value.trim() || '';
-            const illuminance = document.getElementById('instrumentIlluminance')?.value.trim() || '';
-            const salinity = document.getElementById('instrumentSalinity')?.value.trim() || '';
-
-            if (!abrasiveConductivity || !illuminance || !salinity) {
-                showToast('\u8bf7\u5b8c\u6574\u586b\u5199\u4eea\u5668\u8bfb\u6570', 'error');
-                return;
-            }
-
-            showToast(`\u4eea\u5668\u8bfb\u6570\u5df2\u4fdd\u5b58\uff0c\u538b\u7f29\u7a7a\u6c14${compressedAirResult === 'pass' ? '\u5408\u683c' : '\u4e0d\u5408\u683c'}`, 'success');
         }
 
         function updateWorkOrderProgress(recordedCount) {
@@ -3375,6 +3319,7 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
                 currentThicknessRecord.coolingResult = currentCoolingResult;
                 currentThicknessRecord.coolingTime = getSampleSectionTimeText();
                 document.getElementById('coolingSectionTime').textContent = currentThicknessRecord.coolingTime;
+                syncSampleProjectStatusToList(currentThicknessRecord);
             }
 
             currentCoolingEditing = false;
@@ -3400,6 +3345,7 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
                 currentThicknessRecord.residualMagnetism = residualMagnetism;
                 currentThicknessRecord.residualTime = getSampleSectionTimeText();
                 document.getElementById('residualSectionTime').textContent = currentThicknessRecord.residualTime;
+                syncSampleProjectStatusToList(currentThicknessRecord);
             }
 
             currentResidualEditing = false;
@@ -3425,6 +3371,7 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
                 currentThicknessRecord.coatingTempPePp = coatingTempPePp;
                 currentThicknessRecord.coatingTempTime = getSampleSectionTimeText();
                 document.getElementById('coatingTempSectionTime').textContent = currentThicknessRecord.coatingTempTime;
+                syncSampleProjectStatusToList(currentThicknessRecord);
             }
 
             currentCoatingTempEditing = false;
@@ -3450,6 +3397,7 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
                 currentThicknessRecord.threeLayerPePpThickness = threeLayerPePpThickness;
                 currentThicknessRecord.threeLayerThicknessTime = getSampleSectionTimeText();
                 document.getElementById('threeLayerThicknessSectionTime').textContent = currentThicknessRecord.threeLayerThicknessTime;
+                syncSampleProjectStatusToList(currentThicknessRecord);
             }
 
             currentThreeLayerThicknessEditing = false;
@@ -3477,6 +3425,7 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
                 currentThicknessRecord.strength2 = strength2;
                 currentThicknessRecord.peelingTime = getSampleSectionTimeText();
                 document.getElementById('peelingSectionTime').textContent = currentThicknessRecord.peelingTime;
+                syncSampleProjectStatusToList(currentThicknessRecord);
             }
 
             currentPeelingEditing = false;
@@ -3516,6 +3465,7 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
                 currentThicknessRecord.fbeReserved = fbeReservedS;
                 currentThicknessRecord.rootResultTime = getSampleSectionTimeText();
                 document.getElementById('rootResultSectionTime').textContent = currentThicknessRecord.rootResultTime;
+                syncSampleProjectStatusToList(currentThicknessRecord);
             }
 
             currentRootResultEditing = false;
@@ -3681,28 +3631,67 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             avgNode.textContent = avg + ' \u03bcm';
         }
 
-        function renderThicknessListSummary(values) {
-            const validValues = Array.isArray(values)
-                ? values.map(value => Number(value)).filter(value => !Number.isNaN(value) && value > 0)
-                : [];
-
-            if (!validValues.length) {
-                return '<div class="text-xs font-medium text-gray-400">未录入</div>';
-            }
-
-            const max = Math.max(...validValues);
-            const min = Math.min(...validValues);
-            return `<div class="flex flex-col items-center gap-1 text-xs font-medium text-gray-700"><div>Max: ${max} μm</div><div>Min: ${min} μm</div></div>`;
+        function hasFilledValue(...values) {
+            return values.some(value => String(value ?? '').trim() !== '');
         }
 
-        function syncSampleThicknessToList(record) {
+        function getLinkedRootForSampleRecord(record) {
+            if (!record?.id) return null;
+            const rootId = String(record.id).replace(/^CJ-/, '');
+            return entryRecordList.find(item => item.id === rootId) || null;
+        }
+
+        function hasValidThicknessValues(values) {
+            return Array.isArray(values) && values.some(value => {
+                const numberValue = Number(value);
+                return !Number.isNaN(numberValue) && numberValue > 0;
+            });
+        }
+
+        function isSampleProjectDone(record, project) {
+            const linkedRoot = getLinkedRootForSampleRecord(record);
+            switch (project) {
+                case 'coatingTemp':
+                    return hasFilledValue(record.coatingTempFbe, record.coatingTempAd, record.coatingTempPePp);
+                case 'threeLayerThickness':
+                    return hasFilledValue(record.threeLayerFbeThickness, record.threeLayerAdThickness, record.threeLayerPePpThickness);
+                case 'peeling':
+                    return hasFilledValue(record.temp1, record.strength1, record.temp2, record.strength2);
+                case 'cooling':
+                    return hasFilledValue(record.coolingResult);
+                case 'residual':
+                    return hasFilledValue(record.residualMagnetism);
+                case 'thickness':
+                    return hasValidThicknessValues(record.thicknesses) || hasValidThicknessValues(linkedRoot?.thicknesses);
+                case 'rootResult':
+                    return hasFilledValue(
+                        record.leaveLengthS, record.leaveLengthN, record.bevelAngleS,
+                        record.bevelAngleN, record.fbeReservedS, record.fbeReservedN,
+                        record.leaveLength, record.bevelAngle, record.fbeReserved
+                    );
+                default:
+                    return false;
+            }
+        }
+
+        function renderSampleProjectStatus(done) {
+            return done
+                ? '<span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-700"><i class="fas fa-check text-sm"></i></span>'
+                : '';
+        }
+
+        function syncSampleProjectStatusToList(record) {
             if (!record?.id) return;
             const row = document.querySelector(`#sampleTableBody tr[data-id="${record.id}"]`);
             if (!row) return;
-            const thicknessCell = row.children[6];
-            if (thicknessCell) {
-                thicknessCell.innerHTML = renderThicknessListSummary(record.thicknesses);
-            }
+            row.querySelectorAll('[data-sample-project]').forEach(cell => {
+                const project = cell.dataset.sampleProject;
+                cell.innerHTML = renderSampleProjectStatus(isSampleProjectDone(record, project));
+            });
+        }
+
+        function syncAllSampleProjectStatuses() {
+            sampleRecordList.forEach(record => syncSampleProjectStatusToList(record));
         }
 
         function saveThicknessSection() {
@@ -3722,7 +3711,7 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
                 record.thicknesses = [...thicknessValues];
                 record.thicknessTime = getSampleSectionTimeText();
                 document.getElementById('thicknessSectionTime').textContent = record.thicknessTime;
-                syncSampleThicknessToList(record);
+                syncSampleProjectStatusToList(record);
             }
 
             currentThicknessEditing = false;
@@ -4460,6 +4449,7 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
             renderInstrumentTable();
             setCompressedAirResult('pass');
             updateWorkOrderProgress(parseInt(document.getElementById('shiftCountValue')?.textContent || '247', 10));
+            syncAllSampleProjectStatuses();
             applyPadActionBars();
 
             // 鏇存柊褰撳墠鏃堕棿
@@ -4489,10 +4479,12 @@ document.getElementById('sampleDrawerOverlay').classList.add('open');
         });
 
         window.addEventListener('load', function() {
+            syncAllSampleProjectStatuses();
             applyPadActionBars();
             setTimeout(applyPadActionBars, 100);
             setTimeout(applyPadActionBars, 500);
         });
     </script>
+    <script src="/instrument-tab.js"></script>
 </body>
 </html>
